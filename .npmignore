@@ -2,5 +2,5 @@
 !LICENSE
 !README.md
 !package.json
-!app/*
+!src/*
 !main.js

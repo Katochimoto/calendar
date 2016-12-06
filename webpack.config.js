@@ -2,7 +2,7 @@ var path = require('path');
 var webpack = require('webpack');
 var HtmlWebpackPlugin = require('html-webpack-plugin');
 
-var appPath = path.join(__dirname, 'app');
+var srcPath = path.join(__dirname, 'src');
 var distPath = path.join(__dirname, 'dist');
 var nodeEnv = 'development'; // production
 var preprocessParams = '?NODE_ENV=' + nodeEnv;
@@ -10,14 +10,24 @@ var preprocessParams = '?NODE_ENV=' + nodeEnv;
 module.exports = {
     'debug': false,
     'devtool': '#source-map',
-    'target': 'electron',
+    'target': 'web', // 'electron',
     'entry': {
+        'vendor': [
+            'react',
+            'react-dom',
+            'redux',
+            'react-redux',
+            'redux-devtools',
+            'redux-logger',
+            'immutable'
+        ],
         'app': './index.js'
     },
-    'context': appPath,
+    'context': srcPath,
     'output': {
+        'chunkFilename': '[name].js',
+        'crossOriginLoading': 'use-credentials',
         'filename': '[name].js',
-        'library': '[name]',
         'libraryTarget': 'umd',
         'path': distPath
     },
@@ -26,14 +36,14 @@ module.exports = {
             {
                 'test': /\.js$/,
                 'loader': 'eslint',
-                'include': [ appPath ]
+                'include': [ srcPath ]
             }
         ],
         'loaders': [
             {
                 'test': /\.js$/,
                 'loader': 'babel!preprocess' + preprocessParams,
-                'include': [ appPath ]
+                'include': [ srcPath ]
             }
         ]
     },
@@ -44,6 +54,18 @@ module.exports = {
             'process.env': {
                 'NODE_ENV': JSON.stringify(nodeEnv)
             }
+        }),
+        new webpack.ProvidePlugin({
+            'React': 'react',
+            'ReactDOM': 'react-dom',
+            'ReactDOMServer': 'react-dom/server'
+        }),
+        new webpack.optimize.OccurenceOrderPlugin(true),
+        new webpack.optimize.DedupePlugin(),
+        new webpack.optimize.CommonsChunkPlugin({
+            'name': 'vendor',
+            'filename': '[name].js',
+            'minChunks': Infinity
         }),
         new HtmlWebpackPlugin({
             'title': 'Reader',
@@ -56,6 +78,7 @@ module.exports = {
                 'preserveLineBreaks': true
             }
         }),
+        /*
         new webpack.optimize.UglifyJsPlugin({
             'output': {
                 'comments': false
@@ -64,5 +87,6 @@ module.exports = {
                 'warnings': false
             }
         })
+        */
     ]
 };

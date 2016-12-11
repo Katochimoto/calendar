@@ -1,8 +1,7 @@
+import Calendar from './Calendar';
 
 const App = () => (
-  <div>
-    test
-  </div>
+  <Calendar />
 );
 
 export default App;

@@ -1,6 +1,7 @@
 var path = require('path');
 var webpack = require('webpack');
 var HtmlWebpackPlugin = require('html-webpack-plugin');
+var autoprefixer = require('autoprefixer');
 
 var srcPath = path.join(__dirname, 'src');
 var distPath = path.join(__dirname, 'dist');
@@ -43,6 +44,16 @@ module.exports = {
             {
                 'test': /\.js$/,
                 'loader': 'babel!preprocess' + preprocessParams,
+                'include': [ srcPath ]
+            },
+            {
+                'test': /\.less$/,
+                'loaders': [
+                    'style-loader',
+                    'css-loader?modules&importLoaders=1&localIdentName=[local]___[hash:base64:5]',
+                    'postcss-loader',
+                    'less-loader'
+                ],
                 'include': [ srcPath ]
             }
         ]
@@ -88,5 +99,6 @@ module.exports = {
             }
         })
         */
-    ]
+    ],
+    postcss: [ autoprefixer({ browsers: ['last 2 versions'] }) ]
 };

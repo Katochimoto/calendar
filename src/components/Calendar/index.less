@@ -1,0 +1,89 @@
+@import (reference, once) "./constant";
+
+.calendar {
+  font: 13px/1.5 Arial,sans-serif;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  top: 0;
+}
+
+.calendar_days {
+  height: 200%;
+  padding: 5px 0;
+  background: @day-content-color;
+}
+
+.calendar_days__hours {
+  margin-left: 60px;
+
+  .calendar_hour {
+    &:before, &:last-child:after {
+      display: block;
+      position: absolute;
+      right: 100%;
+      margin-right: 5px;
+      font-size: @day-hour-size;
+      line-height: @day-hour-size;
+      color: @day-hour-color;
+    }
+
+    &:before {
+      content: attr(data-hour);
+      margin-top: -0.5 * @day-hour-size;
+    }
+
+    &:last-child:after {
+      content: attr(data-next-hour);
+      margin-bottom: -0.5 * @day-hour-size;
+      bottom: 0;
+    }
+  }
+}
+
+.calendar_day_wrap {
+  height: 100%;
+  position: relative;
+}
+
+.calendar_day {
+  display: table;
+  height: 100%;
+  width: 100%;
+  position: relative;
+}
+
+.calendar_hour {
+  display: table-row;
+  box-shadow: inset 0px 1px 0px 0px @day-content-sep-color;
+
+  &:last-child {
+    box-shadow:
+      inset 0px 1px 0px 0px @day-content-sep-color,
+      inset 0px -1px 0px 0px @day-content-sep-color;
+  }
+}
+
+.calendar_day_events {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  visibility: hidden;
+}
+
+.calendar_day_event {
+  position: absolute;
+  visibility: visible;
+  outline: none;
+  width: 100%;
+  cursor: pointer;
+  background: rgba(0, 0, 255, 0.2);
+  box-shadow: inset 3px 0px 0px 0px rgba(0, 0, 255, 0.5);
+
+  &.selected {
+    background: rgba(0, 0, 255, 0.3);
+  }
+}

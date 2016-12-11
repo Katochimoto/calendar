@@ -3,7 +3,7 @@
  */
 
 import { Component, PropTypes } from 'react';
-import ListOfDays from './ListOfDays';
+import ListOfDays from './components/ListOfDays';
 
 import styles from './index.less';
 
@@ -13,7 +13,11 @@ export default class Calendar extends Component {
     this.state = {
       grid: props.grid
     };
+
+    props.bindChange(this.onChange.bind(this));
   }
+
+  onChange() {}
 
   render() {
     return (
@@ -26,10 +30,12 @@ export default class Calendar extends Component {
 
 Calendar.propTypes = {
   grid: PropTypes.oneOf([ 'day', 'month', 'week', 'year' ]),
-  currentDate: PropTypes.instanceOf(Date)
+  currentDate: PropTypes.instanceOf(Date),
+  bindChange: PropTypes.func
 };
 
 Calendar.defaultProps = {
   grid: 'day',
-  currentDate: new Date()
+  currentDate: new Date(),
+  bindChange: function () {}
 };

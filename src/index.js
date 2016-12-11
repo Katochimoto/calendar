@@ -1,7 +1,12 @@
+import './locale/moment/ru';
+
 import { render } from 'react-dom';
 import { Provider } from 'react-redux';
 import App from './components/App';
 import store from './store';
+import moment from 'moment';
+
+moment.locale('ru');
 
 const root = document.body.appendChild(document.createElement('div'));
 

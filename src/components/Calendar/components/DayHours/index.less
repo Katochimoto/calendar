@@ -1,0 +1,36 @@
+@import (reference, once) "../../constant";
+
+.calendar_day_hours {
+  display: table;
+  position: relative;
+  height: 100%;
+  width: @day-hours-width;
+  margin-left: -1 * @day-hours-width;
+  float: left;
+}
+
+.calendar_day_hours_item {
+  display: table-row;
+
+  &:before, &:last-child:after {
+    display: block;
+    position: absolute;
+    right: 0;
+    margin-right: 5px;
+    white-space: nowrap;
+    font-size: @day-hour-size;
+    line-height: @day-hour-size;
+    color: @day-hour-color;
+  }
+
+  &:before {
+    content: attr(data-hour);
+    margin-top: -0.5 * @day-hour-size;
+  }
+
+  &:last-child:after {
+    content: attr(data-next-hour);
+    margin-bottom: -0.5 * @day-hour-size;
+    bottom: 0;
+  }
+}

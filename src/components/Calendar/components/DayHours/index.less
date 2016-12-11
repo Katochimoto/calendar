@@ -21,16 +21,29 @@
     font-size: @day-hour-size;
     line-height: @day-hour-size;
     color: @day-hour-color;
+
+    @media screen and (max-width: 480px) {
+      font-size: @day-hour-size-480;
+      line-height: @day-hour-size-480;
+    }
   }
 
   &:before {
     content: attr(data-hour);
     margin-top: -0.5 * @day-hour-size;
+
+    @media screen and (max-width: 480px) {
+      margin-top: -0.5 * @day-hour-size-480;
+    }
   }
 
   &:last-child:after {
     content: attr(data-next-hour);
-    margin-bottom: -0.5 * @day-hour-size;
     bottom: 0;
+    margin-bottom: -0.5 * @day-hour-size;
+
+    @media screen and (max-width: 480px) {
+      margin-bottom: -0.5 * @day-hour-size-480;
+    }
   }
 }

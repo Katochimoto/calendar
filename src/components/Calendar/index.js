@@ -14,10 +14,10 @@ export default class Calendar extends Component {
       grid: props.grid
     };
 
-    props.bindChange(this.onChange.bind(this));
+    props.bindChangeEvents(this.onChangeEvents.bind(this));
   }
 
-  onChange() {}
+  onChangeEvents() {}
 
   render() {
     return (
@@ -31,11 +31,13 @@ export default class Calendar extends Component {
 Calendar.propTypes = {
   grid: PropTypes.oneOf([ 'day', 'month', 'week', 'year' ]),
   currentDate: PropTypes.instanceOf(Date),
-  bindChange: PropTypes.func
+  bindChangeEvents: PropTypes.func,
+  onChangeEvents: PropTypes.func
 };
 
 Calendar.defaultProps = {
   grid: 'day',
   currentDate: new Date(),
-  bindChange: function () {}
+  bindChangeEvents: function () {},
+  onChangeEvents: function () {}
 };

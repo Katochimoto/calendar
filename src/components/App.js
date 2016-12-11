@@ -1,11 +1,16 @@
 import Calendar from './Calendar';
 
 const App = () => (
-  <Calendar bindChange={bindChange} />
+  <Calendar bindChangeEvents={bindChangeEvents}
+    onChangeEvents={onChangeEvents}/>
 );
 
 export default App;
 
-function bindChange() { // callback
+function bindChangeEvents() { // callback
   // callback();
+}
+
+function onChangeEvents() { // action, payload
+
 }

@@ -3,6 +3,9 @@
  */
 
 import { Component, PropTypes } from 'react';
+import classnames from 'classnames';
+
+import styles from '../index.less';
 
 export default class InfiniteList extends Component {
   constructor(props) {
@@ -11,8 +14,13 @@ export default class InfiniteList extends Component {
   }
 
   render() {
+    const classes = classnames({
+      [ styles.calendar_infinite ]: true,
+      [ this.props.className ]: Boolean(this.props.className)
+    });
+
     return (
-      <div className={this.props.className}>
+      <div className={classes}>
         {this.props.children}
       </div>
     );

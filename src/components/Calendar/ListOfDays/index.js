@@ -4,7 +4,9 @@
 
 import { Component, PropTypes } from 'react';
 import classnames from 'classnames';
+
 import Day from '../Day';
+import DayHours from '../DayHours';
 import InfiniteList from '../InfiniteList';
 
 import styles from '../index.less';
@@ -26,9 +28,12 @@ export default class ListOfDays extends Component {
     });
 
     return (
-      <InfiniteList className={classes}>
-        {this.state.items}
-      </InfiniteList>
+      <div className={classes}>
+        <DayHours />
+        <InfiniteList>
+          {this.state.items}
+        </InfiniteList>
+      </div>
     );
   }
 }

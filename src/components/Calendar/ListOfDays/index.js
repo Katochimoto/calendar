@@ -29,7 +29,7 @@ export default class ListOfDays extends Component {
 
     return (
       <div className={classes}>
-        <DayHours />
+        { this.props.showСlock && <DayHours /> }
         <InfiniteList>
           {this.state.items}
         </InfiniteList>

@@ -5,7 +5,7 @@
 import { Component } from 'react';
 import moment from 'moment';
 
-import styles from '../index.less';
+import styles from './index.less';
 
 export default class DayHours extends Component {
   constructor(props) {
@@ -23,7 +23,7 @@ export default class DayHours extends Component {
       const nextIdx = i === 23 ? 0 : i + 1;
       const nextHour = cache[ nextIdx ] || (cache[ nextIdx ] = hourFormat(date, nextIdx));
 
-      items.push(<div key={i} className={ styles.calendar_days_hours_item } data-hour={hour} data-next-hour={nextHour} />);
+      items.push(<div key={i} className={ styles.calendar_day_hours_item } data-hour={hour} data-next-hour={nextHour} />);
     }
 
     return items;
@@ -31,7 +31,7 @@ export default class DayHours extends Component {
 
   render() {
     return (
-      <div className={styles.calendar_days_hours}>
+      <div className={styles.calendar_day_hours}>
         {this.hours()}
       </div>
     );

@@ -9,7 +9,7 @@ import Day from '../Day';
 import DayHours from '../DayHours';
 import InfiniteList from '../InfiniteList';
 
-import styles from '../../index.less';
+import styles from '../../style';
 
 export default class ListOfDays extends Component {
   constructor(props) {

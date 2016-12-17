@@ -5,7 +5,7 @@
 import { Component } from 'react';
 import DayEvent from '../DayEvent';
 
-import styles from '../../index.less';
+import styles from '../../style';
 
 export default class DayEvents extends Component {
   constructor(props) {

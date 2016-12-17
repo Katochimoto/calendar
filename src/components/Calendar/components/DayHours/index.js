@@ -5,7 +5,7 @@
 import { Component } from 'react';
 import moment from 'moment';
 
-import styles from './index.less';
+import styles from '../../style';
 
 export default class DayHours extends Component {
   constructor(props) {

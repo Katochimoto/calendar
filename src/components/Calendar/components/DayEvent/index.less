@@ -1,0 +1,13 @@
+.calendar_day_event {
+  position: absolute;
+  visibility: visible;
+  outline: none;
+  width: 100%;
+  cursor: pointer;
+  background: fade(@day-event-color, 20%);
+  box-shadow: inset 3px 0px 0px 0px fade(@day-event-color, 50%);
+
+  &.selected {
+    background: fade(@day-event-color, 30%);
+  }
+}

@@ -1,4 +1,4 @@
-@import (reference, once) "../../constant";
+@import (reference, once) "../../style/constant";
 
 .calendar_day_hours {
   display: table;
@@ -21,28 +21,30 @@
     font-size: @day-hour-size;
     line-height: @day-hour-size;
     color: @day-hour-color;
-
-    @media screen and (max-width: 480px) {
-      font-size: @day-hour-size-480;
-      line-height: @day-hour-size-480;
-    }
   }
 
   &:before {
     content: attr(data-hour);
     margin-top: -0.5 * @day-hour-size;
-
-    @media screen and (max-width: 480px) {
-      margin-top: -0.5 * @day-hour-size-480;
-    }
   }
 
   &:last-child:after {
     content: attr(data-next-hour);
     bottom: 0;
     margin-bottom: -0.5 * @day-hour-size;
+  }
 
-    @media screen and (max-width: 480px) {
+  @media screen and (max-width: 480px) {
+    &:before, &:last-child:after {
+      font-size: @day-hour-size-480;
+      line-height: @day-hour-size-480;
+    }
+
+    &:before {
+      margin-top: -0.5 * @day-hour-size-480;
+    }
+
+    &:last-child:after {
       margin-bottom: -0.5 * @day-hour-size-480;
     }
   }

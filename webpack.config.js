@@ -3,6 +3,9 @@ var webpack = require('webpack');
 var HtmlWebpackPlugin = require('html-webpack-plugin');
 var autoprefixer = require('autoprefixer');
 
+var LessPluginGlob = require('less-plugin-glob');
+var LessPluginGroupMediaQueries = require('less-plugin-group-css-media-queries');
+
 var srcPath = path.join(__dirname, 'src');
 var distPath = path.join(__dirname, 'dist');
 var nodeEnv = 'development'; // production
@@ -34,6 +37,9 @@ module.exports = {
         'libraryTarget': 'umd',
         'path': distPath
     },
+    'resolve': {
+        'extensions': [ '', '.js', '.jsx', '.less' ]
+    },
     'module': {
         'noParse': [
             /node_modules[\/\\]immutable[\/\\]dist[\/\\]immutable.js/,
@@ -58,7 +64,7 @@ module.exports = {
                     'style-loader',
                     'css-loader?modules&importLoaders=1&localIdentName=[local]___[hash:base64:5]',
                     'postcss-loader',
-                    'less-loader'
+                    'less-loader?root=true'
                 ],
                 'include': [ srcPath ]
             }
@@ -107,5 +113,13 @@ module.exports = {
         })
         */
     ],
-    postcss: [ autoprefixer({ browsers: ['last 2 versions'] }) ]
+    postcss: [
+        autoprefixer({ browsers: ['last 2 versions'] })
+    ],
+    lessLoader: {
+        lessPlugins: [
+            LessPluginGlob,
+            LessPluginGroupMediaQueries
+        ]
+    }
 };

@@ -1,0 +1,25 @@
+@import (reference, once) "../../style/constant";
+
+.calendar_day_wrap {
+  height: 100%;
+  position: relative;
+  background: @day-content-color;
+}
+
+.calendar_day {
+  display: table;
+  height: 100%;
+  width: 100%;
+  position: relative;
+}
+
+.calendar_day_hour {
+  display: table-row;
+  box-shadow: inset 0px 1px 0px 0px @day-content-sep-color;
+
+  &:last-child {
+    box-shadow:
+      inset 0px 1px 0px 0px @day-content-sep-color,
+      inset 0px -1px 0px 0px @day-content-sep-color;
+  }
+}

@@ -8,7 +8,7 @@
 import { Component } from 'react';
 import DayEvents from '../DayEvents';
 
-import styles from '../../index.less';
+import styles from '../../style';
 
 export default class Day extends Component {
   constructor(props) {

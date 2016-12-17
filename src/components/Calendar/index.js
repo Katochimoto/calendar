@@ -5,7 +5,7 @@
 import { Component, PropTypes } from 'react';
 import ListOfDays from './components/ListOfDays';
 
-import styles from './index.less';
+import styles from './style';
 
 export default class Calendar extends Component {
   constructor(props) {

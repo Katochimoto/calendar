@@ -27,6 +27,8 @@
     "html-webpack-plugin": "2.24.1",
     "less": "^2.7.1",
     "less-loader": "^2.2.3",
+    "less-plugin-glob": "github:just-boris/less-plugin-glob",
+    "less-plugin-group-css-media-queries": "^1.1.1",
     "postcss-loader": "^1.2.0",
     "preprocess": "3.1.0",
     "preprocess-loader": "0.2.0",

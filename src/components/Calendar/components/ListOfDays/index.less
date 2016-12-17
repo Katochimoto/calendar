@@ -1,17 +1,15 @@
 @import (reference, once) "../../style/constant";
 
-.calendar_days {
+.@{component}_days {
   position: relative;
   height: 200%;
   padding: @day-hour-size / 2 0;
-}
 
-.calendar_days__hours {
-  margin-left: @day-hours-width;
-}
-
-@media screen and (max-width: 480px) {
-  .calendar_days {
-    padding: @day-hour-size-480 / 2 0;
+  &__hours {
+    margin-left: @day-hours-width;
   }
+
+  .mobile({
+    padding: @day-hour-size-480 / 2 0;
+  })
 }

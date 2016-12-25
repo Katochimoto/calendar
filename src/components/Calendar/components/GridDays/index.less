@@ -1,0 +1,29 @@
+@import (reference, once) "../../style/constant";
+
+.@{component}_GridDays {
+  position: relative;
+  height: 200%;
+  padding: @day-hour-size / 2 0;
+
+  &__hours {
+    margin-left: @day-hours-width;
+  }
+
+  &_item {
+    width: 100%;
+    height: 100%;
+    display: table;
+  }
+
+  &_day {
+    display: table-cell;
+
+    &:not(:last-child) {
+      box-shadow: inset -1px 0px 0px 0px @day-separator-color;
+    }
+  }
+
+  .mobile({
+    padding: @day-hour-size-480 / 2 0;
+  })
+}

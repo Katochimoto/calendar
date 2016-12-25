@@ -1,12 +1,13 @@
 @import (reference, once) "../../style/constant";
 
-.@{component}_day_hours {
+.@{component}_DayHours {
   display: table;
   position: relative;
   height: 100%;
   width: @day-hours-width;
   margin-left: -1 * @day-hours-width;
   float: left;
+  pointer-events: none;
 
   &_item {
     display: table-row;

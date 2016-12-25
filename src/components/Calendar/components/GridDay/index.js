@@ -11,7 +11,7 @@ import InfiniteList from '../InfiniteList';
 
 import styles from '../../style';
 
-export default class ListOfDays extends Component {
+export default class GridDay extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -23,8 +23,8 @@ export default class ListOfDays extends Component {
 
   render() {
     const classes = classnames({
-      [ styles.calendar_days ]: true,
-      [ styles.calendar_days__hours ]: this.props.showСlock
+      [ styles.calendar_GridDay ]: true,
+      [ styles.calendar_GridDay__hours ]: this.props.showСlock
     });
 
     return (
@@ -41,10 +41,10 @@ export default class ListOfDays extends Component {
 /**
  * @type {boolean} propTypes.showСlock показывать часы
  */
-ListOfDays.propTypes = {
+GridDay.propTypes = {
   showСlock: PropTypes.bool
 };
 
-ListOfDays.defaultProps = {
+GridDay.defaultProps = {
   showСlock: true
 };

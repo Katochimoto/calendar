@@ -25,7 +25,7 @@ export default class DayEvent extends Component {
 
   render() {
     return (
-      <div className={ styles.calendar_day_event } style={this.positionEvent()} />
+      <div className={ styles.calendar_DayEvent } style={this.positionEvent()} />
     );
   }
 }

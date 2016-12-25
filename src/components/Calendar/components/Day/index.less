@@ -1,25 +1,28 @@
 @import (reference, once) "../../style/constant";
 
-.@{component}_day {
-  display: table;
+.@{component}_Day {
   height: 100%;
-  width: 100%;
   position: relative;
 
-  &_wrap {
+  &__weekend {
+    background: @day-weekend-color;
+  }
+
+  &_content {
+    display: table;
     height: 100%;
+    width: 100%;
     position: relative;
-    background: @day-content-color;
   }
 
   &_hour {
     display: table-row;
-    box-shadow: inset 0px 1px 0px 0px @day-content-sep-color;
+    box-shadow: inset 0px 1px 0px 0px @day-separator-color;
 
     &:last-child {
       box-shadow:
-        inset 0px 1px 0px 0px @day-content-sep-color,
-        inset 0px -1px 0px 0px @day-content-sep-color;
+        inset 0px 1px 0px 0px @day-separator-color,
+        inset 0px -1px 0px 0px @day-separator-color;
     }
   }
 }

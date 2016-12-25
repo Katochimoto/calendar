@@ -3,7 +3,7 @@
  */
 
 import { Component, PropTypes } from 'react';
-import ListOfDays from './components/ListOfDays';
+import GridDays from './components/GridDays';
 
 import styles from './style';
 
@@ -22,7 +22,7 @@ export default class Calendar extends Component {
   render() {
     return (
       <div className={ styles.calendar }>
-        <ListOfDays />
+        <GridDays />
       </div>
     );
   }

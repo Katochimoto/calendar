@@ -15,7 +15,7 @@ export default class DayEvents extends Component {
 
   render() {
     return (
-      <div className={ styles.calendar_day_events }>
+      <div className={ styles.calendar_DayEvents }>
         <DayEvent />
       </div>
     );

@@ -2,7 +2,7 @@
  *
  */
 
-import { Component } from 'react';
+import { Component, PropTypes } from 'react';
 import moment from 'moment';
 
 import styles from '../../style';
@@ -13,7 +13,7 @@ export default class DayHours extends Component {
     this.state = {};
   }
 
-  hours() {
+  getHoursItems() {
     const items = [];
     const cache = {};
     const date = moment();
@@ -34,14 +34,45 @@ export default class DayHours extends Component {
     return items;
   }
 
+  getLinesItems() {
+    const items = [];
+
+    for (let i = 0; i < 24; i++) {
+      items.push(
+        <div key={i} className={styles.calendar_DayHours_item} />
+      );
+    }
+
+    return items;
+  }
+
   render() {
+    const items = do {
+      if (this.props.clockShow) {
+        this.getHoursItems();
+      } else {
+        this.getLinesItems();
+      }
+    };
+
     return (
       <div className={styles.calendar_DayHours}>
-        {this.hours()}
+        {items}
       </div>
     );
   }
 }
+
+/**
+ * @type {boolean} propTypes.clockShow показывать часы
+ */
+DayHours.propTypes = {
+  clockShow: PropTypes.bool
+};
+
+DayHours.defaultProps = {
+  clockShow: true
+};
 
 function hourFormat(date, hour) {
   return date.set({ hour, minute: 0 }).format('LT');

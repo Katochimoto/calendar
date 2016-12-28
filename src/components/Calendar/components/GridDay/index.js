@@ -24,12 +24,12 @@ export default class GridDay extends Component {
   render() {
     const classes = classnames({
       [ styles.calendar_GridDay ]: true,
-      [ styles.calendar_GridDay__hours ]: this.props.showСlock
+      [ styles.calendar_GridDay__hours ]: this.props.clockShow
     });
 
     return (
       <div className={classes}>
-        { this.props.showСlock && <DayHours /> }
+        <DayHours clockShow={this.props.clockShow} />
         <InfiniteList>
           {this.state.items}
         </InfiniteList>
@@ -39,12 +39,12 @@ export default class GridDay extends Component {
 }
 
 /**
- * @type {boolean} propTypes.showСlock показывать часы
+ * @type {boolean} propTypes.clockShow показывать часы
  */
 GridDay.propTypes = {
-  showСlock: PropTypes.bool
+  clockShow: PropTypes.bool
 };
 
 GridDay.defaultProps = {
-  showСlock: true
+  clockShow: true
 };

@@ -3,13 +3,15 @@
 .@{component}_GridDay {
   position: relative;
   height: 200%;
-  padding: @day-hour-size / 2 0;
+  margin-top: @day-hour-margin;
+  margin-bottom: @day-hour-margin;
 
   &__hours {
     margin-left: @day-hours-width;
   }
 
   .mobile({
-    padding: @day-hour-size-480 / 2 0;
+    margin-top: @day-hour-margin;
+    margin-bottom: @day-hour-margin;
   })
 }

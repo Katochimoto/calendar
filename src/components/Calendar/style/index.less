@@ -2,11 +2,16 @@
 
 .@{component} {
   font: 13px/1.5 Arial,Helvetica,sans-serif;
+  overflow: auto;
   position: absolute;
   bottom: 0;
   left: 0;
   right: 0;
   top: 0;
+  -webkit-font-smoothing: antialiased;
+          font-smoothing: antialiased;
+  -webkit-tap-highlight-color: transparent;
+          tap-highlight-color: transparent;
 }
 
 @import "../components/**/*.less";

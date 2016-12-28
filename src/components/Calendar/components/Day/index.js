@@ -18,16 +18,6 @@ export default class Day extends Component {
     this.state = {};
   }
 
-  hours() {
-    const items = [];
-
-    for (let i = 0; i < 24; i++) {
-      items.push(<div key={i} className={ styles.calendar_Day_hour } />);
-    }
-
-    return items;
-  }
-
   render() {
     const classes = classnames({
       [ styles.calendar_Day ]: true,
@@ -37,9 +27,6 @@ export default class Day extends Component {
 
     return (
       <div className={ classes }>
-        <div className={ styles.calendar_Day_content }>
-          {this.hours()}
-        </div>
         <DayEvents />
       </div>
     );

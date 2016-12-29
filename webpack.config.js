@@ -24,7 +24,6 @@ module.exports = {
             'redux-devtools',
             'redux-logger',
             'immutable',
-            'moment/moment.js',
             'classnames'
         ],
         'app': './index.js'
@@ -42,8 +41,7 @@ module.exports = {
     },
     'module': {
         'noParse': [
-            /node_modules[\/\\]immutable[\/\\]dist[\/\\]immutable.js/,
-            /node_modules[\/\\]moment[\/\\]moment.js/
+            /node_modules[\/\\]immutable[\/\\]dist[\/\\]immutable.js/
         ],
         'preLoaders': [
             {
@@ -83,7 +81,6 @@ module.exports = {
             'ReactDOM': 'react-dom',
             'ReactDOMServer': 'react-dom/server'
         }),
-        new webpack.ContextReplacementPlugin(/moment[\/\\]locale$/, /en/),
         new webpack.optimize.OccurenceOrderPlugin(true),
         new webpack.optimize.DedupePlugin(),
         new webpack.optimize.CommonsChunkPlugin({

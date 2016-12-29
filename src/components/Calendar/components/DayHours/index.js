@@ -2,78 +2,39 @@
  *
  */
 
-import { Component, PropTypes } from 'react';
-import moment from 'moment';
-
 import styles from '../../style';
 
-export default class DayHours extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {};
+export default function DayHours({ hoursOfDay, hours }) {
+  const len = hoursOfDay.length - 1;
+
+  if (len < 0) {
+    return null;
   }
 
-  getHoursItems() {
-    const items = [];
-    const cache = {};
-    const date = moment();
+  const elements = [];
 
-    for (let i = 0; i < 24; i++) {
-      const hour = cache[ i ] = hourFormat(date, i);
-      const nextIdx = i === 23 ? 0 : i + 1;
-      const nextHour = cache[ nextIdx ] || (cache[ nextIdx ] = hourFormat(date, nextIdx));
+  for (let i = 0; i < len; i++) {
+    const hour = hoursOfDay[ i ];
 
-      items.push(
-        <div key={i}
-          className={styles.calendar_DayHours_item}
-          data-hour={hour}
-          data-next-hour={nextHour} />
-      );
-    }
-
-    return items;
-  }
-
-  getLinesItems() {
-    const items = [];
-
-    for (let i = 0; i < 24; i++) {
-      items.push(
-        <div key={i} className={styles.calendar_DayHours_item} />
-      );
-    }
-
-    return items;
-  }
-
-  render() {
-    const items = do {
-      if (this.props.clockShow) {
-        this.getHoursItems();
-      } else {
-        this.getLinesItems();
-      }
-    };
-
-    return (
-      <div className={styles.calendar_DayHours}>
-        {items}
-      </div>
+    elements.push(
+      <div key={hour}
+        className={styles.calendar_DayHours_item}
+        data-hour={hours[ hour ].title} />
     );
   }
-}
 
-/**
- * @type {boolean} propTypes.clockShow показывать часы
- */
-DayHours.propTypes = {
-  clockShow: PropTypes.bool
-};
+  const hour = hoursOfDay[ len ];
 
-DayHours.defaultProps = {
-  clockShow: true
-};
+  elements.push(
+    <div key={hour}
+      className={styles.calendar_DayHours_item}
+      data-hour={hours[ hour ].title}
+      data-next-hour={hours[ hoursOfDay[0] ].title} />
+  );
 
-function hourFormat(date, hour) {
-  return date.set({ hour, minute: 0 }).format('LT');
+  return (
+    <div className={styles.calendar_DayHours}>
+      {elements}
+    </div>
+  );
 }

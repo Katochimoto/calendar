@@ -49,7 +49,12 @@
                 "requireReturnDescription": false
             }
         ],
-        "react/jsx-uses-vars": [ 2 ]
+        "react/jsx-uses-vars": [ 2 ],
+        "space-before-function-paren": ["error", {
+            "anonymous": "always",
+            "named": "always",
+            "asyncArrow": "ignore"
+        }]
     },
     "env": {
         "es6": true,

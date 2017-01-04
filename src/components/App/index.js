@@ -11,10 +11,10 @@ const App = () => (
 
 export default App;
 
-function bindChangeEvents() { // callback
+function bindChangeEvents () { // callback
   // callback();
 }
 
-function onChangeEvents() { // action, payload
+function onChangeEvents () { // action, payload
 
 }

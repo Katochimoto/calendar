@@ -5,6 +5,6 @@ export default combineReducers({
   test: test
 });
 
-function test(state = new Map()) {
+function test (state = new Map()) {
   return state;
 }

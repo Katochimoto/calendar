@@ -8,7 +8,7 @@ import GridDays from './components/GridDays';
 import styles from './style';
 
 export default class Calendar extends Component {
-  constructor(props) {
+  constructor (props) {
     super(props);
     this.state = {
       grid: props.grid
@@ -17,9 +17,9 @@ export default class Calendar extends Component {
     props.bindChangeEvents(this.onChangeEvents.bind(this));
   }
 
-  onChangeEvents() {}
+  onChangeEvents () {}
 
-  render() {
+  render () {
     return (
       <div className={styles.calendar}>
         <GridDays hours={this.props.hours} hoursOfDay={this.props.hoursOfDay} />
@@ -71,4 +71,5 @@ Calendar.defaultProps = {
     23: { title: '23:00' },
   },
   hoursOfDay: [ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23 ],
+  hideNonWorkingHours: true,
 };

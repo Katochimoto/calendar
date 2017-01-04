@@ -12,7 +12,7 @@ import InfiniteList from '../InfiniteList';
 import styles from '../../style';
 
 export default class GridDays extends Component {
-  constructor(props) {
+  constructor (props) {
     super(props);
     this.state = {
       items: [
@@ -27,14 +27,16 @@ export default class GridDays extends Component {
     };
   }
 
-  render() {
+  render () {
     const classes = classnames({
       [ styles.calendar_GridDays ]: true
     });
 
     return (
       <div className={classes}>
-        <DayHours hours={this.props.hours} hoursOfDay={this.props.hoursOfDay} />
+        <DayHours hours={this.props.hours}
+          hoursOfDay={this.props.hoursOfDay}
+          hideNonWorkingHours={this.props.hideNonWorkingHours} />
         <InfiniteList>
           <div className={styles.calendar_GridDays_item}>
             {this.state.items}

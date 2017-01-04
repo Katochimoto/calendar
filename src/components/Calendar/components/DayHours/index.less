@@ -26,16 +26,13 @@
 
   &_item {
     display: table-row;
-    box-shadow: inset 0px 1px 0px 0px @day-separator-color;
 
-    &:last-child {
-      box-shadow:
-        inset 0px 1px 0px 0px @day-separator-color,
-        inset 0px -1px 0px 0px @day-separator-color;
-    }
+    & > &_content {
+      position: relative;
+      display: table-cell;
+      box-shadow: inset 0px 1px 0px 0px @day-separator-color;
 
-    &[data-hour] {
-      &:before {
+      &[data-hour]:before {
         .mixin-title-hour;
 
         content: attr(data-hour);
@@ -49,8 +46,12 @@
       }
     }
 
-    &[data-next-hour] {
-      &:last-child:after {
+    &:last-child > &_content {
+      box-shadow:
+        inset 0px 1px 0px 0px @day-separator-color,
+        inset 0px -1px 0px 0px @day-separator-color;
+
+      &[data-next-hour]:after {
         .mixin-title-hour;
 
         content: attr(data-next-hour);

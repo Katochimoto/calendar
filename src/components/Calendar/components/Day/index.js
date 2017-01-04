@@ -13,12 +13,12 @@ import DayEvents from '../DayEvents';
 import styles from '../../style';
 
 export default class Day extends Component {
-  constructor(props) {
+  constructor (props) {
     super(props);
     this.state = {};
   }
 
-  render() {
+  render () {
     const classes = classnames({
       [ styles.calendar_Day ]: true,
       [ styles.calendar_Day__weekend ]: this.props.weekend,

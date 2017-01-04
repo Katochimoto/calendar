@@ -8,12 +8,12 @@ import DayEvent from '../DayEvent';
 import styles from '../../style';
 
 export default class DayEvents extends Component {
-  constructor(props) {
+  constructor (props) {
     super(props);
     this.state = {};
   }
 
-  render() {
+  render () {
     return (
       <div className={ styles.calendar_DayEvents }>
         <DayEvent />

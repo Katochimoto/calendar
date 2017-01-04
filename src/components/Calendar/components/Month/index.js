@@ -6,12 +6,12 @@
 import { Component } from 'react';
 
 export default class Month extends Component {
-  constructor(props) {
+  constructor (props) {
     super(props);
     this.state = {};
   }
 
-  render() {
+  render () {
     return (
       <div>
 

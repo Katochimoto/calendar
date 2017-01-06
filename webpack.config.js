@@ -17,14 +17,17 @@ module.exports = {
     'target': 'web', // 'electron',
     'entry': {
         'vendor': [
+            'raf',
             'react',
             'react-dom',
+            'react-addons-update',
             'redux',
             'react-redux',
             'redux-devtools',
             'redux-logger',
             'immutable',
-            'classnames'
+            'classnames',
+            'eventemitter3'
         ],
         'app': './index.js'
     },

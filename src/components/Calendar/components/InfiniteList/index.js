@@ -11,11 +11,6 @@ export default class InfiniteList extends Component {
   constructor (props) {
     super(props);
     this.state = {};
-    this.onScroll = this.onScroll.bind(this);
-  }
-
-  onScroll () {
-    // console.log('>>>');
   }
 
   render () {
@@ -25,9 +20,10 @@ export default class InfiniteList extends Component {
     });
 
     return (
-      <div className={classes}
-        onScroll={this.onScroll}>
-        {this.props.children}
+      <div className={classes}>
+        <div className={styles.calendar_InfiniteList_item}>
+          {this.props.children}
+        </div>
       </div>
     );
   }

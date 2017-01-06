@@ -3,13 +3,12 @@
 .@{component}_InfiniteList {
   width: 100%;
   height: 100%;
-  -ms-overflow-style: none;
-  overflow: -moz-scrollbars-none;
-  overflow-y: hidden;
-  overflow-x: scroll;
+  overflo: hidden;
+  white-space: nowrap;
 
-  &::-webkit-scrollbar {
-    width: 0 !important;
-    display: none;
+  &_item {
+    display: inline-block;
+    width: 100%;
+    height: 100%;
   }
 }

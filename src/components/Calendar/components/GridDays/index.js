@@ -2,9 +2,8 @@
  *
  */
 
-import classnames from 'classnames';
+import raf from 'raf';
 
-import Store from '../../Store';
 import Component from '../../Component';
 import Day from '../Day';
 import DayHours from '../DayHours';
@@ -12,53 +11,83 @@ import InfiniteList from '../InfiniteList';
 
 import styles from '../../style';
 
+const INITSTATE = { scrollY: 0, scrollHeight: 0 };
+
 export default class GridDays extends Component {
   constructor (props) {
     super(props);
+
+    this.handleWheel = this.handleWheel.bind(this);
+    this.handleResize = this.handleResize.bind(this);
   }
 
   componentDidMount () {
     super.componentDidMount();
-    this._updateScrollSize();
+    window.addEventListener('resize', this.handleResize, false);
+    this.setState({ scrollHeight: getScrollHeight(this._node) });
   }
 
-  componentDidUpdate (prevProps, prevState) {
-    super.componentDidUpdate(prevProps, prevState);
-
-    if (
-      prevState.calendarWidth !== this.state.calendarWidth ||
-      prevState.calendarHeight !== this.state.calendarHeight
-    ) {
-      this._updateScrollSize();
-    }
+  componentWillUnmount () {
+    super.componentWillUnmount();
+    window.removeEventListener('resize', this.handleResize, false);
+    this.stophandleResize();
   }
 
-  _transformState ({ calendarWidth, calendarHeight, scrollY, hours, hoursOfDay, hideNonWorkingHours }) {
+  transformState (storeState, prefState = INITSTATE) {
+    const { hideNonWorkingHours, hours, hoursOfDay } = storeState;
+    const { scrollY, scrollHeight } = prefState;
+
     return {
-      calendarWidth,
-      calendarHeight,
       hideNonWorkingHours,
       hours,
       hoursOfDay,
       scrollY,
+      scrollHeight,
     };
   }
 
-  _updateScrollSize () {
-    Store.update({
-      scrollWidth: scrollWidth(this._node),
-      scrollHeight: scrollHeight(this._node),
-    });
+  handleWheel (event) {
+    event.preventDefault();
+    const deltaY = event.deltaY;
+
+    if (!deltaY) {
+      return;
+    }
+
+    if (this._lockWheel) {
+      this._scrollY = getScrollY(deltaY, this._scrollY, this.state.scrollHeight);
+      return;
+    }
+
+    this._lockWheel = true;
+    this._scrollY = getScrollY(deltaY, this.state.scrollY, this.state.scrollHeight);
+
+    rraf(() => {
+      this.setState({ scrollY: this._scrollY }, () => {
+        this._lockWheel = false;
+      });
+    }, 3);
+  }
+
+  handleResize () {
+    this.stophandleResize();
+    this._resizeTimeout = window.setTimeout(() => {
+      this._resizeTimeout = 0;
+      this.setState({ scrollHeight: getScrollHeight(this._node) });
+    }, 50);
+  }
+
+  stophandleResize () {
+    if (this._resizeTimeout) {
+      clearTimeout(this._resizeTimeout);
+      this._resizeTimeout = 0;
+    }
   }
 
   render () {
     const style = {
       transform: `translate(0px, ${this.state.scrollY}px)`,
     };
-
-    const classes = classnames({
-      [ styles.calendar_GridDays ]: true
-    });
 
     const items = [
       <Day key={0} className={styles.calendar_GridDays_day} />,
@@ -72,8 +101,9 @@ export default class GridDays extends Component {
 
     return (
       <div ref={node => this._node = node}
-        className={classes}
-        style={style}>
+        className={styles.calendar_GridDays}
+        style={style}
+        onWheel={this.handleWheel}>
 
         <DayHours hours={this.state.hours}
           hoursOfDay={this.state.hoursOfDay}
@@ -89,14 +119,25 @@ export default class GridDays extends Component {
   }
 }
 
-function scrollWidth (node) {
-  const stylesElement = window.getComputedStyle(node);
-  const margin = parseFloat(stylesElement.marginLeft) + parseFloat(stylesElement.marginRight);
-  return Math.ceil(node.offsetWidth / 2 + margin);
-}
-
-function scrollHeight (node) {
+function getScrollHeight (node) {
   const stylesElement = window.getComputedStyle(node);
   const margin = parseFloat(stylesElement.marginTop) + parseFloat(stylesElement.marginBottom);
   return Math.ceil(node.offsetHeight / 2 + margin);
+}
+
+function getScrollY (deltaY, y, scrollHeight) {
+  y = Math.max(-(scrollHeight), y + deltaY);
+  y = y > 0 ? 0 : y;
+  return y;
+}
+
+function rraf (callback, cnt = 1, idx = 0) {
+  raf(() => {
+    idx++;
+    if (idx < cnt) {
+      rraf(callback, cnt, idx);
+    } else {
+      callback();
+    }
+  });
 }

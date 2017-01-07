@@ -8,7 +8,7 @@ var LessPluginGroupMediaQueries = require('less-plugin-group-css-media-queries')
 
 var srcPath = path.join(__dirname, 'src');
 var distPath = path.join(__dirname, 'dist');
-var nodeEnv = 'development'; // production
+var nodeEnv = 'production'; // production development
 var preprocessParams = '?NODE_ENV=' + nodeEnv;
 
 module.exports = {
@@ -18,14 +18,7 @@ module.exports = {
     'entry': {
         'vendor': [
             'raf',
-            'react',
-            'react-dom',
-            'react-addons-update',
-            'redux',
-            'react-redux',
-            'redux-devtools',
-            'redux-logger',
-            'immutable',
+            'preact-compat',
             'classnames',
             'eventemitter3'
         ],
@@ -40,7 +33,11 @@ module.exports = {
         'path': distPath
     },
     'resolve': {
-        'extensions': [ '', '.js', '.jsx', '.less' ]
+        'extensions': [ '', '.js', '.jsx', '.less' ],
+        'alias': {
+            'react': 'preact-compat',
+            'react-dom': 'preact-compat'
+        }
     },
     'module': {
         'noParse': [
@@ -80,9 +77,9 @@ module.exports = {
             }
         }),
         new webpack.ProvidePlugin({
-            'React': 'react',
-            'ReactDOM': 'react-dom',
-            'ReactDOMServer': 'react-dom/server'
+            'React': 'preact-compat',
+            'ReactDOM': 'preact-compat',
+            'preact': 'preact'
         }),
         new webpack.optimize.OccurenceOrderPlugin(true),
         new webpack.optimize.DedupePlugin(),

@@ -1,5 +1,4 @@
 import EventEmitter from 'eventemitter3';
-import update from 'react-addons-update';
 
 class Store extends EventEmitter {
   constructor (state) {
@@ -8,11 +7,11 @@ class Store extends EventEmitter {
   }
 
   init (state) {
-    this._state = update(this._state, { $merge: state });
+    this._state = Object.assign(this._state, state);
   }
 
   update (state) {
-    this._state = update(this._state, { $merge: state });
+    this._state = Object.assign(this._state, state);
     this.emit('change');
   }
 
@@ -32,12 +31,6 @@ class Store extends EventEmitter {
 export default new Store({
   grid: 'day',
   currentDate: new Date(),
-  scrollX: 0,
-  scrollY: 0,
-  scrollWidth: 0,
-  scrollHeight: 0,
-  calendarWidth: 0,
-  calendarHeight: 0,
   hours: {
     0: { title: '00:00' },
     1: { title: '01:00' },

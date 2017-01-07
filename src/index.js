@@ -1,16 +1,9 @@
 import { render } from 'react-dom';
-import { Provider } from 'react-redux';
 import App from './components/App';
-import store from './store';
 
 const root = document.body.appendChild(document.createElement('div'));
 
-render(
-    <Provider store={store}>
-        <App />
-    </Provider>,
-    root
-);
+render(<App />, root);
 
 // import { ipcRenderer } from 'electron';
 

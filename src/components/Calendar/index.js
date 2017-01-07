@@ -27,7 +27,7 @@ export default class Calendar extends Component {
 
   render () {
     return (
-      <div ref={node => this._node = node} className={styles.calendar}>
+      <div className={styles.calendar}>
         <GridDays />
       </div>
     );

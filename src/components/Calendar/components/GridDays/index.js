@@ -2,48 +2,31 @@
  *
  */
 
-import raf from 'raf';
+import { PureComponent } from 'react';
 
-import Component from '../../Component';
 import Day from '../Day';
 import DayHours from '../DayHours';
 import InfiniteList from '../InfiniteList';
+import rraf from '../../utils/rraf';
 
 import styles from '../../style';
 
-const INITSTATE = { scrollY: 0, scrollHeight: 0 };
-
-export default class GridDays extends Component {
+export default class GridDays extends PureComponent {
   constructor (props) {
     super(props);
-
+    this.state = { scrollY: 0, scrollHeight: 0 };
     this.handleWheel = this.handleWheel.bind(this);
     this.handleResize = this.handleResize.bind(this);
   }
 
   componentDidMount () {
-    super.componentDidMount();
     window.addEventListener('resize', this.handleResize, false);
     this.setState({ scrollHeight: getScrollHeight(this._node) });
   }
 
   componentWillUnmount () {
-    super.componentWillUnmount();
     window.removeEventListener('resize', this.handleResize, false);
     this.stophandleResize();
-  }
-
-  transformState (storeState, prefState = INITSTATE) {
-    const { hideNonWorkingHours, hours, hoursOfDay } = storeState;
-    const { scrollY, scrollHeight } = prefState;
-
-    return {
-      hideNonWorkingHours,
-      hours,
-      hoursOfDay,
-      scrollY,
-      scrollHeight,
-    };
   }
 
   handleWheel (event) {
@@ -105,9 +88,7 @@ export default class GridDays extends Component {
         style={style}
         onWheel={this.handleWheel}>
 
-        <DayHours hours={this.state.hours}
-          hoursOfDay={this.state.hoursOfDay}
-          hideNonWorkingHours={this.state.hideNonWorkingHours} />
+        <DayHours />
 
         <InfiniteList>
           <div className={styles.calendar_GridDays_item}>
@@ -129,15 +110,4 @@ function getScrollY (deltaY, y, scrollHeight) {
   y = Math.max(-(scrollHeight), y + deltaY);
   y = y > 0 ? 0 : y;
   return y;
-}
-
-function rraf (callback, cnt = 1, idx = 0) {
-  raf(() => {
-    idx++;
-    if (idx < cnt) {
-      rraf(callback, cnt, idx);
-    } else {
-      callback();
-    }
-  });
 }

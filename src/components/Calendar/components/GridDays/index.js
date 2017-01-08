@@ -4,10 +4,11 @@
 
 import { PureComponent } from 'react';
 
+import context from '../../context';
+import rraf from '../../utils/rraf';
 import Day from '../Day';
 import DayHours from '../DayHours';
 import InfiniteList from '../InfiniteList';
-import rraf from '../../utils/rraf';
 
 import styles from '../../style';
 
@@ -20,12 +21,12 @@ export default class GridDays extends PureComponent {
   }
 
   componentDidMount () {
-    window.addEventListener('resize', this.handleResize, false);
+    context.addEventListener('resize', this.handleResize, false);
     this.setState({ scrollHeight: getScrollHeight(this._node) });
   }
 
   componentWillUnmount () {
-    window.removeEventListener('resize', this.handleResize, false);
+    context.removeEventListener('resize', this.handleResize, false);
     this.stophandleResize();
   }
 
@@ -54,7 +55,7 @@ export default class GridDays extends PureComponent {
 
   handleResize () {
     this.stophandleResize();
-    this._resizeTimeout = window.setTimeout(() => {
+    this._resizeTimeout = context.setTimeout(() => {
       this._resizeTimeout = 0;
       this.setState({ scrollHeight: getScrollHeight(this._node) });
     }, 50);
@@ -101,7 +102,7 @@ export default class GridDays extends PureComponent {
 }
 
 function getScrollHeight (node) {
-  const stylesElement = window.getComputedStyle(node);
+  const stylesElement = context.getComputedStyle(node);
   const margin = parseFloat(stylesElement.marginTop) + parseFloat(stylesElement.marginBottom);
   return Math.ceil(node.offsetHeight / 2 + margin);
 }

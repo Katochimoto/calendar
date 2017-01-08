@@ -40,9 +40,6 @@ module.exports = {
         }
     },
     'module': {
-        'noParse': [
-            /node_modules[\/\\]immutable[\/\\]dist[\/\\]immutable.js/
-        ],
         'preLoaders': [
             {
                 'test': /\.js$/,

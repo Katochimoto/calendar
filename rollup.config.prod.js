@@ -5,8 +5,9 @@ import commonjs from 'rollup-plugin-commonjs';
 import filesize from 'rollup-plugin-filesize';
 
 import less from 'rollup-plugin-less';
-import lessPluginGlob from 'less-plugin-glob';
-import lessPluginGroupMediaQueries from 'less-plugin-group-css-media-queries';
+import LessPluginGlob from 'less-plugin-glob';
+import LessPluginGroupMediaQueries from 'less-plugin-group-css-media-queries';
+import LessPluginAutoPrefix from 'less-plugin-autoprefix';
 
 export default {
   entry: 'src/index.js',
@@ -15,14 +16,34 @@ export default {
   sourceMap: true,
   useStrict: false,
   context: 'window',
+  external: [
+    'classnames',
+    'eventemitter3',
+    'preact-compat',
+    'raf',
+  ],
+  globals: {
+    'classnames': 'vendor._classnames',
+    'raf': 'vendor._raf',
+    'eventemitter3': 'vendor._eventemitter',
+    'preact-compat': 'vendor._preact_compat',
+  },
   plugins: [
     json(),
     less({
-      insert: true,
+      output: 'dist/app.css',
       option: {
         plugins: [
-          lessPluginGlob,
-          lessPluginGroupMediaQueries,
+          LessPluginGlob,
+          LessPluginGroupMediaQueries,
+          new LessPluginAutoPrefix({
+            browsers: [
+              '> 1%',
+              'Firefox >= 14',
+              'Opera >= 12',
+              'Chrome >= 4'
+            ]
+          }),
         ],
       },
     }),

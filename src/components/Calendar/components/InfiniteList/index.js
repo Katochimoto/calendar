@@ -5,7 +5,7 @@
 import { Component, PropTypes } from 'react';
 import classnames from 'classnames';
 
-import styles from '../../style';
+import styles from '../../style.less';
 
 export default class InfiniteList extends Component {
   constructor (props) {

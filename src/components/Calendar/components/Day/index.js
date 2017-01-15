@@ -10,7 +10,7 @@ import classnames from 'classnames';
 
 import DayEvents from '../DayEvents';
 
-import styles from '../../style';
+import styles from '../../style.less';
 
 export default class Day extends Component {
   constructor (props) {

@@ -1,6 +1,7 @@
-import resolve from 'rollup-plugin-node-resolve';
-import commonjs from 'rollup-plugin-commonjs';
-import filesize from 'rollup-plugin-filesize';
+import RollupPluginNodeResolve from 'rollup-plugin-node-resolve';
+import RollupPluginCommonJS from 'rollup-plugin-commonjs';
+import RollupPluginFilesize from 'rollup-plugin-filesize';
+import RollupPluginReplace from 'rollup-plugin-replace';
 
 export default {
   entry: 'src/vendor.js',
@@ -11,15 +12,16 @@ export default {
   context: 'window',
   moduleName: 'vendor',
   plugins: [
-    resolve({
+    RollupPluginReplace({
+      'process.env.NODE_ENV': JSON.stringify('production')
+    }),
+    RollupPluginNodeResolve({
       jsnext: true,
       module: true,
       main: true,
-      browser: true,
+      browser: true
     }),
-    commonjs({
-      include: 'node_modules/**',
-    }),
-    filesize(),
-  ],
+    RollupPluginCommonJS({ include: 'node_modules/**' }),
+    RollupPluginFilesize()
+  ]
 };

@@ -10,7 +10,7 @@ import Day from '../Day';
 import DayHours from '../DayHours';
 import InfiniteList from '../InfiniteList';
 
-import styles from '../../style';
+import styles from '../../style.less';
 
 export default class GridDays extends PureComponent {
   constructor (props) {

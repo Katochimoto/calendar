@@ -7,7 +7,7 @@ import GridDays from './components/GridDays';
 import Store from './Store';
 import Component from './Component';
 
-import styles from './style';
+import styles from './style.less';
 
 export default class Calendar extends Component {
   constructor (props) {

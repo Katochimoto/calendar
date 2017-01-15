@@ -4,7 +4,7 @@
 
 import Component from '../../Component';
 
-import styles from '../../style';
+import styles from '../../style.less';
 
 export default class DayHours extends Component {
   transformState (storeState) {

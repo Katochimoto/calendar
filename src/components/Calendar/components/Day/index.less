@@ -1,8 +1,13 @@
 @import (reference, once) "../../style/constant";
 
 .@{component}_Day {
-  height: 100%;
+  display: table-cell;
   position: relative;
+  height: 100%;
+
+  &:not(:last-child) {
+    box-shadow: inset -1px 0px 0px 0px @day-separator-color;
+  }
 
   &__weekend {
     background: @day-weekend-color;

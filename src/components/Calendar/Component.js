@@ -1,7 +1,7 @@
-import { PureComponent } from 'react';
+import { Component as ReactComponent } from 'react';
 import Store from './Store';
 
-export default class Component extends PureComponent {
+export default class Component extends ReactComponent {
   constructor (props) {
     super(props);
     this.state = this.transformState(Store.getState());
@@ -16,8 +16,6 @@ export default class Component extends PureComponent {
   componentWillUnmount () {
     Store.removeChangeListener(onChangeState, this);
   }
-
-  componentDidUpdate () {}
 
   transformState (newState) {
     return newState;

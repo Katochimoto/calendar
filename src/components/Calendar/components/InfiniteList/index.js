@@ -3,9 +3,8 @@
  */
 
 import { Component, PropTypes } from 'react';
-import classnames from 'classnames';
 
-import styles from '../../style.less';
+import styles from './index.less';
 
 export default class InfiniteList extends Component {
   constructor (props) {
@@ -13,16 +12,15 @@ export default class InfiniteList extends Component {
     this.state = {};
   }
 
-  render () {
-    const classes = classnames({
-      [ styles.calendar_InfiniteList ]: true,
-      [ this.props.className ]: Boolean(this.props.className)
-    });
+  shouldComponentUpdate () {
+    return false;
+  }
 
+  render () {
     return (
-      <div className={classes}>
+      <div className={styles.calendar_InfiniteList}>
         <div className={styles.calendar_InfiniteList_item}>
-          {this.props.children}
+          {this.props.getItemElement()}
         </div>
       </div>
     );
@@ -30,8 +28,9 @@ export default class InfiniteList extends Component {
 }
 
 InfiniteList.propTypes = {
-  className: PropTypes.string
+  getItemElement: PropTypes.function
 };
 
 InfiniteList.defaultProps = {
+  getItemElement: () => null
 };

@@ -10,7 +10,7 @@ import classnames from 'classnames';
 
 import DayEvents from '../DayEvents';
 
-import styles from '../../style.less';
+import styles from './index.less';
 
 export default class Day extends Component {
   constructor (props) {
@@ -18,11 +18,14 @@ export default class Day extends Component {
     this.state = {};
   }
 
+  shouldComponentUpdate () {
+    return false;
+  }
+
   render () {
     const classes = classnames({
       [ styles.calendar_Day ]: true,
-      [ styles.calendar_Day__weekend ]: this.props.weekend,
-      [ this.props.className ]: Boolean(this.props.className)
+      [ styles.calendar_Day__weekend ]: this.props.weekend
     });
 
     return (
@@ -37,7 +40,6 @@ export default class Day extends Component {
  * @type {boolean} propTypes.weekend выходной
  */
 Day.propTypes = {
-  className: PropTypes.string,
   weekend: PropTypes.bool
 };
 

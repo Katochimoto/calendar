@@ -11,6 +11,10 @@ export default class Year extends Component {
     this.state = {};
   }
 
+  shouldComponentUpdate () {
+    return false;
+  }
+
   render () {
     return (
       <div>

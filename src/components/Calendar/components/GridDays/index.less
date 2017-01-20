@@ -6,20 +6,16 @@
   margin-top: @day-hour-margin;
   margin-bottom: @day-hour-margin;
   margin-left: @day-hours-width;
-  transition: transform 0.1s;
+  transition: transform ease-out 0.1s;
+
+  &__stopTransition {
+    transition: none;
+  }
 
   &_item {
     width: 100%;
     height: 100%;
     display: table;
-  }
-
-  &_day {
-    display: table-cell;
-
-    &:not(:last-child) {
-      box-shadow: inset -1px 0px 0px 0px @day-separator-color;
-    }
   }
 
   .mobile({

@@ -5,12 +5,16 @@
 import { Component } from 'react';
 import DayEvent from '../DayEvent';
 
-import styles from '../../style.less';
+import styles from './index.less';
 
 export default class DayEvents extends Component {
   constructor (props) {
     super(props);
     this.state = {};
+  }
+
+  shouldComponentUpdate () {
+    return false;
   }
 
   render () {

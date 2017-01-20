@@ -7,7 +7,7 @@ import RollupPluginFilesize from 'rollup-plugin-filesize';
 import RollupPluginReplace from 'rollup-plugin-replace';
 import RollupPluginInject from 'rollup-plugin-inject';
 
-import LessPluginGlob from 'less-plugin-glob';
+// import LessPluginGlob from 'less-plugin-glob';
 import LessPluginGroupMediaQueries from 'less-plugin-group-css-media-queries';
 import LessPluginAutoPrefix from 'less-plugin-autoprefix';
 import LessPluginCssModules from 'less-plugin-css-modules';
@@ -18,8 +18,8 @@ let external = Object.keys(pkg.peerDependencies || {}).concat(Object.keys(pkg.de
 export default {
   entry: 'src/index.js',
   dest: 'dist/app.js',
-  format: 'umd',
-  sourceMap: false,
+  format: 'iife',
+  sourceMap: true,
   useStrict: false,
   context: 'window',
   external: external,
@@ -37,7 +37,7 @@ export default {
       cssModules: true,
       options: {
         plugins: [
-          LessPluginGlob,
+          // LessPluginGlob,
           LessPluginGroupMediaQueries,
           new LessPluginAutoPrefix({
             browsers: [

@@ -11,6 +11,10 @@ export default class Month extends Component {
     this.state = {};
   }
 
+  shouldComponentUpdate () {
+    return false;
+  }
+
   render () {
     return (
       <div>

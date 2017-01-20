@@ -4,11 +4,22 @@
 
 import Component from '../../Component';
 
-import styles from '../../style.less';
+import styles from './index.less';
 
 export default class DayHours extends Component {
-  transformState (storeState) {
-    const { hideNonWorkingHours, hours, hoursOfDay } = storeState;
+
+  shouldComponentUpdate () { // nextProps, nextState
+    return false;
+    /*
+    return (
+      this.state.hideNonWorkingHours !== nextState.nextState.hideNonWorkingHours ||
+      this.state.hours !== nextState.nextState.hours ||
+      this.state.hoursOfDay !== nextState.nextState.hoursOfDay
+    );
+    */
+  }
+
+  transformState ({ hideNonWorkingHours, hours, hoursOfDay }) {
     return { hideNonWorkingHours, hours, hoursOfDay };
   }
 

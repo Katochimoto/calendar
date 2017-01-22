@@ -28,7 +28,7 @@ export default class Calendar extends Component {
   componentDidMount () {
     super.componentDidMount();
     context.addEventListener('resize', this.handleResize, false);
-    Store.update(getRect(this._node));
+    Store.update(this._gridComponent.getRect());
   }
 
   componentWillUnmount () {
@@ -71,26 +71,19 @@ export default class Calendar extends Component {
   }
 
   handleResize () {
-    const state = Store.getState();
-    const { gridWidth, gridHeight, scrollHeight } = getRect(this._node);
-    const scrollY = applyScrollYLimit(Math.round(state.scrollY * scrollHeight / state.scrollHeight), scrollHeight);
+    const oldState = Store.getState();
+    const newState = this._gridComponent.getRect();
 
-    Store.update({
-      gridWidth,
-      gridHeight,
-      scrollY,
-      scrollHeight,
-      stopTransition: true
-    });
+    newState.scrollY = applyScrollYLimit(Math.round(oldState.scrollY * newState.scrollHeight / oldState.scrollHeight), newState.scrollHeight);
+    newState.stopTransition = true;
+
+    Store.update(newState);
   }
 
   render () {
     return (
-      <div ref={node => this._node = node}
-        className={styles.calendar}
-        onWheel={this.handleWheel}>
-
-        <GridDays />
+      <div className={styles.calendar} onWheel={this.handleWheel}>
+        <GridDays ref={component => this._gridComponent = component} />
       </div>
     );
   }
@@ -105,18 +98,6 @@ Calendar.defaultProps = {
   bindChangeEvents: function () {},
   onChangeEvents: function () {},
 };
-
-function getRect (node) {
-  const rect = node.getBoundingClientRect();
-  const styles = context.getComputedStyle(node.firstChild);
-  const marginHeight = parseFloat(styles.marginTop) + parseFloat(styles.marginBottom);
-
-  return {
-    gridWidth: rect.width,
-    gridHeight: rect.height,
-    scrollHeight: Math.ceil(rect.height + marginHeight),
-  };
-}
 
 function getScrollY (deltaY, y, scrollHeight) {
   return applyScrollYLimit(y + deltaY, scrollHeight);

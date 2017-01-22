@@ -2,22 +2,27 @@
  *
  */
 
-import { Component, PropTypes } from 'react';
+import { PropTypes } from 'react';
 import classnames from 'classnames';
+
+import Component from '../../Component';
 
 import styles from './index.less';
 
 export default class InfiniteList extends Component {
   constructor (props) {
     super(props);
-    this.state = {
-      scrollX: 0,
-      stopTransition: false
-    };
   }
 
-  shouldComponentUpdate () {
-    return false;
+  transformState ({ scrollX, stopTransition }) {
+    return { scrollX, stopTransition };
+  }
+
+  shouldComponentUpdate (nextProps, nextState) {
+    return (
+      this.state.scrollX !== nextState.scrollX ||
+      this.state.stopTransition !== nextState.stopTransition
+    );
   }
 
   render () {

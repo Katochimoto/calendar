@@ -7,8 +7,6 @@ export default class Component extends ReactComponent {
     this.state = this.transformState(Store.getState());
   }
 
-  componentWillReceiveProps () {}
-
   componentDidMount () {
     Store.addChangeListener(this.handleChangeStore, this);
   }
@@ -17,8 +15,24 @@ export default class Component extends ReactComponent {
     Store.removeChangeListener(this.handleChangeStore, this);
   }
 
-  transformState (newState) {
-    return newState;
+  shouldComponentUpdate () {
+    return false;
+  }
+
+  componentDidUpdate () {
+    this._lockSetState = false;
+
+    if (this._shouldUpdateState) {
+      this.handleChangeStore();
+    }
+  }
+
+  setStore (state) {
+    Store.update(state);
+  }
+
+  transformState () {
+    return {};
   }
 
   handleChangeStore () {
@@ -27,15 +41,16 @@ export default class Component extends ReactComponent {
       return;
     }
 
-    this._lockSetState = true;
     this._shouldUpdateState = false;
 
     const state = this.transformState(Store.getState(), this.state);
-    this.setState(state, () => {
+
+    if (!this.shouldComponentUpdate(this.props, state)) {
       this._lockSetState = false;
-      if (this._shouldUpdateState) {
-        this.handleChangeStore();
-      }
-    });
+      return;
+    }
+
+    this._lockSetState = true;
+    this.setState(state);
   }
 }

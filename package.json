@@ -41,7 +41,6 @@
   },
   "dependencies": {
     "classnames": "^2.2.5",
-    "eventemitter3": "^2.0.2",
     "preact": "^7.1.0",
     "preact-compat": "^3.9.4",
     "raf": "^3.3.0"

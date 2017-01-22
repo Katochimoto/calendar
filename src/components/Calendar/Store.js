@@ -1,34 +1,10 @@
-import EventEmitter from 'eventemitter3';
+const DEFAULT_STATE = {
+  gridWidth: 0,
+  gridHeight: 0,
+  scrollY: 0,
+  scrollHeight: 0,
+  stopTransition: false,
 
-class Store extends EventEmitter {
-  constructor (state) {
-    super();
-    this._state = state;
-  }
-
-  init (state) {
-    this._state = Object.assign(this._state, state);
-  }
-
-  update (state) {
-    this._state = Object.assign(this._state, state);
-    this.emit('change');
-  }
-
-  getState () {
-    return this._state;
-  }
-
-  addChangeListener (callback, context) {
-    return this.on('change', callback, context);
-  }
-
-  removeChangeListener (callback, context) {
-    return this.removeListener('change', callback, context);
-  }
-}
-
-export default new Store({
   grid: 'day',
   currentDate: new Date(),
   hours: {
@@ -59,4 +35,49 @@ export default new Store({
   },
   hoursOfDay: [ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23 ],
   hideNonWorkingHours: true,
-});
+};
+
+const changeCallbacks = [];
+
+class Store {
+  constructor () {
+    this._state = DEFAULT_STATE;
+  }
+
+  init (state) {
+    this._state = Object.assign(this._state, state);
+  }
+
+  update (state) {
+    this._state = Object.assign(this._state, state);
+
+    for (let i = 0, len = changeCallbacks.length; i < len; i++) {
+      const [ callback, ctx ] = changeCallbacks[i];
+      callback.call(ctx);
+    }
+  }
+
+  getState () {
+    return this._state;
+  }
+
+  addChangeListener (callback, ctx) {
+    changeCallbacks.push([ callback, ctx ]);
+  }
+
+  removeChangeListener (callback, ctx) {
+    let i = 0;
+    while (i < changeCallbacks.length) {
+      const item = changeCallbacks[i];
+
+      if (item[0] === callback && item[1] === ctx) {
+        changeCallbacks.splice(i, 1);
+
+      } else {
+        i++;
+      }
+    }
+  }
+}
+
+export default new Store();

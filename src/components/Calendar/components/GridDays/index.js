@@ -2,11 +2,11 @@
  *
  */
 
-import { Component } from 'react';
 import classnames from 'classnames';
 
-import context from '../../context';
 import rraf from '../../utils/rraf';
+import Component from '../../Component';
+import context from '../../context';
 import Day from '../Day';
 import DayHours from '../DayHours';
 import InfiniteList from '../InfiniteList';
@@ -16,33 +16,32 @@ import styles from './index.less';
 export default class GridDays extends Component {
   constructor (props) {
     super(props);
-    this.state = {
-      gridWidth: 0,
-      gridHeight: 0,
-      scrollY: 0,
-      scrollHeight: 0,
-      stopTransition: false
-    };
 
     this.handleWheel = this.handleWheel.bind(this);
     this.handleResize = this.handleResize.bind(this);
     this.getItemElement = this.getItemElement.bind(this);
   }
 
+  transformState ({ scrollY, scrollHeight, stopTransition }) {
+    return { scrollY, scrollHeight, stopTransition };
+  }
+
   componentDidMount () {
+    super.componentDidMount();
     context.addEventListener('resize', this.handleResize, false);
-    this.setState(getRect(this._node));
+    this.setStore(getRect(this._node));
   }
 
   componentWillUnmount () {
+    super.componentWillUnmount();
     context.removeEventListener('resize', this.handleResize, false);
   }
 
   shouldComponentUpdate (nextProps, nextState) {
     return (
-      this.state.gridHeight !== nextState.gridHeight ||
       this.state.scrollY !== nextState.scrollY ||
-      this.state.scrollHeight !== nextState.scrollHeight
+      this.state.scrollHeight !== nextState.scrollHeight ||
+      this.state.stopTransition !== nextState.stopTransition
     );
   }
 
@@ -62,16 +61,18 @@ export default class GridDays extends Component {
     this._lockWheel = true;
     this._scrollY = getScrollY(deltaY, this.state.scrollY, this.state.scrollHeight);
 
-    rraf(this.wheelUpdateState, 3, this);
+    rraf(this.updateStoreByWheel, 3, this);
   }
 
-  wheelUpdateState () {
-    this.setState({
-      scrollY: this._scrollY,
-      stopTransition: false
-    }, () => {
-      this._lockWheel = false;
-    });
+  updateStoreByWheel () {
+    if (this.state.scrollY !== this._scrollY) {
+      this.setStore({
+        scrollY: this._scrollY,
+        stopTransition: false
+      });
+    }
+
+    this._lockWheel = false;
   }
 
   handleResize () {
@@ -80,7 +81,7 @@ export default class GridDays extends Component {
     const { gridWidth, gridHeight, scrollHeight } = getRect(this._node);
     const scrollY = applyScrollYLimit(Math.round(oldScrollY * scrollHeight / oldScrollHeight), scrollHeight);
 
-    this.setState({
+    this.setStore({
       gridWidth,
       gridHeight,
       scrollY,

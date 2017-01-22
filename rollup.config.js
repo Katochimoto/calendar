@@ -26,7 +26,6 @@ export default {
   globals: {
     'classnames': 'vendor._classnames',
     'raf': 'vendor._raf',
-    'eventemitter3': 'vendor._eventemitter',
     'preact-compat': 'vendor._preact_compat',
     'preact': 'vendor._preact'
   },

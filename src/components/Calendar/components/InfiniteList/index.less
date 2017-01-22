@@ -3,8 +3,12 @@
 .@{component}_InfiniteList {
   width: 100%;
   height: 100%;
-  overflo: hidden;
+  overflow: hidden;
   white-space: nowrap;
+
+  &__stopTransition {
+    transition: none;
+  }
 
   &_item {
     display: inline-block;

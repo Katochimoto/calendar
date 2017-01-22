@@ -10,31 +10,32 @@ export default class Component extends ReactComponent {
   componentWillReceiveProps () {}
 
   componentDidMount () {
-    Store.addChangeListener(onChangeState, this);
+    Store.addChangeListener(this.handleChangeStore, this);
   }
 
   componentWillUnmount () {
-    Store.removeChangeListener(onChangeState, this);
+    Store.removeChangeListener(this.handleChangeStore, this);
   }
 
   transformState (newState) {
     return newState;
   }
-}
 
-function onChangeState () {
-  if (this._lockUpdateState) {
-    this._shouldUpdateState = true;
-    return;
-  }
-
-  this._lockUpdateState = true;
-  this._shouldUpdateState = false;
-
-  this.setState(this.transformState(Store.getState(), this.state), () => {
-    this._lockUpdateState = false;
-    if (this._shouldUpdateState) {
-      onChangeState.call(this);
+  handleChangeStore () {
+    if (this._lockSetState) {
+      this._shouldUpdateState = true;
+      return;
     }
-  });
+
+    this._lockSetState = true;
+    this._shouldUpdateState = false;
+
+    const state = this.transformState(Store.getState(), this.state);
+    this.setState(state, () => {
+      this._lockSetState = false;
+      if (this._shouldUpdateState) {
+        this.handleChangeStore();
+      }
+    });
+  }
 }

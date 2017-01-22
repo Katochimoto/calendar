@@ -17,8 +17,8 @@ export default class GridDays extends Component {
   constructor (props) {
     super(props);
     this.state = {
-      width: 0,
-      height: 0,
+      gridWidth: 0,
+      gridHeight: 0,
       scrollY: 0,
       scrollHeight: 0,
       stopTransition: false
@@ -40,8 +40,7 @@ export default class GridDays extends Component {
 
   shouldComponentUpdate (nextProps, nextState) {
     return (
-      this.state.width !== nextState.width ||
-      this.state.height !== nextState.height ||
+      this.state.gridHeight !== nextState.gridHeight ||
       this.state.scrollY !== nextState.scrollY ||
       this.state.scrollHeight !== nextState.scrollHeight
     );
@@ -78,12 +77,12 @@ export default class GridDays extends Component {
   handleResize () {
     const oldScrollHeight = this.state.scrollHeight;
     const oldScrollY = this.state.scrollY;
-    const { width, height, scrollHeight } = getRect(this._node);
+    const { gridWidth, gridHeight, scrollHeight } = getRect(this._node);
     const scrollY = applyScrollYLimit(Math.round(oldScrollY * scrollHeight / oldScrollHeight), scrollHeight);
 
     this.setState({
-      width,
-      height,
+      gridWidth,
+      gridHeight,
       scrollY,
       scrollHeight,
       stopTransition: true
@@ -138,8 +137,8 @@ function getRect (node) {
   const marginHeight = parseFloat(styles.marginTop) + parseFloat(styles.marginBottom);
 
   return {
-    width: rect.width,
-    height: rect.height,
+    gridWidth: rect.width,
+    gridHeight: rect.height,
     scrollHeight: Math.ceil(rect.height / 2 + marginHeight)
   };
 }

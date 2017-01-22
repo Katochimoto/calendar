@@ -3,13 +3,17 @@
  */
 
 import { Component, PropTypes } from 'react';
+import classnames from 'classnames';
 
 import styles from './index.less';
 
 export default class InfiniteList extends Component {
   constructor (props) {
     super(props);
-    this.state = {};
+    this.state = {
+      scrollX: 0,
+      stopTransition: false
+    };
   }
 
   shouldComponentUpdate () {
@@ -17,8 +21,17 @@ export default class InfiniteList extends Component {
   }
 
   render () {
+    const style = {
+      transform: `translate(${this.state.scrollX}px, 0px)`
+    };
+
+    const classes = classnames({
+      [ styles.calendar_InfiniteList ]: true,
+      [ styles.calendar_InfiniteList__stopTransition ]: this.state.stopTransition
+    });
+
     return (
-      <div className={styles.calendar_InfiniteList}>
+      <div className={classes} style={style}>
         <div className={styles.calendar_InfiniteList_item}>
           {this.props.getItemElement()}
         </div>

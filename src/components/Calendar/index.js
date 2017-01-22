@@ -114,7 +114,7 @@ function getRect (node) {
   return {
     gridWidth: rect.width,
     gridHeight: rect.height,
-    scrollHeight: rect.height + marginHeight, // Math.ceil(rect.height / 2 + marginHeight)
+    scrollHeight: Math.ceil(rect.height + marginHeight),
   };
 }
 

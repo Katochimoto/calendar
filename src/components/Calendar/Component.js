@@ -27,10 +27,6 @@ export default class Component extends ReactComponent {
     }
   }
 
-  setStore (state) {
-    Store.update(state);
-  }
-
   transformState () {
     return {};
   }

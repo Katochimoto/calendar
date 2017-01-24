@@ -28,6 +28,7 @@ export default class Calendar extends Component {
   componentDidMount () {
     super.componentDidMount();
     context.addEventListener('resize', this.handleResize, false);
+
     Store.update(this._gridComponent.getRect());
   }
 
@@ -38,31 +39,42 @@ export default class Calendar extends Component {
 
   handleWheel (event) {
     event.preventDefault();
+
+    const deltaX = event.deltaX;
     const deltaY = event.deltaY;
 
-    if (!deltaY) {
+    if (!deltaX && !deltaY) {
       return;
     }
 
-    const { scrollY, scrollHeight } = Store.getState();
+    const { scrollX, scrollY, scrollWidth, scrollHeight } = Store.getState();
+    const offset = {
+      x: deltaX,
+      y: deltaY,
+      w: scrollWidth,
+      h: scrollHeight
+    };
 
-    if (this._lockWheel) {
-      this._scrollY = getScrollY(deltaY, this._scrollY, scrollHeight);
-      return;
+    this._scroll = this._lockWheel ?
+      getScroll(this._scroll, offset) :
+      getScroll({ x: scrollX, y: scrollY }, offset);
+
+    if (!this._lockWheel) {
+      this._lockWheel = true;
+      rraf(this.updateStoreByWheel, 3, this);
     }
-
-    this._lockWheel = true;
-    this._scrollY = getScrollY(deltaY, scrollY, scrollHeight);
-
-    rraf(this.updateStoreByWheel, 3, this);
   }
 
   updateStoreByWheel () {
-    const { scrollY } = Store.getState();
+    const { scrollX, scrollY } = Store.getState();
 
-    if (scrollY !== this._scrollY) {
+    if (
+      scrollX !== this._scroll.x ||
+      scrollY !== this._scroll.y
+    ) {
       Store.update({
-        scrollY: this._scrollY,
+        scrollX: this._scroll.x,
+        scrollY: this._scroll.y,
         stopTransition: false
       });
     }
@@ -74,7 +86,7 @@ export default class Calendar extends Component {
     const oldState = Store.getState();
     const newState = this._gridComponent.getRect();
 
-    newState.scrollY = applyScrollYLimit(Math.round(oldState.scrollY * newState.scrollHeight / oldState.scrollHeight), newState.scrollHeight);
+    newState.scrollY = applyScrollYLimit(oldState.scrollY * newState.scrollHeight / oldState.scrollHeight, newState.scrollHeight);
     newState.stopTransition = true;
 
     Store.update(newState);
@@ -99,12 +111,19 @@ Calendar.defaultProps = {
   onChangeEvents: function () {},
 };
 
-function getScrollY (deltaY, y, scrollHeight) {
-  return applyScrollYLimit(y + deltaY, scrollHeight);
+function getScroll (current, offset) {
+  return {
+    x: applyScrollXLimit(current.x + offset.x, offset.w),
+    y: applyScrollYLimit(current.y + offset.y, offset.h)
+  };
 }
 
-function applyScrollYLimit (y, scrollHeight) {
-  y = Math.max(-(scrollHeight), y);
-  y = y > 0 ? 0 : y;
-  return y;
+function applyScrollXLimit (value, maxValue) {
+  return Math.round(Math.abs(value) > maxValue ? (value < 0 ? -1 : 1) * maxValue : value);
+}
+
+function applyScrollYLimit (value, maxValue) {
+  value = Math.max(-(maxValue), value);
+  value = value > 0 ? 0 : value;
+  return Math.round(value);
 }

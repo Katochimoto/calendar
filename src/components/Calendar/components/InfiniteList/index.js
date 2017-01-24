@@ -31,14 +31,16 @@ export default class InfiniteList extends Component {
     };
 
     const classes = classnames({
-      [ styles.calendar_InfiniteList ]: true,
-      [ styles.calendar_InfiniteList__stopTransition ]: this.state.stopTransition
+      [ styles.calendar_InfiniteList_content ]: true,
+      [ styles.calendar_InfiniteList_content__stopTransition ]: this.state.stopTransition
     });
 
     return (
-      <div className={classes} style={style}>
-        <div className={styles.calendar_InfiniteList_item}>
-          {this.props.getItemElement()}
+      <div className={styles.calendar_InfiniteList}>
+        <div className={classes} style={style}>
+          <div className={styles.calendar_InfiniteList_item}>
+            {this.props.getItemElement()}
+          </div>
         </div>
       </div>
     );

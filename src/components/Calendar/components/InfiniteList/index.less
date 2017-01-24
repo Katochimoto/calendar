@@ -6,8 +6,14 @@
   overflow: hidden;
   white-space: nowrap;
 
-  &__stopTransition {
-    transition: none;
+  &_content {
+    width: 100%;
+    height: 100%;
+    transition: transform ease-out 0.1s;
+
+    &__stopTransition {
+      transition: none;
+    }
   }
 
   &_item {

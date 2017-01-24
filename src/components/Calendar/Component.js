@@ -41,12 +41,12 @@ export default class Component extends ReactComponent {
 
     const state = this.transformState(Store.getState(), this.state);
 
-    if (!this.shouldComponentUpdate(this.props, state)) {
-      this._lockSetState = false;
-      return;
-    }
+    if (this.shouldComponentUpdate(this.props, state)) {
+      this._lockSetState = true;
+      this.setState(state);
 
-    this._lockSetState = true;
-    this.setState(state);
+    } else {
+      this._lockSetState = false;
+    }
   }
 }

@@ -1,10 +1,8 @@
 const DEFAULT_STATE = {
-  gridWidth: 0,
-  gridHeight: 0,
+  scrollHeight: 0,
+  scrollWidth: 0,
   scrollX: 0,
   scrollY: 0,
-  scrollWidth: 0,
-  scrollHeight: 0,
   stopTransition: false,
 
   grid: 'day',

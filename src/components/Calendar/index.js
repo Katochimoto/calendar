@@ -2,13 +2,11 @@
  *
  */
 
-import { PropTypes } from 'react';
-
+import { Component, PropTypes } from './Component';
 import context from './context';
 import rraf from './utils/rraf';
 import GridDays from './components/GridDays';
 import Store from './Store';
-import Component from './Component';
 
 import styles from './index.less';
 
@@ -29,7 +27,7 @@ export default class Calendar extends Component {
     super.componentDidMount();
     context.addEventListener('resize', this.handleResize, false);
 
-    Store.update(this._gridComponent.getRect());
+    Store.update(this.getRecalculationSize());
   }
 
   componentWillUnmount () {
@@ -83,19 +81,30 @@ export default class Calendar extends Component {
   }
 
   handleResize () {
-    const oldState = Store.getState();
-    const newState = this._gridComponent.getRect();
+    Store.update(this.getRecalculationSize());
+  }
 
-    newState.scrollY = applyScrollYLimit(oldState.scrollY * newState.scrollHeight / oldState.scrollHeight, newState.scrollHeight);
-    newState.stopTransition = true;
+  getRecalculationSize () {
+    const state = Store.getState();
+    const scrollHeight = this._node.scrollHeight - this._node.clientHeight;
+    const scrollWidth = this._gridComponent._node.clientWidth;
+    const scrollY = state.scrollHeight > 0 ? checkLimitY(state.scrollY * scrollHeight / state.scrollHeight, scrollHeight) : 0;
 
-    Store.update(newState);
+    return {
+      scrollHeight,
+      scrollWidth,
+      scrollY,
+      stopTransition: true
+    };
   }
 
   render () {
     return (
-      <div className={styles.calendar} onWheel={this.handleWheel}>
-        <GridDays ref={component => this._gridComponent = component} />
+      <div ref={node => this._node = node}
+        className={styles.calendar}
+        onWheel={this.handleWheel}>
+
+        <GridDays ref={gridComponent => this._gridComponent = gridComponent} />
       </div>
     );
   }
@@ -113,17 +122,20 @@ Calendar.defaultProps = {
 
 function getScroll (current, offset) {
   return {
-    x: applyScrollXLimit(current.x + offset.x, offset.w),
-    y: applyScrollYLimit(current.y + offset.y, offset.h)
+    x: checkLimitX(current.x + offset.x, offset.w),
+    y: checkLimitY(current.y + offset.y, offset.h)
   };
 }
 
-function applyScrollXLimit (value, maxValue) {
+function checkLimitX (value, maxValue) {
   return Math.round(Math.abs(value) > maxValue ? (value < 0 ? -1 : 1) * maxValue : value);
 }
 
-function applyScrollYLimit (value, maxValue) {
-  value = Math.max(-(maxValue), value);
-  value = value > 0 ? 0 : value;
-  return Math.round(value);
+function checkLimitY (value, maxValue) {
+  if (maxValue > 0) {
+    value = Math.max(-(maxValue), value);
+    return value > 0 ? 0 : Math.round(value);
+  }
+
+  return 0;
 }

@@ -2,10 +2,9 @@
  *
  */
 
-import { PropTypes } from 'react';
 import classnames from 'classnames';
 
-import Component from '../../Component';
+import { Component, PropTypes } from '../../Component';
 
 import styles from './index.less';
 

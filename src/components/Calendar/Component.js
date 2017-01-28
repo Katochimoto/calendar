@@ -1,7 +1,9 @@
-import { Component as ReactComponent } from 'react';
+import { Component as ReactComponent, PropTypes } from 'react';
 import Store from './Store';
 
-export default class Component extends ReactComponent {
+export { PropTypes };
+
+export class Component extends ReactComponent {
   constructor (props) {
     super(props);
     this.state = this.transformState(Store.getState());

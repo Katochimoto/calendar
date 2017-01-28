@@ -4,8 +4,8 @@
 
 import classnames from 'classnames';
 
+import { Component } from '../../Component';
 import context from '../../context';
-import Component from '../../Component';
 import Day from '../Day';
 import DayHours from '../DayHours';
 import InfiniteList from '../InfiniteList';
@@ -28,20 +28,6 @@ export default class GridDays extends Component {
       this.state.scrollY !== nextState.scrollY ||
       this.state.stopTransition !== nextState.stopTransition
     );
-  }
-
-  getRect () {
-    const rect = this._node.getBoundingClientRect();
-    const styles = context.getComputedStyle(this._node);
-    const marginHeight = parseFloat(styles.marginTop) + parseFloat(styles.marginBottom);
-    // const marginWidth = parseFloat(styles.marginLeft) + parseFloat(styles.marginRight);
-
-    return {
-      gridWidth: rect.width,
-      gridHeight: rect.height,
-      scrollWidth: Math.ceil(rect.width), // - marginWidth
-      scrollHeight: Math.ceil(rect.height / 2 + marginHeight)
-    };
   }
 
   getItemElement () {

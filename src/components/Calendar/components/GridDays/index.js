@@ -17,6 +17,7 @@ export default class GridDays extends Component {
     super(props);
 
     this.getItemElement = this.getItemElement.bind(this);
+    this.getItemElementHeader = this.getItemElementHeader.bind(this);
   }
 
   transformState ({ scrollY, stopTransition }) {
@@ -42,10 +43,35 @@ export default class GridDays extends Component {
     ];
 
     return (
-      <div className={styles.calendar_GridDays_item}>
+      <div className={styles.calendar_GridDays_Item}>
         {items}
       </div>
     );
+  }
+
+  getItemElementHeader () {
+    const items = [
+      <Day key={0} />,
+      <Day key={1} />,
+      <Day key={2} />,
+      <Day key={3} />,
+      <Day key={4} />,
+      <Day key={5} />,
+      <Day key={6} />
+    ];
+
+    return (
+      <div className={styles.calendar_GridDays_Item}>
+        {items}
+      </div>
+    );
+  }
+
+  getRect () {
+    return {
+      scrollHeight: this._node.scrollHeight - this._node.clientHeight,
+      scrollWidth: this._node.clientWidth
+    };
   }
 
   render () {
@@ -54,18 +80,30 @@ export default class GridDays extends Component {
     };
 
     const classes = classnames({
-      [ styles.calendar_GridDays ]: true,
-      [ styles.calendar_GridDays__stopTransition ]: this.state.stopTransition
+      [ styles.calendar_GridDays_ScrollContent ]: true,
+      [ styles.calendar_GridDays_ScrollContent__stopTransition ]: this.state.stopTransition
     });
 
     return (
-      <div ref={node => this._node = node}
-        className={classes}
-        style={style}>
-
-        <DayHours />
-        <InfiniteList getItemElement={this.getItemElement} />
-      </div>
+      <table className={styles.calendar_GridDays}>
+        <tr className={styles.calendar_GridDays_Tr1}>
+          <td className={styles.calendar_GridDays_Td1}>
+            <div className={styles.calendar_GridDays_Header}>
+              <InfiniteList fullFill={false} getItemElement={this.getItemElementHeader} />
+            </div>
+          </td>
+        </tr>
+        <tr className={styles.calendar_GridDays_Tr2}>
+          <td className={styles.calendar_GridDays_Td2}>
+            <div ref={node => this._node = node} className={styles.calendar_GridDays_ScrollWrap}>
+              <div className={classes} style={style}>
+                <DayHours />
+                <InfiniteList getItemElement={this.getItemElement} />
+              </div>
+            </div>
+          </td>
+        </tr>
+      </table>
     );
   }
 }

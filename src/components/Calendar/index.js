@@ -86,8 +86,7 @@ export default class Calendar extends Component {
 
   getRecalculationSize () {
     const state = Store.getState();
-    const scrollHeight = this._node.scrollHeight - this._node.clientHeight;
-    const scrollWidth = this._gridComponent._node.clientWidth;
+    const { scrollHeight, scrollWidth } = this._gridComponent.getRect();
     const scrollY = state.scrollHeight > 0 ? checkLimitY(state.scrollY * scrollHeight / state.scrollHeight, scrollHeight) : 0;
 
     return {
@@ -100,8 +99,7 @@ export default class Calendar extends Component {
 
   render () {
     return (
-      <div ref={node => this._node = node}
-        className={styles.calendar}
+      <div className={styles.calendar}
         onWheel={this.handleWheel}>
 
         <GridDays ref={gridComponent => this._gridComponent = gridComponent} />

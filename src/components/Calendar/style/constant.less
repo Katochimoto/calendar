@@ -12,25 +12,25 @@
 
 @day-event-color: #00f;
 
-.mobile(@rules) {
+.mobile (@rules) {
   @media screen and (max-width: 480px) {
     @rules();
   }
 }
 
-.desktop(@rules) {
+.desktop (@rules) {
   @media screen and (min-width: 1200px) {
     @rules();
   }
 }
 
-.print(@rules) {
+.print (@rules) {
   @media print {
     @rules();
   }
 }
 
-.hdpi(@rules) {
+.hdpi (@rules) {
   @media all and (-webkit-min-device-pixel-ratio : 1.5) {
     @rules();
   }

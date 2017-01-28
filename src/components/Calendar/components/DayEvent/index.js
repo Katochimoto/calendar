@@ -22,8 +22,8 @@ export default class DayEvent extends Component {
     const height = Number((minuteOffset * (60)).toFixed(3));
 
     return {
-      top: `calc(${top}%)`,
-      height: `calc(${height}%)`,
+      top: `${top}%`,
+      height: `${height}%`,
     };
   }
 

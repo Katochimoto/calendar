@@ -45,11 +45,11 @@ class Store {
   }
 
   init (state) {
-    this._state = Object.assign(this._state, state);
+    this._state = Object.assign({}, this._state, state);
   }
 
   update (state) {
-    this._state = Object.assign(this._state, state);
+    this._state = Object.assign({}, this._state, state);
 
     for (let i = 0, len = changeCallbacks.length; i < len; i++) {
       const [ callback, ctx ] = changeCallbacks[i];

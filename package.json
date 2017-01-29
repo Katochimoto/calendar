@@ -11,23 +11,21 @@
     "dev": "rollup --watch --config rollup.config.js",
     "reload": "livereload 'dist'",
     "watch": "npm-run-all --parallel reload dev vendor",
-
-
     "start": "electron .",
     "build": "electron-packager . $npm_package_name --platform=darwin --arch=x64 --version=$npm_package_electronVersion --app-version=$npm_package_version --out=build --ignore=build --prune"
   },
   "devDependencies": {
+    "autoprefixer": "^6.7.0",
     "babel-plugin-module-resolver": "^2.4.0",
     "babel-plugin-transform-react-jsx": "^6.8.0",
     "babel-preset-es2015-rollup": "^3.0.0",
     "babel-preset-react": "^6.16.0",
     "babel-preset-stage-0": "^6.16.0",
-    "less-plugin-autoprefix": "^1.5.1",
+    "css-mqpacker": "^5.0.1",
     "less-plugin-css-modules": "0.0.2",
-    "less-plugin-glob": "^1.1.1",
-    "less-plugin-group-css-media-queries": "^1.1.1",
     "livereload": "^0.6.0",
     "npm-run-all": "^4.0.1",
+    "postcss": "^5.2.11",
     "rollup": "^0.41.4",
     "rollup-plugin-babel": "^2.7.1",
     "rollup-plugin-commonjs": "^7.0.0",

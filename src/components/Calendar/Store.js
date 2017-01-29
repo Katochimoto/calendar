@@ -39,14 +39,14 @@ const DEFAULT_STATE = {
 
 const changeCallbacks = [];
 
-class Store {
-  constructor () {
-    this._state = DEFAULT_STATE;
-  }
+function Store () {
+  this._state = DEFAULT_STATE;
+}
 
+Store.prototype = {
   init (state) {
     this._state = Object.assign({}, this._state, state);
-  }
+  },
 
   update (state) {
     this._state = Object.assign({}, this._state, state);
@@ -55,15 +55,15 @@ class Store {
       const [ callback, ctx ] = changeCallbacks[i];
       callback.call(ctx);
     }
-  }
+  },
 
   getState () {
     return this._state;
-  }
+  },
 
   addChangeListener (callback, ctx) {
     changeCallbacks.push([ callback, ctx ]);
-  }
+  },
 
   removeChangeListener (callback, ctx) {
     let i = 0;
@@ -78,6 +78,6 @@ class Store {
       }
     }
   }
-}
+};
 
 export default new Store();

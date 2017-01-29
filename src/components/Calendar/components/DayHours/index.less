@@ -1,6 +1,6 @@
 @import (reference, once) "../../style/constant";
 
-.mixin-title-hour {
+.mixin-title-hour () {
   display: block;
   position: absolute;
   left: 0;
@@ -33,7 +33,7 @@
       box-shadow: inset 0px 1px 0px 0px @day-separator-color;
 
       &[data-hour]:before {
-        .mixin-title-hour;
+        .mixin-title-hour();
 
         content: attr(data-hour);
         margin-top: -0.5 * @day-hour-size;
@@ -52,7 +52,7 @@
         inset 0px -1px 0px 0px @day-separator-color;
 
       &[data-next-hour]:after {
-        .mixin-title-hour;
+        .mixin-title-hour();
 
         content: attr(data-next-hour);
         bottom: 0;

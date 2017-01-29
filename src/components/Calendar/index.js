@@ -26,12 +26,14 @@ export default class Calendar extends Component {
   componentDidMount () {
     super.componentDidMount();
     context.addEventListener('resize', this.handleResize, false);
-
-    Store.update(this.getRecalculationSize());
+    this._timerRecalculationSize = context.setTimeout(() => {
+      Store.update(this.getRecalculationSize());
+    }, 0);
   }
 
   componentWillUnmount () {
     super.componentWillUnmount();
+    context.clearTimeout(this._timerRecalculationSize);
     context.removeEventListener('resize', this.handleResize, false);
   }
 

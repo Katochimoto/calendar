@@ -7,10 +7,11 @@ import RollupPluginFilesize from 'rollup-plugin-filesize';
 import RollupPluginReplace from 'rollup-plugin-replace';
 import RollupPluginInject from 'rollup-plugin-inject';
 
-// import LessPluginGlob from 'less-plugin-glob';
-import LessPluginGroupMediaQueries from 'less-plugin-group-css-media-queries';
-import LessPluginAutoPrefix from 'less-plugin-autoprefix';
 import LessPluginCssModules from 'less-plugin-css-modules';
+
+import autoprefixer from 'autoprefixer';
+import postcss from 'postcss';
+import PostcssCssMqpacker from 'css-mqpacker';
 
 let pkg = require('./package.json');
 let external = Object.keys(pkg.peerDependencies || {}).concat(Object.keys(pkg.dependencies || {}));
@@ -36,9 +37,17 @@ export default {
       cssModules: true,
       options: {
         plugins: [
-          // LessPluginGlob,
-          LessPluginGroupMediaQueries,
-          new LessPluginAutoPrefix({
+          new LessPluginCssModules({
+            mode: 'local',
+            hashPrefix: 'calendar',
+            generateScopedName: '[local]___[hash:base64:5]' // '[hash:base64:8]'
+          })
+        ]
+      },
+      onWriteBefore: function (cssText) {
+        return postcss([
+          autoprefixer({
+            remove: false,
             browsers: [
               '> 1%',
               'Firefox >= 14',
@@ -46,12 +55,10 @@ export default {
               'Chrome >= 4',
             ]
           }),
-          new LessPluginCssModules({
-            mode: 'local',
-            hashPrefix: 'calendar',
-            generateScopedName: '[local]___[hash:base64:5]'
-          })
-        ]
+          PostcssCssMqpacker()
+        ]).process(cssText).then(function (result) {
+          return result.css;
+        });
       }
     }),
     RollupPluginReplace({

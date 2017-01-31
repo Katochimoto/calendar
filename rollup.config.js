@@ -50,7 +50,7 @@ export default {
             remove: false,
             browsers: [
               '> 1%',
-              'Firefox >= 14',
+              'Firefox >= 13',
               'Opera >= 12',
               'Chrome >= 4',
             ]

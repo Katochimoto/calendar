@@ -25,9 +25,8 @@ export default class InfiniteList extends Component {
   }
 
   render () {
-    const style = {
-      transform: `translate(${this.state.scrollX}px, 0px)`
-    };
+    const style = `transform: translateX(${this.state.scrollX}px)`;
+    // const style = `transform: translate3d(${this.state.scrollX}px, 0, 0)`;
 
     const classes = classnames({
       [ styles.calendar_InfiniteList ]: true,

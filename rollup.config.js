@@ -6,12 +6,14 @@ import RollupPluginCommonJS from 'rollup-plugin-commonjs';
 import RollupPluginFilesize from 'rollup-plugin-filesize';
 import RollupPluginReplace from 'rollup-plugin-replace';
 import RollupPluginInject from 'rollup-plugin-inject';
+import RollupPluginUglify from 'rollup-plugin-uglify';
 
 import LessPluginCssModules from 'less-plugin-css-modules';
 
 import autoprefixer from 'autoprefixer';
 import postcss from 'postcss';
-import PostcssCssMqpacker from 'css-mqpacker';
+import PostcssCsso from 'postcss-csso';
+import CssMqpacker from 'css-mqpacker';
 
 let pkg = require('./package.json');
 let external = Object.keys(pkg.peerDependencies || {}).concat(Object.keys(pkg.dependencies || {}));
@@ -55,7 +57,8 @@ export default {
               'Chrome >= 4',
             ]
           }),
-          PostcssCssMqpacker()
+          CssMqpacker(),
+          PostcssCsso()
         ]).process(cssText).then(function (result) {
           return result.css;
         });
@@ -100,6 +103,7 @@ export default {
       include: 'node_modules/**',
       exclude: '**/*.less'
     }),
+    RollupPluginUglify(),
     RollupPluginFilesize()
   ]
 };

@@ -13,10 +13,6 @@ import DayEvents from '../DayEvents';
 import styles from './index.less';
 
 export default class Day extends Component {
-  constructor (props) {
-    super(props);
-    this.state = {};
-  }
 
   shouldComponentUpdate () {
     return false;

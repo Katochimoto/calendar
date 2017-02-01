@@ -26,6 +26,7 @@
     "livereload": "^0.6.0",
     "npm-run-all": "^4.0.1",
     "postcss": "^5.2.11",
+    "postcss-csso": "^1.1.2",
     "rollup": "^0.41.4",
     "rollup-plugin-babel": "^2.7.1",
     "rollup-plugin-commonjs": "^7.0.0",
@@ -35,6 +36,7 @@
     "rollup-plugin-less2": "0.0.6",
     "rollup-plugin-node-resolve": "^2.0.0",
     "rollup-plugin-replace": "^1.1.1",
+    "rollup-plugin-uglify": "^1.0.1",
     "rollup-watch": "^3.2.2"
   },
   "dependencies": {

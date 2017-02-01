@@ -5,6 +5,11 @@ const DEFAULT_STATE = {
   scrollY: 0,
   stopTransition: false,
 
+  gridHeight: 0,
+  viewportHeight: 0,
+  viewportMinutesBegin: 0,
+  viewportMinutesEnd: 0,
+
   grid: 'day',
   currentDate: new Date(),
   hours: {
@@ -45,11 +50,11 @@ function Store () {
 
 Store.prototype = {
   init (state) {
-    this._state = Object.assign({}, this._state, state);
+    Object.assign(this._state, state);
   },
 
   update (state) {
-    this._state = Object.assign({}, this._state, state);
+    Object.assign(this._state, state);
 
     for (let i = 0, len = changeCallbacks.length; i < len; i++) {
       const [ callback, ctx ] = changeCallbacks[i];

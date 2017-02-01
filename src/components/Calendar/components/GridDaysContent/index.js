@@ -56,7 +56,6 @@ export default class GridDaysContent extends Component {
 
   render () {
     const style = `transform: translateY(${this.state.scrollY}px)`;
-    // const style = `transform: translate3d(0, ${this.state.scrollY}px, 0)`;
 
     const classes = classnames({
       [ styles.calendar_GridDaysContent_Scroll ]: true,

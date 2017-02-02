@@ -4,9 +4,10 @@
   display: table-cell;
   position: relative;
   height: 100%;
+  box-shadow: inset -1px 0px 0px 0px @day-separator-color;
 
-  &:not(:last-child) {
-    box-shadow: inset -1px 0px 0px 0px @day-separator-color;
+  &:last-child {
+    box-shadow: none;
   }
 
   &__weekend {

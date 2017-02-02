@@ -20,8 +20,10 @@ export default class DayHeader extends Component {
     });
 
     return (
-      <div className={ classes }>
-        test
+      <div className={classes}>
+        <div className={styles.calendar_DayHeader_Title}>
+          ср, 22
+        </div>
       </div>
     );
   }

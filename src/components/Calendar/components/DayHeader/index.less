@@ -5,11 +5,13 @@
   position: relative;
   height: 100%;
 
-  &:not(:last-child) {
-    box-shadow: inset -1px 0px 0px 0px @day-separator-color;
-  }
-
   &__weekend {
     background: @day-weekend-color;
+  }
+
+  &_Title {
+    text-align: center;
+    font-size: @day-header-title-size;
+    padding: 0 6px;
   }
 }

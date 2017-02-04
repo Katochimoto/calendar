@@ -5,13 +5,19 @@
   position: relative;
   height: 100%;
 
-  &__weekend {
-    background: @day-weekend-color;
-  }
+  //&__weekend {
+  //  background: @day-weekend-color;
+  //}
 
   &_Title {
     text-align: center;
     font-size: @day-header-title-size;
+    line-height: @day-header-title-size;
     padding: 0 6px;
+
+    .mobile({
+      font-size: @day-header-title-size-mobile;
+      line-height: @day-header-title-size-mobile;
+    })
   }
 }

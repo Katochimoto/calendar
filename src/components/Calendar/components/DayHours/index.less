@@ -14,6 +14,8 @@
 }
 
 .@{component}_DayHours {
+  pointer-events: none;
+  visibility: hidden;
   display: table;
   position: absolute;
   height: 100%;
@@ -22,15 +24,15 @@
   left: 0;
   bottom: 0;
   right: 0;
-  pointer-events: none;
 
   &_item {
     display: table-row;
 
     & > &_content {
+      visibility: visible;
       position: relative;
       display: table-cell;
-      box-shadow: inset 0px 1px 0px 0px @day-separator-color;
+      box-shadow: inset 0px 1px 0px 0px @day-hour-separator-color;
 
       &[data-hour]:before {
         .mixin-title-hour();
@@ -48,8 +50,8 @@
 
     &:last-child > &_content {
       box-shadow:
-        inset 0px 1px 0px 0px @day-separator-color,
-        inset 0px -1px 0px 0px @day-separator-color;
+        inset 0px 1px 0px 0px @day-hour-separator-color,
+        inset 0px -1px 0px 0px @day-hour-separator-color;
 
       &[data-next-hour]:after {
         .mixin-title-hour();

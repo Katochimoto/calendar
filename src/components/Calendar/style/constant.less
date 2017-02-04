@@ -1,20 +1,26 @@
 @component: calendar;
 
-@base-color: #333;
+@base-font: 13px Arial, Helvetica, sans-serif;
+@base-font-color: #333;
 
 @day-hours-width: 4em;
-@day-weekend-color: fade(#f2f2f2, 50%);
-@day-separator-color: darken(fade(#f2f2f2, 50%), 12%);
+@day-weekend-color: fade(#fcfcfc, 50%);
+@day-separator-color: darken(#fcfcfc, 10%);
+@day-hour-separator-color: darken(#fcfcfc, 5%);
 
-@day-hour-color: #b3b3b3;
+@day-hour-color: #888;
 @day-hour-size: 0.9em;
 @day-hour-size-mobile: 1.05em;
 @day-hour-margin: 0.5 * @day-hour-size;
 @day-hour-margin-mobile: 0.5 * @day-hour-size-mobile;
 
 @day-event-color: #00f;
+@day-event-background-color: fade(@day-event-color, 20%);
+@day-event-background-selected-color: fade(@day-event-color, 30%);
+@day-event-border-color: fade(@day-event-color, 50%);
 
 @day-header-title-size: 1.3em;
+@day-header-title-size-mobile: 1.2em;
 
 .mobile (@rules) {
   @media screen and (max-width: 480px) {

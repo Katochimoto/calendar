@@ -6,15 +6,15 @@
   outline: none;
   width: 96%;
   cursor: pointer;
-  background: fade(@day-event-color, 20%);
-  box-shadow: inset 3px 0px 0px 0px fade(@day-event-color, 50%);
+  background: @day-event-background-color;
+  box-shadow: inset 3px 0px 0px 0px @day-event-border-color;
 
   &__selected {
-    background: fade(@day-event-color, 30%);
+    background: @day-event-background-selected-color;
   }
 
   .mobile({
     width: 90%;
-    box-shadow: inset 1px 0px 0px 0px fade(@day-event-color, 50%);
+    box-shadow: inset 1px 0px 0px 0px @day-event-border-color;
   })
 }

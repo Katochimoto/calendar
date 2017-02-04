@@ -13,8 +13,8 @@ export default class InfiniteList extends Component {
     super(props);
   }
 
-  transformState ({ scrollX, stopTransition }) {
-    return { scrollX, stopTransition };
+  transformState ({ scrollX, stopTransition, listKey }) {
+    return { scrollX, stopTransition, listKey };
   }
 
   shouldComponentUpdate (nextProps, nextState) {
@@ -24,8 +24,24 @@ export default class InfiniteList extends Component {
     );
   }
 
+  getItems () {
+    let items = [];
+    let begin = this.state.listKey - 1;
+    let end = this.state.listKey + 1;
+
+    for (; begin <= end; begin++) {
+      items.push(
+        <div key={begin} className={styles.calendar_InfiniteList_Item}>
+          {this.props.getItemElement(begin)}
+        </div>
+      );
+    }
+
+    return items;
+  }
+
   render () {
-    const style = `transform: translateX(${this.state.scrollX}px)`;
+    const styleContent = `transform: translateX(${this.state.scrollX}px)`;
 
     const classes = classnames({
       [ styles.calendar_InfiniteList ]: true,
@@ -39,10 +55,8 @@ export default class InfiniteList extends Component {
 
     return (
       <div className={classes}>
-        <div className={classesContent} style={style}>
-          <div className={styles.calendar_InfiniteList_Item}>
-            {this.props.getItemElement()}
-          </div>
+        <div className={classesContent} style={styleContent}>
+          {this.getItems()}
         </div>
       </div>
     );

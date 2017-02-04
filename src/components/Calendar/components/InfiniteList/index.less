@@ -10,6 +10,7 @@
   overflow: hidden;
   white-space: nowrap;
 
+  // список заполняет всё отведенное пространство
   &__fullFill {
     position: absolute;
     top: 0;
@@ -23,6 +24,7 @@
     will-change: transform, transition;
     transition: transform ease-out 0.1s;
 
+    // прерывание анимации, например при ресайзе
     &__stopTransition {
       transition: none;
     }

@@ -5,6 +5,8 @@ const DEFAULT_STATE = {
   scrollY: 0,
   stopTransition: false,
 
+  listKey: 0,
+
   gridHeight: 0,
   viewportHeight: 0,
   viewportMinutesBegin: 0,

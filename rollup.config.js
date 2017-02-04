@@ -46,7 +46,16 @@ export default {
           })
         ]
       },
-      onWriteBefore: function (cssText) {
+      /*
+      sourceMap: {
+        //outputSourceFiles: true,
+        sourceMapRootpath: '../',
+        //sourceMapBasepath: '/dist/',
+        //sourceMapURL: 'http://localhost:8000',
+        //sourceMapOutput: 'dist/app.css.map'
+      },
+      */
+      onWriteBefore: function (css, map) {
         return postcss([
           autoprefixer({
             remove: false,
@@ -59,8 +68,14 @@ export default {
           }),
           CssMqpacker(),
           PostcssCsso()
-        ]).process(cssText).then(function (result) {
-          return result.css;
+        ]).process(css, {
+          to: 'app.css',
+          map: { inline: false }
+        }).then(function (result) {
+          return {
+            css: result.css,
+            map: JSON.parse(result.map)
+          };
         });
       }
     }),

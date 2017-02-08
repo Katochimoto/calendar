@@ -4,7 +4,7 @@
 
 import { Component, PropTypes } from './Component';
 import context from './context';
-import rraf from './utils/rraf';
+import rraf, { raf, caf } from './utils/rraf';
 import GridDays from './components/GridDays';
 import Store from './Store';
 
@@ -26,14 +26,14 @@ export default class Calendar extends Component {
   componentDidMount () {
     super.componentDidMount();
     context.addEventListener('resize', this.handleResize, false);
-    this._timerRecalculationSize = context.setTimeout(() => {
+    this._timerRecalculationSize = raf(() => {
       Store.update(this.getRecalculationSize());
-    }, 0);
+    });
   }
 
   componentWillUnmount () {
     super.componentWillUnmount();
-    context.clearTimeout(this._timerRecalculationSize);
+    caf(this._timerRecalculationSize);
     context.removeEventListener('resize', this.handleResize, false);
   }
 
@@ -93,8 +93,9 @@ export default class Calendar extends Component {
 
     return {
       scrollHeight,
-      scrollWidth,
+      scrollWidth: 2 * scrollWidth, //!!
       scrollY,
+      scrollX: -(scrollWidth), //!!
       stopTransition: true
     };
   }

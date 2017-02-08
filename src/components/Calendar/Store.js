@@ -45,46 +45,50 @@ const DEFAULT_STATE = {
 };
 
 const changeCallbacks = [];
+const state = DEFAULT_STATE;
 
-function Store () {
-  this._state = DEFAULT_STATE;
-}
-
-Store.prototype = {
-  init (state) {
-    Object.assign(this._state, state);
-  },
-
-  update (state) {
-    Object.assign(this._state, state);
-
-    for (let i = 0, len = changeCallbacks.length; i < len; i++) {
-      const [ callback, ctx ] = changeCallbacks[i];
-      callback.call(ctx);
-    }
-  },
-
-  getState () {
-    return this._state;
-  },
-
-  addChangeListener (callback, ctx) {
-    changeCallbacks.push([ callback, ctx ]);
-  },
-
-  removeChangeListener (callback, ctx) {
-    let i = 0;
-    while (i < changeCallbacks.length) {
-      const item = changeCallbacks[i];
-
-      if (item[0] === callback && item[1] === ctx) {
-        changeCallbacks.splice(i, 1);
-
-      } else {
-        i++;
-      }
-    }
-  }
+export default {
+  init,
+  update,
+  getState,
+  addChangeListener,
+  removeChangeListener
 };
 
-export default new Store();
+function init (newState) {
+  Object.assign(state, newState);
+}
+
+function update (newState) {
+  Object.assign(state, newState);
+  fireChange();
+}
+
+function getState () {
+  return state;
+}
+
+function fireChange () {
+  for (let i = 0, len = changeCallbacks.length; i < len; i++) {
+    const [ callback, ctx ] = changeCallbacks[i];
+    callback.call(ctx);
+  }
+}
+
+function addChangeListener (callback, ctx) {
+  changeCallbacks.push([ callback, ctx ]);
+}
+
+function removeChangeListener (callback, ctx) {
+  let i = 0;
+  while (i < changeCallbacks.length) {
+    const item = changeCallbacks[i];
+
+    if (item[0] === callback && item[1] === ctx) {
+      changeCallbacks.splice(i, 1);
+
+    } else {
+      i++;
+    }
+  }
+}

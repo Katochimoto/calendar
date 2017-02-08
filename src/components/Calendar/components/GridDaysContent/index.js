@@ -49,8 +49,8 @@ export default class GridDaysContent extends Component {
 
   getRect () {
     return {
-      scrollHeight: this._node.scrollHeight - this._node.clientHeight,
-      scrollWidth: this._node.clientWidth
+      scrollHeight: this._contentNode.scrollHeight - this._contentNode.clientHeight,
+      scrollWidth: this._contentScrollNode.clientWidth
     };
   }
 
@@ -63,8 +63,8 @@ export default class GridDaysContent extends Component {
     });
 
     return (
-      <div ref={node => this._node = node} className={styles.calendar_GridDaysContent}>
-        <div className={classes} style={style}>
+      <div ref={node => this._contentNode = node} className={styles.calendar_GridDaysContent}>
+        <div ref={node => this._contentScrollNode = node} className={classes} style={style}>
           <DayHours />
           <InfiniteList getItemElement={this.getItemElement} />
         </div>

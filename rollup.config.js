@@ -119,7 +119,7 @@ export default {
       include: 'node_modules/**',
       exclude: '**/*.less'
     }),
-    RollupPluginUglify(),
+    // RollupPluginUglify(),
     RollupPluginFilesize()
   ]
 };

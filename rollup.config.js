@@ -36,6 +36,7 @@ export default {
     RollupPluginJSON(),
     RollupPluginLess2({
       output: 'dist/app.css',
+      // sourceMapOutput: 'dist/app.css.map',
       cssModules: true,
       options: {
         plugins: [
@@ -45,16 +46,16 @@ export default {
             generateScopedName: '[local]___[hash:base64:5]' // '[hash:base64:8]'
           })
         ]
+        /*
+        sourceMap: {
+          //outputSourceFiles: true,
+          sourceMapRootpath: '../',
+          //sourceMapBasepath: '/dist/',
+          //sourceMapURL: 'http://localhost:8000',
+          //sourceMapFullFilename
+        },
+        */
       },
-      /*
-      sourceMap: {
-        //outputSourceFiles: true,
-        sourceMapRootpath: '../',
-        //sourceMapBasepath: '/dist/',
-        //sourceMapURL: 'http://localhost:8000',
-        //sourceMapOutput: 'dist/app.css.map'
-      },
-      */
       onWriteBefore: function (css, map) {
         return postcss([
           autoprefixer({

@@ -35,8 +35,13 @@
   }
 
   &_Item {
+    visibility: hidden;
     display: inline-block;
     width: 100%;
+
+    &__visible {
+      visibility: visible;
+    }
 
     .mixin-infinite-full-fill({
       height: 100%;

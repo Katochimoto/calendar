@@ -1,11 +1,16 @@
 const DEFAULT_STATE = {
   scrollHeight: 0,
   scrollWidth: 0,
-  scrollX: 0,
+  scrollOffsetLeft: 0, // максимальное смещение при скроле влево = -1 * scrollWidth * ( listRange * 2 )
+  scrollOffsetRight: 0, // максимальное смещение при скроле вправо = constant 0
+  scrollOffsetTop: 0, // максимальное смещение при скроле вверх = -1 * scrollHeight
+  scrollOffsetBottom: 0, // максимальное смещение при скроле вниз = constant 0
+  scrollX: undefined, // смещение скрола по оси X = -1 * listRange * scrollWidth
   scrollY: 0,
   stopTransition: false,
 
   listOffset: 0,
+  listRange: 1,
 
   gridHeight: 0,
   viewportHeight: 0,
@@ -44,6 +49,39 @@ const DEFAULT_STATE = {
   hideNonWorkingHours: true,
 };
 
+const getter = {
+  listRange: data => _getter('listRange', data),
+  scrollWidth: data => _getter('scrollWidth', data),
+  scrollHeight: data => _getter('scrollHeight', data),
+  scrollOffsetTop: data => _getter('scrollOffsetTop', data, data => -1 * getter.scrollHeight(data)),
+  scrollOffsetBottom: data => _getter('scrollOffsetBottom', data),
+  scrollOffsetLeft: data => _getter('scrollOffsetLeft', data, data => -2 * getter.scrollWidth(data) * getter.listRange(data)),
+  scrollOffsetRight: data => _getter('scrollOffsetRight', data),
+  scrollY: function (data) {
+    let scrollY = _getter('scrollY', data);
+
+    if (data.scrollHeight !== undefined && data.scrollHeight !== state.scrollHeight) {
+      scrollY = state.scrollHeight > 0 ? scrollY * data.scrollHeight / state.scrollHeight : 0;
+    }
+
+    return _limitScrollY(scrollY, getter.scrollOffsetTop(data), getter.scrollOffsetBottom(data));
+  },
+  scrollX: function (data) {
+    let scrollX = _getter('scrollX', data);
+
+    if (scrollX === undefined) {
+      const scrollWidth = getter.scrollWidth(data);
+
+      if (scrollWidth) {
+        scrollX = -1 * getter.listRange(data) * scrollWidth;
+      }
+    }
+
+    return scrollX === undefined ? scrollX :
+      _limitScrollX(scrollX, getter.scrollOffsetLeft(data), getter.scrollOffsetRight(data));
+  }
+};
+
 const changeCallbacks = [];
 const state = DEFAULT_STATE;
 
@@ -52,15 +90,19 @@ export default {
   update,
   getState,
   addChangeListener,
-  removeChangeListener
+  removeChangeListener,
+  limitScrollX: value => _limitScrollX(value),
+  limitScrollY: value => _limitScrollY(value)
 };
 
 function init (newState) {
-  Object.assign(state, newState);
+  Object.assign(state, newState, _calculateState(newState));
+  //console.log(state);
 }
 
 function update (newState) {
-  Object.assign(state, newState);
+  Object.assign(state, newState, _calculateState(newState));
+  //console.log(state);
   fireChange();
 }
 
@@ -91,4 +133,25 @@ function removeChangeListener (callback, ctx) {
       i++;
     }
   }
+}
+
+function _calculateState (newState) {
+  return {
+    scrollOffsetLeft: getter.scrollOffsetLeft(newState),
+    scrollOffsetTop: getter.scrollOffsetTop(newState),
+    scrollX: getter.scrollX(newState),
+    scrollY: getter.scrollY(newState)
+  };
+}
+
+function _getter (value, data, _get = () => state[ value ]) {
+  return data[ value ] !== undefined ? data[ value ] : _get(data);
+}
+
+function _limitScrollX (value, min = state.scrollOffsetLeft, max = state.scrollOffsetRight) {
+  return Math.round(value < min ? min : value > max ? max : value);
+}
+
+function _limitScrollY (value, min = state.scrollOffsetTop, max = state.scrollOffsetBottom) {
+  return Math.round(value < min ? min : value > max ? max : value);
 }

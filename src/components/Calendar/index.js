@@ -47,17 +47,21 @@ export default class Calendar extends Component {
       return;
     }
 
-    const { scrollX, scrollY, scrollWidth, scrollHeight } = Store.getState();
-    const offset = {
-      x: deltaX,
-      y: deltaY,
-      w: scrollWidth,
-      h: scrollHeight
-    };
+    let scrollX;
+    let scrollY;
 
-    this._scroll = this._lockWheel ?
-      getScroll(this._scroll, offset) :
-      getScroll({ x: scrollX, y: scrollY }, offset);
+    if (this._lockWheel) {
+      scrollX = this._scrollX;
+      scrollY = this._scrollY;
+
+    } else {
+      let state = Store.getState();
+      scrollX = state.scrollX;
+      scrollY = state.scrollY;
+    }
+
+    this._scrollX = Store.limitScrollX(scrollX + deltaX);
+    this._scrollY = Store.limitScrollY(scrollY + deltaY);
 
     if (!this._lockWheel) {
       this._lockWheel = true;
@@ -66,15 +70,15 @@ export default class Calendar extends Component {
   }
 
   updateStoreByWheel () {
-    const { scrollX, scrollY } = Store.getState();
+    const state = Store.getState();
 
     if (
-      scrollX !== this._scroll.x ||
-      scrollY !== this._scroll.y
+      state.scrollX !== this._scrollX ||
+      state.scrollY !== this._scrollY
     ) {
       Store.update({
-        scrollX: this._scroll.x,
-        scrollY: this._scroll.y,
+        scrollX: this._scrollX,
+        scrollY: this._scrollY,
         stopTransition: false
       });
     }
@@ -87,15 +91,11 @@ export default class Calendar extends Component {
   }
 
   getRecalculationSize () {
-    const state = Store.getState();
     const { scrollHeight, scrollWidth } = this._gridComponent.getRect();
-    const scrollY = state.scrollHeight > 0 ? checkLimitY(state.scrollY * scrollHeight / state.scrollHeight, scrollHeight) : 0;
 
     return {
       scrollHeight,
-      scrollWidth: 2 * scrollWidth, //!!
-      scrollY,
-      scrollX: -(scrollWidth), //!!
+      scrollWidth,
       stopTransition: true
     };
   }
@@ -120,23 +120,3 @@ Calendar.defaultProps = {
   bindChangeEvents: function () {},
   onChangeEvents: function () {},
 };
-
-function getScroll (current, offset) {
-  return {
-    x: checkLimitX(current.x + offset.x, offset.w),
-    y: checkLimitY(current.y + offset.y, offset.h)
-  };
-}
-
-function checkLimitX (value, maxValue) {
-  return Math.round(Math.abs(value) > maxValue ? (value < 0 ? -1 : 1) * maxValue : value);
-}
-
-function checkLimitY (value, maxValue) {
-  if (maxValue > 0) {
-    value = Math.max(-(maxValue), value);
-    return value > 0 ? 0 : Math.round(value);
-  }
-
-  return 0;
-}

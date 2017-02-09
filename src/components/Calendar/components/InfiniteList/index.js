@@ -13,8 +13,8 @@ export default class InfiniteList extends Component {
     super(props);
   }
 
-  transformState ({ scrollX, stopTransition, listOffset }) {
-    return { scrollX, stopTransition, listOffset };
+  transformState ({ scrollX, stopTransition, listOffset, listRange }) {
+    return { scrollX, stopTransition, listOffset, listRange };
   }
 
   shouldComponentUpdate (nextProps, nextState) {
@@ -27,8 +27,8 @@ export default class InfiniteList extends Component {
 
   getItems () {
     let items = [];
-    let begin = this.state.listOffset - 1;
-    let end = this.state.listOffset + 1;
+    let begin = this.state.listOffset - this.state.listRange;
+    let end = this.state.listOffset + this.state.listRange;
 
     const classes = classnames({
       [ styles.calendar_InfiniteList_Item ]: true,

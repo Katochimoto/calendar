@@ -53,10 +53,18 @@ const getter = {
   listRange: data => _getter('listRange', data),
   scrollWidth: data => _getter('scrollWidth', data),
   scrollHeight: data => _getter('scrollHeight', data),
-  scrollOffsetTop: data => _getter('scrollOffsetTop', data, data => -1 * getter.scrollHeight(data)),
   scrollOffsetBottom: data => _getter('scrollOffsetBottom', data),
-  scrollOffsetLeft: data => _getter('scrollOffsetLeft', data, data => -2 * getter.scrollWidth(data) * getter.listRange(data)),
   scrollOffsetRight: data => _getter('scrollOffsetRight', data),
+  scrollOffsetTop: function (data) {
+    return data.scrollHeight === undefined ?
+      _getter('scrollOffsetTop', data) :
+      -1 * data.scrollHeight;
+  },
+  scrollOffsetLeft: function (data) {
+    return data.scrollWidth === undefined && data.listRange === undefined ?
+      _getter('scrollOffsetLeft', data) :
+      -2 * getter.scrollWidth(data) * getter.listRange(data);
+  },
   scrollY: function (data) {
     let scrollY = _getter('scrollY', data);
 

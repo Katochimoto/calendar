@@ -8,7 +8,6 @@
 
 .@{component}_InfiniteList {
   overflow: hidden;
-  white-space: nowrap;
 
   // список заполняет всё отведенное пространство
   &__fullFill {
@@ -21,6 +20,7 @@
 
   &_Content {
     width: 100%;
+    white-space: nowrap;
     will-change: transform, transition;
     transition: transform ease-out 0.1s;
 

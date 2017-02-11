@@ -24,10 +24,10 @@ export default class GridDaysHeader extends Component {
       <DayHeader key={0} />,
       <DayHeader key={1} />,
       <DayHeader key={2} />,
-      <DayHeader key={3} weekend={true} />,
-      <DayHeader key={4} weekend={true} />,
-      <DayHeader key={5} />,
-      <DayHeader key={6} />
+      <DayHeader key={3} />,
+      <DayHeader key={4} />,
+      <DayHeader key={5} weekend={true} />,
+      <DayHeader key={6} weekend={true} />
     ];
 
     return (

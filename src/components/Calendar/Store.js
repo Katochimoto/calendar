@@ -7,8 +7,8 @@ const DEFAULT_STATE = {
   scrollOffsetBottom: 0,  // максимальное смещение при скроле вниз = constant 0
   scrollX: undefined,     // смещение скрола по оси X = -1 * listRange * scrollWidth
   scrollY: 0,
-  stopTransitionX: false,
-  stopTransitionY: false,
+  stopTransitionX: true,
+  stopTransitionY: true,
 
   stickyScrollX: false,   // залипающий скролл по X
   stepScrollX: false,     // пошаговый скролл по X
@@ -113,13 +113,13 @@ const getter = {
     const rate = centerOffsetWidth ? sign * scrollY2CenterWidth * 100 / centerOffsetWidth : 0;
 
     let listOffset = state.listOffset;
-    if (rate < -50) {
+    if (rate <= -100) {
       listOffset++;
-    } else if (rate > 50) {
+    } else if (rate >= 100) {
       listOffset--;
     }
 
-    console.log(rate, state.listOffset, listOffset);
+    //console.log(rate, state.listOffset, listOffset);
 
     return listOffset;
   })
@@ -143,11 +143,12 @@ function init (newState) {
 }
 
 function update (newState) {
-  //const old = state.listOffset;
+  const old = state.listOffset;
   Object.assign(state, newState, _calculateState(newState));
-  //if (old !== state.listOffset) {
-  //  state.scrollX = -1 * state.listRange * state.scrollWidth + state.scrollWidth / 2;
-  //}
+  if (old !== state.listOffset) {
+    state.scrollX = state.scrollX - state.scrollWidth; // -1 * state.listRange * state.scrollWidth + state.scrollWidth / 2;
+    state.stopTransitionX = true;
+  }
 
   fireChange();
 }
@@ -187,7 +188,7 @@ function _calculateState (newState) {
     scrollOffsetTop: getter.scrollOffsetTop(newState),
     scrollX: getter.scrollX(newState),
     scrollY: getter.scrollY(newState),
-    //listOffset: getter.listOffset(newState)
+    listOffset: getter.listOffset(newState)
   };
 }
 

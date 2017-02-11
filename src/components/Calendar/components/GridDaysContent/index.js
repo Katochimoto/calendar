@@ -34,10 +34,10 @@ export default class GridDaysContent extends Component {
       <Day key={0} />,
       <Day key={1} />,
       <Day key={2} />,
-      <Day key={3} weekend={true} />,
-      <Day key={4} weekend={true} />,
-      <Day key={5} />,
-      <Day key={6} />
+      <Day key={3} />,
+      <Day key={4} />,
+      <Day key={5} weekend={true} />,
+      <Day key={6} weekend={true} />
     ];
 
     return (

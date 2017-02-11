@@ -1,13 +1,22 @@
 const DEFAULT_STATE = {
   scrollHeight: 0,
   scrollWidth: 0,
-  scrollOffsetLeft: 0, // максимальное смещение при скроле влево = -1 * scrollWidth * ( listRange * 2 )
-  scrollOffsetRight: 0, // максимальное смещение при скроле вправо = constant 0
-  scrollOffsetTop: 0, // максимальное смещение при скроле вверх = -1 * scrollHeight
-  scrollOffsetBottom: 0, // максимальное смещение при скроле вниз = constant 0
-  scrollX: undefined, // смещение скрола по оси X = -1 * listRange * scrollWidth
+  scrollOffsetLeft: 0,    // максимальное смещение при скроле влево = -1 * scrollWidth * ( listRange * 2 )
+  scrollOffsetRight: 0,   // максимальное смещение при скроле вправо = constant 0
+  scrollOffsetTop: 0,     // максимальное смещение при скроле вверх = -1 * scrollHeight
+  scrollOffsetBottom: 0,  // максимальное смещение при скроле вниз = constant 0
+  scrollX: undefined,     // смещение скрола по оси X = -1 * listRange * scrollWidth
   scrollY: 0,
-  stopTransition: false,
+  stopTransitionX: false,
+  stopTransitionY: false,
+
+  stickyScrollX: false,   // залипающий скролл по X
+  stepScrollX: false,     // пошаговый скролл по X
+  freeScrollX: false,     // свободный скролл по X
+  freeScrollY: false,     // свободный скролл по Y
+
+  speedScrollX: 0,        // скорость скролла по X: старт = abs(new) > abs(old); вправо > 0; влево < 0;
+  speedScrollY: 0,        // скорость скролла по Y: старт = abs(new) > abs(old); вниз > 0; вверх < 0;
 
   listOffset: 0,
   listRange: 1,
@@ -63,7 +72,7 @@ const getter = {
   scrollOffsetLeft: function (data) {
     return data.scrollWidth === undefined && data.listRange === undefined ?
       _getter('scrollOffsetLeft', data) :
-      -2 * getter.scrollWidth(data) * getter.listRange(data);
+      -2 * getter.listRange(data) * getter.scrollWidth(data);
   },
   scrollY: function (data) {
     let scrollY = _getter('scrollY', data);
@@ -87,7 +96,33 @@ const getter = {
 
     return scrollX === undefined ? scrollX :
       _limitScrollX(scrollX, getter.scrollOffsetLeft(data), getter.scrollOffsetRight(data));
-  }
+  },
+  listOffset: data => _getter('listOffset', data, function (data) {
+    const scrollY = getter.scrollX(data);
+    const scrollOffsetLeft = getter.scrollOffsetLeft(data);
+    const scrollOffsetRight = getter.scrollOffsetRight(data);
+    const scrollOffsetCenter = (scrollOffsetLeft + scrollOffsetRight) / 2;
+    const scrollOffsetWidth = scrollOffsetLeft > scrollOffsetRight ?
+      scrollOffsetLeft - scrollOffsetRight :
+      scrollOffsetRight - scrollOffsetLeft;
+    const centerOffsetWidth = scrollOffsetWidth / 2;
+    const sign = scrollY > scrollOffsetCenter ? 1 : -1;
+    const scrollY2CenterWidth = scrollY > scrollOffsetCenter ?
+      scrollY - scrollOffsetCenter :
+      scrollOffsetCenter - scrollY;
+    const rate = centerOffsetWidth ? sign * scrollY2CenterWidth * 100 / centerOffsetWidth : 0;
+
+    let listOffset = state.listOffset;
+    if (rate < -50) {
+      listOffset++;
+    } else if (rate > 50) {
+      listOffset--;
+    }
+
+    console.log(rate, state.listOffset, listOffset);
+
+    return listOffset;
+  })
 };
 
 const changeCallbacks = [];
@@ -105,12 +140,15 @@ export default {
 
 function init (newState) {
   Object.assign(state, newState, _calculateState(newState));
-  //console.log(state);
 }
 
 function update (newState) {
+  //const old = state.listOffset;
   Object.assign(state, newState, _calculateState(newState));
-  //console.log(state);
+  //if (old !== state.listOffset) {
+  //  state.scrollX = -1 * state.listRange * state.scrollWidth + state.scrollWidth / 2;
+  //}
+
   fireChange();
 }
 
@@ -148,7 +186,8 @@ function _calculateState (newState) {
     scrollOffsetLeft: getter.scrollOffsetLeft(newState),
     scrollOffsetTop: getter.scrollOffsetTop(newState),
     scrollX: getter.scrollX(newState),
-    scrollY: getter.scrollY(newState)
+    scrollY: getter.scrollY(newState),
+    //listOffset: getter.listOffset(newState)
   };
 }
 

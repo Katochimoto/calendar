@@ -13,15 +13,15 @@ export default class InfiniteList extends Component {
     super(props);
   }
 
-  transformState ({ scrollX, stopTransition, listOffset, listRange }) {
-    return { scrollX, stopTransition, listOffset, listRange };
+  transformState ({ scrollX, stopTransitionX, listOffset, listRange }) {
+    return { scrollX, stopTransitionX, listOffset, listRange };
   }
 
   shouldComponentUpdate (nextProps, nextState) {
     return (
       this.state.listOffset !== nextState.listOffset ||
       this.state.scrollX !== nextState.scrollX ||
-      this.state.stopTransition !== nextState.stopTransition
+      this.state.stopTransitionX !== nextState.stopTransitionX
     );
   }
 
@@ -37,7 +37,7 @@ export default class InfiniteList extends Component {
 
     for (; begin <= end; begin++) {
       items.push(
-        <div key={begin} className={classes}>
+        <div key={begin} data-key={begin} className={classes}>
           {this.props.getItemElement(begin)}
         </div>
       );
@@ -56,7 +56,7 @@ export default class InfiniteList extends Component {
 
     const classesContent = classnames({
       [ styles.calendar_InfiniteList_Content ]: true,
-      [ styles.calendar_InfiniteList_Content__stopTransition ]: this.state.stopTransition
+      [ styles.calendar_InfiniteList_Content__stopTransitionX ]: this.state.stopTransitionX
     });
 
     return (

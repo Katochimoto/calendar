@@ -47,21 +47,8 @@ export default class Calendar extends Component {
       return;
     }
 
-    let scrollX;
-    let scrollY;
-
-    if (this._lockWheel) {
-      scrollX = this._scrollX;
-      scrollY = this._scrollY;
-
-    } else {
-      let state = Store.getState();
-      scrollX = state.scrollX;
-      scrollY = state.scrollY;
-    }
-
-    this._scrollX = Store.limitScrollX(scrollX + deltaX);
-    this._scrollY = Store.limitScrollY(scrollY + deltaY);
+    this._deltaX = deltaX + (this._lockWheel ? this._deltaX : 0);
+    this._deltaY = deltaY + (this._lockWheel ? this._deltaY : 0);
 
     if (!this._lockWheel) {
       this._lockWheel = true;
@@ -70,17 +57,32 @@ export default class Calendar extends Component {
   }
 
   updateStoreByWheel () {
-    const state = Store.getState();
+    if (this._deltaX || this._deltaY) {
+      const state = Store.getState();
+      const newState = {};
+      let needUpdate = false;
 
-    if (
-      state.scrollX !== this._scrollX ||
-      state.scrollY !== this._scrollY
-    ) {
-      Store.update({
-        scrollX: this._scrollX,
-        scrollY: this._scrollY,
-        stopTransition: false
-      });
+      if (this._deltaX) {
+        const scrollX = Store.limitScrollX(state.scrollX + this._deltaX);
+        if (state.scrollX !== scrollX) {
+          newState.scrollX = scrollX;
+          newState.stopTransitionX = false;
+          needUpdate = true;
+        }
+      }
+
+      if (this._deltaY) {
+        const scrollY = Store.limitScrollY(state.scrollY + this._deltaY);
+        if (state.scrollY !== scrollY) {
+          newState.scrollY = scrollY;
+          newState.stopTransitionY = false;
+          needUpdate = true;
+        }
+      }
+
+      if (needUpdate) {
+        Store.update(newState);
+      }
     }
 
     this._lockWheel = false;
@@ -96,7 +98,8 @@ export default class Calendar extends Component {
     return {
       scrollHeight,
       scrollWidth,
-      stopTransition: true
+      stopTransitionY: true,
+      stopTransitionX: true
     };
   }
 

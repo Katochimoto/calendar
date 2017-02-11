@@ -18,14 +18,14 @@ export default class GridDaysContent extends Component {
     this.getItemElement = this.getItemElement.bind(this);
   }
 
-  transformState ({ scrollY, stopTransition }) {
-    return { scrollY, stopTransition };
+  transformState ({ scrollY, stopTransitionY }) {
+    return { scrollY, stopTransitionY };
   }
 
   shouldComponentUpdate (nextProps, nextState) {
     return (
       this.state.scrollY !== nextState.scrollY ||
-      this.state.stopTransition !== nextState.stopTransition
+      this.state.stopTransitionY !== nextState.stopTransitionY
     );
   }
 
@@ -59,7 +59,7 @@ export default class GridDaysContent extends Component {
 
     const classes = classnames({
       [ styles.calendar_GridDaysContent_Scroll ]: true,
-      [ styles.calendar_GridDaysContent_Scroll__stopTransition ]: this.state.stopTransition
+      [ styles.calendar_GridDaysContent_Scroll__stopTransitionY ]: this.state.stopTransitionY
     });
 
     return (

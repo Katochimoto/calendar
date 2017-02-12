@@ -2,8 +2,6 @@
  *
  */
 
-import classnames from 'classnames';
-
 import { Component } from '../../Component';
 import Day from '../Day';
 import DayHours from '../DayHours';
@@ -18,14 +16,13 @@ export default class GridDaysContent extends Component {
     this.getItemElement = this.getItemElement.bind(this);
   }
 
-  transformState ({ scrollY, stopTransitionY }) {
-    return { scrollY, stopTransitionY };
+  transformState ({ scrollY }) {
+    return { scrollY };
   }
 
   shouldComponentUpdate (nextProps, nextState) {
     return (
-      this.state.scrollY !== nextState.scrollY ||
-      this.state.stopTransitionY !== nextState.stopTransitionY
+      this.state.scrollY !== nextState.scrollY
     );
   }
 
@@ -57,14 +54,9 @@ export default class GridDaysContent extends Component {
   render () {
     const style = `transform: translateY(${this.state.scrollY}px)`;
 
-    const classes = classnames({
-      [ styles.calendar_GridDaysContent_Scroll ]: true,
-      [ styles.calendar_GridDaysContent_Scroll__stopTransitionY ]: this.state.stopTransitionY
-    });
-
     return (
       <div ref={node => this._contentNode = node} className={styles.calendar_GridDaysContent}>
-        <div ref={node => this._contentScrollNode = node} className={classes} style={style}>
+        <div ref={node => this._contentScrollNode = node} className={styles.calendar_GridDaysContent_Scroll} style={style}>
           <DayHours />
           <InfiniteList getItemElement={this.getItemElement} />
         </div>

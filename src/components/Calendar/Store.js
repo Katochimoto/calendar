@@ -7,8 +7,7 @@ const DEFAULT_STATE = {
   scrollOffsetBottom: 0,  // максимальное смещение при скроле вниз = constant 0
   scrollX: undefined,     // смещение скрола по оси X = -1 * listRange * scrollWidth
   scrollY: 0,
-  stopTransitionX: true,
-  stopTransitionY: true,
+  scrollDeltaX: 0,
 
   stickyScrollX: false,   // залипающий скролл по X
   stepScrollX: false,     // пошаговый скролл по X
@@ -147,11 +146,17 @@ function init (newState) {
 }
 
 function update (newState) {
-  const old = state.listOffset;
+  const oldListOffset = state.listOffset;
+  const oldScrollX = state.scrollX;
+
   Object.assign(state, newState, _calculateState(newState));
-  if (old !== state.listOffset) {
-    state.scrollX = old > state.listOffset ? state.scrollX - state.scrollWidth : state.scrollX + state.scrollWidth;
-    state.stopTransitionX = true;
+
+  const newListOffset = state.listOffset;
+  const newScrollX = state.scrollX;
+
+  if (oldListOffset !== newListOffset) {
+    state.scrollX = oldListOffset > newListOffset ? oldScrollX - state.scrollWidth : oldScrollX + state.scrollWidth;
+    state.scrollDeltaX = newScrollX - oldScrollX;
   }
 
   fireChange();

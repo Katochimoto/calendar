@@ -2,9 +2,11 @@
  *
  */
 
+import { polyfill } from 'raf';
+polyfill();
+
 import { Component, PropTypes } from './Component';
 import context from './context';
-import rraf, { raf, caf } from './utils/rraf';
 import GridDays from './components/GridDays';
 import Store from './Store';
 
@@ -17,6 +19,7 @@ export default class Calendar extends Component {
 
     this.handleWheel = this.handleWheel.bind(this);
     this.handleResize = this.handleResize.bind(this);
+    this.updateStoreByWheel = this.updateStoreByWheel.bind(this);
   }
 
   componentWillReceiveProps (nextProps) {
@@ -26,14 +29,14 @@ export default class Calendar extends Component {
   componentDidMount () {
     super.componentDidMount();
     context.addEventListener('resize', this.handleResize, false);
-    this._timerRecalculationSize = raf(() => {
+    this._timerRecalculationSize = context.requestAnimationFrame(() => {
       Store.update(this.getRecalculationSize());
     });
   }
 
   componentWillUnmount () {
     super.componentWillUnmount();
-    caf(this._timerRecalculationSize);
+    context.cancelAnimationFrame(this._timerRecalculationSize);
     context.removeEventListener('resize', this.handleResize, false);
   }
 
@@ -52,7 +55,7 @@ export default class Calendar extends Component {
 
     if (!this._lockWheel) {
       this._lockWheel = true;
-      rraf(this.updateStoreByWheel, 3, this);
+      context.requestAnimationFrame(this.updateStoreByWheel);
     }
   }
 
@@ -63,10 +66,10 @@ export default class Calendar extends Component {
       let needUpdate = false;
 
       if (this._deltaX) {
-        const scrollX = Store.limitScrollX(state.scrollX + this._deltaX);
+        const scrollX = Store.limitScrollX(state.scrollX + this._deltaX + state.scrollDeltaX);
         if (state.scrollX !== scrollX) {
           newState.scrollX = scrollX;
-          newState.stopTransitionX = false;
+          newState.scrollDeltaX = 0;
           needUpdate = true;
         }
       }
@@ -75,7 +78,6 @@ export default class Calendar extends Component {
         const scrollY = Store.limitScrollY(state.scrollY + this._deltaY);
         if (state.scrollY !== scrollY) {
           newState.scrollY = scrollY;
-          newState.stopTransitionY = false;
           needUpdate = true;
         }
       }
@@ -97,9 +99,7 @@ export default class Calendar extends Component {
 
     return {
       scrollHeight,
-      scrollWidth,
-      stopTransitionY: true,
-      stopTransitionX: true
+      scrollWidth
     };
   }
 

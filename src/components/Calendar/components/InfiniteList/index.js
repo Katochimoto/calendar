@@ -51,7 +51,7 @@ export default class InfiniteList extends Component {
 
     const classes = classnames({
       [ styles.calendar_InfiniteList ]: true,
-      [ styles.calendar_InfiniteList__fullFill ]: this.props.fullFill
+      [ styles.calendar_InfiniteList__fullFill ]: true//this.props.fullFill
     });
 
     const classesContent = classnames({

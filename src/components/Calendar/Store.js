@@ -18,6 +18,7 @@ const DEFAULT_STATE = {
   speedScrollX: 0,        // скорость скролла по X: старт = abs(new) > abs(old); вправо > 0; влево < 0;
   speedScrollY: 0,        // скорость скролла по Y: старт = abs(new) > abs(old); вниз > 0; вверх < 0;
 
+  listOffsetRate: 0,
   listOffset: 0,
   listRange: 1,
 
@@ -97,6 +98,9 @@ const getter = {
     return scrollX === undefined ? scrollX :
       _limitScrollX(scrollX, getter.scrollOffsetLeft(data), getter.scrollOffsetRight(data));
   },
+  listOffsetRate: data => _getter('listOffsetRate', data, function (data) {
+
+  }),
   listOffset: data => _getter('listOffset', data, function (data) {
     const scrollY = getter.scrollX(data);
     const scrollOffsetLeft = getter.scrollOffsetLeft(data);
@@ -146,7 +150,7 @@ function update (newState) {
   const old = state.listOffset;
   Object.assign(state, newState, _calculateState(newState));
   if (old !== state.listOffset) {
-    state.scrollX = state.scrollX - state.scrollWidth; // -1 * state.listRange * state.scrollWidth + state.scrollWidth / 2;
+    state.scrollX = old > state.listOffset ? state.scrollX - state.scrollWidth : state.scrollX + state.scrollWidth;
     state.stopTransitionX = true;
   }
 

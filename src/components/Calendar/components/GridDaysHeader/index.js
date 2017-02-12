@@ -40,7 +40,9 @@ export default class GridDaysHeader extends Component {
   render () {
     return (
       <div className={styles.calendar_GridDaysHeader}>
-        <InfiniteList fullFill={false} getItemElement={this.getItemElement} />
+        <div className={styles.calendar_GridDaysHeader_Content}>
+          <InfiniteList fullFill={false} getItemElement={this.getItemElement} />
+        </div>
       </div>
     );
   }

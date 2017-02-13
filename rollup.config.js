@@ -28,7 +28,7 @@ export default {
   external: external,
   globals: {
     'classnames': 'vendor._classnames',
-    'raf': 'vendor._raf',
+    'object-assign': 'vendor._object_assign',
     'preact-compat': 'vendor._preact_compat',
     'preact': 'vendor._preact'
   },

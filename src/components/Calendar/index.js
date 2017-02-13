@@ -2,9 +2,7 @@
  *
  */
 
-import { polyfill } from 'raf';
-polyfill();
-
+import { raf, caf } from './utils/raf';
 import { Component, PropTypes } from './Component';
 import context from './context';
 import GridDays from './components/GridDays';
@@ -29,14 +27,14 @@ export default class Calendar extends Component {
   componentDidMount () {
     super.componentDidMount();
     context.addEventListener('resize', this.handleResize, false);
-    this._timerRecalculationSize = context.requestAnimationFrame(() => {
+    this._timerRecalculationSize = raf(() => {
       Store.update(this.getRecalculationSize());
     });
   }
 
   componentWillUnmount () {
     super.componentWillUnmount();
-    context.cancelAnimationFrame(this._timerRecalculationSize);
+    caf(this._timerRecalculationSize);
     context.removeEventListener('resize', this.handleResize, false);
   }
 
@@ -55,7 +53,7 @@ export default class Calendar extends Component {
 
     if (!this._lockWheel) {
       this._lockWheel = true;
-      context.requestAnimationFrame(this.updateStoreByWheel);
+      raf(this.updateStoreByWheel);
     }
   }
 

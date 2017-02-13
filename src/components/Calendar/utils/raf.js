@@ -28,7 +28,10 @@ if (!context.cancelAnimationFrame) {
   };
 }
 
-export {
-  raf: context.requestAnimationFrame,
-  caf: context.cancelAnimationFrame
-};
+export function raf (callback) {
+  return context.requestAnimationFrame(callback);
+}
+
+export function caf (id) {
+  return context.cancelAnimationFrame(id);
+}

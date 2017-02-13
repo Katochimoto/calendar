@@ -1,3 +1,5 @@
+import objectAssign from 'object-assign';
+
 const DEFAULT_STATE = {
   scrollHeight: 0,
   scrollWidth: 0,
@@ -142,14 +144,14 @@ export default {
 };
 
 function init (newState) {
-  Object.assign(state, newState, _calculateState(newState));
+  objectAssign(state, newState, _calculateState(newState));
 }
 
 function update (newState) {
   const oldListOffset = state.listOffset;
   const oldScrollX = state.scrollX;
 
-  Object.assign(state, newState, _calculateState(newState));
+  objectAssign(state, newState, _calculateState(newState));
 
   const newListOffset = state.listOffset;
   const newScrollX = state.scrollX;

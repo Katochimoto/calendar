@@ -3,6 +3,7 @@
  */
 
 import { raf, caf } from './utils/raf';
+import { onWheel, offWheel, wrapWheelCallback } from './utils/wheel';
 import { Component, PropTypes } from './Component';
 import context from './context';
 import GridDays from './components/GridDays';
@@ -15,7 +16,7 @@ export default class Calendar extends Component {
     Store.init(props);
     super(props);
 
-    this.handleWheel = this.handleWheel.bind(this);
+    this.handleWheel = wrapWheelCallback(this.handleWheel.bind(this));
     this.handleResize = this.handleResize.bind(this);
     this.updateStoreByWheel = this.updateStoreByWheel.bind(this);
   }
@@ -26,9 +27,10 @@ export default class Calendar extends Component {
 
   componentDidMount () {
     super.componentDidMount();
-    context.addEventListener('resize', this.handleResize, false);
     this._timerRecalculationSize = raf(() => {
       Store.update(this.getRecalculationSize());
+      context.addEventListener('resize', this.handleResize, false);
+      onWheel(this._calendarNode, this.handleWheel);
     });
   }
 
@@ -36,6 +38,7 @@ export default class Calendar extends Component {
     super.componentWillUnmount();
     caf(this._timerRecalculationSize);
     context.removeEventListener('resize', this.handleResize, false);
+    offWheel(this._calendarNode, this.handleWheel);
   }
 
   handleWheel (event) {
@@ -102,9 +105,7 @@ export default class Calendar extends Component {
 
   render () {
     return (
-      <div className={styles.calendar}
-        onWheel={this.handleWheel}>
-
+      <div ref={calendarNode => this._calendarNode = calendarNode} className={styles.calendar}>
         <GridDays ref={gridComponent => this._gridComponent = gridComponent} />
       </div>
     );

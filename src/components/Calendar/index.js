@@ -64,10 +64,9 @@ export default class Calendar extends Component {
       let needUpdate = false;
 
       if (this._deltaX) {
-        const scrollX = Store.limitScrollX(state.scrollX + this._deltaX + state.scrollDeltaX);
+        const scrollX = Store.limitScrollX(state.scrollX + this._deltaX);
         if (state.scrollX !== scrollX) {
           newState.scrollX = scrollX;
-          newState.scrollDeltaX = 0;
           needUpdate = true;
         }
       }

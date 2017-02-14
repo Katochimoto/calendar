@@ -218,3 +218,7 @@ function _limitScrollX (value, min = state.scrollOffsetLeft, max = state.scrollO
 function _limitScrollY (value, min = state.scrollOffsetTop, max = state.scrollOffsetBottom) {
   return Math.round(value < min ? min : value > max ? max : value);
 }
+
+function _scrollXOffset (data, offset) {
+
+}

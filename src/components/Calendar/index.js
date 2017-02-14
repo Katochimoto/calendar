@@ -41,6 +41,10 @@ export default class Calendar extends Component {
     offWheel(this._calendarNode, this.handleWheel);
   }
 
+  handleResize () {
+    Store.update(this.getRecalculationSize());
+  }
+
   handleWheel (event) {
     event.preventDefault();
 
@@ -88,10 +92,6 @@ export default class Calendar extends Component {
     }
 
     this._lockWheel = false;
-  }
-
-  handleResize () {
-    Store.update(this.getRecalculationSize());
   }
 
   getRecalculationSize () {

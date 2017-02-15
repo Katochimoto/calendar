@@ -25,31 +25,31 @@ export default class DayHours extends Component {
 
   render () {
     const { hoursOfDay, hours /* hideNonWorkingHours */ } = this.state;
-    const len = hoursOfDay.length - 1;
+    const len = hoursOfDay.length;
 
-    if (len < 0) {
+    if (!len) {
       return null;
     }
 
     const elements = [];
+    let i = 0;
 
-    for (let i = 0; i < len; i++) {
+    while (i < len) {
       const hour = hoursOfDay[ i ];
 
       elements.push(
-        <div key={hour}
+        <div key={i}
           className={styles.calendar_DayHours_Item}
           data-hour={hours[ hour ].title} />
       );
+
+      i++;
     }
 
-    const hour = hoursOfDay[ len ];
-
     elements.push(
-      <div key={hour}
+      <div key={i}
         className={styles.calendar_DayHours_Item}
-        data-hour={hours[ hour ].title}
-        data-next-hour={hours[ hoursOfDay[0] ].title} />
+        data-hour={hours[ hoursOfDay[0] ].title} />
     );
 
     return (
@@ -59,35 +59,3 @@ export default class DayHours extends Component {
     );
   }
 }
-
-/*
-for (let i = 0; i < len; i++) {
-  const hour = hoursOfDay[ i ];
-
-  elements.push(
-    <tr key={hour} className={styles.calendar_DayHours_Item}>
-      <td className={styles.calendar_DayHours_Content}>
-        <span className={styles.calendar_DayHours_Current}>{hours[ hour ].title}</span>
-      </td>
-    </tr>
-  );
-}
-
-const hour = hoursOfDay[ len ];
-
-elements.push(
-  <tr key={hour} className={styles.calendar_DayHours_Item}>
-    <td className={styles.calendar_DayHours_Content}>
-      <span className={styles.calendar_DayHours_Current}>{hours[ hour ].title}</span>
-    </td>
-  </tr>
-);
-
-return (
-  <table className={styles.calendar_DayHours}>
-    <tbody>
-      {elements}
-    </tbody>
-  </table>
-);
- */

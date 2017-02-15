@@ -1,120 +1,43 @@
 @import (reference, once) "../../style/constant";
 
-.mixin-title-hour () {
-  display: block;
-  position: absolute;
-  left: 0;
-  margin-left: -1 * @day-hours-width;
-  width: @day-hours-width - 0.5em;
-  text-align: right;
-  white-space: nowrap;
-}
-
 .@{component}_DayHours {
+  visibility: hidden;
   display: flex;
   flex-direction: column;
-  align-content: stretch;
-
-  /*position: absolute;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  left: 0;*/
+  justify-content: space-between;
 
   color: @day-hour-color;
   font-size: @day-hour-size;
   line-height: @day-hour-size;
 
+  pointer-events: none;
+
   height: 100%;
   width: 100%;
 
   &_Item {
+    visibility: visible;
     position: relative;
-    display: flex;
-    flex-grow: 1;
+    height: 1px;
+    background-color: @day-hour-separator-color;
 
-    box-sizing: border-box;
-    border-bottom: 1px solid @day-hour-separator-color;
+    &:before {
+      position: absolute;
+      display: block;
 
-    &:first-child {
-      border-top: 1px solid @day-hour-separator-color;
-    }
-
-    &[data-hour]:before {
-      .mixin-title-hour();
-
-      content: attr(data-hour);
+      left: 0;
       top: -0.5 * @day-hour-size;
+      margin-left: -1 * @day-hours-width;
+
+      text-align: right;
+      white-space: nowrap;
+      content: attr(data-hour);
+
+      width: @day-hours-width - 0.5em;
 
       .mobile({
         top: -0.5 * @day-hour-size-mobile;
       })
     }
-
-    &[data-next-hour]:after {
-      .mixin-title-hour();
-
-      content: attr(data-next-hour);
-      bottom: -0.5 * @day-hour-size;
-
-      .mobile({
-        bottom: -0.5 * @day-hour-size-mobile;
-      })
-    }
   }
 }
-
-
-
-/*
-.@{component}_DayHours {
-  height: 100%;
-  width: 100%;
-  border-collapse: collapse;
-  border-spacing: 0;
-  box-sizing: border-box;
-
-  color: @day-hour-color;
-  font-size: @day-hour-size;
-  line-height: @day-hour-size;
-
-  &_Current {
-    .mixin-title-hour();
-    margin-top: -0.5 * @day-hour-size;
-
-    .mobile({
-      margin-top: -0.5 * @day-hour-size-mobile;
-    })
-  }
-
-  &_Next {
-    .mixin-title-hour();
-    margin-bottom: -0.5 * @day-hour-size;
-
-    .mobile({
-      margin-bottom: -0.5 * @day-hour-size-mobile;
-    })
-  }
-
-  &_Item {
-    height: auto;
-  }
-
-  &_Item:first-child > &_Content {
-    border-top: 1px solid @day-hour-separator-color;
-  }
-
-  &_Content {
-    box-sizing: border-box;
-    height: auto;
-    position: relative;
-    vertical-align: top;
-    border-bottom: 1px solid @day-hour-separator-color;
-  }
-
-  .mobile({
-    font-size: @day-hour-size-mobile;
-    line-height: @day-hour-size-mobile;
-  })
-}
-*/

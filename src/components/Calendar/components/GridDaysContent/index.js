@@ -45,6 +45,7 @@ export default class GridDaysContent extends Component {
   }
 
   getRect () {
+    console.log(this._contentNode.scrollHeight, this._contentNode.clientHeight, this._contentNode);
     return {
       scrollHeight: this._contentNode.scrollHeight - this._contentNode.clientHeight,
       scrollWidth: this._contentScrollNode.clientWidth

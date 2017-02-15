@@ -54,8 +54,10 @@ export default class DayHours extends Component {
     );
 
     return (
-      <div className={styles.calendar_DayHours}>
-        {elements}
+      <div className={styles.calendar_DayHours2}>
+        <div className={styles.calendar_DayHours}>
+          {elements}
+        </div>
       </div>
     );
   }

@@ -7,36 +7,37 @@
   margin-left: -1 * @day-hours-width;
   width: @day-hours-width - 0.5em;
   text-align: end;
+  white-space: nowrap;
+}
+
+.@{component}_DayHours2 {
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
 }
 
 .@{component}_DayHours {
   pointer-events: none;
   visibility: hidden;
-
-  position: absolute;
   display: table;
   height: 100%;
   width: 100%;
 
-  top: 0;
-  left: 0;
-  bottom: 0;
-  right: 0;
 
   color: @day-hour-color;
   font-size: @day-hour-size;
   line-height: @day-hour-size;
-  white-space: nowrap;
 
   &_Item {
     display: table-row;
 
-    &_Content {
-      display: table-cell;
+    & > &_Content {
       visibility: visible;
       position: relative;
-      box-sizing: border-box;
-      border-top: 1px solid @day-hour-separator-color;
+      display: table-cell;
+      box-shadow: inset 0px 1px 0px 0px @day-hour-separator-color;
 
       &[data-hour]:before {
         .mixin-title-hour();
@@ -61,9 +62,10 @@
       }
     }
 
-    &:last-child &_Content {
-      border-top: 1px solid @day-hour-separator-color;
-      border-bottom: 1px solid @day-hour-separator-color;
+    &:last-child > &_Content {
+      box-shadow:
+        inset 0px 1px 0px 0px @day-hour-separator-color,
+        inset 0px -1px 0px 0px @day-hour-separator-color;
     }
   }
 

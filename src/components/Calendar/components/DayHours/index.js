@@ -37,9 +37,8 @@ export default class DayHours extends Component {
       const hour = hoursOfDay[ i ];
 
       elements.push(
-        <div key={hour} className={styles.calendar_DayHours_item}>
-          <div className={styles.calendar_DayHours_item_content}
-            data-hour={hours[ hour ].title} />
+        <div key={hour} className={styles.calendar_DayHours_Item}>
+          <div className={styles.calendar_DayHours_Item_Content} data-hour={hours[ hour ].title} />
         </div>
       );
     }
@@ -47,10 +46,10 @@ export default class DayHours extends Component {
     const hour = hoursOfDay[ len ];
 
     elements.push(
-      <div key={hour} className={styles.calendar_DayHours_item}>
-        <div className={styles.calendar_DayHours_item_content}
+      <div key={hour} className={styles.calendar_DayHours_Item}>
+        <div className={styles.calendar_DayHours_Item_Content}
           data-hour={hours[ hour ].title}
-          data-next-hour={hours[ hoursOfDay[0] ].title}/>
+          data-next-hour={hours[ hoursOfDay[0] ].title} />
       </div>
     );
 

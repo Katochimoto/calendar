@@ -5,10 +5,6 @@
   position: absolute;
   left: 0;
   margin-left: -1 * @day-hours-width;
-  white-space: nowrap;
-  font-size: @day-hour-size;
-  line-height: @day-hour-size;
-  color: @day-hour-color;
   width: @day-hours-width - 0.5em;
   text-align: end;
 }
@@ -16,56 +12,63 @@
 .@{component}_DayHours {
   pointer-events: none;
   visibility: hidden;
-  display: table;
+
   position: absolute;
+  display: table;
   height: 100%;
   width: 100%;
+
   top: 0;
   left: 0;
   bottom: 0;
   right: 0;
 
-  &_item {
+  color: @day-hour-color;
+  font-size: @day-hour-size;
+  line-height: @day-hour-size;
+  white-space: nowrap;
+
+  &_Item {
     display: table-row;
 
-    & > &_content {
+    &_Content {
+      display: table-cell;
       visibility: visible;
       position: relative;
-      display: table-cell;
-      box-shadow: inset 0px 1px 0px 0px @day-hour-separator-color;
+      box-sizing: border-box;
+      border-top: 1px solid @day-hour-separator-color;
 
       &[data-hour]:before {
         .mixin-title-hour();
 
         content: attr(data-hour);
-        margin-top: -0.5 * @day-hour-size;
+        top: -0.5 * @day-hour-size;
 
         .mobile({
-          font-size: @day-hour-size-mobile;
-          line-height: @day-hour-size-mobile;
-          margin-top: -0.5 * @day-hour-size-mobile;
+          top: -0.5 * @day-hour-size-mobile;
         })
       }
-    }
-
-    &:last-child > &_content {
-      box-shadow:
-        inset 0px 1px 0px 0px @day-hour-separator-color,
-        inset 0px -1px 0px 0px @day-hour-separator-color;
 
       &[data-next-hour]:after {
         .mixin-title-hour();
 
         content: attr(data-next-hour);
-        bottom: 0;
-        margin-bottom: -0.5 * @day-hour-size;
+        bottom: -0.5 * @day-hour-size;
 
         .mobile({
-          font-size: @day-hour-size-mobile;
-          line-height: @day-hour-size-mobile;
-          margin-bottom: -0.5 * @day-hour-size-mobile;
+          bottom: -0.5 * @day-hour-size-mobile;
         })
       }
     }
+
+    &:last-child &_Content {
+      border-top: 1px solid @day-hour-separator-color;
+      border-bottom: 1px solid @day-hour-separator-color;
+    }
   }
+
+  .mobile({
+    font-size: @day-hour-size-mobile;
+    line-height: @day-hour-size-mobile;
+  })
 }

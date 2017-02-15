@@ -3,8 +3,10 @@
 .@{component}_Day {
   display: table-cell;
   position: relative;
+  width: 1%;
   height: 100%;
-  box-shadow: inset -1px 0px 0px 0px @day-separator-color;
+  box-sizing: border-box;
+  border-right: 1px solid @day-separator-color;
 
   &__weekend {
     background: @day-weekend-background-color;

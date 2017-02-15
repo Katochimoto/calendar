@@ -7,24 +7,29 @@
   right: 0;
   bottom: 0;
   left: 0;
+  padding-top: @day-hour-margin;
+  padding-bottom: @day-hour-margin;
 
   &_Item {
     width: 100%;
     height: 100%;
     display: table;
+    box-sizing: border-box;
+  }
+
+  &_Item2 {
+    display: table-row;
   }
 
   &_Scroll {
     position: relative;
     height: 200%;
     margin-left: @day-hours-width;
-    margin-top: @day-hour-margin;
-    margin-bottom: @day-hour-margin;
     will-change: transform;
-
-    .mobile({
-      margin-top: @day-hour-margin;
-      margin-bottom: @day-hour-margin;
-    })
   }
+
+  .mobile({
+    padding-top: @day-hour-margin;
+    padding-bottom: @day-hour-margin;
+  })
 }

@@ -25,15 +25,13 @@
       position: absolute;
       display: block;
 
-      left: 0;
+      left: -1 * @day-hours-width;
       top: -0.5 * @day-hour-size;
-      margin-left: -1 * @day-hours-width;
+      width: @day-hours-width - 0.5em;
 
       text-align: right;
       white-space: nowrap;
       content: attr(data-hour);
-
-      width: @day-hours-width - 0.5em;
 
       .mobile({
         top: -0.5 * @day-hour-size-mobile;

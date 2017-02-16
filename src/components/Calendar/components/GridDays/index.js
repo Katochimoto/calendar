@@ -21,9 +21,10 @@ export default class GridDays extends Component {
   render () {
     return (
       <table className={styles.calendar_GridDays}>
+        <col width="100%" valign="top" />
         <thead>
           <tr>
-            <td>
+            <td className={styles.calendar_GridDays_Header}>
               <GridDaysHeader />
             </td>
           </tr>

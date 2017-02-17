@@ -19,14 +19,18 @@ export default class InfiniteList extends Component {
 
   shouldComponentUpdate (nextProps, nextState) {
     return (
+      this.props.itemSize !== nextProps.itemSize ||
+
       this.state.listOffset !== nextState.listOffset ||
-      this.state.scrollX !== nextState.scrollX
+      this.state.scrollX !== nextState.scrollX ||
+      this.state.listRange !== nextState.listRange
     );
   }
 
   getItems () {
+    const itemSize = this.props.itemSize;
     let items = [];
-    let begin = this.state.listOffset - this.state.listRange;
+    let idx = this.state.listOffset - this.state.listRange;
     let end = this.state.listOffset + this.state.listRange;
 
     const classes = classnames({
@@ -34,10 +38,10 @@ export default class InfiniteList extends Component {
       [ styles.calendar_InfiniteList_Item__visible ]: true
     });
 
-    for (; begin <= end; begin++) {
+    for (; idx <= end; idx++) {
       items.push(
-        <div key={begin} data-key={begin} className={classes}>
-          {this.props.getItemElement(begin)}
+        <div key={idx} className={classes}>
+          {this.props.getItemElement(idx, itemSize)}
         </div>
       );
     }
@@ -59,11 +63,11 @@ export default class InfiniteList extends Component {
 }
 
 InfiniteList.propTypes = {
-  fullFill: PropTypes.bool,
+  itemSize: PropTypes.number,
   getItemElement: PropTypes.function
 };
 
 InfiniteList.defaultProps = {
-  fullFill: true,
+  itemSize: 0,
   getItemElement: () => null
 };

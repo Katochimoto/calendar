@@ -14,5 +14,43 @@
 <body>
   <script src="../dist/vendor.js"></script>
   <script src="../dist/app.js"></script>
+
+  <form onsubmit="return onSubmit(event);">
+    <label>gridDaysListItemSize: <input name="gridDaysListItemSize" value="7" type="number" /></label>
+    <hr/>
+    <input type="submit" />
+  </form>
+
+  <script>
+    function onSubmit (event) {
+      event.preventDefault();
+
+      var items = new FormData(window.document.forms[0]).entries();
+      var state = {};
+
+      while (true) {
+        var item = items.next();
+        if (!item || item.done) {
+          break;
+        }
+
+        var name = item.value[0];
+        var value = item.value[1];
+
+        switch (name) {
+          case 'gridDaysListItemSize':
+            value = Number(value);
+            break;
+        }
+
+        state[name] = value;
+      }
+
+      console.log(state);
+      window.updateState(state);
+
+      return false;
+    }
+  </script>
 </body>
 </html>

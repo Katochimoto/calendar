@@ -10,22 +10,26 @@ const DEFAULT_STATE = {
   scrollX: undefined,     // смещение скрола по оси X = -1 * listRange * scrollWidth
   scrollY: 0,
 
-  stickyScrollX: false,   // залипающий скролл по X
-  stepScrollX: false,     // пошаговый скролл по X
-  freeScrollX: false,     // свободный скролл по X
-  freeScrollY: false,     // свободный скролл по Y
+  stickyScrollX: false,   // ? залипающий скролл по X
+  stepScrollX: false,     // ? пошаговый скролл по X
+  freeScrollX: false,     // ? свободный скролл по X
+  freeScrollY: false,     // ? свободный скролл по Y
 
-  speedScrollX: 0,        // скорость скролла по X: старт = abs(new) > abs(old); вправо > 0; влево < 0;
-  speedScrollY: 0,        // скорость скролла по Y: старт = abs(new) > abs(old); вниз > 0; вверх < 0;
+  speedScrollX: 0,        // ? скорость скролла по X: старт = abs(new) > abs(old); вправо > 0; влево < 0;
+  speedScrollY: 0,        // ? скорость скролла по Y: старт = abs(new) > abs(old); вниз > 0; вверх < 0;
 
-  listOffsetRate: 0,
-  listOffset: 0,
-  listRange: 1,
+  listOffsetRate: 0,      // смещение скрола от центра экрана в процентах
+  listOffset: 0,          // смещение начала списка. смещение определяется интервалами InfiniteList
+  listRange: 1,           // количество предзагружаемых заранее интервалов InfiniteList слева и справа от текущего
 
   gridHeight: 0,
   viewportHeight: 0,
   viewportMinutesBegin: 0,
   viewportMinutesEnd: 0,
+
+  gridDaysListItemSize: 7,  // количество дней в одном элементе InfiniteList
+  gridWeekListItemSize: 1,  // количество недель в одном элементе InfiniteList
+
 
   grid: 'day',
   currentDate: new Date(),
@@ -167,6 +171,8 @@ function update (newState) {
 
   fireChange();
 }
+
+window.updateState = update;
 
 function getState () {
   return state;

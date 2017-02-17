@@ -9,8 +9,8 @@ import InfiniteList from '../InfiniteList';
 import styles from './index.less';
 
 export default class GridDaysHeader extends Component {
-  /*constructor (props) {
-    super(props);
+  /*constructor (props, context) {
+    super(props, context);
   }*/
 
   transformState ({ gridDaysListItemSize }) {

@@ -9,9 +9,6 @@ import { Component, PropTypes } from '../../Component';
 import styles from './index.less';
 
 export default class InfiniteList extends Component {
-  constructor (props) {
-    super(props);
-  }
 
   transformState ({ scrollX, listOffset, listRange }) {
     return { scrollX, listOffset, listRange };

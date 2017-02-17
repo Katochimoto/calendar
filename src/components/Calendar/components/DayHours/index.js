@@ -8,53 +8,53 @@ import styles from './index.less';
 
 export default class DayHours extends Component {
 
-  shouldComponentUpdate () { // nextProps, nextState
-    return false;
-    /*
+  shouldComponentUpdate (nextProps, nextState) {
     return (
-      this.state.hideNonWorkingHours !== nextState.nextState.hideNonWorkingHours ||
-      this.state.hours !== nextState.nextState.hours ||
-      this.state.hoursOfDay !== nextState.nextState.hoursOfDay
+      this.state.hours !== nextState.hours ||
+      this.state.hoursOfDay !== nextState.hoursOfDay
     );
-    */
   }
 
-  transformState ({ hideNonWorkingHours, hours, hoursOfDay }) {
-    return { hideNonWorkingHours, hours, hoursOfDay };
+  transformState ({ hours, hoursOfDay }) {
+    return { hours, hoursOfDay };
   }
 
-  render () {
-    const { hoursOfDay, hours /* hideNonWorkingHours */ } = this.state;
+  getItems () {
+    const hoursOfDay = this.state.hoursOfDay.split(',');
+    const hours = this.state.hours;
     const len = hoursOfDay.length;
 
     if (!len) {
       return null;
     }
 
-    const elements = [];
-    let i = 0;
+    const items = [];
 
-    while (i < len) {
+    for (let i = 0; i < len; i++) {
       const hour = hoursOfDay[ i ];
 
-      elements.push(
-        <div key={i}
+      items.push(
+        <div key={hour}
           className={styles.calendar_DayHours_Item}
           data-hour={hours[ hour ].title} />
       );
-
-      i++;
     }
 
-    elements.push(
-      <div key={i}
+    const hour = hoursOfDay[ 0 ];
+
+    items.push(
+      <div key={`next-${hour}`}
         className={styles.calendar_DayHours_Item}
-        data-hour={hours[ hoursOfDay[0] ].title} />
+        data-hour={hours[ hour ].title} />
     );
 
+    return items;
+  }
+
+  render () {
     return (
       <div className={styles.calendar_DayHours}>
-        {elements}
+        {this.getItems()}
       </div>
     );
   }

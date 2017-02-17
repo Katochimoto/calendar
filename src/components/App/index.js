@@ -4,7 +4,8 @@ import styles from './index.less';
 
 const App = () => (
   <div className={styles.app}>
-    <Calendar bindChangeEvents={bindChangeEvents}
+    <Calendar
+      bindChangeEvents={bindChangeEvents}
       onChangeEvents={onChangeEvents}/>
   </div>
 );

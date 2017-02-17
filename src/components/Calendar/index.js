@@ -2,47 +2,58 @@
  *
  */
 
+import { Component, PropTypes } from 'react';
 import { raf, caf } from './utils/raf';
 import { onWheel, offWheel, wrapWheelCallback } from './utils/wheel';
-import { Component, PropTypes } from './Component';
 import context from './context';
 import GridDays from './components/GridDays';
+
 import Store from './Store';
+import Datetime from './Datetime';
 
 import styles from './index.less';
 
 export default class Calendar extends Component {
   constructor (props) {
-    Store.init(props);
+    const store = new Store(props);
+    const datetime = new Datetime();
+
     super(props);
+
+    this.state = { store, datetime };
 
     this.handleWheel = wrapWheelCallback(this.handleWheel.bind(this));
     this.handleResize = this.handleResize.bind(this);
     this.updateStoreByWheel = this.updateStoreByWheel.bind(this);
   }
 
+  getChildContext () {
+    return {
+      store: this.state.store,
+      datetime: this.state.datetime
+    };
+  }
+
   componentWillReceiveProps (nextProps) {
-    Store.update(nextProps);
+    this.state.store.update(nextProps);
   }
 
   componentDidMount () {
-    super.componentDidMount();
     this._timerRecalculationSize = raf(() => {
-      Store.update(this.getRecalculationSize());
+      this.state.store.update(this.getRecalculationSize());
       context.addEventListener('resize', this.handleResize, false);
       onWheel(this._calendarNode, this.handleWheel);
     });
   }
 
   componentWillUnmount () {
-    super.componentWillUnmount();
     caf(this._timerRecalculationSize);
     context.removeEventListener('resize', this.handleResize, false);
     offWheel(this._calendarNode, this.handleWheel);
   }
 
   handleResize () {
-    Store.update(this.getRecalculationSize());
+    this.state.store.update(this.getRecalculationSize());
   }
 
   handleWheel (event) {
@@ -66,12 +77,12 @@ export default class Calendar extends Component {
 
   updateStoreByWheel () {
     if (this._deltaX || this._deltaY) {
-      const state = Store.getState();
+      const state = this.state.store.getState();
       const newState = {};
       let needUpdate = false;
 
       if (this._deltaX) {
-        const scrollX = Store.limitScrollX(state.scrollX + this._deltaX);
+        const scrollX = this.state.store.limitScrollX(state.scrollX + this._deltaX);
         if (state.scrollX !== scrollX) {
           newState.scrollX = scrollX;
           needUpdate = true;
@@ -79,7 +90,7 @@ export default class Calendar extends Component {
       }
 
       if (this._deltaY) {
-        const scrollY = Store.limitScrollY(state.scrollY + this._deltaY);
+        const scrollY = this.state.store.limitScrollY(state.scrollY + this._deltaY);
         if (state.scrollY !== scrollY) {
           newState.scrollY = scrollY;
           needUpdate = true;
@@ -87,7 +98,7 @@ export default class Calendar extends Component {
       }
 
       if (needUpdate) {
-        Store.update(newState);
+        this.state.store.update(newState);
       }
     }
 
@@ -111,6 +122,11 @@ export default class Calendar extends Component {
     );
   }
 }
+
+Calendar.childContextTypes = {
+  store: PropTypes.instanceOf(Store),
+  datetime: PropTypes.instanceOf(Datetime)
+};
 
 Calendar.propTypes = {
   bindChangeEvents: PropTypes.func,

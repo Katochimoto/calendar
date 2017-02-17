@@ -1,20 +1,21 @@
 import { Component as ReactComponent, PropTypes } from 'react';
 import Store from './Store';
+import Datetime from './Datetime';
 
 export { PropTypes };
 
 export class Component extends ReactComponent {
-  constructor (props) {
-    super(props);
-    this.state = this.transformState(Store.getState());
+  constructor (props, context) {
+    super(props, context);
+    this.state = this.transformState(context.store.getState());
   }
 
   componentDidMount () {
-    Store.addChangeListener(this.handleChangeStore, this);
+    this.context.store.addChangeListener(this.handleChangeStore, this);
   }
 
   componentWillUnmount () {
-    Store.removeChangeListener(this.handleChangeStore, this);
+    this.context.store.removeChangeListener(this.handleChangeStore, this);
   }
 
   shouldComponentUpdate () {
@@ -41,7 +42,7 @@ export class Component extends ReactComponent {
 
     this._shouldUpdateState = false;
 
-    const state = this.transformState(Store.getState(), this.state);
+    const state = this.transformState(this.context.store.getState(), this.state);
 
     if (this.shouldComponentUpdate(this.props, state)) {
       this._lockSetState = true;
@@ -52,3 +53,8 @@ export class Component extends ReactComponent {
     }
   }
 }
+
+Component.contextTypes = {
+  store: PropTypes.instanceOf(Store),
+  datetime: PropTypes.instanceOf(Datetime)
+};

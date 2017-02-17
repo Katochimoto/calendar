@@ -59,169 +59,188 @@ const DEFAULT_STATE = {
     22: { title: '22:00' },
     23: { title: '23:00' },
   },
-  hoursOfDay: [ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23 ],
+  hoursOfDay: '0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23', // набор часов, выводимых в сетке на день и неделю
   hideNonWorkingHours: true,
 };
 
-const getter = {
-  listRange: data => _getter('listRange', data),
-  scrollWidth: data => _getter('scrollWidth', data),
-  scrollHeight: data => _getter('scrollHeight', data),
-  scrollOffsetBottom: data => _getter('scrollOffsetBottom', data),
-  scrollOffsetRight: data => _getter('scrollOffsetRight', data),
-  scrollOffsetTop: function (data) {
-    return data.scrollHeight === undefined ?
-      _getter('scrollOffsetTop', data) :
-      -1 * data.scrollHeight;
-  },
-  scrollOffsetLeft: function (data) {
-    return data.scrollWidth === undefined && data.listRange === undefined ?
-      _getter('scrollOffsetLeft', data) :
-      -2 * getter.listRange(data) * getter.scrollWidth(data);
-  },
-  scrollY: function (data) {
-    let scrollY = _getter('scrollY', data);
+export default function Store (newState) {
+  this.state = objectAssign({}, DEFAULT_STATE);
+  this.getter = new Getter(this);
+  this.changeCallbacks = [];
 
-    if (data.scrollHeight !== undefined && data.scrollHeight !== state.scrollHeight) {
-      scrollY = state.scrollHeight > 0 ? scrollY * data.scrollHeight / state.scrollHeight : 0;
+  objectAssign(this.state, newState, this._calculateState(newState));
+}
+
+Store.prototype = {
+  update (newState) {
+    const oldListOffset = this.state.listOffset;
+    const oldScrollX = this.state.scrollX;
+
+    objectAssign(this.state, newState, this._calculateState(newState));
+
+    const newListOffset = this.state.listOffset;
+
+    if (oldListOffset !== newListOffset) {
+      const diff = newListOffset - oldListOffset;
+
+      if (Math.abs(diff) > this.state.listRange) {
+        this.state.scrollX = -1 * this.state.listRange * this.state.scrollWidth;
+
+      } else {
+        this.state.scrollX = oldScrollX + diff * this.state.scrollWidth;
+      }
     }
 
-    return _limitScrollY(scrollY, getter.scrollOffsetTop(data), getter.scrollOffsetBottom(data));
+    for (let i = 0, len = this.changeCallbacks.length; i < len; i++) {
+      const [ callback, ctx ] = this.changeCallbacks[i];
+      callback.call(ctx);
+    }
   },
-  scrollX: function (data) {
-    let scrollX = _getter('scrollX', data);
+
+  getState () {
+    return this.state;
+  },
+
+  addChangeListener (callback, ctx) {
+    this.changeCallbacks.push([ callback, ctx ]);
+  },
+
+  removeChangeListener (callback, ctx) {
+    let i = 0;
+    while (i < this.changeCallbacks.length) {
+      const item = this.changeCallbacks[i];
+
+      if (item[0] === callback && item[1] === ctx) {
+        this.changeCallbacks.splice(i, 1);
+
+      } else {
+        i++;
+      }
+    }
+  },
+
+  limitScrollX (value) {
+    return _limitScroll(value, this.state.scrollOffsetLeft, this.state.scrollOffsetRight);
+  },
+
+  limitScrollY (value) {
+    return _limitScroll(value, this.state.scrollOffsetTop, this.state.scrollOffsetBottom);
+  },
+
+  _calculateState (newState) {
+    return {
+      scrollOffsetLeft: this.getter.scrollOffsetLeft(newState),
+      scrollOffsetTop: this.getter.scrollOffsetTop(newState),
+      scrollX: this.getter.scrollX(newState),
+      scrollY: this.getter.scrollY(newState),
+      listOffset: this.getter.listOffset(newState)
+    };
+  }
+};
+
+function Getter (store) {
+  this.store = store;
+}
+
+Getter.prototype = {
+  _getter (value, data, getter) {
+    return data[ value ] !== undefined ?
+      data[ value ] : getter ?
+      getter.call(this, data) : this.store.state[ value ];
+  },
+
+  listRange (data) {
+    return this._getter('listRange', data);
+  },
+
+  scrollWidth (data) {
+    return this._getter('scrollWidth', data);
+  },
+
+  scrollHeight (data) {
+    return this._getter('scrollHeight', data);
+  },
+
+  scrollOffsetBottom (data) {
+    return this._getter('scrollOffsetBottom', data);
+  },
+
+  scrollOffsetRight (data) {
+    return this._getter('scrollOffsetRight', data);
+  },
+
+  scrollOffsetTop (data) {
+    return data.scrollHeight === undefined ?
+      this._getter('scrollOffsetTop', data) :
+      -1 * data.scrollHeight;
+  },
+
+  scrollOffsetLeft (data) {
+    return data.scrollWidth === undefined && data.listRange === undefined ?
+      this._getter('scrollOffsetLeft', data) :
+      -2 * this.listRange(data) * this.scrollWidth(data);
+  },
+
+  scrollY (data) {
+    let scrollY = this._getter('scrollY', data);
+
+    if (data.scrollHeight !== undefined && data.scrollHeight !== this.store.state.scrollHeight) {
+      scrollY = this.store.state.scrollHeight > 0 ? scrollY * data.scrollHeight / this.store.state.scrollHeight : 0;
+    }
+
+    return _limitScroll(scrollY, this.scrollOffsetTop(data), this.scrollOffsetBottom(data));
+  },
+
+  scrollX (data) {
+    let scrollX = this._getter('scrollX', data);
 
     if (scrollX === undefined) {
-      const scrollWidth = getter.scrollWidth(data);
+      const scrollWidth = this.scrollWidth(data);
 
       if (scrollWidth) {
-        scrollX = -1 * getter.listRange(data) * scrollWidth;
+        scrollX = -1 * this.listRange(data) * scrollWidth;
       }
     }
 
     return scrollX === undefined ? scrollX :
-      _limitScrollX(scrollX, getter.scrollOffsetLeft(data), getter.scrollOffsetRight(data));
+      _limitScroll(scrollX, this.scrollOffsetLeft(data), this.scrollOffsetRight(data));
   },
-  listOffsetRate: data => _getter('listOffsetRate', data, function (data) {
 
-  }),
-  listOffset: data => _getter('listOffset', data, function (data) {
-    const scrollY = getter.scrollX(data);
-    const scrollOffsetLeft = getter.scrollOffsetLeft(data);
-    const scrollOffsetRight = getter.scrollOffsetRight(data);
-    const scrollOffsetCenter = (scrollOffsetLeft + scrollOffsetRight) / 2;
-    const scrollOffsetWidth = scrollOffsetLeft > scrollOffsetRight ?
-      scrollOffsetLeft - scrollOffsetRight :
-      scrollOffsetRight - scrollOffsetLeft;
-    const centerOffsetWidth = scrollOffsetWidth / 2;
-    const sign = scrollY > scrollOffsetCenter ? 1 : -1;
-    const scrollY2CenterWidth = scrollY > scrollOffsetCenter ?
-      scrollY - scrollOffsetCenter :
-      scrollOffsetCenter - scrollY;
-    const rate = centerOffsetWidth ? sign * scrollY2CenterWidth * 100 / centerOffsetWidth : 0;
+  listOffsetRate (data) {
+    return this._getter('listOffsetRate', data, function (data) {
 
-    let listOffset = state.listOffset;
-    if (rate <= -100) {
-      listOffset++;
-    } else if (rate >= 100) {
-      listOffset--;
-    }
+    });
+  },
 
-    //console.log(rate, state.listOffset, listOffset);
+  listOffset (data) {
+    return this._getter('listOffset', data, function (data) {
+      const scrollY = this.scrollX(data);
+      const scrollOffsetLeft = this.scrollOffsetLeft(data);
+      const scrollOffsetRight = this.scrollOffsetRight(data);
+      const scrollOffsetCenter = (scrollOffsetLeft + scrollOffsetRight) / 2;
+      const scrollOffsetWidth = scrollOffsetLeft > scrollOffsetRight ?
+        scrollOffsetLeft - scrollOffsetRight :
+        scrollOffsetRight - scrollOffsetLeft;
+      const centerOffsetWidth = scrollOffsetWidth / 2;
+      const sign = scrollY > scrollOffsetCenter ? 1 : -1;
+      const scrollY2CenterWidth = scrollY > scrollOffsetCenter ?
+        scrollY - scrollOffsetCenter :
+        scrollOffsetCenter - scrollY;
+      const rate = centerOffsetWidth ? sign * scrollY2CenterWidth * 100 / centerOffsetWidth : 0;
 
-    return listOffset;
-  })
+      let listOffset = this.store.state.listOffset;
+      if (rate <= -100) {
+        listOffset++;
+      } else if (rate >= 100) {
+        listOffset--;
+      }
+
+      return listOffset;
+    })
+  }
 };
 
-const changeCallbacks = [];
-const state = DEFAULT_STATE;
-
-export default {
-  init,
-  update,
-  getState,
-  addChangeListener,
-  removeChangeListener,
-  limitScrollX: value => _limitScrollX(value),
-  limitScrollY: value => _limitScrollY(value)
-};
-
-function init (newState) {
-  objectAssign(state, newState, _calculateState(newState));
-}
-
-function update (newState) {
-  const oldListOffset = state.listOffset;
-  const oldScrollX = state.scrollX;
-
-  objectAssign(state, newState, _calculateState(newState));
-
-  const newListOffset = state.listOffset;
-
-  if (oldListOffset !== newListOffset) {
-    const diff = newListOffset - oldListOffset;
-
-    if (Math.abs(diff) > state.listRange) {
-      state.scrollX = -1 * state.listRange * state.scrollWidth;
-
-    } else {
-      state.scrollX = oldScrollX + diff * state.scrollWidth;
-    }
-  }
-
-  fireChange();
-}
-
-window.updateState = update;
-
-function getState () {
-  return state;
-}
-
-function fireChange () {
-  for (let i = 0, len = changeCallbacks.length; i < len; i++) {
-    const [ callback, ctx ] = changeCallbacks[i];
-    callback.call(ctx);
-  }
-}
-
-function addChangeListener (callback, ctx) {
-  changeCallbacks.push([ callback, ctx ]);
-}
-
-function removeChangeListener (callback, ctx) {
-  let i = 0;
-  while (i < changeCallbacks.length) {
-    const item = changeCallbacks[i];
-
-    if (item[0] === callback && item[1] === ctx) {
-      changeCallbacks.splice(i, 1);
-
-    } else {
-      i++;
-    }
-  }
-}
-
-function _calculateState (newState) {
-  return {
-    scrollOffsetLeft: getter.scrollOffsetLeft(newState),
-    scrollOffsetTop: getter.scrollOffsetTop(newState),
-    scrollX: getter.scrollX(newState),
-    scrollY: getter.scrollY(newState),
-    listOffset: getter.listOffset(newState)
-  };
-}
-
-function _getter (value, data, _get = () => state[ value ]) {
-  return data[ value ] !== undefined ? data[ value ] : _get(data);
-}
-
-function _limitScrollX (value, min = state.scrollOffsetLeft, max = state.scrollOffsetRight) {
-  return Math.round(value < min ? min : value > max ? max : value);
-}
-
-function _limitScrollY (value, min = state.scrollOffsetTop, max = state.scrollOffsetBottom) {
+function _limitScroll (value, min, max) {
   return Math.round(value < min ? min : value > max ? max : value);
 }
 

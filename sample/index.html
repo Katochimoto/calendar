@@ -16,12 +16,34 @@
   <script src="../dist/app.js"></script>
 
   <form onsubmit="return onSubmit(event);">
-    <label>gridDaysListItemSize: <input name="gridDaysListItemSize" value="7" type="number" /></label>
+    <label>gridDaysListItemSize: <input name="gridDaysListItemSize" type="number" style="width:30px;" /></label>
+    <label>hoursOfDay: <input name="hoursOfDay" type="text" style="width:330px;" /></label>
     <hr/>
     <input type="submit" />
   </form>
 
   <script>
+    //addChangeListener(upgrade);
+
+    /*
+    function upgrade () {
+      var state = getState();
+
+      for (var name in state) {
+        var element = document.querySelector('[name="' + name + '"]');
+        if (!element) {
+          continue;
+        }
+
+        switch (name) {
+          default:
+            element.value = state[name];
+            break;
+        }
+      }
+    }
+    */
+
     function onSubmit (event) {
       event.preventDefault();
 
@@ -47,7 +69,7 @@
       }
 
       console.log(state);
-      window.updateState(state);
+      //window.updateState(state);
 
       return false;
     }

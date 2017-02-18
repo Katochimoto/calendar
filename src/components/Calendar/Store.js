@@ -99,7 +99,7 @@ function createState () {
 
         currentValues.scrollHeight = value;
         currentValues.scrollOffsetTop = -1 * value;
-        currentValues.scrollY = limitScrollY(scrollHeight > 0 ? scrollY * value / scrollHeight : 0);
+        currentValues.scrollY = scrollHeight > 0 ? limitScrollY(scrollY * value / scrollHeight) : 0;
 
         isChangedValues = true;
       }
@@ -122,7 +122,7 @@ function createState () {
         currentValues.scrollOffsetLeft = -2 * state.listRange * value;
         currentValues.scrollX = scrollX === undefined ?
           limitScrollX(-1 * state.listRange * state.scrollWidth) :
-          limitScrollX(scrollWidth > 0 ? scrollX * value / scrollWidth : 0);
+          scrollWidth > 0 ? limitScrollX(scrollX * value / scrollWidth) : 0;
         currentValues.listOffset = getListOffset(currentValues);
 
         if (listOffset !== currentValues.listOffset) {
@@ -188,28 +188,30 @@ function createState () {
       get: () => currentValues.scrollX,
       set: (value) => {
         value = limitScrollX(value);
-        if (value !== currentValues.scrollX) {
-          const scrollX = currentValues.scrollX;
-          const listOffset = currentValues.listOffset;
-
-          currentValues.scrollX = value;
-          currentValues.listOffset = getListOffset(currentValues);
-
-          if (listOffset !== currentValues.listOffset) {
-            const diff = currentValues.listOffset - listOffset;
-            const newScrollX = do {
-              if (Math.abs(diff) > state.listRange) {
-                -1 * state.listRange * state.scrollWidth;
-              } else {
-                scrollX + diff * state.scrollWidth;
-              }
-            };
-
-            currentValues.scrollX = limitScrollX(newScrollX);
-          }
-
-          isChangedValues = true;
+        if (value === currentValues.scrollX) {
+          return;
         }
+
+        const scrollX = currentValues.scrollX;
+        const listOffset = currentValues.listOffset;
+
+        currentValues.scrollX = value;
+        currentValues.listOffset = getListOffset(currentValues);
+
+        if (listOffset !== currentValues.listOffset) {
+          const diff = currentValues.listOffset - listOffset;
+          const newScrollX = do {
+            if (Math.abs(diff) > state.listRange) {
+              -1 * state.listRange * state.scrollWidth;
+            } else {
+              scrollX + diff * state.scrollWidth;
+            }
+          };
+
+          currentValues.scrollX = limitScrollX(newScrollX);
+        }
+
+        isChangedValues = true;
       }
     },
 
@@ -252,19 +254,17 @@ function createState () {
         const listOffset = currentValues.listOffset;
         currentValues.listOffset = value;
 
-        if (listOffset !== currentValues.listOffset) {
-          const diff = currentValues.listOffset - listOffset;
-          const newScrollX = do {
-            if (Math.abs(diff) > state.listRange) {
-              -1 * state.listRange * state.scrollWidth;
-            } else {
-              currentValues.scrollX + diff * state.scrollWidth;
-            }
-          };
+        const diff = currentValues.listOffset - listOffset;
+        const newScrollX = do {
+          if (Math.abs(diff) > state.listRange) {
+            -1 * state.listRange * state.scrollWidth;
+          } else {
+            currentValues.scrollX + diff * state.scrollWidth;
+          }
+        };
 
-          currentValues.scrollX = limitScrollX(newScrollX);
-          isChangedValues = true;
-        }
+        currentValues.scrollX = limitScrollX(newScrollX);
+        isChangedValues = true;
       }
     },
 

@@ -10,10 +10,6 @@ import InfiniteList from '../InfiniteList';
 import styles from './index.less';
 
 export default class GridDaysContent extends Component {
-  /*constructor (props, context) {
-    super(props, context);
-  }*/
-
   transformState ({ scrollY, gridDaysListItemSize }) {
     return { scrollY, gridDaysListItemSize };
   }
@@ -57,8 +53,13 @@ export default class GridDaysContent extends Component {
     const style = `transform: translateY(${this.state.scrollY}px)`;
 
     return (
-      <div ref={node => this._contentNode = node} className={styles.calendar_GridDaysContent}>
-        <div ref={node => this._contentScrollNode = node} className={styles.calendar_GridDaysContent_Scroll} style={style}>
+      <div ref={node => this._contentNode = node}
+        className={styles.calendar_GridDaysContent}>
+
+        <div ref={node => this._contentScrollNode = node}
+          className={styles.calendar_GridDaysContent_Scroll}
+          style={style}>
+
           <DayHours />
           <InfiniteList
             getItemElement={this.getItemElement}

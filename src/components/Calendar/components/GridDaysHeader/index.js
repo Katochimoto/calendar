@@ -2,33 +2,40 @@
  *
  */
 
-import { Component } from 'react';
+import { Component } from '../../Component';
 import DayHeader from '../DayHeader';
 import InfiniteList from '../InfiniteList';
 
 import styles from './index.less';
 
 export default class GridDaysHeader extends Component {
-  constructor (props) {
-    super(props);
+  /*constructor (props, context) {
+    super(props, context);
+  }*/
 
-    this.getItemElement = this.getItemElement.bind(this);
+  transformState ({ gridDaysListItemSize }) {
+    return { gridDaysListItemSize };
   }
 
-  shouldComponentUpdate () {
-    return false;
+  shouldComponentUpdate (nextProps, nextState) {
+    return (
+      this.state.gridDaysListItemSize !== nextState.gridDaysListItemSize
+    );
   }
 
-  getItemElement () {
-    const items = [
-      <DayHeader key={0} />,
-      <DayHeader key={1} />,
-      <DayHeader key={2} />,
-      <DayHeader key={3} />,
-      <DayHeader key={4} />,
-      <DayHeader key={5} weekend={true} />,
-      <DayHeader key={6} weekend={true} />
-    ];
+  /**
+   * @this {InfiniteList}
+   */
+  getItemElement (listOffset, itemSize) {
+    let items = [];
+    let idx = listOffset * itemSize;
+    let end = listOffset * itemSize + itemSize - 1;
+
+    for (; idx <= end; idx++) {
+      items.push(
+        <DayHeader key={idx} />
+      );
+    }
 
     return (
       <div className={styles.calendar_GridDaysHeader_Item}>
@@ -41,7 +48,9 @@ export default class GridDaysHeader extends Component {
     return (
       <div className={styles.calendar_GridDaysHeader}>
         <div className={styles.calendar_GridDaysHeader_Content}>
-          <InfiniteList fullFill={false} getItemElement={this.getItemElement} />
+          <InfiniteList
+            getItemElement={this.getItemElement}
+            itemSize={this.state.gridDaysListItemSize} />
         </div>
       </div>
     );

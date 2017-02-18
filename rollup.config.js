@@ -22,15 +22,15 @@ export default {
   entry: 'src/index.js',
   dest: 'dist/app.js',
   format: 'iife',
-  sourceMap: true,
+  sourceMap: false,
   useStrict: false,
   context: 'window',
   external: external,
   globals: {
     'classnames': 'vendor._classnames',
-    'raf': 'vendor._raf',
     'preact-compat': 'vendor._preact_compat',
-    'preact': 'vendor._preact'
+    'preact': 'vendor._preact',
+    'raf': 'vendor._raf'
   },
   plugins: [
     RollupPluginJSON(),

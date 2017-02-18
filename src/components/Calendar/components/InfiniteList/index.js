@@ -9,25 +9,25 @@ import { Component, PropTypes } from '../../Component';
 import styles from './index.less';
 
 export default class InfiniteList extends Component {
-  constructor (props) {
-    super(props);
-  }
 
-  transformState ({ scrollX, stopTransitionX, listOffset, listRange }) {
-    return { scrollX, stopTransitionX, listOffset, listRange };
+  transformState ({ scrollX, listOffset, listRange }) {
+    return { scrollX, listOffset, listRange };
   }
 
   shouldComponentUpdate (nextProps, nextState) {
     return (
+      this.props.itemSize !== nextProps.itemSize ||
+
       this.state.listOffset !== nextState.listOffset ||
       this.state.scrollX !== nextState.scrollX ||
-      this.state.stopTransitionX !== nextState.stopTransitionX
+      this.state.listRange !== nextState.listRange
     );
   }
 
   getItems () {
+    const itemSize = this.props.itemSize;
     let items = [];
-    let begin = this.state.listOffset - this.state.listRange;
+    let idx = this.state.listOffset - this.state.listRange;
     let end = this.state.listOffset + this.state.listRange;
 
     const classes = classnames({
@@ -35,10 +35,10 @@ export default class InfiniteList extends Component {
       [ styles.calendar_InfiniteList_Item__visible ]: true
     });
 
-    for (; begin <= end; begin++) {
+    for (; idx <= end; idx++) {
       items.push(
-        <div key={begin} data-key={begin} className={classes}>
-          {this.props.getItemElement(begin)}
+        <div key={idx} data-key={idx} className={classes}>
+          {this.props.getItemElement(idx, itemSize)}
         </div>
       );
     }
@@ -49,19 +49,9 @@ export default class InfiniteList extends Component {
   render () {
     const styleContent = `transform: translateX(${this.state.scrollX}px)`;
 
-    const classes = classnames({
-      [ styles.calendar_InfiniteList ]: true,
-      [ styles.calendar_InfiniteList__fullFill ]: true//this.props.fullFill
-    });
-
-    const classesContent = classnames({
-      [ styles.calendar_InfiniteList_Content ]: true,
-      [ styles.calendar_InfiniteList_Content__stopTransitionX ]: this.state.stopTransitionX
-    });
-
     return (
-      <div className={classes}>
-        <div className={classesContent} style={styleContent}>
+      <div className={styles.calendar_InfiniteList}>
+        <div className={styles.calendar_InfiniteList_Content} style={styleContent}>
           {this.getItems()}
         </div>
       </div>
@@ -70,11 +60,11 @@ export default class InfiniteList extends Component {
 }
 
 InfiniteList.propTypes = {
-  fullFill: PropTypes.bool,
+  itemSize: PropTypes.number,
   getItemElement: PropTypes.function
 };
 
 InfiniteList.defaultProps = {
-  fullFill: true,
+  itemSize: 0,
   getItemElement: () => null
 };

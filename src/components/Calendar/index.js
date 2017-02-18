@@ -2,39 +2,58 @@
  *
  */
 
-import { Component, PropTypes } from './Component';
+import { Component, PropTypes } from 'react';
+import { raf, caf } from './utils/raf';
+import { onWheel, offWheel, wrapWheelCallback } from './utils/wheel';
 import context from './context';
-import rraf, { raf, caf } from './utils/rraf';
 import GridDays from './components/GridDays';
+
 import Store from './Store';
+import Datetime from './Datetime';
 
 import styles from './index.less';
 
 export default class Calendar extends Component {
   constructor (props) {
-    Store.init(props);
     super(props);
 
-    this.handleWheel = this.handleWheel.bind(this);
+    this.state = {
+      store: new Store(),
+      datetime: new Datetime()
+    };
+
+    this.handleWheel = wrapWheelCallback(this.handleWheel.bind(this));
     this.handleResize = this.handleResize.bind(this);
+    this.updateStoreByWheel = this.updateStoreByWheel.bind(this);
+  }
+
+  getChildContext () {
+    return {
+      store: this.state.store,
+      datetime: this.state.datetime
+    };
   }
 
   componentWillReceiveProps (nextProps) {
-    Store.update(nextProps);
+    this.state.store.update(nextProps);
   }
 
   componentDidMount () {
-    super.componentDidMount();
-    context.addEventListener('resize', this.handleResize, false);
     this._timerRecalculationSize = raf(() => {
-      Store.update(this.getRecalculationSize());
+      this.state.store.update(this.getRecalculationSize());
+      context.addEventListener('resize', this.handleResize, false);
+      onWheel(this._calendarNode, this.handleWheel);
     });
   }
 
   componentWillUnmount () {
-    super.componentWillUnmount();
     caf(this._timerRecalculationSize);
     context.removeEventListener('resize', this.handleResize, false);
+    offWheel(this._calendarNode, this.handleWheel);
+  }
+
+  handleResize () {
+    this.state.store.update(this.getRecalculationSize());
   }
 
   handleWheel (event) {
@@ -52,44 +71,27 @@ export default class Calendar extends Component {
 
     if (!this._lockWheel) {
       this._lockWheel = true;
-      rraf(this.updateStoreByWheel, 3, this);
+      raf(this.updateStoreByWheel);
     }
   }
 
   updateStoreByWheel () {
     if (this._deltaX || this._deltaY) {
-      const state = Store.getState();
+      const state = this.state.store.getState();
       const newState = {};
-      let needUpdate = false;
 
       if (this._deltaX) {
-        const scrollX = Store.limitScrollX(state.scrollX + this._deltaX);
-        if (state.scrollX !== scrollX) {
-          newState.scrollX = scrollX;
-          newState.stopTransitionX = false;
-          needUpdate = true;
-        }
+        newState.scrollX = state.scrollX + this._deltaX;
       }
 
       if (this._deltaY) {
-        const scrollY = Store.limitScrollY(state.scrollY + this._deltaY);
-        if (state.scrollY !== scrollY) {
-          newState.scrollY = scrollY;
-          newState.stopTransitionY = false;
-          needUpdate = true;
-        }
+        newState.scrollY = state.scrollY + this._deltaY;
       }
 
-      if (needUpdate) {
-        Store.update(newState);
-      }
+      this.state.store.update(newState);
     }
 
     this._lockWheel = false;
-  }
-
-  handleResize () {
-    Store.update(this.getRecalculationSize());
   }
 
   getRecalculationSize () {
@@ -97,22 +99,23 @@ export default class Calendar extends Component {
 
     return {
       scrollHeight,
-      scrollWidth,
-      stopTransitionY: true,
-      stopTransitionX: true
+      scrollWidth
     };
   }
 
   render () {
     return (
-      <div className={styles.calendar}
-        onWheel={this.handleWheel}>
-
+      <div ref={calendarNode => this._calendarNode = calendarNode} className={styles.calendar}>
         <GridDays ref={gridComponent => this._gridComponent = gridComponent} />
       </div>
     );
   }
 }
+
+Calendar.childContextTypes = {
+  store: PropTypes.instanceOf(Store),
+  datetime: PropTypes.instanceOf(Datetime)
+};
 
 Calendar.propTypes = {
   bindChangeEvents: PropTypes.func,

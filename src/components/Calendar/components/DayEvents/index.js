@@ -8,8 +8,8 @@ import DayEvent from '../DayEvent';
 import styles from './index.less';
 
 export default class DayEvents extends Component {
-  constructor (props) {
-    super(props);
+  constructor (props, context) {
+    super(props, context);
     this.state = {};
   }
 

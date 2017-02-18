@@ -8,55 +8,51 @@ import styles from './index.less';
 
 export default class DayHours extends Component {
 
-  shouldComponentUpdate () { // nextProps, nextState
-    return false;
-    /*
+  shouldComponentUpdate (nextProps, nextState) {
     return (
-      this.state.hideNonWorkingHours !== nextState.nextState.hideNonWorkingHours ||
-      this.state.hours !== nextState.nextState.hours ||
-      this.state.hoursOfDay !== nextState.nextState.hoursOfDay
+      this.state.hoursOfDay !== nextState.hoursOfDay
     );
-    */
   }
 
-  transformState ({ hideNonWorkingHours, hours, hoursOfDay }) {
-    return { hideNonWorkingHours, hours, hoursOfDay };
+  transformState ({ hoursOfDay }) {
+    return { hoursOfDay };
   }
 
-  render () {
-    const { hoursOfDay, hours /* hideNonWorkingHours */ } = this.state;
-    const len = hoursOfDay.length - 1;
+  getItems () {
+    const hoursOfDay = this.state.hoursOfDay.split(',');
+    const len = hoursOfDay.length;
 
-    if (len < 0) {
+    if (!len) {
       return null;
     }
 
-    const elements = [];
+    const items = [];
 
     for (let i = 0; i < len; i++) {
       const hour = hoursOfDay[ i ];
 
-      elements.push(
-        <div key={hour} className={styles.calendar_DayHours_item}>
-          <div className={styles.calendar_DayHours_item_content}
-            data-hour={hours[ hour ].title} />
-        </div>
+      items.push(
+        <div key={hour}
+          className={styles.calendar_DayHours_Item}
+          data-hour={this.context.datetime.getHourTitle(hour)} />
       );
     }
 
-    const hour = hoursOfDay[ len ];
+    const hour = hoursOfDay[ 0 ];
 
-    elements.push(
-      <div key={hour} className={styles.calendar_DayHours_item}>
-        <div className={styles.calendar_DayHours_item_content}
-          data-hour={hours[ hour ].title}
-          data-next-hour={hours[ hoursOfDay[0] ].title}/>
-      </div>
+    items.push(
+      <div key={`next-${hour}`}
+        className={styles.calendar_DayHours_Item}
+        data-hour={this.context.datetime.getHourTitle(hour)} />
     );
 
+    return items;
+  }
+
+  render () {
     return (
       <div className={styles.calendar_DayHours}>
-        {elements}
+        {this.getItems()}
       </div>
     );
   }

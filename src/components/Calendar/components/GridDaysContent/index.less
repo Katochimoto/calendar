@@ -2,31 +2,31 @@
 
 .@{component}_GridDaysContent {
   overflow: hidden;
-  width: 100%;
-  height: 100%;
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  padding-top: @day-hour-margin;
+  padding-bottom: @day-hour-margin;
 
   &_Item {
     width: 100%;
     height: 100%;
     display: table;
+    box-sizing: border-box;
   }
 
   &_Scroll {
     position: relative;
     height: 200%;
     margin-left: @day-hours-width;
-    margin-top: @day-hour-margin;
-    margin-bottom: @day-hour-margin;
-    will-change: transform, transition;
-    transition: transform ease-out 0.1s;
-
-    &__stopTransitionY {
-      transition: none;
-    }
-
-    .mobile({
-      margin-top: @day-hour-margin;
-      margin-bottom: @day-hour-margin;
-    })
+    will-change: transform;
+    //transition: transform ease-out 0.1s;
   }
+
+  .mobile({
+    padding-top: @day-hour-margin;
+    padding-bottom: @day-hour-margin;
+  })
 }

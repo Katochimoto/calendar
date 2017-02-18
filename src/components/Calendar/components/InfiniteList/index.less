@@ -1,50 +1,35 @@
 @import (reference, once) "../../style/constant";
 
-.mixin-infinite-full-fill (@rules) {
-  .@{component}_InfiniteList__fullFill & {
-    @rules();
-  }
-}
-
 .@{component}_InfiniteList {
   overflow: hidden;
-
-  // список заполняет всё отведенное пространство
-  &__fullFill {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-  }
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
 
   &_Content {
     width: 100%;
+    height: 100%;
     white-space: nowrap;
-    will-change: transform, transition;
-    transition: transform ease-out 0.1s;
+    will-change: transform;
+    box-sizing: border-box;
 
-    // прерывание анимации, например при ресайзе
-    &__stopTransitionX {
-      transition: none;
+    &__transition {
+      transition: transform ease-out 0.1s;
     }
-
-    .mixin-infinite-full-fill({
-      height: 100%;
-    });
   }
 
   &_Item {
     visibility: hidden;
     display: inline-block;
     width: 100%;
+    height: 100%;
+    vertical-align: top;
+    box-sizing: border-box;
 
     &__visible {
       visibility: visible;
     }
-
-    .mixin-infinite-full-fill({
-      height: 100%;
-    });
   }
 }

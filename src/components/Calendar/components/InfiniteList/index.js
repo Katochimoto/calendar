@@ -37,7 +37,7 @@ export default class InfiniteList extends Component {
 
     for (; idx <= end; idx++) {
       items.push(
-        <div key={idx} className={classes}>
+        <div key={idx} data-key={idx} className={classes}>
           {this.props.getItemElement(idx, itemSize)}
         </div>
       );

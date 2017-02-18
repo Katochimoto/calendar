@@ -15,12 +15,12 @@ import styles from './index.less';
 
 export default class Calendar extends Component {
   constructor (props) {
-    const store = new Store(props);
-    const datetime = new Datetime();
-
     super(props);
 
-    this.state = { store, datetime };
+    this.state = {
+      store: new Store(),
+      datetime: new Datetime()
+    };
 
     this.handleWheel = wrapWheelCallback(this.handleWheel.bind(this));
     this.handleResize = this.handleResize.bind(this);
@@ -79,27 +79,16 @@ export default class Calendar extends Component {
     if (this._deltaX || this._deltaY) {
       const state = this.state.store.getState();
       const newState = {};
-      let needUpdate = false;
 
       if (this._deltaX) {
-        const scrollX = this.state.store.limitScrollX(state.scrollX + this._deltaX);
-        if (state.scrollX !== scrollX) {
-          newState.scrollX = scrollX;
-          needUpdate = true;
-        }
+        newState.scrollX = state.scrollX + this._deltaX;
       }
 
       if (this._deltaY) {
-        const scrollY = this.state.store.limitScrollY(state.scrollY + this._deltaY);
-        if (state.scrollY !== scrollY) {
-          newState.scrollY = scrollY;
-          needUpdate = true;
-        }
+        newState.scrollY = state.scrollY + this._deltaY;
       }
 
-      if (needUpdate) {
-        this.state.store.update(newState);
-      }
+      this.state.store.update(newState);
     }
 
     this._lockWheel = false;

@@ -8,7 +8,7 @@ export default {
   entry: 'src/vendor.js',
   format: 'iife',
   dest: 'dist/vendor.js',
-  sourceMap: true,
+  sourceMap: false,
   useStrict: false,
   context: 'window',
   moduleName: 'vendor',

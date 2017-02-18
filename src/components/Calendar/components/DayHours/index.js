@@ -10,18 +10,16 @@ export default class DayHours extends Component {
 
   shouldComponentUpdate (nextProps, nextState) {
     return (
-      this.state.hours !== nextState.hours ||
       this.state.hoursOfDay !== nextState.hoursOfDay
     );
   }
 
-  transformState ({ hours, hoursOfDay }) {
-    return { hours, hoursOfDay };
+  transformState ({ hoursOfDay }) {
+    return { hoursOfDay };
   }
 
   getItems () {
     const hoursOfDay = this.state.hoursOfDay.split(',');
-    const hours = this.state.hours;
     const len = hoursOfDay.length;
 
     if (!len) {
@@ -36,7 +34,7 @@ export default class DayHours extends Component {
       items.push(
         <div key={hour}
           className={styles.calendar_DayHours_Item}
-          data-hour={hours[ hour ].title} />
+          data-hour={this.context.datetime.getHourTitle(hour)} />
       );
     }
 
@@ -45,7 +43,7 @@ export default class DayHours extends Component {
     items.push(
       <div key={`next-${hour}`}
         className={styles.calendar_DayHours_Item}
-        data-hour={hours[ hour ].title} />
+        data-hour={this.context.datetime.getHourTitle(hour)} />
     );
 
     return items;

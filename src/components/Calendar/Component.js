@@ -11,11 +11,11 @@ export class Component extends ReactComponent {
   }
 
   componentDidMount () {
-    this.context.store.addChangeListener(this.handleChangeStore, this);
+    this.context.store.addListener(this.handleChangeStore, this);
   }
 
   componentWillUnmount () {
-    this.context.store.removeChangeListener(this.handleChangeStore, this);
+    this.context.store.removeListener(this.handleChangeStore, this);
   }
 
   shouldComponentUpdate () {

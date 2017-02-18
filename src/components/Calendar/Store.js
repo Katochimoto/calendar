@@ -1,249 +1,330 @@
-import objectAssign from 'object-assign';
+import limitScroll from './utils/limitScroll';
+import getListOffset from './utils/getListOffset';
 
-const DEFAULT_STATE = {
-  scrollHeight: 0,
-  scrollWidth: 0,
-  scrollOffsetLeft: 0,    // максимальное смещение при скроле влево = -1 * scrollWidth * ( listRange * 2 )
-  scrollOffsetRight: 0,   // максимальное смещение при скроле вправо = constant 0
-  scrollOffsetTop: 0,     // максимальное смещение при скроле вверх = -1 * scrollHeight
-  scrollOffsetBottom: 0,  // максимальное смещение при скроле вниз = constant 0
-  scrollX: undefined,     // смещение скрола по оси X = -1 * listRange * scrollWidth
-  scrollY: 0,
+export default function Store (data) {
+  const { state, update } = createState();
+  this._state = state
+  this._update = update;
+  this._callbacks = [];
 
-  stickyScrollX: false,   // ? залипающий скролл по X
-  stepScrollX: false,     // ? пошаговый скролл по X
-  freeScrollX: false,     // ? свободный скролл по X
-  freeScrollY: false,     // ? свободный скролл по Y
-
-  speedScrollX: 0,        // ? скорость скролла по X: старт = abs(new) > abs(old); вправо > 0; влево < 0;
-  speedScrollY: 0,        // ? скорость скролла по Y: старт = abs(new) > abs(old); вниз > 0; вверх < 0;
-
-  listOffsetRate: 0,      // смещение скрола от центра экрана в процентах
-  listOffset: 0,          // смещение начала списка. смещение определяется интервалами InfiniteList
-  listRange: 1,           // количество предзагружаемых заранее интервалов InfiniteList слева и справа от текущего
-
-  gridHeight: 0,
-  viewportHeight: 0,
-  viewportMinutesBegin: 0,
-  viewportMinutesEnd: 0,
-
-  gridDaysListItemSize: 7,  // количество дней в одном элементе InfiniteList
-  gridWeekListItemSize: 1,  // количество недель в одном элементе InfiniteList
-
-
-  grid: 'day',
-  currentDate: new Date(),
-  hours: {
-    0: { title: '00:00' },
-    1: { title: '01:00' },
-    2: { title: '02:00' },
-    3: { title: '03:00' },
-    4: { title: '04:00' },
-    5: { title: '05:00' },
-    6: { title: '06:00' },
-    7: { title: '07:00' },
-    8: { title: '08:00' },
-    9: { title: '09:00' },
-    10: { title: '10:00' },
-    11: { title: '11:00' },
-    12: { title: '12:00' },
-    13: { title: '13:00' },
-    14: { title: '14:00' },
-    15: { title: '15:00' },
-    16: { title: '16:00' },
-    17: { title: '17:00' },
-    18: { title: '18:00' },
-    19: { title: '19:00' },
-    20: { title: '20:00' },
-    21: { title: '21:00' },
-    22: { title: '22:00' },
-    23: { title: '23:00' },
-  },
-  hoursOfDay: '0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23', // набор часов, выводимых в сетке на день и неделю
-  hideNonWorkingHours: true,
-};
-
-export default function Store (newState) {
-  this.state = objectAssign({}, DEFAULT_STATE);
-  this.getter = new Getter(this);
-  this.changeCallbacks = [];
-
-  objectAssign(this.state, newState, this._calculateState(newState));
+  update(data);
 }
 
 Store.prototype = {
-  update (newState) {
-    const oldListOffset = this.state.listOffset;
-    const oldScrollX = this.state.scrollX;
-
-    objectAssign(this.state, newState, this._calculateState(newState));
-
-    const newListOffset = this.state.listOffset;
-
-    if (oldListOffset !== newListOffset) {
-      const diff = newListOffset - oldListOffset;
-
-      if (Math.abs(diff) > this.state.listRange) {
-        this.state.scrollX = -1 * this.state.listRange * this.state.scrollWidth;
-
-      } else {
-        this.state.scrollX = oldScrollX + diff * this.state.scrollWidth;
+  update (data) {
+    if (this._update(data)) {
+      for (let i = 0, len = this._callbacks.length; i < len; i++) {
+        const item = this._callbacks[i];
+        item[0].call(item[1]);
       }
-    }
-
-    for (let i = 0, len = this.changeCallbacks.length; i < len; i++) {
-      const [ callback, ctx ] = this.changeCallbacks[i];
-      callback.call(ctx);
     }
   },
 
   getState () {
-    return this.state;
+    return this._state;
   },
 
-  addChangeListener (callback, ctx) {
-    this.changeCallbacks.push([ callback, ctx ]);
+  addListener (callback, ctx) {
+    this._callbacks.push([ callback, ctx ]);
   },
 
-  removeChangeListener (callback, ctx) {
+  removeListener (callback, ctx) {
     let i = 0;
-    while (i < this.changeCallbacks.length) {
-      const item = this.changeCallbacks[i];
+    while (i < this._callbacks.length) {
+      const item = this._callbacks[i];
 
       if (item[0] === callback && item[1] === ctx) {
-        this.changeCallbacks.splice(i, 1);
+        this._callbacks.splice(i, 1);
 
       } else {
         i++;
       }
     }
-  },
-
-  limitScrollX (value) {
-    return _limitScroll(value, this.state.scrollOffsetLeft, this.state.scrollOffsetRight);
-  },
-
-  limitScrollY (value) {
-    return _limitScroll(value, this.state.scrollOffsetTop, this.state.scrollOffsetBottom);
-  },
-
-  _calculateState (newState) {
-    return {
-      scrollOffsetLeft: this.getter.scrollOffsetLeft(newState),
-      scrollOffsetTop: this.getter.scrollOffsetTop(newState),
-      scrollX: this.getter.scrollX(newState),
-      scrollY: this.getter.scrollY(newState),
-      listOffset: this.getter.listOffset(newState)
-    };
   }
 };
 
-function Getter (store) {
-  this.store = store;
-}
+function createState () {
+  const currentValues = {
+    scrollHeight: 0,
+    scrollWidth: 0,
+    scrollOffsetLeft: 0,
+    scrollOffsetRight: 0,
+    scrollOffsetTop: 0,
+    scrollOffsetBottom: 0,
+    scrollX: undefined,
+    scrollY: 0,
 
-Getter.prototype = {
-  _getter (value, data, getter) {
-    return data[ value ] !== undefined ?
-      data[ value ] : getter ?
-      getter.call(this, data) : this.store.state[ value ];
-  },
+    listOffset: 0,
+    listRange: 1,
 
-  listRange (data) {
-    return this._getter('listRange', data);
-  },
+    //stickyScrollX: false,   // ? залипающий скролл по X
+    //stepScrollX: false,     // ? пошаговый скролл по X
+    //freeScrollX: false,     // ? свободный скролл по X
+    //freeScrollY: false,     // ? свободный скролл по Y
 
-  scrollWidth (data) {
-    return this._getter('scrollWidth', data);
-  },
+    //speedScrollX: 0,        // ? скорость скролла по X: старт = abs(new) > abs(old); вправо > 0; влево < 0;
+    //speedScrollY: 0,        // ? скорость скролла по Y: старт = abs(new) > abs(old); вниз > 0; вверх < 0;
 
-  scrollHeight (data) {
-    return this._getter('scrollHeight', data);
-  },
+    //gridHeight: 0,
+    //viewportHeight: 0,
+    //viewportMinutesBegin: 0,
+    //viewportMinutesEnd: 0,
 
-  scrollOffsetBottom (data) {
-    return this._getter('scrollOffsetBottom', data);
-  },
+    gridDaysListItemSize: 7,  // !! количество дней в одном элементе InfiniteList
+    //gridWeekListItemSize: 1,  // количество недель в одном элементе InfiniteList
 
-  scrollOffsetRight (data) {
-    return this._getter('scrollOffsetRight', data);
-  },
 
-  scrollOffsetTop (data) {
-    return data.scrollHeight === undefined ?
-      this._getter('scrollOffsetTop', data) :
-      -1 * data.scrollHeight;
-  },
+    //grid: 'day',
+    //currentDate: new Date(),
 
-  scrollOffsetLeft (data) {
-    return data.scrollWidth === undefined && data.listRange === undefined ?
-      this._getter('scrollOffsetLeft', data) :
-      -2 * this.listRange(data) * this.scrollWidth(data);
-  },
+    hoursOfDay: '0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23'
+  };
 
-  scrollY (data) {
-    let scrollY = this._getter('scrollY', data);
+  let isChangedValues = false;
 
-    if (data.scrollHeight !== undefined && data.scrollHeight !== this.store.state.scrollHeight) {
-      scrollY = this.store.state.scrollHeight > 0 ? scrollY * data.scrollHeight / this.store.state.scrollHeight : 0;
-    }
+  const state = Object.create(null);
 
-    return _limitScroll(scrollY, this.scrollOffsetTop(data), this.scrollOffsetBottom(data));
-  },
+  Object.defineProperties(state, {
+    /**
+     * [scrollHeight description]
+     * @type {number}
+     * @public
+     */
+    scrollHeight: {
+      enumerable: true,
+      get: () => currentValues.scrollHeight,
+      set: (value) => {
+        const scrollY = currentValues.scrollY;
+        const scrollHeight = currentValues.scrollHeight;
 
-  scrollX (data) {
-    let scrollX = this._getter('scrollX', data);
+        currentValues.scrollHeight = value;
+        currentValues.scrollOffsetTop = -1 * value;
+        currentValues.scrollY = limitScrollY(scrollHeight > 0 ? scrollY * value / scrollHeight : 0);
 
-    if (scrollX === undefined) {
-      const scrollWidth = this.scrollWidth(data);
+        isChangedValues = true;
+      }
+    },
 
-      if (scrollWidth) {
-        scrollX = -1 * this.listRange(data) * scrollWidth;
+    /**
+     * [scrollWidth description]
+     * @type {number}
+     * @public
+     */
+    scrollWidth: {
+      enumerable: true,
+      get: () => currentValues.scrollWidth,
+      set: (value) => {
+        const scrollX = currentValues.scrollX;
+        const scrollWidth = currentValues.scrollWidth;
+        const listOffset = currentValues.listOffset;
+
+        currentValues.scrollWidth = value;
+        currentValues.scrollOffsetLeft = -2 * state.listRange * value;
+        currentValues.scrollX = scrollX === undefined ?
+          limitScrollX(-1 * state.listRange * state.scrollWidth) :
+          limitScrollX(scrollWidth > 0 ? scrollX * value / scrollWidth : 0);
+        currentValues.listOffset = getListOffset(currentValues);
+
+        if (listOffset !== currentValues.listOffset) {
+          const diff = currentValues.listOffset - listOffset;
+          const newScrollX = do {
+            if (Math.abs(diff) > state.listRange) {
+              -1 * state.listRange * value;
+            } else {
+              scrollX + diff * value;
+            }
+          };
+
+          currentValues.scrollX = limitScrollX(newScrollX);
+        }
+
+        isChangedValues = true;
+      }
+    },
+
+    /**
+     * максимальное смещение при скроле влево = -1 * scrollWidth * ( listRange * 2 )
+     * @type {number}
+     * @private
+     */
+    scrollOffsetLeft: {
+      get: () => currentValues.scrollOffsetLeft
+    },
+
+    /**
+     * максимальное смещение при скроле вправо
+     * @constant {number}
+     * @private
+     */
+    scrollOffsetRight: {
+      value: currentValues.scrollOffsetRight
+    },
+
+    /**
+     * максимальное смещение при скроле вверх = -1 * scrollHeight
+     * @type {number}
+     * @private
+     */
+    scrollOffsetTop: {
+      get: () => currentValues.scrollOffsetTop
+    },
+
+    /**
+     * максимальное смещение при скроле вниз
+     * @constant {number}
+     * @private
+     */
+    scrollOffsetBottom: {
+      value: currentValues.scrollOffsetBottom
+    },
+
+    /**
+     * смещение скрола по оси X = -1 * listRange * scrollWidth
+     * @type {number}
+     * @public
+     */
+    scrollX: {
+      enumerable: true,
+      get: () => currentValues.scrollX,
+      set: (value) => {
+        value = limitScrollX(value);
+        if (value !== currentValues.scrollX) {
+          const scrollX = currentValues.scrollX;
+          const listOffset = currentValues.listOffset;
+
+          currentValues.scrollX = value;
+          currentValues.listOffset = getListOffset(currentValues);
+
+          if (listOffset !== currentValues.listOffset) {
+            const diff = currentValues.listOffset - listOffset;
+            const newScrollX = do {
+              if (Math.abs(diff) > state.listRange) {
+                -1 * state.listRange * state.scrollWidth;
+              } else {
+                scrollX + diff * state.scrollWidth;
+              }
+            };
+
+            currentValues.scrollX = limitScrollX(newScrollX);
+          }
+
+          isChangedValues = true;
+        }
+      }
+    },
+
+    /**
+     * смещение скрола по оси Y
+     * @type {number}
+     * @public
+     */
+    scrollY: {
+      enumerable: true,
+      get: () => currentValues.scrollY,
+      set: (value) => {
+        value = limitScrollY(value)
+        if (value !== currentValues.scrollY) {
+          currentValues.scrollY = value;
+          isChangedValues = true;
+        }
+      }
+    },
+
+    /**
+     * Количество предзагружаемых заранее интервалов InfiniteList слева и справа от текущего
+     * @constant {number}
+     * @public
+     */
+    listRange: {
+      enumerable: true,
+      value: currentValues.listRange
+    },
+
+    /**
+     * смещение начала списка. смещение определяется интервалами InfiniteList
+     * @type {number}
+     * @public
+     */
+    listOffset: {
+      enumerable: true,
+      get: () => currentValues.listOffset,
+      set: (value) => {
+        const listOffset = currentValues.listOffset;
+        currentValues.listOffset = value;
+
+        if (listOffset !== currentValues.listOffset) {
+          const diff = currentValues.listOffset - listOffset;
+          const newScrollX = do {
+            if (Math.abs(diff) > state.listRange) {
+              -1 * state.listRange * state.scrollWidth;
+            } else {
+              currentValues.scrollX + diff * state.scrollWidth;
+            }
+          };
+
+          currentValues.scrollX = limitScrollX(newScrollX);
+          isChangedValues = true;
+        }
+      }
+    },
+
+    /**
+     * Набор часов, выводимых в сетке на день и неделю
+     * @type {string}
+     * @public
+     */
+    hoursOfDay: {
+      enumerable: true,
+      get: () => currentValues.hoursOfDay,
+      set: (value) => {
+        currentValues.hoursOfDay = value;
+        isChangedValues = true;
+      }
+    },
+
+    /**
+     * количество дней в одном элементе InfiniteList
+     * @type {number}
+     * @public
+     */
+    gridDaysListItemSize: {
+      enumerable: true,
+      get: () => currentValues.gridDaysListItemSize,
+      set: (value) => {
+        currentValues.gridDaysListItemSize = value;
+        isChangedValues = true;
       }
     }
+  });
 
-    return scrollX === undefined ? scrollX :
-      _limitScroll(scrollX, this.scrollOffsetLeft(data), this.scrollOffsetRight(data));
-  },
-
-  listOffsetRate (data) {
-    return this._getter('listOffsetRate', data, function (data) {
-
-    });
-  },
-
-  listOffset (data) {
-    return this._getter('listOffset', data, function (data) {
-      const scrollY = this.scrollX(data);
-      const scrollOffsetLeft = this.scrollOffsetLeft(data);
-      const scrollOffsetRight = this.scrollOffsetRight(data);
-      const scrollOffsetCenter = (scrollOffsetLeft + scrollOffsetRight) / 2;
-      const scrollOffsetWidth = scrollOffsetLeft > scrollOffsetRight ?
-        scrollOffsetLeft - scrollOffsetRight :
-        scrollOffsetRight - scrollOffsetLeft;
-      const centerOffsetWidth = scrollOffsetWidth / 2;
-      const sign = scrollY > scrollOffsetCenter ? 1 : -1;
-      const scrollY2CenterWidth = scrollY > scrollOffsetCenter ?
-        scrollY - scrollOffsetCenter :
-        scrollOffsetCenter - scrollY;
-      const rate = centerOffsetWidth ? sign * scrollY2CenterWidth * 100 / centerOffsetWidth : 0;
-
-      let listOffset = this.store.state.listOffset;
-      if (rate <= -100) {
-        listOffset++;
-      } else if (rate >= 100) {
-        listOffset--;
-      }
-
-      return listOffset;
-    })
+  function limitScrollY (value) {
+    return limitScroll(value, state.scrollOffsetTop, state.scrollOffsetBottom);
   }
-};
 
-function _limitScroll (value, min, max) {
-  return Math.round(value < min ? min : value > max ? max : value);
-}
+  function limitScrollX (value) {
+    return limitScroll(value, state.scrollOffsetLeft, state.scrollOffsetRight);
+  }
 
-function _scrollXOffset (data, offset) {
+  return {
+    state,
 
+    update (data) {
+      isChangedValues = false;
+
+      if (data) {
+        //console.log('>>', data);
+        for (const name in data) {
+          if (data.hasOwnProperty(name) &&
+            name in state &&
+            data[ name ] !== state[ name ]) {
+
+            state[ name ] = data[ name ];
+          }
+        }
+        //console.log('<<', state, isChangedValues);
+      }
+
+      return isChangedValues;
+    }
+  };
 }

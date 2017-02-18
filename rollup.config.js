@@ -22,13 +22,12 @@ export default {
   entry: 'src/index.js',
   dest: 'dist/app.js',
   format: 'iife',
-  sourceMap: true,
+  sourceMap: false,
   useStrict: false,
   context: 'window',
   external: external,
   globals: {
     'classnames': 'vendor._classnames',
-    'object-assign': 'vendor._object_assign',
     'preact-compat': 'vendor._preact_compat',
     'preact': 'vendor._preact',
     'raf': 'vendor._raf'

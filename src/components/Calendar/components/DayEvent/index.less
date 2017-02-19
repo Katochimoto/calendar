@@ -1,13 +1,15 @@
 @import (reference, once) "../../style/constant";
 
 .@{component}_DayEvent {
+  visibility: visible;
   pointer-events: auto;
   position: absolute;
   outline: none;
   width: 96%;
   cursor: pointer;
   background: @day-event-background-color;
-  box-shadow: inset 3px 0px 0px 0px @day-event-border-color;
+  border-left: 3px solid @day-event-border-color;
+  box-sizing: border-box;
 
   &__selected {
     background: @day-event-background-selected-color;
@@ -15,6 +17,6 @@
 
   .mobile({
     width: 90%;
-    box-shadow: inset 1px 0px 0px 0px @day-event-border-color;
+    border-left: 1px solid @day-event-border-color;
   })
 }

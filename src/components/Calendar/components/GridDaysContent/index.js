@@ -10,26 +10,31 @@ import InfiniteList from '../InfiniteList';
 import styles from './index.less';
 
 export default class GridDaysContent extends Component {
-  transformState ({ scrollY, gridDaysListItemSize }) {
-    return { scrollY, gridDaysListItemSize };
+  constructor (props, context) {
+    super(props, context);
+    this.getItemElement = this.getItemElement.bind(this);
+  }
+
+  transformState ({ scrollY, gridDaysListItemSize, currentDate }) {
+    return { scrollY, gridDaysListItemSize, currentDate };
   }
 
   shouldComponentUpdate (nextProps, nextState) {
     return (
       this.state.scrollY !== nextState.scrollY ||
-      this.state.gridDaysListItemSize !== nextState.gridDaysListItemSize
+      this.state.gridDaysListItemSize !== nextState.gridDaysListItemSize ||
+      this.state.currentDate !== nextState.currentDate
     );
   }
 
-  /**
-   * @this {InfiniteList}
-   */
   getItemElement (listOffset, itemSize) {
     let items = [];
     let idx = listOffset * itemSize;
     let end = listOffset * itemSize + itemSize - 1;
 
     for (; idx <= end; idx++) {
+      const date = this.context.datetime.offsetDay(this.state.currentDate, idx);
+      console.log('>>', date);
       items.push(
         <Day key={idx} />
       );
@@ -61,6 +66,7 @@ export default class GridDaysContent extends Component {
           style={style}>
 
           <DayHours />
+
           <InfiniteList
             getItemElement={this.getItemElement}
             itemSize={this.state.gridDaysListItemSize} />

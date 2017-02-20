@@ -9,9 +9,10 @@ import InfiniteList from '../InfiniteList';
 import styles from './index.less';
 
 export default class GridDaysHeader extends Component {
-  /*constructor (props, context) {
+  constructor (props, context) {
     super(props, context);
-  }*/
+    this.getItemElement = this.getItemElement.bind(this);
+  }
 
   transformState ({ gridDaysListItemSize }) {
     return { gridDaysListItemSize };
@@ -23,9 +24,6 @@ export default class GridDaysHeader extends Component {
     );
   }
 
-  /**
-   * @this {InfiniteList}
-   */
   getItemElement (listOffset, itemSize) {
     let items = [];
     let idx = listOffset * itemSize;

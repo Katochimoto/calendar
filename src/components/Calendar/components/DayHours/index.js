@@ -19,16 +19,14 @@ export default class DayHours extends Component {
   }
 
   getItems () {
-    const hoursOfDay = this.state.hoursOfDay.split(',');
-    const len = hoursOfDay.length;
-
-    if (!len) {
+    if (!this.state.hoursOfDay) {
       return null;
     }
 
     const items = [];
+    const hoursOfDay = this.state.hoursOfDay.split(',');
 
-    for (let i = 0; i < len; i++) {
+    for (let i = 0, len = hoursOfDay.length; i < len; i++) {
       const hour = hoursOfDay[ i ];
 
       items.push(

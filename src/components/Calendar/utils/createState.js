@@ -30,8 +30,7 @@ export default function createState () {
 
 
     //grid: 'day',
-    //currentDate: new Date(),
-
+    currentDate: '2017-02-20',
     hoursOfDay: '0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23'
   };
 
@@ -197,8 +196,14 @@ export default function createState () {
       enumerable: true,
       get: () => currentValues.hoursOfDay,
       set: (value) => {
-        currentValues.hoursOfDay = value;
-        isChangedValues = true;
+        value = value.split(',').map(Number);
+        value.sort((a, b) => (a - b));
+        value = value.join(',');
+
+        if (value !== currentValues.hoursOfDay) {
+          currentValues.hoursOfDay = value;
+          isChangedValues = true;
+        }
       }
     },
 
@@ -212,6 +217,20 @@ export default function createState () {
       get: () => currentValues.gridDaysListItemSize,
       set: (value) => {
         currentValues.gridDaysListItemSize = value;
+        isChangedValues = true;
+      }
+    },
+
+    /**
+     * Текущая дата
+     * @type {string}
+     * @public
+     */
+    currentDate: {
+      enumerable: true,
+      get: () => currentValues.currentDate,
+      set: (value) => {
+        currentValues.currentDate = value;
         isChangedValues = true;
       }
     }

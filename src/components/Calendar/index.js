@@ -13,12 +13,14 @@ import Datetime from './Datetime';
 
 import styles from './index.less';
 
+window.store = new Store();
+
 export default class Calendar extends Component {
   constructor (props) {
     super(props);
 
     this.state = {
-      store: new Store(),
+      store: window.store,
       datetime: new Datetime()
     };
 

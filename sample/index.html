@@ -23,11 +23,10 @@
   </form>
 
   <script>
-    //addListener(upgrade);
+    window.store.addListener(upgrade);
 
-    /*
     function upgrade () {
-      var state = getState();
+      var state = window.store.getState();
 
       for (var name in state) {
         var element = document.querySelector('[name="' + name + '"]');
@@ -42,7 +41,6 @@
         }
       }
     }
-    */
 
     function onSubmit (event) {
       event.preventDefault();
@@ -69,7 +67,7 @@
       }
 
       console.log(state);
-      //window.updateState(state);
+      window.store.update(state);
 
       return false;
     }

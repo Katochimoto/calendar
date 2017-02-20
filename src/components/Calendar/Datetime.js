@@ -1,17 +1,29 @@
+import fecha from 'fecha';
+
+const PARSE_CACHE = {};
+
 export default function Datetime (strategy) {
 
 }
 
 Datetime.prototype = {
-  getHourTitle (hour) {
+  parse (sDate, format) {
+    const key = `${sDate}>${format}`;
+    return PARSE_CACHE[ key ] || (PARSE_CACHE[ key ] = fecha.parse(sDate, format));
+  },
+
+  gridDaysHourTitle (hour) {
     return String(hour);
   },
 
-  offsetDay (date, offset) {
-    const match = date.match(/(\d{4})-(\d{2})-(\d{2})/);
-    if (match) {
-      const offsetDate = new Date(Date.UTC(Number(match[1]), Number(match[2]) - 1, Number(match[3]) + offset));
-      return `${offsetDate.getFullYear()}-${offsetDate.getMonth() + 1}-${offsetDate.getDate()}`;
-    }
+  gridDaysDayTitle (sDate) {
+    const date = this.parse(sDate, 'YYYY-MM-DD');
+    return fecha.format(date, 'ddd, D');
+  },
+
+  offsetDay (sDate, offset) {
+    const date = this.parse(sDate, 'YYYY-MM-DD');
+    date.setUTCDate(date.getUTCDate() + offset);
+    return fecha.format(date, 'YYYY-MM-DD');
   }
 };

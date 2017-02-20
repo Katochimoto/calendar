@@ -14,24 +14,29 @@ export default class GridDaysHeader extends Component {
     this.getItemElement = this.getItemElement.bind(this);
   }
 
-  transformState ({ gridDaysListItemSize }) {
-    return { gridDaysListItemSize };
+  transformState ({ gridDaysListItemSize, currentDate }) {
+    return { gridDaysListItemSize, currentDate };
   }
 
   shouldComponentUpdate (nextProps, nextState) {
     return (
-      this.state.gridDaysListItemSize !== nextState.gridDaysListItemSize
+      this.state.gridDaysListItemSize !== nextState.gridDaysListItemSize ||
+      this.state.currentDate !== nextState.currentDate
     );
   }
 
   getItemElement (listOffset, itemSize) {
+    const datetime = this.context.datetime;
+    const currentDate = this.state.currentDate;
+
     let items = [];
     let idx = listOffset * itemSize;
     let end = listOffset * itemSize + itemSize - 1;
 
     for (; idx <= end; idx++) {
+      const date = datetime.offsetDay(currentDate, idx);
       items.push(
-        <DayHeader key={idx} />
+        <DayHeader key={date} date={date} />
       );
     }
 

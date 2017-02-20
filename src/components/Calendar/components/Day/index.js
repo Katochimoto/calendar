@@ -14,31 +14,26 @@ import styles from './index.less';
 
 export default class Day extends Component {
 
-  shouldComponentUpdate () {
-    return false;
+  shouldComponentUpdate (nextProps) {
+    return (
+      this.props.date !== nextProps.date
+    );
   }
 
   render () {
     const classes = classnames({
-      [ styles.calendar_Day ]: true,
-      [ styles.calendar_Day__weekend ]: this.props.weekend
+      [ styles.calendar_Day ]: true
+      // [ styles.calendar_Day__weekend ]: this.props.weekend
     });
 
     return (
-      <div className={ classes }>
-        <DayEvents />
+      <div className={classes} data-key={this.props.date}>
+        <DayEvents date={this.props.date} />
       </div>
     );
   }
 }
 
-/**
- * @type {boolean} propTypes.weekend выходной
- */
 Day.propTypes = {
-  weekend: PropTypes.bool
-};
-
-Day.defaultProps = {
-  weekend: false
+  date: PropTypes.string
 };

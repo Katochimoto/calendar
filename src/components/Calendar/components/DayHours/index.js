@@ -23,8 +23,9 @@ export default class DayHours extends Component {
       return null;
     }
 
-    const items = [];
+    const datetime = this.context.datetime;
     const hoursOfDay = this.state.hoursOfDay.split(',');
+    const items = [];
 
     for (let i = 0, len = hoursOfDay.length; i < len; i++) {
       const hour = hoursOfDay[ i ];
@@ -32,7 +33,7 @@ export default class DayHours extends Component {
       items.push(
         <div key={hour}
           className={styles.calendar_DayHours_Item}
-          data-hour={this.context.datetime.getHourTitle(hour)} />
+          data-hour={datetime.gridDaysHourTitle(hour)} />
       );
     }
 
@@ -41,7 +42,7 @@ export default class DayHours extends Component {
     items.push(
       <div key={`next-${hour}`}
         className={styles.calendar_DayHours_Item}
-        data-hour={this.context.datetime.getHourTitle(hour)} />
+        data-hour={datetime.gridDaysHourTitle(hour)} />
     );
 
     return items;

@@ -28,15 +28,18 @@ export default class GridDaysContent extends Component {
   }
 
   getItemElement (listOffset, itemSize) {
+    console.log(listOffset, itemSize);
+    const datetime = this.context.datetime;
+    const currentDate = this.state.currentDate;
+
     let items = [];
     let idx = listOffset * itemSize;
     let end = listOffset * itemSize + itemSize - 1;
 
     for (; idx <= end; idx++) {
-      const date = this.context.datetime.offsetDay(this.state.currentDate, idx);
-      console.log('>>', date);
+      const date = datetime.offsetDay(currentDate, idx);
       items.push(
-        <Day key={idx} />
+        <Day key={date} date={date} />
       );
     }
 

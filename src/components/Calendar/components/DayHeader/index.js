@@ -11,15 +11,16 @@ export default class DayHeader extends Component {
 
   shouldComponentUpdate (nextProps) {
     return (
-      this.props.date !== nextProps.date
+      this.props.date !== nextProps.date ||
+      this.props.weekend !== nextProps.weekend
     );
   }
 
   render () {
     const datetime = this.context.datetime;
     const classes = classnames({
-      [ styles.calendar_DayHeader ]: true
-      // [ styles.calendar_DayHeader__weekend ]: this.props.weekend
+      [ styles.calendar_DayHeader ]: true,
+      [ styles.calendar_DayHeader__weekend ]: this.props.weekend
     });
 
     return (
@@ -33,5 +34,10 @@ export default class DayHeader extends Component {
 }
 
 DayHeader.propTypes = {
-  date: PropTypes.string
+  date: PropTypes.string,
+  weekend: PropTypes.boolean
+};
+
+DayHeader.defaultProps = {
+  weekend: false
 };

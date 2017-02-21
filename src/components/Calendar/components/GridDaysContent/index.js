@@ -6,6 +6,7 @@ import { Component } from '../../Component';
 import Day from '../Day';
 import DayHours from '../DayHours';
 import InfiniteList from '../InfiniteList';
+import arr2obj from '../../utils/arr2obj';
 
 import styles from './index.less';
 
@@ -15,22 +16,25 @@ export default class GridDaysContent extends Component {
     this.getItemElement = this.getItemElement.bind(this);
   }
 
-  transformState ({ scrollY, gridDaysListItemSize, currentDate }) {
-    return { scrollY, gridDaysListItemSize, currentDate };
+  transformState ({ scrollY, gridDaysListItemSize, currentDate, weekends, hideWeekends }) {
+    return { scrollY, gridDaysListItemSize, currentDate, weekends, hideWeekends };
   }
 
   shouldComponentUpdate (nextProps, nextState) {
     return (
       this.state.scrollY !== nextState.scrollY ||
       this.state.gridDaysListItemSize !== nextState.gridDaysListItemSize ||
-      this.state.currentDate !== nextState.currentDate
+      this.state.currentDate !== nextState.currentDate ||
+      this.state.weekends !== nextState.weekends ||
+      this.state.hideWeekends !== nextState.hideWeekends
     );
   }
 
   getItemElement (listOffset, itemSize) {
-    console.log(listOffset, itemSize);
     const datetime = this.context.datetime;
     const currentDate = this.state.currentDate;
+    const weekends = this.state.weekends ? arr2obj(this.state.weekends.split(',')) : {};
+    const hideWeekends = this.state.hideWeekends;
 
     let items = [];
     let idx = listOffset * itemSize;
@@ -38,9 +42,13 @@ export default class GridDaysContent extends Component {
 
     for (; idx <= end; idx++) {
       const date = datetime.offsetDay(currentDate, idx);
-      items.push(
-        <Day key={date} date={date} />
-      );
+      const isWeekend = Boolean(weekends[ datetime.getDay(date) ]);
+
+      if (!isWeekend || !hideWeekends) {
+        items.push(
+          <Day key={date} date={date} weekend={isWeekend} />
+        );
+      }
     }
 
     return (

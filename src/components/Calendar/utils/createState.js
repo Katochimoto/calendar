@@ -25,13 +25,16 @@ export default function createState () {
     //viewportMinutesBegin: 0,
     //viewportMinutesEnd: 0,
 
-    gridDaysListItemSize: 7,  // !! количество дней в одном элементе InfiniteList
+    gridDaysListItemSize: 7,
     //gridWeekListItemSize: 1,  // количество недель в одном элементе InfiniteList
 
 
     //grid: 'day',
-    currentDate: '2017-02-20',
-    hoursOfDay: '0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23'
+    currentDate: '2017-02-21',
+    hoursOfDay: '0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23',
+    weekends: '0,6',
+    hideWeekends: false,
+    beginningOfWeek: 1
   };
 
   let isChangedValues = false;
@@ -232,6 +235,51 @@ export default function createState () {
       set: (value) => {
         currentValues.currentDate = value;
         isChangedValues = true;
+      }
+    },
+
+    /**
+     * Выходные дни недели
+     * @type {string}
+     * @public
+     */
+    weekends: {
+      enumerable: true,
+      get: () => currentValues.weekends,
+      set: (value) => {
+        currentValues.weekends = value;
+        isChangedValues = true;
+      }
+    },
+
+    /**
+     * Начинать неделю с дня
+     * @type {number}
+     * @public
+     */
+    beginningOfWeek: {
+      enumerable: true,
+      get: () => currentValues.beginningOfWeek,
+      set: (value) => {
+        currentValues.beginningOfWeek = value;
+        isChangedValues = true;
+      }
+    },
+
+    /**
+     * Скрывать выходные
+     * @type {boolean}
+     * @public
+     */
+    hideWeekends: {
+      enumerable: true,
+      get: () => currentValues.hideWeekends,
+      set: (value) => {
+        value = Boolean(value);
+        if (value !== currentValues.hideWeekends) {
+          currentValues.hideWeekends = value;
+          isChangedValues = true;
+        }
       }
     }
   });

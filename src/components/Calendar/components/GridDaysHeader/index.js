@@ -28,9 +28,6 @@ export default class GridDaysHeader extends Component {
     );
   }
 
-  /**
-   * FIXME Вызывается при каждой перерисовке списка при изменении X
-   */
   getItemElement (listOffset, itemSize) {
     const datetime = this.context.datetime;
     const currentDate = this.state.currentDate;

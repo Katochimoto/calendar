@@ -17,7 +17,7 @@ export default function createState () {
     //freeScrollX: false,     // ? свободный скролл по X
     //freeScrollY: false,     // ? свободный скролл по Y
 
-    //speedScrollX: 0,        // ? скорость скролла по X: старт = abs(new) > abs(old); вправо > 0; влево < 0;
+    //speedScrollX: 0,
     //speedScrollY: 0,        // ? скорость скролла по Y: старт = abs(new) > abs(old); вниз > 0; вверх < 0;
 
     //gridHeight: 0,
@@ -25,13 +25,16 @@ export default function createState () {
     //viewportMinutesBegin: 0,
     //viewportMinutesEnd: 0,
 
-    gridDaysListItemSize: 7,  // !! количество дней в одном элементе InfiniteList
+    gridDaysListItemSize: 7,
     //gridWeekListItemSize: 1,  // количество недель в одном элементе InfiniteList
 
 
     //grid: 'day',
-    currentDate: '2017-02-20',
-    hoursOfDay: '0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23'
+    currentDate: '2017-02-22',
+    hoursOfDay: '0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23',
+    weekends: '0,6',
+    hideWeekends: false,
+    beginningOfWeek: 1
   };
 
   let isChangedValues = false;
@@ -71,9 +74,10 @@ export default function createState () {
         const listOffset = currentValues.listOffset;
 
         currentValues.scrollWidth = value;
-        currentValues.scrollOffsetLeft = -2 * state.listRange * value;
+        currentValues.scrollOffsetLeft = -2 * currentValues.listRange * value;
+        // currentValues.speedScrollX = 0;
         currentValues.scrollX = currentValues.scrollX === undefined ?
-          limitScrollX(-1 * state.listRange * state.scrollWidth) :
+          limitScrollX(getScrollXByOffset(0, currentValues.listRange, value)) :
           scrollWidth > 0 ? limitScrollX(currentValues.scrollX * value / scrollWidth) : 0;
         currentValues.listOffset = getListOffset(currentValues);
         currentValues.scrollX = correctScrollX(listOffset, currentValues);
@@ -86,6 +90,7 @@ export default function createState () {
      * максимальное смещение при скроле влево = -1 * scrollWidth * ( listRange * 2 )
      * @type {number}
      * @private
+     * @readonly
      */
     scrollOffsetLeft: {
       get: () => currentValues.scrollOffsetLeft
@@ -95,6 +100,7 @@ export default function createState () {
      * максимальное смещение при скроле вправо
      * @constant {number}
      * @private
+     * @readonly
      */
     scrollOffsetRight: {
       value: currentValues.scrollOffsetRight
@@ -104,6 +110,7 @@ export default function createState () {
      * максимальное смещение при скроле вверх = -1 * scrollHeight
      * @type {number}
      * @private
+     * @readonly
      */
     scrollOffsetTop: {
       get: () => currentValues.scrollOffsetTop
@@ -113,6 +120,7 @@ export default function createState () {
      * максимальное смещение при скроле вниз
      * @constant {number}
      * @private
+     * @readonly
      */
     scrollOffsetBottom: {
       value: currentValues.scrollOffsetBottom
@@ -129,11 +137,13 @@ export default function createState () {
       set: (value) => {
         value = limitScrollX(value);
         if (value === currentValues.scrollX) {
+          // currentValues.speedScrollX = 0;
           return;
         }
 
         const listOffset = currentValues.listOffset;
 
+        // currentValues.speedScrollX = currentValues.scrollX - value;
         currentValues.scrollX = value;
         currentValues.listOffset = getListOffset(currentValues);
         currentValues.scrollX = correctScrollX(listOffset, currentValues);
@@ -141,6 +151,17 @@ export default function createState () {
         isChangedValues = true;
       }
     },
+
+    /**
+     * скорость скролла по X: вправо > 0; влево < 0;
+     * @type {number}
+     * @public
+     * @readonly
+     */
+    // speedScrollX: {
+    //   enumerable: true,
+    //   get: () => currentValues.speedScrollX
+    // },
 
     /**
      * смещение скрола по оси Y
@@ -163,6 +184,7 @@ export default function createState () {
      * Количество предзагружаемых заранее интервалов InfiniteList слева и справа от текущего
      * @constant {number}
      * @public
+     * @readonly
      */
     listRange: {
       enumerable: true,
@@ -181,6 +203,7 @@ export default function createState () {
         const listOffset = currentValues.listOffset;
 
         currentValues.listOffset = value;
+        // currentValues.speedScrollX = 0;
         currentValues.scrollX = correctScrollX(listOffset, currentValues);
 
         isChangedValues = true;
@@ -233,6 +256,51 @@ export default function createState () {
         currentValues.currentDate = value;
         isChangedValues = true;
       }
+    },
+
+    /**
+     * Выходные дни недели
+     * @type {string}
+     * @public
+     */
+    weekends: {
+      enumerable: true,
+      get: () => currentValues.weekends,
+      set: (value) => {
+        currentValues.weekends = value;
+        isChangedValues = true;
+      }
+    },
+
+    /**
+     * Начинать неделю с дня
+     * @type {number}
+     * @public
+     */
+    beginningOfWeek: {
+      enumerable: true,
+      get: () => currentValues.beginningOfWeek,
+      set: (value) => {
+        currentValues.beginningOfWeek = value;
+        isChangedValues = true;
+      }
+    },
+
+    /**
+     * Скрывать выходные
+     * @type {boolean}
+     * @public
+     */
+    hideWeekends: {
+      enumerable: true,
+      get: () => currentValues.hideWeekends,
+      set: (value) => {
+        value = Boolean(value);
+        if (value !== currentValues.hideWeekends) {
+          currentValues.hideWeekends = value;
+          isChangedValues = true;
+        }
+      }
     }
   });
 
@@ -277,15 +345,18 @@ export default function createState () {
     }
 
     const diff = listOffset - oldListOffset;
-    const newScrollX = do {
+
+    return do {
       if (Math.abs(diff) > listRange) {
-        -1 * listRange * scrollWidth;
+        limitScrollX(getScrollXByOffset(listOffset, listRange, scrollWidth));
       } else {
-        scrollX + diff * scrollWidth;
+        limitScrollX(scrollX + diff * scrollWidth);
       }
     };
+  }
 
-    return limitScrollX(newScrollX);
+  function getScrollXByOffset (listOffset, listRange, scrollWidth) {
+    return (listOffset + 1) * -1 * listRange * scrollWidth;
   }
 
   return {
@@ -306,6 +377,10 @@ export default function createState () {
       }
 
       return isChangedValues;
+    },
+
+    scrollXByOffset (listOffset) {
+      return getScrollXByOffset(listOffset, currentValues.listRange, currentValues.scrollWidth);
     }
   };
 }

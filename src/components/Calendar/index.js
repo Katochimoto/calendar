@@ -49,7 +49,16 @@ export default class Calendar extends Component {
   }
 
   componentWillUnmount () {
-    caf(this._timerRecalculationSize);
+    if (this._timerRecalculationSize) {
+      caf(this._timerRecalculationSize);
+      this._timerRecalculationSize = 0;
+    }
+
+    if (this._timerUpdateStoreByWheel) {
+      caf(this._timerUpdateStoreByWheel);
+      this._timerUpdateStoreByWheel = 0;
+    }
+
     context.removeEventListener('resize', this.handleResize, false);
     offWheel(this._calendarNode, this.handleWheel);
   }
@@ -68,12 +77,11 @@ export default class Calendar extends Component {
       return;
     }
 
-    this._deltaX = deltaX + (this._lockWheel ? this._deltaX : 0);
-    this._deltaY = deltaY + (this._lockWheel ? this._deltaY : 0);
+    this._deltaX = deltaX + (this._timerUpdateStoreByWheel ? this._deltaX : 0);
+    this._deltaY = deltaY + (this._timerUpdateStoreByWheel ? this._deltaY : 0);
 
-    if (!this._lockWheel) {
-      this._lockWheel = true;
-      raf(this.updateStoreByWheel);
+    if (!this._timerUpdateStoreByWheel) {
+      this._timerUpdateStoreByWheel = raf(this.updateStoreByWheel);
     }
   }
 
@@ -93,7 +101,7 @@ export default class Calendar extends Component {
       this.state.store.update(newState);
     }
 
-    this._lockWheel = false;
+    this._timerUpdateStoreByWheel = 0;
   }
 
   getRecalculationSize () {

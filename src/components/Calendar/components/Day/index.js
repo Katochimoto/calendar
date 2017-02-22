@@ -14,8 +14,11 @@ import styles from './index.less';
 
 export default class Day extends Component {
 
-  shouldComponentUpdate () {
-    return false;
+  shouldComponentUpdate (nextProps) {
+    return (
+      this.props.date !== nextProps.date ||
+      this.props.weekend !== nextProps.weekend
+    );
   }
 
   render () {
@@ -25,18 +28,16 @@ export default class Day extends Component {
     });
 
     return (
-      <div className={ classes }>
-        <DayEvents />
+      <div className={classes} data-key={this.props.date}>
+        <DayEvents date={this.props.date} />
       </div>
     );
   }
 }
 
-/**
- * @type {boolean} propTypes.weekend выходной
- */
 Day.propTypes = {
-  weekend: PropTypes.bool
+  date: PropTypes.string,
+  weekend: PropTypes.boolean
 };
 
 Day.defaultProps = {

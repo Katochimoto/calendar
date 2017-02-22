@@ -2,56 +2,65 @@
  *
  */
 
-import classnames from 'classnames';
-
 import { Component, PropTypes } from '../../Component';
+import InfiniteListItem from '../InfiniteListItem';
 
 import styles from './index.less';
 
 export default class InfiniteList extends Component {
-
-  transformState ({ scrollX, listOffset, listRange }) {
-    return { scrollX, listOffset, listRange };
+  transformState ({ scrollX, listOffset, listRange, scrollWidth }) {
+    return { scrollX, listOffset, listRange, scrollWidth };
   }
 
   shouldComponentUpdate (nextProps, nextState) {
     return (
       this.props.itemSize !== nextProps.itemSize ||
-
       this.state.listOffset !== nextState.listOffset ||
-      this.state.scrollX !== nextState.scrollX ||
-      this.state.listRange !== nextState.listRange
+      this.state.listRange !== nextState.listRange ||
+      this.state.scrollX !== nextState.scrollX
     );
   }
 
+  /**
+   * FIXME подумать над оптимизацией - вызывается при каждом изменении scrollX
+   */
   getItems () {
     const itemSize = this.props.itemSize;
-    let items = [];
-    let idx = this.state.listOffset - this.state.listRange;
-    let end = this.state.listOffset + this.state.listRange;
+    const { scrollX, listOffset, listRange, scrollWidth } = this.state;
 
-    const classes = classnames({
-      [ styles.calendar_InfiniteList_Item ]: true,
-      [ styles.calendar_InfiniteList_Item__visible ]: true
-    });
+    let items = [];
+    let idxLocal = -(listRange);
+    let idx = listOffset - listRange;
+    let end = listOffset + listRange;
 
     for (; idx <= end; idx++) {
-      items.push(
-        <div key={idx} className={classes}>
-          {this.props.getItemElement(idx, itemSize)}
-        </div>
+      const min = this.context.store.scrollXByOffset(idxLocal);
+      const max = min - scrollWidth;
+      const isVisible = scrollX !== undefined && !Boolean(
+        max >= scrollX ||
+        min <= scrollX - scrollWidth
       );
+
+      items.push(
+        <InfiniteListItem
+          idx={idx}
+          itemSize={itemSize}
+          isVisible={isVisible}
+          getItemElement={this.props.getItemElement} />
+      );
+
+      idxLocal++;
     }
 
     return items;
   }
 
   render () {
-    const styleContent = `transform: translateX(${this.state.scrollX}px)`;
+    const style = `transform: translateX(${this.state.scrollX}px)`;
 
     return (
       <div className={styles.calendar_InfiniteList}>
-        <div className={styles.calendar_InfiniteList_Content} style={styleContent}>
+        <div ref={node => this._contentNode = node} className={styles.calendar_InfiniteList_Content} style={style}>
           {this.getItems()}
         </div>
       </div>

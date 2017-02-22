@@ -36,9 +36,23 @@ Datetime.prototype = {
   }
 };
 
+let PARSE_CACHE = Object.create(null);
+let parseCacheLength = 0;
+
 function parseDate (sDate) {
-  const m = sDate.match(REG_DATE);
-  return m ? new Date(Number(m[1]), Number(m[2]) - 1, Number(m[3])) : null;
+  if (parseCacheLength > 500) {
+    PARSE_CACHE = Object.create(null);
+  }
+
+  let timestamp = PARSE_CACHE[ sDate ];
+
+  if (!timestamp) {
+    const m = sDate.match(REG_DATE);
+    timestamp = PARSE_CACHE[ sDate ] = Date.UTC(Number(m[1]), Number(m[2]) - 1, Number(m[3]));
+    parseCacheLength++
+  }
+
+  return new Date(timestamp);
 }
 
 function formatDate (date) {

@@ -9,9 +9,8 @@ import { Component, PropTypes } from '../../Component';
 import styles from './index.less';
 
 export default class InfiniteList extends Component {
-
-  transformState ({ scrollX, listOffset, listRange }) {
-    return { scrollX, listOffset, listRange };
+  transformState ({ scrollX, listOffset, listRange, scrollWidth }) {
+    return { scrollX, listOffset, listRange, scrollWidth };
   }
 
   shouldComponentUpdate (nextProps, nextState) {
@@ -25,22 +24,28 @@ export default class InfiniteList extends Component {
   }
 
   getItems () {
+    const scrollWidth = this.state.scrollWidth;
     const itemSize = this.props.itemSize;
     let items = [];
+    let idxLocal = -(this.state.listRange);
     let idx = this.state.listOffset - this.state.listRange;
     let end = this.state.listOffset + this.state.listRange;
 
-    const classes = classnames({
-      [ styles.calendar_InfiniteList_Item ]: true,
-      [ styles.calendar_InfiniteList_Item__visible ]: true
-    });
-
     for (; idx <= end; idx++) {
+      const min = this.context.store.scrollXByOffset(idxLocal);
+      const max = min - scrollWidth;
+      const isVisible = this.state.scrollX !== undefined && !Boolean(
+        max >= this.state.scrollX ||
+        min <= this.state.scrollX - scrollWidth
+      );
+
       items.push(
-        <div key={idx} className={classes}>
-          {this.props.getItemElement(idx, itemSize)}
+        <div key={idxLocal} className={styles.calendar_InfiniteList_Item}>
+          {isVisible ? this.props.getItemElement(idx, itemSize) : null}
         </div>
       );
+
+      idxLocal++;
     }
 
     return items;

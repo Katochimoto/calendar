@@ -1,10 +1,12 @@
 import createState from './utils/createState';
 
 export default function Store (data) {
-  const { state, update } = createState();
+  const { state, update, scrollXByOffset } = createState();
   this._state = state
   this._update = update;
   this._callbacks = [];
+
+  this.scrollXByOffset = scrollXByOffset;
 
   update(data);
 }

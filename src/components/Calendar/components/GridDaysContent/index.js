@@ -2,11 +2,12 @@
  *
  */
 
-import { Component } from '../../Component';
+import { Component, PropTypes } from '../../Component';
+
 import Day from '../Day';
 import DayHours from '../DayHours';
 import InfiniteList from '../InfiniteList';
-import arr2obj from '../../utils/arr2obj';
+import GridDaysItem from '../GridDaysItem';
 
 import styles from './index.less';
 
@@ -16,45 +17,23 @@ export default class GridDaysContent extends Component {
     this.getItemElement = this.getItemElement.bind(this);
   }
 
-  transformState ({ scrollY, gridDaysListItemSize, currentDate, weekends, hideWeekends }) {
-    return { scrollY, gridDaysListItemSize, currentDate, weekends, hideWeekends };
+  transformState ({ scrollY, gridDaysListItemSize }) {
+    return { scrollY, gridDaysListItemSize };
   }
 
   shouldComponentUpdate (nextProps, nextState) {
     return (
-      this.state.currentDate !== nextState.currentDate ||
-      this.state.gridDaysListItemSize !== nextState.gridDaysListItemSize ||
-      this.state.hideWeekends !== nextState.hideWeekends ||
-      this.state.weekends !== nextState.weekends ||
-      this.state.scrollY !== nextState.scrollY
+      this.state.scrollY !== nextState.scrollY ||
+      this.state.gridDaysListItemSize !== nextState.gridDaysListItemSize
     );
   }
 
   getItemElement (listOffset, itemSize) {
-    const datetime = this.context.datetime;
-    const currentDate = this.state.currentDate;
-    const weekends = this.state.weekends ? arr2obj(this.state.weekends.split(',')) : {};
-    const hideWeekends = this.state.hideWeekends;
-
-    let items = [];
-    let idx = listOffset * itemSize;
-    let end = listOffset * itemSize + itemSize - 1;
-
-    for (; idx <= end; idx++) {
-      const date = datetime.offsetDay(currentDate, idx);
-      const isWeekend = Boolean(weekends[ datetime.getDay(date) ]);
-
-      if (!isWeekend || !hideWeekends) {
-        items.push(
-          <Day key={date} date={date} weekend={isWeekend} />
-        );
-      }
-    }
-
     return (
-      <div className={styles.calendar_GridDaysContent_Item}>
-        {items}
-      </div>
+      <GridDaysItem
+        ItemComponent={Day}
+        itemSize={itemSize}
+        listOffset={listOffset} />
     );
   }
 

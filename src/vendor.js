@@ -2,7 +2,6 @@ import * as _preact from 'preact';
 import * as _preact_compat from 'preact-compat';
 import * as _classnames from 'classnames';
 import * as _raf from 'raf';
-// import * as _fecha from 'fecha';
 
 export default {
   _preact,

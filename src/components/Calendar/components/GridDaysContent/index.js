@@ -17,17 +17,23 @@ export default class GridDaysContent extends Component {
   }
 
   transformState ({ scrollY, gridDaysListItemSize, currentDate, weekends, hideWeekends }) {
+    this.scrollYTo(scrollY);
     return { scrollY, gridDaysListItemSize, currentDate, weekends, hideWeekends };
   }
 
   shouldComponentUpdate (nextProps, nextState) {
     return (
-      this.state.scrollY !== nextState.scrollY ||
-      this.state.gridDaysListItemSize !== nextState.gridDaysListItemSize ||
       this.state.currentDate !== nextState.currentDate ||
-      this.state.weekends !== nextState.weekends ||
-      this.state.hideWeekends !== nextState.hideWeekends
+      this.state.gridDaysListItemSize !== nextState.gridDaysListItemSize ||
+      this.state.hideWeekends !== nextState.hideWeekends ||
+      this.state.weekends !== nextState.weekends
     );
+  }
+
+  scrollYTo (scrollY) {
+    if (this.state.scrollY !== scrollY && this._contentScrollNode) {
+      this._contentScrollNode.style.cssText = `transform: translateY(${scrollY}px)`;
+    }
   }
 
   getItemElement (listOffset, itemSize) {

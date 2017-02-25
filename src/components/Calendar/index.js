@@ -13,16 +13,24 @@ import Datetime from './Datetime';
 
 import styles from './index.less';
 
-window.store = new Store();
-
 export default class Calendar extends Component {
   constructor (props) {
     super(props);
 
+    const {
+      uploadEvents,
+      handleChangeEvents
+    } = props;
+
     this.state = {
-      store: window.store,
+      store: new Store({
+        uploadEvents,
+        handleChangeEvents
+      }),
       datetime: new Datetime()
     };
+
+    window.store = this.state.store;
 
     this.handleWheel = wrapWheelCallback(this.handleWheel.bind(this));
     this.handleResize = this.handleResize.bind(this);
@@ -128,11 +136,11 @@ Calendar.childContextTypes = {
 };
 
 Calendar.propTypes = {
-  bindChangeEvents: PropTypes.func,
-  onChangeEvents: PropTypes.func,
+  uploadEvents: PropTypes.func,
+  handleChangeEvents: PropTypes.func,
 };
 
 Calendar.defaultProps = {
-  bindChangeEvents: function () {},
-  onChangeEvents: function () {},
+  uploadEvents: () => {},
+  handleChangeEvents: () => {},
 };

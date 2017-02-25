@@ -16,6 +16,7 @@
   <script src="../dist/app.js"></script>
 
   <form onsubmit="return onSubmit(event);">
+    <label>listOffset: <input name="listOffset" style="width:70px;" /></label>
     <label>currentDate: <input name="currentDate" style="width:70px;" /></label>
     <label>gridDaysListItemSize: <input name="gridDaysListItemSize" style="width:30px;" /></label>
     <label>hoursOfDay: <input name="hoursOfDay" style="width:330px;" /></label>
@@ -59,6 +60,7 @@
         var value = item.value[1];
 
         switch (name) {
+          case 'listOffset':
           case 'gridDaysListItemSize':
             value = Number(value);
             break;

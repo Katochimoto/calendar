@@ -4,8 +4,8 @@ import arr2obj from '../../utils/arr2obj';
 import styles from './index.less';
 
 export default class GridDaysItem extends Component {
-  transformState ({ currentDate, weekends, hideWeekends }) {
-    return { currentDate, weekends, hideWeekends };
+  transformState ({ currentDate, weekends, hideWeekends, hoursOfDay }) {
+    return { currentDate, weekends, hideWeekends, hoursOfDay };
   }
 
   shouldComponentUpdate (nextProps, nextState) {
@@ -15,7 +15,8 @@ export default class GridDaysItem extends Component {
 
       this.state.currentDate !== nextState.currentDate ||
       this.state.hideWeekends !== nextState.hideWeekends ||
-      this.state.weekends !== nextState.weekends
+      this.state.weekends !== nextState.weekends ||
+      this.state.hoursOfDay !== nextState.hoursOfDay
     );
   }
 

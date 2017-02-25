@@ -5,17 +5,22 @@ import styles from './index.less';
 const App = () => (
   <div className={styles.app}>
     <Calendar
-      bindChangeEvents={bindChangeEvents}
-      onChangeEvents={onChangeEvents}/>
+      handleChangeEvents={handleChangeEvents}
+      uploadEvents={uploadEvents}/>
   </div>
 );
 
 export default App;
 
-function bindChangeEvents () { // callback
-  // callback();
+function handleChangeEvents () { // action, payload
 }
 
-function onChangeEvents () { // action, payload
+function uploadEvents (interval, callback) {
+  const dateBegin = interval[0]
+  const dateEnd = interval[1];
 
+  setTimeout(callback, 500, [
+    dateBegin,
+    dateEnd
+  ]);
 }

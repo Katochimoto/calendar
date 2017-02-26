@@ -1,4 +1,6 @@
 const REG_DATE = /^(\d{4})-(\d{2})-(\d{2})$/;
+const REG_DATETIME = /^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2})$/;
+const DAY_MINUTES = 24 * 60;
 
 const DAYS = {
   0: 'Sun',
@@ -20,42 +22,68 @@ Datetime.prototype = {
   },
 
   gridDaysDayTitle (sDate) {
-    const date = parseDate(sDate);
+    const date = _parseDate(sDate);
     return `${DAYS[ date.getDay() ]}, ${date.getDate()}`;
   },
 
   offsetDay (sDate, offset) {
-    const date = parseDate(sDate);
+    const date = _parseDate(sDate);
     date.setDate(date.getDate() + offset);
-    return formatDate(date);
+    return _formatDate(date);
   },
 
   getDay (sDate) {
-    const date = parseDate(sDate);
+    const date = _parseDate(sDate);
     return date.getDay();
+  },
+
+  getMinutesRate (date) {
+    const minutes = date.getHours() * 60 + date.getMinutes();
+    return Math.round(1000 * 100 * minutes / DAY_MINUTES) / 1000;
+  },
+
+  parseDatetime (sDatetime) {
+    return _parseDatetime(sDatetime);
   }
 };
 
 let PARSE_CACHE = Object.create(null);
 let parseCacheLength = 0;
 
-function parseDate (sDate) {
+function _parseDate (sDate) {
   if (parseCacheLength > 500) {
+    parseCacheLength = 0;
     PARSE_CACHE = Object.create(null);
   }
 
   let timestamp = PARSE_CACHE[ sDate ];
 
   if (!timestamp) {
-    const m = sDate.match(REG_DATE);
-    timestamp = PARSE_CACHE[ sDate ] = Date.UTC(Number(m[1]), Number(m[2]) - 1, Number(m[3]));
     parseCacheLength++
+    const m = sDate.match(REG_DATE);
+    timestamp = PARSE_CACHE[ sDate ] = new Date(
+      Number(m[1]),
+      Number(m[2]) - 1,
+      Number(m[3])
+    ).getTime();
   }
 
   return new Date(timestamp);
 }
 
-function formatDate (date) {
+function _parseDatetime (sDatetime) {
+  const m = sDatetime.match(REG_DATETIME);
+  return new Date(
+    Number(m[1]),
+    Number(m[2]) - 1,
+    Number(m[3]),
+    Number(m[4]),
+    Number(m[5]),
+    Number(m[6])
+  );
+}
+
+function _formatDate (date) {
   return `${date.getFullYear()}-${o(date.getMonth() + 1)}-${o(date.getDate())}`;
 }
 

@@ -17,10 +17,14 @@ function handleChangeEvents () { // action, payload
 
 function uploadEvents (interval, callback) {
   const dateBegin = interval[0]
-  const dateEnd = interval[1];
+  const dateEnd = interval[1] || dateBegin;
 
   setTimeout(callback, 500, [
-    dateBegin,
-    dateEnd
+    {
+      sDateBegin: `${dateBegin}T10:00:00`,
+      sDateEnd: `${dateEnd}T10:30:00`,
+      //color: '',
+      //title: '',
+    }
   ]);
 }

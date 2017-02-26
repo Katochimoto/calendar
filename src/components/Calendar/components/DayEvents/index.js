@@ -66,7 +66,7 @@ export default class DayEvents extends Component {
 
   componentDidUpdate (prevProps) {
     if (this.props.date !== prevProps.date) {
-      this.setState({ events: [] });
+      //this.setState({ events: [] });
       removeListener(this.updateEvents);
       addListener(this.updateEvents);
     }

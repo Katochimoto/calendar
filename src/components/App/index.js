@@ -1,3 +1,5 @@
+import raf from 'raf';
+
 import Calendar from './../Calendar';
 
 import styles from './index.less';
@@ -31,6 +33,6 @@ function uploadEvents (interval, callback) {
     ]
   };
 
-  //callback(data);
-  setTimeout(callback, 500, data);
+  raf(() => callback(data));
+  //setTimeout(callback, 500, data);
 }

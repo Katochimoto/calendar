@@ -21,8 +21,9 @@ function uploadEvents (interval, callback) {
 
   setTimeout(callback, 500, [
     {
-      sDateBegin: `${dateBegin}T10:00:00`,
-      sDateEnd: `${dateEnd}T10:30:00`,
+      id: 'qweqweqwe',
+      sDateBegin: `${dateBegin}T07:30:00`,
+      sDateEnd: `${dateEnd}T11:30:00`,
       //color: '',
       //title: '',
     }

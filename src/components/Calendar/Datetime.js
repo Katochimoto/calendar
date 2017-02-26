@@ -1,6 +1,5 @@
 const REG_DATE = /^(\d{4})-(\d{2})-(\d{2})$/;
 const REG_DATETIME = /^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2})$/;
-const DAY_MINUTES = 24 * 60;
 
 const DAYS = {
   0: 'Sun',
@@ -37,9 +36,9 @@ Datetime.prototype = {
     return date.getDay();
   },
 
-  getMinutesRate (date) {
+  getMinutesRate (date, hoursOfDay = 24) {
     const minutes = date.getHours() * 60 + date.getMinutes();
-    return Math.round(1000 * 100 * minutes / DAY_MINUTES) / 1000;
+    return Math.round(1000 * 100 * minutes / (hoursOfDay * 60)) / 1000;
   },
 
   parseDatetime (sDatetime) {

@@ -59,11 +59,14 @@ export default class DayEvents extends Component {
     const datetime = this.context.datetime;
     const { hoursOfDay } = this.context.store.getState();
 
+    const hours = hoursOfDay.split(',');
+    const hoursLength = hours.length;
+
     events = events.map(item => {
       const dateBegin = datetime.parseDatetime(item.sDateBegin);
       const dateEnd = datetime.parseDatetime(item.sDateEnd);
-      const begin = datetime.getMinutesRate(dateBegin);
-      const end = 100 - datetime.getMinutesRate(dateEnd);
+      const begin = datetime.getMinutesRate(dateBegin, hoursLength);
+      const end = 100 - datetime.getMinutesRate(dateEnd, hoursLength);
 
       return {
         dateBegin,

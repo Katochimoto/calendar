@@ -102,7 +102,8 @@ export default class DayEvents extends Component {
         dateBegin,
         dateEnd,
         begin,
-        end
+        end,
+        title: item.title
       };
 
     }).reduce((list, item) => {
@@ -114,7 +115,10 @@ export default class DayEvents extends Component {
 
   render () {
     const items = this.state.events.map(item => (
-      <DayEvent begin={item.begin} end={item.end} />
+      <DayEvent
+        title={item.title}
+        begin={item.begin}
+        end={item.end} />
     ));
 
     return (

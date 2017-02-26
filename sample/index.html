@@ -32,15 +32,18 @@
     for (var name in state) {
       var value = state[name];
       var type = typeof value;
+      var descriptor = Object.getOwnPropertyDescriptor(state, name);
+      var disabled = descriptor.writable || descriptor.set ? '' : '';
+      var style = descriptor.writable || descriptor.set ? '' : 'style="background: #eee;"';
 
       switch (type) {
         case 'string':
         case 'number':
         case 'undefined':
-          form += '<tr><td>' + name + '</td><td><input name="' + name + '" value="' + value + '" /></td></tr>';
+          form += '<tr><td>' + name + '</td><td><input name="' + name + '" value="' + value + '" ' + disabled + ' ' + style + ' /></td></tr>';
           break;
         case 'boolean':
-          form += '<tr><td>' + name + '</td><td><input type="checkbox" name="' + name + '" ' + (value ? 'checked' : '') + ' value="1" /></td></tr>';
+          form += '<tr><td>' + name + '</td><td><input type="checkbox" name="' + name + '" ' + (value ? 'checked' : '') + ' value="1" ' + disabled + ' ' + style + ' /></td></tr>';
           break;
       }
     }

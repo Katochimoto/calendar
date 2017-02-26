@@ -19,12 +19,15 @@ export default class DayEvent extends Component {
     const style = `top: ${this.props.begin}%; bottom: ${this.props.end}%;`;
 
     return (
-      <div className={styles.calendar_DayEvent} style={style} />
+      <div className={styles.calendar_DayEvent} style={style}>
+        {this.props.title}
+      </div>
     );
   }
 }
 
 DayEvent.propTypes = {
+  title: PropTypes.string,
   begin: PropTypes.number,
   end: PropTypes.number
 };

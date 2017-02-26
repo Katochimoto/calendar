@@ -63,8 +63,8 @@ export default class DayEvents extends Component {
     const hoursLength = hours.length;
 
     events = events.map(item => {
-      const dateBegin = datetime.parseDatetime(item.sDateBegin);
-      const dateEnd = datetime.parseDatetime(item.sDateEnd);
+      const dateBegin = datetime.parseDatetime(item.dateBegin);
+      const dateEnd = datetime.parseDatetime(item.dateEnd);
       const begin = datetime.getMinutesRate(dateBegin, hoursLength);
       const end = 100 - datetime.getMinutesRate(dateEnd, hoursLength);
 

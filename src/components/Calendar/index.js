@@ -23,11 +23,11 @@ export default class Calendar extends Component {
     } = props;
 
     this.state = {
+      datetime: new Datetime(),
       store: new Store({
         uploadEvents,
         handleChangeEvents
-      }),
-      datetime: new Datetime()
+      })
     };
 
     window.store = this.state.store;

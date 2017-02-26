@@ -10,21 +10,45 @@
       document.write('<script src="http://' + (location.host || 'localhost').split(':')[0] +
       ':35729/livereload.js?snipver=1"></' + 'script>')
     </script>
+
+    <style>
+      form { float: right; }
+      form input { width: 80px; }
+    </style>
 </head>
 <body>
   <script src="../dist/vendor.js"></script>
   <script src="../dist/app.js"></script>
 
   <form onsubmit="return onSubmit(event);">
-    <label>listOffset: <input name="listOffset" style="width:70px;" /></label>
-    <label>currentDate: <input name="currentDate" style="width:70px;" /></label>
-    <label>gridDaysListItemSize: <input name="gridDaysListItemSize" style="width:30px;" /></label>
-    <label>hoursOfDay: <input name="hoursOfDay" style="width:330px;" /></label>
-    <hr/>
+    <div id="form"></div>
     <input type="submit" />
   </form>
 
   <script>
+    var state = window.store.getState();
+    var form = '<table>';
+
+    for (var name in state) {
+      var value = state[name];
+      var type = typeof value;
+
+      switch (type) {
+        case 'string':
+        case 'number':
+        case 'undefined':
+          form += '<tr><td>' + name + '</td><td><input name="' + name + '" value="' + value + '" /></td></tr>';
+          break;
+        case 'boolean':
+          form += '<tr><td>' + name + '</td><td><input type="checkbox" name="' + name + '" ' + (value ? 'checked' : '') + ' value="1" /></td></tr>';
+          break;
+      }
+    }
+
+    form += '</table>';
+
+    document.getElementById('form').innerHTML = form;
+
     window.store.addListener(upgrade);
 
     function upgrade () {
@@ -36,9 +60,17 @@
           continue;
         }
 
-        switch (name) {
-          default:
-            element.value = state[name];
+        var value = state[name];
+        var type = typeof value;
+
+        switch (type) {
+          case 'string':
+          case 'number':
+          case 'undefined':
+            element.value = value;
+            break;
+          case 'boolean':
+            element.checked = Boolean(value);
             break;
         }
       }
@@ -47,30 +79,34 @@
     function onSubmit (event) {
       event.preventDefault();
 
-      var items = new FormData(window.document.forms[0]).entries();
-      var state = {};
+      var state = window.store.getState();
+      var newState = {};
 
-      while (true) {
-        var item = items.next();
-        if (!item || item.done) {
-          break;
+      for (var name in state) {
+        var element = document.querySelector('[name="' + name + '"]');
+        if (!element) {
+          continue;
         }
 
-        var name = item.value[0];
-        var value = item.value[1];
+        var value = state[name];
+        var type = typeof value;
 
-        switch (name) {
-          case 'listOffset':
-          case 'gridDaysListItemSize':
-            value = Number(value);
+        switch (type) {
+          case 'string':
+            newState[name] = String(element.value);
+            break;
+          case 'number':
+          case 'undefined':
+            newState[name] = Number(element.value);
+            break;
+          case 'boolean':
+            newState[name] = element.checked;
             break;
         }
-
-        state[name] = value;
       }
 
-      console.log(state);
-      window.store.update(state);
+      console.log(newState);
+      window.store.update(newState);
 
       return false;
     }

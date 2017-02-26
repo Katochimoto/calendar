@@ -10,13 +10,13 @@ export default class DayEvent extends Component {
 
   shouldComponentUpdate (nextProps) {
     return (
-      this.props.begin !== nextProps.begin ||
-      this.props.end !== nextProps.end
+      this.props.rateBegin !== nextProps.rateBegin ||
+      this.props.rateEnd !== nextProps.rateEnd
     );
   }
 
   render () {
-    const style = `top: ${this.props.begin}%; bottom: ${this.props.end}%;`;
+    const style = `top: ${this.props.rateBegin}%; bottom: ${this.props.rateEnd}%;`;
 
     return (
       <div className={styles.calendar_DayEvent} style={style}>
@@ -28,6 +28,6 @@ export default class DayEvent extends Component {
 
 DayEvent.propTypes = {
   title: PropTypes.string,
-  begin: PropTypes.number,
-  end: PropTypes.number
+  rateBegin: PropTypes.number,
+  rateEnd: PropTypes.number
 };

@@ -64,12 +64,13 @@ export default class DayEvents extends Component {
     addListener(this.updateEvents);
   }
 
-  /*componentDidUpdate (prevProps) {
+  componentDidUpdate (prevProps) {
     if (this.props.date !== prevProps.date) {
+      this.setState({ events: [] });
       removeListener(this.updateEvents);
       addListener(this.updateEvents);
     }
-  }*/
+  }
 
   componentWillUnmount () {
     removeListener(this.updateEvents);
@@ -95,14 +96,15 @@ export default class DayEvents extends Component {
     events = events.map(item => {
       const dateBegin = datetime.parseDatetime(item.dateBegin);
       const dateEnd = datetime.parseDatetime(item.dateEnd);
-      const begin = datetime.getMinutesRate(dateBegin, hoursLength);
-      const end = 100 - datetime.getMinutesRate(dateEnd, hoursLength);
+      const rateBegin = datetime.getMinutesRate(dateBegin, hoursLength);
+      const rateEnd = 100 - datetime.getMinutesRate(dateEnd, hoursLength);
 
       return {
+        key: item.id,
         dateBegin,
         dateEnd,
-        begin,
-        end,
+        rateBegin,
+        rateEnd,
         title: item.title
       };
 
@@ -116,9 +118,10 @@ export default class DayEvents extends Component {
   render () {
     const items = this.state.events.map(item => (
       <DayEvent
+        key={item.key}
         title={item.title}
-        begin={item.begin}
-        end={item.end} />
+        rateBegin={item.rateBegin}
+        rateEnd={item.rateEnd} />
     ));
 
     return (

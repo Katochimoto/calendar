@@ -24,7 +24,7 @@ export default class DayHeader extends Component {
     });
 
     return (
-      <div className={classes} data-key={this.props.date}>
+      <div className={classes}>
         <div className={styles.calendar_DayHeader_Title}>
           {datetime.gridDaysDayTitle(this.props.date)}
         </div>

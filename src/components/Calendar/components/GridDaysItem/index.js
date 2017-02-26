@@ -29,6 +29,7 @@ export default class GridDaysItem extends Component {
     let items = [];
     let idx = listOffset * itemSize;
     let end = listOffset * itemSize + itemSize - 1;
+    let idxLocal = 0;
 
     for (; idx <= end; idx++) {
       const date = datetime.offsetDay(currentDate, idx);
@@ -36,8 +37,9 @@ export default class GridDaysItem extends Component {
 
       if (!weekend || !hideWeekends) {
         items.push(
-          <ItemComponent key={date} date={date} weekend={weekend} />
+          <ItemComponent key={idxLocal} date={date} weekend={weekend} />
         );
+        idxLocal++;
       }
     }
 

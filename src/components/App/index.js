@@ -22,7 +22,7 @@ function uploadEvents (interval, callback) {
     interval,
     events: [
       {
-        id: 'qweqweqwe',
+        id: `${dateBegin}T07:30:00--${dateEnd}T11:30:00`,
         dateBegin: `${dateBegin}T07:30:00`,
         dateEnd: `${dateEnd}T11:30:00`,
         //color: '',

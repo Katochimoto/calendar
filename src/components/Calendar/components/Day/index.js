@@ -28,7 +28,7 @@ export default class Day extends Component {
     });
 
     return (
-      <div className={classes} data-key={this.props.date}>
+      <div className={classes}>
         <DayEvents date={this.props.date} />
       </div>
     );

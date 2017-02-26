@@ -15,17 +15,6 @@ export default class DayEvent extends Component {
     );
   }
 
-  /*positionEvent () { // dateBegin, duration
-    const minuteOffset = 100 / (24 * 60);
-    const top = Number((minuteOffset * (12 * 60 + 45)).toFixed(3));
-    const height = Number((minuteOffset * (60)).toFixed(3));
-
-    return {
-      top: `${top}%`,
-      height: `${height}%`,
-    };
-  }*/
-
   render () {
     const style = `top: ${this.props.begin}%; bottom: ${this.props.end}%;`;
 

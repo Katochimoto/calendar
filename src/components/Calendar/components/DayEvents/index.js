@@ -10,6 +10,38 @@ import DayEvent from '../DayEvent';
 
 import styles from './index.less';
 
+let callbacks = [];
+
+function addListener (callback) {
+  if (!callbacks.length) {
+    context.setTimeout(runListeners, 100);
+  }
+
+  callbacks.push(callback);
+}
+
+function removeListener (callback) {
+  let i = 0;
+  while (i < callbacks.length) {
+    const item = callbacks[i];
+
+    if (item === callback) {
+      callbacks.splice(i, 1);
+
+    } else {
+      i++;
+    }
+  }
+}
+
+function runListeners () {
+  let task;
+  while ((task = callbacks.shift())) {
+    task();
+  }
+}
+
+
 export default class DayEvents extends Component {
   constructor (props, context) {
     super(props, context);
@@ -19,8 +51,6 @@ export default class DayEvents extends Component {
 
     this.updateEvents = this.updateEvents.bind(this);
     this.handleUploadEvents = this.handleUploadEvents.bind(this);
-
-    this._timer = 0;
   }
 
   shouldComponentUpdate (nextProps, nextState) {
@@ -31,19 +61,19 @@ export default class DayEvents extends Component {
   }
 
   componentDidMount () {
-    this._timer = context.setTimeout(this.updateEvents, 100);
+    addListener(this.updateEvents);
   }
 
-  componentDidUpdate (prevProps) {
+  /*componentDidUpdate (prevProps) {
     if (this.props.date !== prevProps.date) {
-      context.clearTimeout(this._timer);
-      this._timer = context.setTimeout(this.updateEvents, 100);
+      removeListener(this.updateEvents);
+      addListener(this.updateEvents);
     }
-  }
+  }*/
 
   componentWillUnmount () {
-    context.clearTimeout(this._timer);
-    this._timer = 0;
+    removeListener(this.updateEvents);
+    this._unmount = true;
   }
 
   updateEvents () {
@@ -51,8 +81,8 @@ export default class DayEvents extends Component {
     uploadEvents([ this.props.date ], this.handleUploadEvents);
   }
 
-  handleUploadEvents (events) {
-    if (!this._timer) {
+  handleUploadEvents ({ interval, events }) {
+    if (this._unmount || this.props.date !== interval[0]) {
       return;
     }
 

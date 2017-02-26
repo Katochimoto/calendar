@@ -19,13 +19,16 @@ function uploadEvents (interval, callback) {
   const dateBegin = interval[0]
   const dateEnd = interval[1] || dateBegin;
 
-  setTimeout(callback, 500, [
-    {
-      id: 'qweqweqwe',
-      dateBegin: `${dateBegin}T07:30:00`,
-      dateEnd: `${dateEnd}T11:30:00`,
-      //color: '',
-      //title: '',
-    }
-  ]);
+  setTimeout(callback, 500, {
+    interval,
+    events: [
+      {
+        id: 'qweqweqwe',
+        dateBegin: `${dateBegin}T07:30:00`,
+        dateEnd: `${dateEnd}T11:30:00`,
+        //color: '',
+        //title: '',
+      }
+    ]
+  });
 }

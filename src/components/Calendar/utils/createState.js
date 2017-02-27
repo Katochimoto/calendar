@@ -30,9 +30,9 @@ export default function createState () {
 
 
     //grid: 'day',
-    currentDate: '2017-02-22',
+    currentDate: '2017-02-27',
     hoursOfDay: '0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23',
-    intervalsOfDay: Object.freeze({ 0: 23 }),
+    intervalsOfDay: Object.freeze(Object.create(null, { 0: { value: 23 } })),
     weekends: '0,6',
     hideWeekends: false,
     beginningOfWeek: 1
@@ -406,7 +406,7 @@ function getScrollXByOffset (listOffset, { listRange, scrollWidth }) {
 }
 
 function createIntervals (list) {
-  const intervals = {};
+  const intervals = Object.create(null);
   let prev = -2;
   let start;
 

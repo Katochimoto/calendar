@@ -82,6 +82,8 @@ export default class DayEvents extends Component {
       };
 
     }).reduce((list, item) => {
+      
+
       return list.concat(item);
     }, []);
 

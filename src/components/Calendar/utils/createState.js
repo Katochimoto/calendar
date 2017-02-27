@@ -32,6 +32,7 @@ export default function createState () {
     //grid: 'day',
     currentDate: '2017-02-22',
     hoursOfDay: '0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23',
+    intervalsOfDay: Object.freeze({ 0: 23 }),
     weekends: '0,6',
     hideWeekends: false,
     beginningOfWeek: 1
@@ -55,7 +56,7 @@ export default function createState () {
 
         currentValues.scrollHeight = value;
         currentValues.scrollOffsetTop = -1 * value;
-        currentValues.scrollY = scrollHeight > 0 ? limitScrollY(currentValues.scrollY * value / scrollHeight) : 0;
+        currentValues.scrollY = scrollHeight > 0 ? limitScrollY(currentValues.scrollY * value / scrollHeight, currentValues) : 0;
 
         isChangedValues = true;
       }
@@ -77,8 +78,8 @@ export default function createState () {
         currentValues.scrollOffsetLeft = -2 * currentValues.listRange * value;
         // currentValues.speedScrollX = 0;
         currentValues.scrollX = currentValues.scrollX === undefined ?
-          limitScrollX(getScrollXByOffset(0, currentValues.listRange, value)) :
-          scrollWidth > 0 ? limitScrollX(currentValues.scrollX * value / scrollWidth) : 0;
+          limitScrollX(getScrollXByOffset(0, currentValues), currentValues) :
+          scrollWidth > 0 ? limitScrollX(currentValues.scrollX * value / scrollWidth, currentValues) : 0;
         currentValues.listOffset = getListOffset(currentValues);
         currentValues.scrollX = correctScrollX(listOffset, currentValues);
 
@@ -135,7 +136,7 @@ export default function createState () {
       enumerable: true,
       get: () => currentValues.scrollX,
       set: (value) => {
-        value = limitScrollX(value);
+        value = limitScrollX(value, currentValues);
         if (value === currentValues.scrollX) {
           // currentValues.speedScrollX = 0;
           return;
@@ -172,7 +173,7 @@ export default function createState () {
       enumerable: true,
       get: () => currentValues.scrollY,
       set: (value) => {
-        value = limitScrollY(value)
+        value = limitScrollY(value, currentValues)
         if (value !== currentValues.scrollY) {
           currentValues.scrollY = value;
           isChangedValues = true;
@@ -211,7 +212,7 @@ export default function createState () {
     },
 
     /**
-     * Набор часов, выводимых в сетке на день и неделю
+     * Рабочие часы в сутках
      * @type {string}
      * @public
      */
@@ -219,15 +220,27 @@ export default function createState () {
       enumerable: true,
       get: () => currentValues.hoursOfDay,
       set: (value) => {
-        value = value.split(',').map(Number);
-        value.sort((a, b) => (a - b));
-        value = value.join(',');
+        const list = value.split(',').map(Number).filter(item => (item >= 0 && item <= 23));
+        list.sort((a, b) => (a - b));
+        value = list.join(',');
 
         if (value !== currentValues.hoursOfDay) {
           currentValues.hoursOfDay = value;
+          currentValues.intervalsOfDay = createIntervals(list);
           isChangedValues = true;
         }
       }
+    },
+
+    /**
+     * Рабочие интервалы в сутках
+     * @type {Object}
+     * @public
+     * @readonly
+     */
+    intervalsOfDay: {
+      enumerable: true,
+      get: () => currentValues.intervalsOfDay
     },
 
     /**
@@ -304,61 +317,6 @@ export default function createState () {
     }
   });
 
-  function limitScrollY (value) {
-    return limitScroll(value, state.scrollOffsetTop, state.scrollOffsetBottom);
-  }
-
-  function limitScrollX (value) {
-    return limitScroll(value, state.scrollOffsetLeft, state.scrollOffsetRight);
-  }
-
-  function getListOffset ({ listOffset, scrollX, scrollOffsetLeft, scrollOffsetRight }) {
-    const scrollOffsetCenter = (scrollOffsetLeft + scrollOffsetRight) / 2;
-    const scrollOffsetWidth = scrollOffsetLeft > scrollOffsetRight ?
-      scrollOffsetLeft - scrollOffsetRight :
-      scrollOffsetRight - scrollOffsetLeft;
-    const centerOffsetWidth = scrollOffsetWidth / 2;
-    const sign = scrollX > scrollOffsetCenter ? 1 : -1;
-    const scrollX2CenterWidth = scrollX > scrollOffsetCenter ?
-      scrollX - scrollOffsetCenter :
-      scrollOffsetCenter - scrollX;
-    const rate = centerOffsetWidth ? sign * scrollX2CenterWidth * 100 / centerOffsetWidth : 0;
-
-    return do {
-      if (rate <= -100) {
-        ++listOffset;
-      } else if (rate >= 100) {
-        --listOffset;
-      } else {
-        listOffset;
-      }
-    };
-  }
-
-  function limitScroll (value, min, max) {
-    return value < min ? min : value > max ? max : Math.round(value);
-  }
-
-  function correctScrollX (oldListOffset, { scrollX, scrollWidth, listOffset, listRange }) {
-    if (oldListOffset === listOffset) {
-      return scrollX;
-    }
-
-    const diff = listOffset - oldListOffset;
-
-    return do {
-      if (Math.abs(diff) > listRange) {
-        limitScrollX(getScrollXByOffset(listOffset, listRange, scrollWidth));
-      } else {
-        limitScrollX(scrollX + diff * scrollWidth);
-      }
-    };
-  }
-
-  function getScrollXByOffset (listOffset, listRange, scrollWidth) {
-    return (listOffset + 1) * -1 * listRange * scrollWidth;
-  }
-
   return {
     state,
 
@@ -380,7 +338,87 @@ export default function createState () {
     },
 
     scrollXByOffset (listOffset) {
-      return getScrollXByOffset(listOffset, currentValues.listRange, currentValues.scrollWidth);
+      return getScrollXByOffset(listOffset, currentValues);
     }
   };
+}
+
+function getListOffset ({ listOffset, scrollX, scrollOffsetLeft, scrollOffsetRight }) {
+  const scrollOffsetCenter = (scrollOffsetLeft + scrollOffsetRight) / 2;
+  const scrollOffsetWidth = scrollOffsetLeft > scrollOffsetRight ?
+    scrollOffsetLeft - scrollOffsetRight :
+    scrollOffsetRight - scrollOffsetLeft;
+  const centerOffsetWidth = scrollOffsetWidth / 2;
+  const sign = scrollX > scrollOffsetCenter ? 1 : -1;
+  const scrollX2CenterWidth = scrollX > scrollOffsetCenter ?
+    scrollX - scrollOffsetCenter :
+    scrollOffsetCenter - scrollX;
+  const rate = centerOffsetWidth ? sign * scrollX2CenterWidth * 100 / centerOffsetWidth : 0;
+
+  return do {
+    if (rate <= -100) {
+      ++listOffset;
+    } else if (rate >= 100) {
+      --listOffset;
+    } else {
+      listOffset;
+    }
+  };
+}
+
+function limitScroll (value, min, max) {
+  return value < min ? min : value > max ? max : Math.round(value);
+}
+
+function limitScrollY (value, { scrollOffsetTop, scrollOffsetBottom }) {
+  return limitScroll(value, scrollOffsetTop, scrollOffsetBottom);
+}
+
+function limitScrollX (value, { scrollOffsetLeft, scrollOffsetRight }) {
+  return limitScroll(value, scrollOffsetLeft, scrollOffsetRight);
+}
+
+function correctScrollX (oldListOffset, state) {
+  const {
+    listOffset,
+    listRange,
+    scrollWidth,
+    scrollX
+  } = state;
+
+  if (oldListOffset === listOffset) {
+    return scrollX;
+  }
+
+  const diff = listOffset - oldListOffset;
+
+  return do {
+    if (Math.abs(diff) > listRange) {
+      limitScrollX(getScrollXByOffset(listOffset, state), state);
+    } else {
+      limitScrollX(scrollX + diff * scrollWidth, state);
+    }
+  };
+}
+
+function getScrollXByOffset (listOffset, { listRange, scrollWidth }) {
+  return (listOffset + 1) * -1 * listRange * scrollWidth;
+}
+
+function createIntervals (list) {
+  const intervals = {};
+  let prev = -2;
+  let start;
+
+  for (let i = 0, len = list.length; i < len; i++) {
+    let item = list[i];
+    if ((item - prev) > 1) {
+      start = item;
+    }
+
+    intervals[ start ] = item;
+    prev = item;
+  }
+
+  return Object.freeze(intervals);
 }

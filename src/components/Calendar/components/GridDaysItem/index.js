@@ -29,7 +29,7 @@ export default class GridDaysItem extends Component {
     let items = [];
     let idx = listOffset * itemSize;
     let end = listOffset * itemSize + itemSize - 1;
-    let idxLocal = 0;
+    let idxLocal = 0; // local index minimizes redraw
 
     for (; idx <= end; idx++) {
       const date = datetime.offsetDay(currentDate, idx);

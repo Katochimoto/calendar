@@ -3,44 +3,12 @@
  */
 
 import { Component, PropTypes } from 'react';
-import context from '../../context';
 import Store from '../../Store';
 import Datetime from '../../Datetime';
+import Events from '../../Events';
 import DayEvent from '../DayEvent';
 
 import styles from './index.less';
-
-let callbacks = [];
-
-function addListener (callback) {
-  if (!callbacks.length) {
-    context.setTimeout(runListeners, 100);
-  }
-
-  callbacks.push(callback);
-}
-
-function removeListener (callback) {
-  let i = 0;
-  while (i < callbacks.length) {
-    const item = callbacks[i];
-
-    if (item === callback) {
-      callbacks.splice(i, 1);
-
-    } else {
-      i++;
-    }
-  }
-}
-
-function runListeners () {
-  let task;
-  while ((task = callbacks.shift())) {
-    task();
-  }
-}
-
 
 export default class DayEvents extends Component {
   constructor (props, context) {
@@ -49,7 +17,6 @@ export default class DayEvents extends Component {
       events: []
     };
 
-    this.updateEvents = this.updateEvents.bind(this);
     this.handleUploadEvents = this.handleUploadEvents.bind(this);
   }
 
@@ -61,25 +28,31 @@ export default class DayEvents extends Component {
   }
 
   componentDidMount () {
-    addListener(this.updateEvents);
+    this.updateEvents();
   }
 
   componentDidUpdate (prevProps) {
     if (this.props.date !== prevProps.date) {
       //this.setState({ events: [] });
-      removeListener(this.updateEvents);
-      addListener(this.updateEvents);
+      this.updateEvents();
     }
   }
 
   componentWillUnmount () {
-    removeListener(this.updateEvents);
+    this.cancelUpdateEvents();
     this._unmount = true;
   }
 
   updateEvents () {
-    const { uploadEvents } = this.context.store.getState();
-    uploadEvents([ this.props.date ], this.handleUploadEvents);
+    this.cancelUpdateEvents();
+    this._updateEvents = this.context.events.lazyUpload([ this.props.date ], this.handleUploadEvents);
+  }
+
+  cancelUpdateEvents () {
+    if (this._updateEvents) {
+      this._updateEvents.cancel();
+      this._updateEvents = null;
+    }
   }
 
   handleUploadEvents ({ interval, events }) {
@@ -137,6 +110,7 @@ DayEvents.propTypes = {
 };
 
 DayEvents.contextTypes = {
-  store: PropTypes.instanceOf(Store),
-  datetime: PropTypes.instanceOf(Datetime)
+  datetime: PropTypes.instanceOf(Datetime),
+  events: PropTypes.instanceOf(Events),
+  store: PropTypes.instanceOf(Store)
 };

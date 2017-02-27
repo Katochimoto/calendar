@@ -29,7 +29,7 @@ export default class InfiniteList extends Component {
     const { scrollX, listOffset, listRange, scrollWidth } = this.state;
 
     let items = [];
-    let idxLocal = -(listRange);
+    let idxLocal = -(listRange); // local index minimizes redraw
     let idx = listOffset - listRange;
     let end = listOffset + listRange;
 

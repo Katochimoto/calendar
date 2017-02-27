@@ -34,10 +34,7 @@ export default function createState () {
     hoursOfDay: '0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23',
     weekends: '0,6',
     hideWeekends: false,
-    beginningOfWeek: 1,
-
-    uploadEvents: () => {},
-    handleChangeEvents: () => {},
+    beginningOfWeek: 1
   };
 
   let isChangedValues = false;
@@ -304,18 +301,6 @@ export default function createState () {
           isChangedValues = true;
         }
       }
-    },
-
-    uploadEvents: {
-      enumerable: true,
-      writable: true,
-      value: currentValues.uploadEvents
-    },
-
-    handleChangeEvents: {
-      enumerable: true,
-      writable: true,
-      value: currentValues.handleChangeEvents
     }
   });
 

@@ -8,26 +8,20 @@ import { onWheel, offWheel, wrapWheelCallback } from './utils/wheel';
 import context from './context';
 import GridDays from './components/GridDays';
 
-import Store from './Store';
 import Datetime from './Datetime';
+import Events from './Events';
+import Store from './Store';
 
 import styles from './index.less';
 
 export default class Calendar extends Component {
-  constructor (props) {
-    super(props);
-
-    const {
-      uploadEvents,
-      handleChangeEvents
-    } = props;
+  constructor (props, context) {
+    super(props, context);
 
     this.state = {
       datetime: new Datetime(),
-      store: new Store({
-        uploadEvents,
-        handleChangeEvents
-      })
+      events: new Events(),
+      store: new Store()
     };
 
     window.store = this.state.store;
@@ -39,8 +33,9 @@ export default class Calendar extends Component {
 
   getChildContext () {
     return {
-      store: this.state.store,
-      datetime: this.state.datetime
+      datetime: this.state.datetime,
+      events: this.state.events,
+      store: this.state.store
     };
   }
 
@@ -131,16 +126,11 @@ export default class Calendar extends Component {
 }
 
 Calendar.childContextTypes = {
-  store: PropTypes.instanceOf(Store),
-  datetime: PropTypes.instanceOf(Datetime)
+  datetime: PropTypes.instanceOf(Datetime),
+  events: PropTypes.instanceOf(Events),
+  store: PropTypes.instanceOf(Store)
 };
 
-Calendar.propTypes = {
-  uploadEvents: PropTypes.func,
-  handleChangeEvents: PropTypes.func,
-};
+Calendar.propTypes = {};
 
-Calendar.defaultProps = {
-  uploadEvents: () => {},
-  handleChangeEvents: () => {},
-};
+Calendar.defaultProps = {};

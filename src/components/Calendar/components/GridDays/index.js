@@ -2,7 +2,7 @@
  *
  */
 
-import { Component } from '../../Component';
+import { Component } from '../../utils/Component';
 import GridDaysHeader from '../GridDaysHeader';
 import GridDaysContent from '../GridDaysContent';
 

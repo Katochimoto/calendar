@@ -2,7 +2,7 @@
  *
  */
 
-import { StoreComponent } from '../../Component';
+import { StoreComponent } from '../../utils/Component';
 
 import styles from './index.less';
 

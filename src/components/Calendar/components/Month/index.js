@@ -3,7 +3,7 @@
  * - 12 часов во вьюпорте
  */
 
-import { Component } from '../../Component';
+import { Component } from '../../utils/Component';
 
 export default class Month extends Component {
   constructor (props, context) {

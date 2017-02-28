@@ -5,18 +5,18 @@ export default function EventEmitter () {
 EventEmitter.prototype = {
   constructor: EventEmitter,
 
-  emit () {
+  emitChange () {
     for (let i = 0, len = this._callbacks.length; i < len; i++) {
       const item = this._callbacks[i];
       item[0].call(item[1]);
     }
   },
 
-  addListener (callback, ctx) {
+  addChangeListener (callback, ctx) {
     this._callbacks.push([ callback, ctx ]);
   },
 
-  removeListener (callback, ctx) {
+  removeChangeListener (callback, ctx) {
     let i = 0;
     while (i < this._callbacks.length) {
       const item = this._callbacks[i];

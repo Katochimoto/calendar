@@ -2,15 +2,15 @@
  *
  */
 
-import { Component, PropTypes } from 'react';
+import { Component, PropTypes } from './utils/Component';
 import { raf, caf } from './utils/raf';
 import { onWheel, offWheel, wrapWheelCallback } from './utils/wheel';
 import context from './context';
 import GridDays from './components/GridDays';
 
-import Datetime from './Datetime';
-import Events from './Events';
-import Store from './Store';
+import Datetime from './utils/Datetime';
+import Events from './utils/Events';
+import Store from './utils/Store';
 
 import styles from './index.less';
 

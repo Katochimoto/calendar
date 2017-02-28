@@ -2,10 +2,7 @@
  *
  */
 
-import { Component, PropTypes } from '../../Component';
-import Store from '../../Store';
-import Datetime from '../../Datetime';
-import Events from '../../Events';
+import { Component, PropTypes } from '../../utils/Component';
 import DayEvent from '../DayEvent';
 
 import styles from './index.less';
@@ -13,10 +10,6 @@ import styles from './index.less';
 export default class DayEvents extends Component {
   constructor (props, context) {
     super(props, context);
-    this.state = {
-      events: []
-    };
-
     this.handleUploadEvents = this.handleUploadEvents.bind(this);
   }
 
@@ -43,7 +36,14 @@ export default class DayEvents extends Component {
     this._unmount = true;
   }
 
+  transformState () {
+    return {
+      events: []
+    };
+  }
+
   updateEvents () {
+    return;
     this.cancelUpdateEvents();
     this._updateEvents = this.context.events.lazyUpload([ this.props.date ], this.handleUploadEvents);
   }
@@ -109,10 +109,4 @@ export default class DayEvents extends Component {
 
 DayEvents.propTypes = {
   date: PropTypes.string
-};
-
-DayEvents.contextTypes = {
-  datetime: PropTypes.instanceOf(Datetime),
-  events: PropTypes.instanceOf(Events),
-  store: PropTypes.instanceOf(Store)
 };

@@ -1,12 +1,35 @@
 import raf from 'raf';
-import EventEmitter from './utils/EventEmitter';
-import inherit from './utils/inherit';
-import context from './context';
+import EventEmitter from './EventEmitter';
+import inherit from './inherit';
+import context from '../context';
 
 const CALLBACKS = [];
 
+function EventsStrategy () {
+
+}
+
+EventsStrategy.prototype = {
+  getById (id) {},
+  getByInterval (interval) {},
+  uploadByInterval (interval) {}
+};
+
+function EventsStrategyDefault () {
+
+}
+
+inherit(EventsStrategyDefault, EventsStrategy);
+
+EventsStrategyDefault.prototype.uploadByInterval = function () {};
+
+
+/**
+ * @param {EventsStrategy} strategy
+ */
 export default function Events (strategy) {
-  Events.superclass.constructor.call(this);
+  this.super();
+  this._strategy = strategy || new EventsStrategyDefault();
 }
 
 inherit(Events, EventEmitter);

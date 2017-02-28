@@ -1,4 +1,4 @@
-import { Component, PropTypes } from '../../Component';
+import { Component, PropTypes } from '../../utils/Component';
 
 import styles from './index.less';
 

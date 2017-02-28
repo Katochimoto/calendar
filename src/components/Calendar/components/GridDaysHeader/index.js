@@ -2,7 +2,7 @@
  *
  */
 
-import { StoreComponent } from '../../Component';
+import { StoreComponent } from '../../utils/Component';
 
 import DayHeader from '../DayHeader';
 import InfiniteList from '../InfiniteList';

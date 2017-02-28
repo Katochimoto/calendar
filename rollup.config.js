@@ -92,6 +92,7 @@ export default {
         'react'
       ],
       plugins: [
+        'transform-decorators-legacy',
         [ 'transform-react-jsx', { pragma: 'h' } ],
         [
           'module-resolver',

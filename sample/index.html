@@ -52,7 +52,7 @@
 
     document.getElementById('form').innerHTML = form;
 
-    window.store.addListener(upgrade);
+    window.store.addChangeListener(upgrade);
 
     function upgrade () {
       var state = window.store.getState();

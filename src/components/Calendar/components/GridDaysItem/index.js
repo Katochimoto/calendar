@@ -1,4 +1,4 @@
-import { StoreComponent, PropTypes } from '../../Component';
+import { StoreComponent, PropTypes } from '../../utils/Component';
 import arr2obj from '../../utils/arr2obj';
 
 import styles from './index.less';

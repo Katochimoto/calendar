@@ -2,7 +2,7 @@
  *
  */
 
-import { StoreComponent, PropTypes } from '../../Component';
+import { StoreComponent, PropTypes } from '../../utils/Component';
 
 import Day from '../Day';
 import DayHours from '../DayHours';

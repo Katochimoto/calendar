@@ -1,5 +1,5 @@
 import EventEmitter from './EventEmitter';
-import createState from './createState';
+import createState from './Store/createState';
 import inherit from './inherit';
 
 export default function Store (data) {

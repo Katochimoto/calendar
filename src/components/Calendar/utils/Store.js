@@ -1,25 +1,24 @@
 import EventEmitter from './EventEmitter';
 import createState from './Store/createState';
-import inherit from './inherit';
 
-export default function Store (data) {
-  this.super();
-  this._state = createState();
-  this._state.update(data);
-}
-
-inherit(Store, EventEmitter);
-
-Store.prototype.update = function (data) {
-  if (this._state.update(data)) {
-    this.emitChange();
+export default class Store extends EventEmitter {
+  constructor (data) {
+    super();
+    this._state = createState();
+    this._state.update(data);
   }
-};
 
-Store.prototype.getState = function () {
-  return this._state.state;
-};
+  update (data) {
+    if (this._state.update(data)) {
+      this.emitChange();
+    }
+  }
 
-Store.prototype.scrollXByOffset = function (listOffset) {
-  return this._state.scrollXByOffset(listOffset);
-};
+  getState () {
+    return this._state.state;
+  }
+
+  scrollXByOffset (listOffset) {
+    return this._state.scrollXByOffset(listOffset);
+  }
+}

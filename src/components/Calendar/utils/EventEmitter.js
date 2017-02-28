@@ -1,20 +1,18 @@
-export default function EventEmitter () {
-  this._callbacks = [];
-}
-
-EventEmitter.prototype = {
-  constructor: EventEmitter,
+export default class EventEmitter {
+  constructor () {
+    this._callbacks = [];
+  }
 
   emitChange () {
     for (let i = 0, len = this._callbacks.length; i < len; i++) {
       const item = this._callbacks[i];
       item[0].call(item[1]);
     }
-  },
+  }
 
   addChangeListener (callback, ctx) {
     this._callbacks.push([ callback, ctx ]);
-  },
+  }
 
   removeChangeListener (callback, ctx) {
     let i = 0;
@@ -29,4 +27,4 @@ EventEmitter.prototype = {
       }
     }
   }
-};
+}

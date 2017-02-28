@@ -1,70 +1,60 @@
 import raf from 'raf';
 import EventEmitter from './EventEmitter';
-import inherit from './inherit';
 import context from '../context';
 
 const CALLBACKS = [];
 
-function EventsStrategy () {
-
-}
-
-EventsStrategy.prototype = {
-  getById (id) {},
-  getByInterval (interval) {},
+class EventsStrategy {
+  getById (id) {}
+  getByInterval (interval) {}
   uploadByInterval (interval) {}
-};
-
-function EventsStrategyDefault () {
-
 }
 
-inherit(EventsStrategyDefault, EventsStrategy);
+class EventsStrategyDefault extends EventsStrategy {
 
-EventsStrategyDefault.prototype.uploadByInterval = function () {};
-
+}
 
 /**
  * @param {EventsStrategy} strategy
  */
-export default function Events (strategy) {
-  this.super();
-  this._strategy = strategy || new EventsStrategyDefault();
+export default class Events extends EventEmitter {
+  constructor (strategy) {
+    super();
+    this._strategy = strategy || new EventsStrategyDefault();
+  }
+
+  getList (interval) {
+
+  }
+
+  upload (interval, callback) {
+    const dateBegin = interval[0]
+    const dateEnd = interval[1] || dateBegin;
+    const data = {
+      interval,
+      events: [
+        {
+          id: `${dateBegin}T07:30:00--${dateEnd}T11:30:00`,
+          dateBegin: `${dateBegin}T07:30:00`,
+          dateEnd: `${dateEnd}T11:30:00`,
+          //color: '',
+          title: `${dateBegin}`
+        }
+      ]
+    };
+
+    //callback(data);
+    //raf(() => callback(data));
+    setTimeout(callback, 500, data);
+  }
+
+  /**
+   * @final
+   */
+  lazyUpload (interval, callback) {
+    return lazy(() => this.upload(interval, callback));
+  }
 }
-
-inherit(Events, EventEmitter);
-
-Events.prototype.getList = function (interval) {
-
-};
-
-Events.prototype.upload = function (interval, callback) {
-  const dateBegin = interval[0]
-  const dateEnd = interval[1] || dateBegin;
-  const data = {
-    interval,
-    events: [
-      {
-        id: `${dateBegin}T07:30:00--${dateEnd}T11:30:00`,
-        dateBegin: `${dateBegin}T07:30:00`,
-        dateEnd: `${dateEnd}T11:30:00`,
-        //color: '',
-        title: `${dateBegin}`
-      }
-    ]
-  };
-
-  //callback(data);
-  //raf(() => callback(data));
-  setTimeout(callback, 500, data);
-};
-
-/**
- * @final
- */
-Events.prototype.lazyUpload = function (interval, callback) {
-  return lazy(() => this.upload(interval, callback));
-};
 
 function lazy (callback) {
   if (!CALLBACKS.length) {

@@ -2,7 +2,7 @@
  *
  */
 
-import { Component } from 'react';
+import { Component } from '../../Component';
 import GridDaysHeader from '../GridDaysHeader';
 import GridDaysContent from '../GridDaysContent';
 

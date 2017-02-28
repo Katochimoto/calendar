@@ -2,7 +2,7 @@
  *
  */
 
-import { Component, PropTypes } from '../../Component';
+import { StoreComponent, PropTypes } from '../../Component';
 
 import Day from '../Day';
 import DayHours from '../DayHours';
@@ -11,13 +11,14 @@ import GridDaysItem from '../GridDaysItem';
 
 import styles from './index.less';
 
-export default class GridDaysContent extends Component {
+export default class GridDaysContent extends StoreComponent {
   constructor (props, context) {
     super(props, context);
     this.getItemElement = this.getItemElement.bind(this);
   }
 
-  transformState ({ scrollY, gridDaysListItemSize }) {
+  transformState (props, context) {
+    const { scrollY, gridDaysListItemSize } = context.store.getState();
     return { scrollY, gridDaysListItemSize };
   }
 

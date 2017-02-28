@@ -3,7 +3,7 @@
  * - 12 часов во вьюпорте
  */
 
-import { Component } from 'react';
+import { Component } from '../../Component';
 
 export default class Year extends Component {
   constructor (props, context) {

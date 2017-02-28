@@ -1,10 +1,11 @@
-import { Component, PropTypes } from '../../Component';
+import { StoreComponent, PropTypes } from '../../Component';
 import arr2obj from '../../utils/arr2obj';
 
 import styles from './index.less';
 
-export default class GridDaysItem extends Component {
-  transformState ({ currentDate, weekends, hideWeekends, hoursOfDay }) {
+export default class GridDaysItem extends StoreComponent {
+  transformState (props, context) {
+    const { currentDate, weekends, hideWeekends, hoursOfDay } = context.store.getState();
     return { currentDate, weekends, hideWeekends, hoursOfDay };
   }
 

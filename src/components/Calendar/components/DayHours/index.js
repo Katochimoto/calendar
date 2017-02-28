@@ -2,11 +2,11 @@
  *
  */
 
-import { Component } from '../../Component';
+import { StoreComponent } from '../../Component';
 
 import styles from './index.less';
 
-export default class DayHours extends Component {
+export default class DayHours extends StoreComponent {
 
   shouldComponentUpdate (nextProps, nextState) {
     return (
@@ -14,7 +14,8 @@ export default class DayHours extends Component {
     );
   }
 
-  transformState ({ hoursOfDay }) {
+  transformState (props, context) {
+    const { hoursOfDay } = context.store.getState();
     return { hoursOfDay };
   }
 

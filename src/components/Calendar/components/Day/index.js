@@ -5,7 +5,7 @@
  * - показывать только определенный промежуток
  */
 
-import { Component, PropTypes } from 'react';
+import { Component, PropTypes } from '../../Component';
 import classnames from 'classnames';
 
 import DayEvents from '../DayEvents';

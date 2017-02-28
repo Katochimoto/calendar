@@ -2,7 +2,7 @@
  *
  */
 
-import { Component, PropTypes } from 'react';
+import { Component, PropTypes } from '../../Component';
 import Store from '../../Store';
 import Datetime from '../../Datetime';
 import Events from '../../Events';
@@ -82,7 +82,7 @@ export default class DayEvents extends Component {
       };
 
     }).reduce((list, item) => {
-      
+
 
       return list.concat(item);
     }, []);

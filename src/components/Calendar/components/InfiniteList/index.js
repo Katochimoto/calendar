@@ -2,13 +2,14 @@
  *
  */
 
-import { Component, PropTypes } from '../../Component';
+import { StoreComponent, PropTypes } from '../../Component';
 import InfiniteListItem from '../InfiniteListItem';
 
 import styles from './index.less';
 
-export default class InfiniteList extends Component {
-  transformState ({ scrollX, listOffset, listRange, scrollWidth }) {
+export default class InfiniteList extends StoreComponent {
+  transformState (props, context) {
+    const { scrollX, listOffset, listRange, scrollWidth } = context.store.getState();
     return { scrollX, listOffset, listRange, scrollWidth };
   }
 

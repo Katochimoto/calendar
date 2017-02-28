@@ -1,21 +1,14 @@
 import { Component as ReactComponent, PropTypes } from 'react';
-import Store from './Store';
 import Datetime from './Datetime';
+import Events from './Events';
+import Store from './Store';
 
 export { PropTypes };
 
 export class Component extends ReactComponent {
   constructor (props, context) {
     super(props, context);
-    this.state = this.transformState(context.store.getState());
-  }
-
-  componentDidMount () {
-    this.context.store.addListener(this.handleChangeStore, this);
-  }
-
-  componentWillUnmount () {
-    this.context.store.removeListener(this.handleChangeStore, this);
+    this.state = this.transformState(props, context);
   }
 
   shouldComponentUpdate () {
@@ -26,15 +19,15 @@ export class Component extends ReactComponent {
     this._lockSetState = false;
 
     if (this._shouldUpdateState) {
-      this.handleChangeStore();
+      this.handleChange();
     }
   }
 
-  transformState () {
+  transformState (/* props, context */) {
     return {};
   }
 
-  handleChangeStore () {
+  handleChange () {
     if (this._lockSetState) {
       this._shouldUpdateState = true;
       return;
@@ -42,7 +35,7 @@ export class Component extends ReactComponent {
 
     this._shouldUpdateState = false;
 
-    const state = this.transformState(this.context.store.getState(), this.state);
+    const state = this.transformState(this.props, this.context);
 
     if (this.shouldComponentUpdate(this.props, state)) {
       this._lockSetState = true;
@@ -55,6 +48,27 @@ export class Component extends ReactComponent {
 }
 
 Component.contextTypes = {
-  store: PropTypes.instanceOf(Store),
-  datetime: PropTypes.instanceOf(Datetime)
+  datetime: PropTypes.instanceOf(Datetime),
+  events: PropTypes.instanceOf(Events),
+  store: PropTypes.instanceOf(Store)
 };
+
+export class StoreComponent extends Component {
+  componentDidMount () {
+    this.context.store.addListener(this.handleChange, this);
+  }
+
+  componentWillUnmount () {
+    this.context.store.removeListener(this.handleChange, this);
+  }
+}
+
+export class EventsComponent extends Component {
+  componentDidMount () {
+    this.context.events.addListener(this.handleChange, this);
+  }
+
+  componentWillUnmount () {
+    this.context.events.removeListener(this.handleChange, this);
+  }
+}

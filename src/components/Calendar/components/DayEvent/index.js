@@ -2,7 +2,7 @@
  *
  */
 
-import { Component, PropTypes } from 'react';
+import { Component, PropTypes } from '../../Component';
 
 import styles from './index.less';
 

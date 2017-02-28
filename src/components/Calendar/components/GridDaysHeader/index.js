@@ -2,7 +2,7 @@
  *
  */
 
-import { Component } from '../../Component';
+import { StoreComponent } from '../../Component';
 
 import DayHeader from '../DayHeader';
 import InfiniteList from '../InfiniteList';
@@ -10,13 +10,14 @@ import GridDaysItem from '../GridDaysItem';
 
 import styles from './index.less';
 
-export default class GridDaysHeader extends Component {
+export default class GridDaysHeader extends StoreComponent {
   constructor (props, context) {
     super(props, context);
     this.getItemElement = this.getItemElement.bind(this);
   }
 
-  transformState ({ gridDaysListItemSize }) {
+  transformState (props, context) {
+    const { gridDaysListItemSize } = context.store.getState();
     return { gridDaysListItemSize };
   }
 

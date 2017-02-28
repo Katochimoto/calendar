@@ -3,7 +3,7 @@ import createState from './utils/createState';
 import inherit from './utils/inherit';
 
 export default function Store (data) {
-  Store.superclass.constructor.call(this, data);
+  Store.superclass.constructor.call(this);
   this._state = createState();
   this._state.update(data);
 }

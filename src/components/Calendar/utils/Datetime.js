@@ -41,6 +41,10 @@ Datetime.prototype = {
     return Math.round(1000 * 100 * minutes / (hoursOfDay * 60)) / 1000;
   },
 
+  parseDate (sDate) {
+    return _parseDate(sDate);
+  },
+
   parseDatetime (sDatetime) {
     return _parseDatetime(sDatetime);
   }

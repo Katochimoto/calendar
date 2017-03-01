@@ -2,96 +2,95 @@
  *
  */
 
-import { Component, PropTypes } from '../../utils/Component';
+import { EventsComponent, PropTypes } from '../../utils/Component';
 import DayEvent from '../DayEvent';
 
 import styles from './index.less';
 
-export default class DayEvents extends Component {
-  constructor (props, context) {
-    super(props, context);
-    this.handleUploadEvents = this.handleUploadEvents.bind(this);
-  }
+export default class DayEvents extends EventsComponent {
 
   shouldComponentUpdate (nextProps, nextState) {
     return (
       this.props.date !== nextProps.date ||
-      this.state.events !== nextState.events
+      this.state.visualEvents !== nextState.visualEvents
     );
   }
 
   componentDidMount () {
-    this.updateEvents();
+    super.componentDidMount();
+    this.upload();
   }
 
   componentDidUpdate (prevProps) {
+    super.componentDidUpdate();
+
     if (this.props.date !== prevProps.date) {
-      //this.setState({ events: [] });
-      this.updateEvents();
+      this.updateState();
+      this.upload();
     }
   }
 
   componentWillUnmount () {
-    this.cancelUpdateEvents();
-    this._unmount = true;
+    super.componentWillUnmount();
+    this.cancelUpload();
   }
 
-  transformState () {
+  getInterval (props = this.props) {
+    return [ props.date ];
+  }
+
+  transformState (props, context) {
+    const interval = this.getInterval(props);
+    const events = context.events.getByInterval(interval);
+    const visualEvents = this.createVisualEvents(events, context);
+
     return {
-      events: []
+      visualEvents
     };
   }
 
-  updateEvents () {
-    return;
-    this.cancelUpdateEvents();
-    this._updateEvents = this.context.events.lazyUpload([ this.props.date ], this.handleUploadEvents);
+  upload () {
+    this.cancelUpload();
+    this._upload = this.context.events.uploadByInterval(this.getInterval());
   }
 
-  cancelUpdateEvents () {
-    if (this._updateEvents) {
-      this._updateEvents.cancel();
-      this._updateEvents = null;
+  cancelUpload () {
+    if (this._upload) {
+      this._upload.cancel();
+      this._upload = null;
     }
   }
 
-  handleUploadEvents ({ interval, events }) {
-    if (this._unmount || this.props.date !== interval[0]) {
-      return;
-    }
-
-    const datetime = this.context.datetime;
-    const { hoursOfDay } = this.context.store.getState();
+  createVisualEvents (events, context) {
+    const datetime = context.datetime;
+    const { hoursOfDay } = context.store.getState();
 
     const hours = hoursOfDay.split(',');
     const hoursLength = hours.length;
+    const visualEvents = [];
 
-    events = events.map(item => {
-      const dateBegin = datetime.parseDatetime(item.dateBegin);
-      const dateEnd = datetime.parseDatetime(item.dateEnd);
+    for (let i = 0, len = events.length; i < len; i++) {
+      const item = events[i];
+      const dateBegin = new Date(datetime.parseDate(item.dateBegin).getTime() + item.timeBegin);
+      const dateEnd = new Date(datetime.parseDate(item.dateEnd).getTime() + item.timeEnd);
       const rateBegin = datetime.getMinutesRate(dateBegin, hoursLength);
       const rateEnd = 100 - datetime.getMinutesRate(dateEnd, hoursLength);
 
-      return {
+      visualEvents.push({
         key: item.id,
         dateBegin,
         dateEnd,
         rateBegin,
         rateEnd,
         title: item.title
-      };
+      });
+    }
 
-    }).reduce((list, item) => {
-
-
-      return list.concat(item);
-    }, []);
-
-    this.setState({ events });
+    return visualEvents;
   }
 
   render () {
-    const items = this.state.events.map(item => (
+    const items = this.state.visualEvents.map(item => (
       <DayEvent
         key={item.key}
         title={item.title}

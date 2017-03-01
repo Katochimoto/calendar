@@ -11,7 +11,8 @@ export default class DayEvent extends Component {
   shouldComponentUpdate (nextProps) {
     return (
       this.props.rateBegin !== nextProps.rateBegin ||
-      this.props.rateEnd !== nextProps.rateEnd
+      this.props.rateEnd !== nextProps.rateEnd ||
+      this.props.title !== nextProps.title
     );
   }
 

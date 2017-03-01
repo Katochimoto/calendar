@@ -78,8 +78,6 @@ export default class DayEvents extends EventsComponent {
 
       visualEvents.push({
         key: item.id,
-        dateBegin,
-        dateEnd,
         rateBegin,
         rateEnd,
         title: item.title
@@ -91,11 +89,7 @@ export default class DayEvents extends EventsComponent {
 
   render () {
     const items = this.state.visualEvents.map(item => (
-      <DayEvent
-        key={item.key}
-        title={item.title}
-        rateBegin={item.rateBegin}
-        rateEnd={item.rateEnd} />
+      <DayEvent {...item} />
     ));
 
     return (

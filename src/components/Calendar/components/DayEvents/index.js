@@ -12,7 +12,7 @@ export default class DayEvents extends EventsComponent {
   shouldComponentUpdate (nextProps, nextState) {
     return (
       this.props.date !== nextProps.date ||
-      this.state.visualEvents !== nextState.visualEvents
+      this.state.events !== nextState.events
     );
   }
 
@@ -41,11 +41,9 @@ export default class DayEvents extends EventsComponent {
 
   transformState (props, context) {
     const interval = this.getInterval(props);
-    const events = context.events.getByInterval(interval);
-    const visualEvents = this.createVisualEvents(events, context);
 
     return {
-      visualEvents
+      events: context.events.getByInterval(interval)
     };
   }
 
@@ -61,40 +59,37 @@ export default class DayEvents extends EventsComponent {
     }
   }
 
-  createVisualEvents (events, context) {
-    const datetime = context.datetime;
-    const { hoursOfDay } = context.store.getState();
+  getItems () {
+    const datetime = this.context.datetime;
+    const { hoursOfDay } = this.context.store.getState();
 
     const hours = hoursOfDay.split(',');
     const hoursLength = hours.length;
-    const visualEvents = [];
+    const items = [];
 
-    for (let i = 0, len = events.length; i < len; i++) {
-      const item = events[i];
+    for (let i = 0, len = this.state.events.length; i < len; i++) {
+      const item = this.state.events[i];
       const dateBegin = new Date(datetime.parseDate(item.dateBegin).getTime() + item.timeBegin);
       const dateEnd = new Date(datetime.parseDate(item.dateEnd).getTime() + item.timeEnd);
       const rateBegin = datetime.getMinutesRate(dateBegin, hoursLength);
       const rateEnd = 100 - datetime.getMinutesRate(dateEnd, hoursLength);
 
-      visualEvents.push({
-        key: item.id,
-        rateBegin,
-        rateEnd,
-        title: item.title
-      });
+      items.push(
+        <DayEvent
+          key={item.id}
+          rateBegin={rateBegin}
+          rateEnd={rateEnd}
+          title={item.title} />
+      );
     }
 
-    return visualEvents;
+    return items;
   }
 
   render () {
-    const items = this.state.visualEvents.map(item => (
-      <DayEvent {...item} />
-    ));
-
     return (
       <div className={styles.calendar_DayEvents}>
-        {items}
+        {this.getItems()}
       </div>
     );
   }

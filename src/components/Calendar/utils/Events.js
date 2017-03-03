@@ -1,6 +1,6 @@
 import lazy from './lazy';
 import EventEmitter from './EventEmitter';
-import EventsStrategyDefault from './EventsStrategyDefault';
+import EventsStrategyDefault from './Events/EventsStrategyDefault';
 
 /**
  * @param {EventsStrategy} strategy

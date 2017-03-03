@@ -96,5 +96,5 @@ export default class DayEvents extends EventsComponent {
 }
 
 DayEvents.propTypes = {
-  date: PropTypes.string
+  date: PropTypes.number
 };

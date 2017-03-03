@@ -1,6 +1,3 @@
-const REG_DATE = /^(\d{4})-(\d{2})-(\d{2})$/;
-const REG_DATETIME = /^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2})$/;
-
 const DAYS = {
   0: 'Sun',
   1: 'Mon',
@@ -43,51 +40,19 @@ Datetime.prototype = {
 
   parseDate (sDate) {
     return _parseDate(sDate);
-  },
-
-  parseDatetime (sDatetime) {
-    return _parseDatetime(sDatetime);
   }
 };
 
-let PARSE_CACHE = Object.create(null);
-let parseCacheLength = 0;
-
-function _parseDate (sDate) {
-  if (parseCacheLength > 500) {
-    parseCacheLength = 0;
-    PARSE_CACHE = Object.create(null);
-  }
-
-  let timestamp = PARSE_CACHE[ sDate ];
-
-  if (!timestamp) {
-    parseCacheLength++
-    const m = sDate.match(REG_DATE);
-    timestamp = PARSE_CACHE[ sDate ] = new Date(
-      Number(m[1]),
-      Number(m[2]) - 1,
-      Number(m[3])
-    ).getTime();
-  }
-
-  return new Date(timestamp);
-}
-
-function _parseDatetime (sDatetime) {
-  const m = sDatetime.match(REG_DATETIME);
-  return new Date(
-    Number(m[1]),
-    Number(m[2]) - 1,
-    Number(m[3]),
-    Number(m[4]),
-    Number(m[5]),
-    Number(m[6])
-  );
+function _parseDate (date) {
+  const _ = 100 * date ^ 0;
+  const y = date ^ 0;
+  const m = (_ - 100 * y) - 1;
+  const d = (10000 * date ^ 0) - _ * 100;
+  return new Date(y, m, d);
 }
 
 function _formatDate (date) {
-  return `${date.getFullYear()}-${o(date.getMonth() + 1)}-${o(date.getDate())}`;
+  return Number(`${date.getFullYear()}.${o(date.getMonth() + 1)}${o(date.getDate())}`);
 }
 
 function o (v) {

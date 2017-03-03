@@ -36,7 +36,7 @@ export default class Day extends Component {
 }
 
 Day.propTypes = {
-  date: PropTypes.string,
+  date: PropTypes.number,
   weekend: PropTypes.boolean
 };
 

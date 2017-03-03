@@ -34,7 +34,7 @@ export default class DayHeader extends Component {
 }
 
 DayHeader.propTypes = {
-  date: PropTypes.string,
+  date: PropTypes.number,
   weekend: PropTypes.boolean
 };
 

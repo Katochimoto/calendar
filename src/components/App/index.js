@@ -1,5 +1,3 @@
-import raf from 'raf';
-
 import Calendar from './../Calendar';
 
 import styles from './index.less';

@@ -6,7 +6,8 @@ import RollupPluginCommonJS from 'rollup-plugin-commonjs';
 import RollupPluginFilesize from 'rollup-plugin-filesize';
 import RollupPluginReplace from 'rollup-plugin-replace';
 import RollupPluginInject from 'rollup-plugin-inject';
-import RollupPluginUglify from 'rollup-plugin-uglify';
+import RollupPluginBuble from 'rollup-plugin-buble';
+//import RollupPluginUglify from 'rollup-plugin-uglify';
 
 import LessPluginCssModules from 'less-plugin-css-modules';
 
@@ -87,13 +88,14 @@ export default {
     RollupPluginBabel({
       exclude: 'node_modules/**',
       babelrc: false,
-      presets: [
+      /*presets: [
         'stage-0',
         'es2015-rollup',
         'react'
-      ],
+      ],*/
       plugins: [
         'transform-decorators-legacy',
+        'transform-do-expressions',
         [ 'transform-react-jsx', { pragma: 'h' } ],
         [
           'module-resolver',
@@ -110,6 +112,7 @@ export default {
     RollupPluginInject({
       'h': [ 'preact', 'h' ]
     }),
+    RollupPluginBuble(),
     RollupPluginNodeResolve({
       jsnext: true,
       module: true,
@@ -121,7 +124,7 @@ export default {
       include: 'node_modules/**',
       exclude: '**/*.less'
     }),
-    // RollupPluginUglify(),
+    //RollupPluginUglify(),
     RollupPluginFilesize()
   ]
 };

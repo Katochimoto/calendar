@@ -1,8 +1,33 @@
+import immediate from 'setimmediate2';
 import context from '../context';
 
 const callbacks = [];
 
-export default function lazy (callback) {
+export function lazy (target, key, descriptor) {
+  const callback = descriptor.value;
+  callback._args = [];
+
+  const lazyRun = function () {
+    const saveArgs = callback._args;
+    callback._timer = 0;
+    callback._args = [];
+    callback.call(this, saveArgs);
+  };
+
+  descriptor.value = function (...args) {
+    callback._args.push(args);
+
+    if (!callback._timer) {
+      callback._timer = immediate.setImmediate(() => {
+        lazyRun.call(this);
+      });
+    }
+  };
+
+  return descriptor;
+}
+
+export function qlazy (callback) {
   if (!callbacks.length) {
     context.setTimeout(run, 200);
   }

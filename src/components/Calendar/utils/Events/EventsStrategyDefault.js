@@ -1,4 +1,5 @@
 import context from '../../context';
+import { lazy } from '../lazy';
 import EventsStrategy from './EventsStrategy';
 
 export default class EventsStrategyDefault extends EventsStrategy {
@@ -24,6 +25,7 @@ export default class EventsStrategyDefault extends EventsStrategy {
     return data;
   }
 
+  @lazy
   uploadByInterval (interval) {
     context.setTimeout(() => {
       this.emitChange();

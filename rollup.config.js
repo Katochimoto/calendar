@@ -30,7 +30,8 @@ export default {
     'classnames': 'vendor._classnames',
     'preact-compat': 'vendor._preact_compat',
     'preact': 'vendor._preact',
-    'raf': 'vendor._raf'
+    'raf': 'vendor._raf',
+    'setimmediate2': 'vendor._setimmediate2'
   },
   plugins: [
     RollupPluginJSON(),

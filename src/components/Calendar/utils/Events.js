@@ -1,4 +1,4 @@
-import lazy from './lazy';
+import { qlazy } from './lazy';
 import EventEmitter from './EventEmitter';
 import EventsStrategyDefault from './Events/EventsStrategyDefault';
 
@@ -17,7 +17,7 @@ export default class Events extends EventEmitter {
   }
 
   uploadByInterval (interval) {
-    return lazy(() => this._strategy.uploadByInterval(interval));
+    return qlazy(() => this._strategy.uploadByInterval(interval));
   }
 
   _handleChangeEventsStrategy () {

@@ -45,6 +45,7 @@
     "classnames": "^2.2.5",
     "preact": "^7.1.0",
     "preact-compat": "^3.9.4",
-    "raf": "^3.3.0"
+    "raf": "^3.3.0",
+    "setimmediate2": "^3.0.0"
   }
 }

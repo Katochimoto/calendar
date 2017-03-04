@@ -3,7 +3,6 @@
  */
 
 import { Component, PropTypes } from './utils/Component';
-import { raf, caf } from './utils/raf';
 import { onWheel, offWheel, wrapWheelCallback } from './utils/wheel';
 import context from './context';
 import GridDays from './components/GridDays';
@@ -44,7 +43,7 @@ export default class Calendar extends Component {
   }
 
   componentDidMount () {
-    this._timerRecalculationSize = raf(() => {
+    this._timerRecalculationSize = context.requestAnimationFrame(() => {
       this.state.store.update(this.getRecalculationSize());
       context.addEventListener('resize', this.handleResize, false);
       onWheel(this._calendarNode, this.handleWheel);
@@ -53,12 +52,12 @@ export default class Calendar extends Component {
 
   componentWillUnmount () {
     if (this._timerRecalculationSize) {
-      caf(this._timerRecalculationSize);
+      context.cancelAnimationFrame(this._timerRecalculationSize);
       this._timerRecalculationSize = 0;
     }
 
     if (this._timerUpdateStoreByWheel) {
-      caf(this._timerUpdateStoreByWheel);
+      context.cancelAnimationFrame(this._timerUpdateStoreByWheel);
       this._timerUpdateStoreByWheel = 0;
     }
 
@@ -84,7 +83,7 @@ export default class Calendar extends Component {
     this._deltaY = deltaY + (this._timerUpdateStoreByWheel ? this._deltaY : 0);
 
     if (!this._timerUpdateStoreByWheel) {
-      this._timerUpdateStoreByWheel = raf(this.updateStoreByWheel);
+      this._timerUpdateStoreByWheel = context.requestAnimationFrame(this.updateStoreByWheel);
     }
   }
 

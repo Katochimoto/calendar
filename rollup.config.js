@@ -22,17 +22,16 @@ let external = Object.keys(pkg.peerDependencies || {}).concat(Object.keys(pkg.de
 export default {
   entry: 'src/index.js',
   dest: 'dist/app.js',
+  exports: 'none',
   format: 'iife',
   sourceMap: false,
-  useStrict: false,
+  useStrict: true,
   context: 'window',
   external: external,
   globals: {
     'classnames': 'vendor._classnames',
     'preact-compat': 'vendor._preact_compat',
-    'preact': 'vendor._preact',
-    'raf': 'vendor._raf',
-    'setimmediate2': 'vendor._setimmediate2'
+    'preact': 'vendor._preact'
   },
   plugins: [
     RollupPluginJSON(),
@@ -112,7 +111,17 @@ export default {
     RollupPluginInject({
       'h': [ 'preact', 'h' ]
     }),
-    RollupPluginBuble(),
+    RollupPluginBuble({
+      exclude: 'node_modules/**',
+      //target: { chrome: 48, firefox: 44 },
+      /*transforms: {
+        arrow: true,
+        modules: false,
+        dangerousForOf: true
+      },*/
+      //jsx: 'preact.h'
+      //objectAssign: 'angular.extend',
+    }),
     RollupPluginNodeResolve({
       jsnext: true,
       module: true,

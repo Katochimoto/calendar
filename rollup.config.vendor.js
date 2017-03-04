@@ -7,10 +7,11 @@ import RollupPluginBuble from 'rollup-plugin-buble';
 
 export default {
   entry: 'src/vendor.js',
-  format: 'iife',
   dest: 'dist/vendor.js',
+  format: 'iife',
+  exports: 'default',
   sourceMap: false,
-  useStrict: false,
+  useStrict: true,
   context: 'window',
   moduleName: 'vendor',
   plugins: [
@@ -23,7 +24,12 @@ export default {
         [ 'es2015', { 'modules': false } ]
       ]
     }),*/
-    RollupPluginBuble(),
+    RollupPluginBuble({
+      //target: { chrome: 48, firefox: 44 },
+      transforms: {
+        modules: false
+      }
+    }),
     RollupPluginNodeResolve({
       jsnext: true,
       module: true,

@@ -1,4 +1,3 @@
-import immediate from 'setimmediate2';
 import context from '../context';
 
 const callbacks = [];
@@ -18,7 +17,7 @@ export function lazy (target, key, descriptor) {
     callback._args.push(args);
 
     if (!callback._timer) {
-      callback._timer = immediate.setImmediate(() => {
+      callback._timer = context.setImmediate(() => {
         lazyRun.call(this);
       });
     }
@@ -40,11 +39,9 @@ export function qlazy (callback) {
 function cancel (callback) {
   let i = 0;
   while (i < callbacks.length) {
-    const item = callbacks[i];
-
-    if (item === callback) {
+    if (callbacks[i] === callback) {
       callbacks.splice(i, 1);
-
+      
     } else {
       i++;
     }

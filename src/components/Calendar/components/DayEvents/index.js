@@ -61,13 +61,36 @@ export default class DayEvents extends EventsComponent {
 
   getItems () {
     const datetime = this.context.datetime;
-    const { listHoursOfDay } = this.context.store.getState();
-    const hoursLength = listHoursOfDay.length;
+    const { intervalsOfDay } = this.context.store.getState();
     const items = [];
 
-    for (let i = 0, len = this.state.events.length; i < len; i++) {
+    const len = this.state.events.length
+    let i = 0;
+
+    for (; i < len; i++) {
       const item = this.state.events[i];
-      const dateBegin = new Date(datetime.parseDate(item.dateBegin).getTime() + item.timeBegin);
+
+      for (const begin in intervalsOfDay) {
+        const end = intervalsOfDay[ begin ];
+
+        if (item.timeEnd < begin || item.timeBegin > end) {
+          continue;
+        }
+
+        const timeBegin = Math.max(item.timeBegin, begin);
+        const timeEnd = Math.min(item.timeEnd, end);
+
+        items.push(
+          <DayEvent
+            key={item.id}
+            rateBegin={10}
+            rateEnd={75}
+            title={item.title} />
+        );
+      }
+
+
+      /*const dateBegin = new Date(datetime.parseDate(item.dateBegin).getTime() + item.timeBegin);
       const dateEnd = new Date(datetime.parseDate(item.dateEnd).getTime() + item.timeEnd);
       const rateBegin = datetime.getMinutesRate(dateBegin, hoursLength);
       const rateEnd = 100 - datetime.getMinutesRate(dateEnd, hoursLength);
@@ -78,7 +101,7 @@ export default class DayEvents extends EventsComponent {
           rateBegin={rateBegin}
           rateEnd={rateEnd}
           title={item.title} />
-      );
+      );*/
     }
 
     return items;

@@ -420,6 +420,8 @@ function getScrollXByOffset (listOffset, { listRange, scrollWidth }) {
   return (listOffset + 1) * -1 * listRange * scrollWidth;
 }
 
+const HOURMS = 60 * 60 * 1000;
+
 function createIntervals (list) {
   const intervals = Object.create(null);
   let prev = -2;
@@ -431,7 +433,7 @@ function createIntervals (list) {
       start = item;
     }
 
-    intervals[ start ] = item;
+    intervals[ start * HOURMS ] = item * HOURMS;
     prev = item;
   }
 

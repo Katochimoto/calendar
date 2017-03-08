@@ -1,4 +1,6 @@
 export default function createState () {
+  const hoursOfDay = '0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23';
+  const listHoursOfDay = hoursOfDay.split(',').map(Number);
   const currentValues = {
     scrollHeight: 0,
     scrollWidth: 0,
@@ -31,8 +33,9 @@ export default function createState () {
 
     //grid: 'day',
     currentDate: 2017.0227,
-    hoursOfDay: '0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23',
-    intervalsOfDay: Object.freeze(Object.create(null, { 0: { value: 23 } })),
+    hoursOfDay: hoursOfDay,
+    listHoursOfDay: listHoursOfDay,
+    intervalsOfDay: createIntervals(listHoursOfDay),
     weekends: '0,6',
     hideWeekends: false,
     beginningOfWeek: 1
@@ -226,10 +229,22 @@ export default function createState () {
 
         if (value !== currentValues.hoursOfDay) {
           currentValues.hoursOfDay = value;
+          currentValues.listHoursOfDay = list;
           currentValues.intervalsOfDay = createIntervals(list);
           isChangedValues = true;
         }
       }
+    },
+
+    /**
+     * Рабочие часы в сутках
+     * @type {array}
+     * @public
+     * @readonly
+     */
+    listHoursOfDay: {
+      enumerable: true,
+      get: () => currentValues.listHoursOfDay
     },
 
     /**

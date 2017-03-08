@@ -61,10 +61,8 @@ export default class DayEvents extends EventsComponent {
 
   getItems () {
     const datetime = this.context.datetime;
-    const { hoursOfDay } = this.context.store.getState();
-
-    const hours = hoursOfDay.split(',');
-    const hoursLength = hours.length;
+    const { listHoursOfDay } = this.context.store.getState();
+    const hoursLength = listHoursOfDay.length;
     const items = [];
 
     for (let i = 0, len = this.state.events.length; i < len; i++) {

@@ -1,7 +1,7 @@
 export default function arr2obj (value) {
   const data = {};
   for (let i = 0, len = value.length; i < len; i++) {
-     data[ value[ i ] ] = true;
+     data[ value[ i ] ] = i;
   }
   return data;
 }

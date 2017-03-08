@@ -31,11 +31,6 @@ export default class DatetimeStrategyDefault extends DatetimeStrategy {
     return d.getDay();
   }
 
-  getMinutesRate (date, hoursOfDay = 24) {
-    const minutes = date.getHours() * 60 + date.getMinutes();
-    return Math.round(1000 * 100 * minutes / (hoursOfDay * 60)) / 1000;
-  }
-
   parseDate (date) {
     return _parseDate(date);
   }

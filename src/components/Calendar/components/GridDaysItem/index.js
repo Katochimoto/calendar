@@ -34,7 +34,7 @@ export default class GridDaysItem extends StoreComponent {
 
     for (; idx <= end; idx++) {
       const date = datetime.offsetDay(currentDate, idx);
-      const weekend = Boolean(weekendsObj[ datetime.getDay(date) ]);
+      const weekend = weekendsObj.hasOwnProperty(datetime.getDay(date));
 
       if (!weekend || !hideWeekends) {
         items.push(

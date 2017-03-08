@@ -4,6 +4,7 @@
 
 import { EventsComponent, PropTypes } from '../../utils/Component';
 import DayEvent from '../DayEvent';
+import arr2obj from '../../utils/arr2obj';
 
 import styles from './index.less';
 
@@ -61,8 +62,11 @@ export default class DayEvents extends EventsComponent {
 
   getItems () {
     const datetime = this.context.datetime;
-    const { intervalsOfDay } = this.context.store.getState();
+    const { intervalsOfDay, listHoursOfDay } = this.context.store.getState();
     const items = [];
+
+    const oListHoursOfDay = arr2obj(listHoursOfDay);
+    const ms = listHoursOfDay.length * datetime.HOURMS; // 100%
 
     const len = this.state.events.length
     let i = 0;
@@ -70,6 +74,7 @@ export default class DayEvents extends EventsComponent {
     for (; i < len; i++) {
       const item = this.state.events[i];
 
+      let j = 0;
       for (const begin in intervalsOfDay) {
         const end = intervalsOfDay[ begin ];
 
@@ -79,29 +84,26 @@ export default class DayEvents extends EventsComponent {
 
         const timeBegin = Math.max(item.timeBegin, begin);
         const timeEnd = Math.min(item.timeEnd, end);
+        const hourBegin = timeBegin / datetime.HOURMS ^ 0;
+        const hourEnd = timeEnd / datetime.HOURMS ^ 0;
+        const msBegin = timeBegin % datetime.HOURMS;
+        const msEnd = timeEnd % datetime.HOURMS;
+
+        const gridBegin = oListHoursOfDay[hourBegin] * datetime.HOURMS + msBegin;
+        const gridEnd = oListHoursOfDay[hourEnd] * datetime.HOURMS + msEnd;
+
+        const rateBegin = Math.round(1000 * 100 * gridBegin / ms) / 1000;
+        const rateEnd = 100 - Math.round(1000 * 100 * gridEnd / ms) / 1000;
 
         items.push(
           <DayEvent
-            key={item.id}
-            rateBegin={10}
-            rateEnd={75}
+            key={`${item.id}-${j}`}
+            rateBegin={rateBegin}
+            rateEnd={rateEnd}
             title={item.title} />
         );
+        j++;
       }
-
-
-      /*const dateBegin = new Date(datetime.parseDate(item.dateBegin).getTime() + item.timeBegin);
-      const dateEnd = new Date(datetime.parseDate(item.dateEnd).getTime() + item.timeEnd);
-      const rateBegin = datetime.getMinutesRate(dateBegin, hoursLength);
-      const rateEnd = 100 - datetime.getMinutesRate(dateEnd, hoursLength);
-
-      items.push(
-        <DayEvent
-          key={item.id}
-          rateBegin={rateBegin}
-          rateEnd={rateEnd}
-          title={item.title} />
-      );*/
     }
 
     return items;

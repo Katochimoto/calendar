@@ -3,6 +3,5 @@ export default class DatetimeStrategy {
   gridDaysDayTitle (date) {}
   offsetDay (date, offset) {}
   getDay (date) {}
-  getMinutesRate (date, hoursOfDay) {}
   parseDate (date) {}
 }

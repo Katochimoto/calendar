@@ -1,6 +1,9 @@
+const HOURMS = 60 * 60 * 1000;
+const HOURS = '0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23';
+const HOURS_LIST = HOURS.split(',').map(Number);
+const INTERVALS = createIntervals(HOURS_LIST);
+
 export default function createState () {
-  const hoursOfDay = '0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23';
-  const listHoursOfDay = hoursOfDay.split(',').map(Number);
   const currentValues = {
     scrollHeight: 0,
     scrollWidth: 0,
@@ -33,9 +36,9 @@ export default function createState () {
 
     //grid: 'day',
     currentDate: 2017.0227,
-    hoursOfDay: hoursOfDay,
-    listHoursOfDay: listHoursOfDay,
-    intervalsOfDay: createIntervals(listHoursOfDay),
+    hoursOfDay: HOURS,
+    listHoursOfDay: HOURS_LIST,
+    intervalsOfDay: INTERVALS,
     weekends: '0,6',
     hideWeekends: false,
     beginningOfWeek: 1
@@ -420,8 +423,6 @@ function getScrollXByOffset (listOffset, { listRange, scrollWidth }) {
   return (listOffset + 1) * -1 * listRange * scrollWidth;
 }
 
-const HOURMS = 60 * 60 * 1000;
-
 function createIntervals (list) {
   const intervals = Object.create(null);
   let prev = -2;
@@ -433,7 +434,7 @@ function createIntervals (list) {
       start = item;
     }
 
-    intervals[ start * HOURMS ] = item * HOURMS;
+    intervals[ start * HOURMS ] = (item + 1) * HOURMS - 1;
     prev = item;
   }
 

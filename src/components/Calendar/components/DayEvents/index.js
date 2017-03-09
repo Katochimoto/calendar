@@ -4,7 +4,6 @@
 
 import { EventsComponent, PropTypes } from '../../utils/Component';
 import DayEvent from '../DayEvent';
-import arr2obj from '../../utils/arr2obj';
 
 import styles from './index.less';
 
@@ -13,6 +12,7 @@ export default class DayEvents extends EventsComponent {
   shouldComponentUpdate (nextProps, nextState) {
     return (
       this.props.date !== nextProps.date ||
+      this.props.hoursOfDay !== nextProps.hoursOfDay ||
       this.state.events !== nextState.events
     );
   }
@@ -22,11 +22,14 @@ export default class DayEvents extends EventsComponent {
     this.upload();
   }
 
+  componentWillReceiveProps (nextProps) {
+    this.updateState(nextProps);
+  }
+
   componentDidUpdate (prevProps) {
     super.componentDidUpdate();
 
     if (this.props.date !== prevProps.date) {
-      this.updateState();
       this.upload();
     }
   }
@@ -42,10 +45,10 @@ export default class DayEvents extends EventsComponent {
 
   transformState (props, context) {
     const interval = this.getInterval(props);
+    const events = context.events.getByInterval(interval);
+    const { intervalsOfDay, dayms, hoursIdx } = context.store.getState();
 
-    return {
-      events: context.events.getByInterval(interval)
-    };
+    return { events, intervalsOfDay, dayms, hoursIdx };
   }
 
   upload () {
@@ -62,11 +65,8 @@ export default class DayEvents extends EventsComponent {
 
   getItems () {
     const datetime = this.context.datetime;
-    const { intervalsOfDay, listHoursOfDay } = this.context.store.getState();
+    const { intervalsOfDay, dayms, hoursIdx } = this.state;
     const items = [];
-
-    const oListHoursOfDay = arr2obj(listHoursOfDay);
-    const ms = listHoursOfDay.length * datetime.HOURMS; // 100%
 
     const len = this.state.events.length
     let i = 0;
@@ -89,11 +89,11 @@ export default class DayEvents extends EventsComponent {
         const msBegin = timeBegin % datetime.HOURMS;
         const msEnd = timeEnd % datetime.HOURMS;
 
-        const gridBegin = oListHoursOfDay[hourBegin] * datetime.HOURMS + msBegin;
-        const gridEnd = oListHoursOfDay[hourEnd] * datetime.HOURMS + msEnd;
+        const gridBegin = hoursIdx[hourBegin] * datetime.HOURMS + msBegin;
+        const gridEnd = hoursIdx[hourEnd] * datetime.HOURMS + msEnd;
 
-        const rateBegin = Math.round(1000 * 100 * gridBegin / ms) / 1000;
-        const rateEnd = 100 - Math.round(1000 * 100 * gridEnd / ms) / 1000;
+        const rateBegin = Math.round(1000 * 100 * gridBegin / dayms) / 1000;
+        const rateEnd = 100 - Math.round(1000 * 100 * gridEnd / dayms) / 1000;
 
         items.push(
           <DayEvent
@@ -119,5 +119,6 @@ export default class DayEvents extends EventsComponent {
 }
 
 DayEvents.propTypes = {
-  date: PropTypes.number
+  date: PropTypes.number,
+  hoursOfDay: PropTypes.string
 };

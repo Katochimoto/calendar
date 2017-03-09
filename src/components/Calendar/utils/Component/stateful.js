@@ -21,7 +21,7 @@ function transformState (/* props, context */) {
   return {};
 }
 
-function updateState () {
+function updateState (props = this.props) {
   if (this._lockSetState) {
     this._shouldUpdateState = true;
     return;
@@ -29,9 +29,9 @@ function updateState () {
 
   this._shouldUpdateState = false;
 
-  const state = this.transformState(this.props, this.context);
+  const state = this.transformState(props, this.context);
 
-  if (this.shouldComponentUpdate(this.props, state)) {
+  if (this.shouldComponentUpdate(props, state)) {
     this._lockSetState = true;
     this.setState(state);
 

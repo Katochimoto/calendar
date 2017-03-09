@@ -86,6 +86,13 @@
       var newState = {};
 
       for (var name in state) {
+        var descriptor = Object.getOwnPropertyDescriptor(state, name);
+        var isWritable = descriptor.writable || descriptor.set ? true : false;
+
+        if (!isWritable) {
+          continue;
+        }
+        
         var element = document.querySelector('[name="' + name + '"]');
         if (!element) {
           continue;

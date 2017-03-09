@@ -1,7 +1,11 @@
+import arr2obj from '../arr2obj';
+
 const HOURMS = 60 * 60 * 1000;
 const HOURS = '0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23';
 const HOURS_LIST = HOURS.split(',').map(Number);
 const INTERVALS = createIntervals(HOURS_LIST);
+const DAYMS = HOURS_LIST.length * HOURMS;
+const HOURS_IDX = arr2obj(HOURS_LIST);
 
 export default function createState () {
   const currentValues = {
@@ -37,7 +41,8 @@ export default function createState () {
     //grid: 'day',
     currentDate: 2017.0227,
     hoursOfDay: HOURS,
-    listHoursOfDay: HOURS_LIST,
+    hoursIdx: HOURS_IDX,
+    dayms: DAYMS,
     intervalsOfDay: INTERVALS,
     weekends: '0,6',
     hideWeekends: false,
@@ -232,7 +237,8 @@ export default function createState () {
 
         if (value !== currentValues.hoursOfDay) {
           currentValues.hoursOfDay = value;
-          currentValues.listHoursOfDay = list;
+          currentValues.dayms = list.length * HOURMS;
+          currentValues.hoursIdx = arr2obj(list);
           currentValues.intervalsOfDay = createIntervals(list);
           isChangedValues = true;
         }
@@ -240,14 +246,25 @@ export default function createState () {
     },
 
     /**
-     * Рабочие часы в сутках
-     * @type {array}
+     * Количество миллисекунд в сутках
+     * @type {number}
      * @public
      * @readonly
      */
-    listHoursOfDay: {
+    dayms: {
       enumerable: true,
-      get: () => currentValues.listHoursOfDay
+      get: () => currentValues.dayms
+    },
+
+    /**
+     * Объект соответствия рабочего часа с реальным положением в сетке
+     * @type {Object}
+     * @public
+     * @readonly
+     */
+    hoursIdx: {
+      enumerable: true,
+      get: () => currentValues.hoursIdx
     },
 
     /**

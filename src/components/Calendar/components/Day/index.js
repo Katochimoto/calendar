@@ -17,7 +17,8 @@ export default class Day extends Component {
   shouldComponentUpdate (nextProps) {
     return (
       this.props.date !== nextProps.date ||
-      this.props.weekend !== nextProps.weekend
+      this.props.weekend !== nextProps.weekend ||
+      this.props.hoursOfDay !== nextProps.hoursOfDay
     );
   }
 
@@ -29,7 +30,9 @@ export default class Day extends Component {
 
     return (
       <div className={classes}>
-        <DayEvents date={this.props.date} />
+        <DayEvents
+          date={this.props.date}
+          hoursOfDay={this.props.hoursOfDay} />
       </div>
     );
   }
@@ -37,7 +40,8 @@ export default class Day extends Component {
 
 Day.propTypes = {
   date: PropTypes.number,
-  weekend: PropTypes.boolean
+  weekend: PropTypes.boolean,
+  hoursOfDay: PropTypes.string
 };
 
 Day.defaultProps = {

@@ -2,7 +2,10 @@
  *
  */
 
-import { Component, PropTypes } from '../../utils/Component';
+import { Component } from '../../utils/Component';
+/* @if NODE_ENV=='development' **
+import { PropTypes } from '../../utils/Component';
+/* @endif */
 
 import styles from './index.less';
 
@@ -27,8 +30,10 @@ export default class DayEvent extends Component {
   }
 }
 
+/* @if NODE_ENV=='development' **
 DayEvent.propTypes = {
   title: PropTypes.string,
   rateBegin: PropTypes.number,
   rateEnd: PropTypes.number
 };
+/* @endif */

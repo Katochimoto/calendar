@@ -39,15 +39,16 @@
     "rollup-plugin-json": "^2.1.0",
     "rollup-plugin-less2": "^2.0.1",
     "rollup-plugin-node-resolve": "^2.0.0",
+    "rollup-plugin-preprocess": "0.0.1",
     "rollup-plugin-replace": "^1.1.1",
     "rollup-plugin-uglify": "^1.0.1",
     "rollup-watch": "^3.2.2"
   },
   "dependencies": {
-    "classnames": "^2.2.5",
-    "preact": "^7.1.0",
-    "preact-compat": "^3.9.4",
-    "raf": "^3.3.0",
-    "setimmediate2": "^3.0.0"
+    "classnames": "2.2.5",
+    "preact": "7.2.0",
+    "preact-compat": "3.13.1",
+    "raf": "3.3.0",
+    "setimmediate2": "3.0.0"
   }
 }

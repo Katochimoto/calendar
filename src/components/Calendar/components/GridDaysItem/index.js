@@ -1,4 +1,7 @@
-import { StoreComponent, PropTypes } from '../../utils/Component';
+import { StoreComponent } from '../../utils/Component';
+/* @if NODE_ENV=='development' **
+import { PropTypes } from '../../utils/Component';
+/* @endif */
 import arr2obj from '../../utils/arr2obj';
 
 import styles from './index.less';
@@ -60,11 +63,13 @@ export default class GridDaysItem extends StoreComponent {
   }
 }
 
+/* @if NODE_ENV=='development' **
 GridDaysItem.propTypes = {
   ItemComponent: PropTypes.function,
   itemSize: PropTypes.number,
   listOffset: PropTypes.number
 };
+/* @endif */
 
 GridDaysItem.defaultProps = {
   itemSize: 0,

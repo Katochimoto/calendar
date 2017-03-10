@@ -2,7 +2,10 @@
  *
  */
 
-import { StoreComponent, PropTypes } from '../../utils/Component';
+import { StoreComponent } from '../../utils/Component';
+/* @if NODE_ENV=='development' **
+import { PropTypes } from '../../utils/Component';
+/* @endif */
 import InfiniteListItem from '../InfiniteListItem';
 
 import styles from './index.less';
@@ -69,10 +72,12 @@ export default class InfiniteList extends StoreComponent {
   }
 }
 
+/* @if NODE_ENV=='development' **
 InfiniteList.propTypes = {
   itemSize: PropTypes.number,
   getItemElement: PropTypes.function
 };
+/* @endif */
 
 InfiniteList.defaultProps = {
   itemSize: 0,

@@ -2,7 +2,10 @@
  *
  */
 
-import { Component, PropTypes } from '../../utils/Component';
+import { Component } from '../../utils/Component';
+/* @if NODE_ENV=='development' **
+import { PropTypes } from '../../utils/Component';
+/* @endif */
 import classnames from 'classnames';
 
 import styles from './index.less';
@@ -33,10 +36,12 @@ export default class DayHeader extends Component {
   }
 }
 
+/* @if NODE_ENV=='development' **
 DayHeader.propTypes = {
   date: PropTypes.number,
   weekend: PropTypes.boolean
 };
+/* @endif */
 
 DayHeader.defaultProps = {
   weekend: false

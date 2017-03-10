@@ -2,7 +2,11 @@
  *
  */
 
-import { EventsComponent, PropTypes } from '../../utils/Component';
+import { EventsComponent } from '../../utils/Component';
+/* @if NODE_ENV=='development' **
+import { PropTypes } from '../../utils/Component';
+/* @endif */
+
 import DayEvent from '../DayEvent';
 
 import styles from './index.less';
@@ -74,7 +78,7 @@ export default class DayEvents extends EventsComponent {
     for (; i < len; i++) {
       const item = this.state.events[i];
 
-      let j = 0;
+      let partId = 0;
       for (const begin in intervalsOfDay) {
         const end = intervalsOfDay[ begin ];
 
@@ -89,20 +93,21 @@ export default class DayEvents extends EventsComponent {
         const msBegin = timeBegin % datetime.HOURMS;
         const msEnd = timeEnd % datetime.HOURMS;
 
-        const gridBegin = hoursIdx[hourBegin] * datetime.HOURMS + msBegin;
-        const gridEnd = hoursIdx[hourEnd] * datetime.HOURMS + msEnd;
+        const gridBegin = hoursIdx[ hourBegin ] * datetime.HOURMS + msBegin;
+        const gridEnd = hoursIdx[ hourEnd ] * datetime.HOURMS + msEnd;
 
         const rateBegin = Math.round(1000 * 100 * gridBegin / dayms) / 1000;
         const rateEnd = 100 - Math.round(1000 * 100 * gridEnd / dayms) / 1000;
 
         items.push(
           <DayEvent
-            key={`${item.id}-${j}`}
+            key={`${item.id}-${partId}`}
             rateBegin={rateBegin}
             rateEnd={rateEnd}
             title={item.title} />
         );
-        j++;
+
+        partId++;
       }
     }
 
@@ -118,7 +123,9 @@ export default class DayEvents extends EventsComponent {
   }
 }
 
+/* @if NODE_ENV=='development' **
 DayEvents.propTypes = {
   date: PropTypes.number,
   hoursOfDay: PropTypes.string
 };
+/* @endif */

@@ -5,7 +5,10 @@
  * - показывать только определенный промежуток
  */
 
-import { Component, PropTypes } from '../../utils/Component';
+import { Component } from '../../utils/Component';
+/* @if NODE_ENV=='development' **
+import { PropTypes } from '../../utils/Component';
+/* @endif */
 import classnames from 'classnames';
 
 import DayEvents from '../DayEvents';
@@ -38,11 +41,13 @@ export default class Day extends Component {
   }
 }
 
+/* @if NODE_ENV=='development' **
 Day.propTypes = {
   date: PropTypes.number,
   weekend: PropTypes.boolean,
   hoursOfDay: PropTypes.string
 };
+/* @endif */
 
 Day.defaultProps = {
   weekend: false

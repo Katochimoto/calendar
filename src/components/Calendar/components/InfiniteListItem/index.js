@@ -1,4 +1,7 @@
-import { Component, PropTypes } from '../../utils/Component';
+import { Component } from '../../utils/Component';
+/* @if NODE_ENV=='development' **
+import { PropTypes } from '../../utils/Component';
+/* @endif */
 
 import styles from './index.less';
 
@@ -21,12 +24,14 @@ export default class InfiniteListItem extends Component {
   }
 }
 
+/* @if NODE_ENV=='development' **
 InfiniteListItem.propTypes = {
   idx: PropTypes.number,
   itemSize: PropTypes.number,
   isVisible: PropTypes.boolean,
   getItemElement: PropTypes.function
 };
+/* @endif */
 
 InfiniteListItem.defaultProps = {
   idx: 0,

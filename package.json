@@ -45,10 +45,10 @@
     "rollup-watch": "^3.2.2"
   },
   "dependencies": {
-    "classnames": "2.2.5",
-    "preact": "7.2.0",
-    "preact-compat": "3.13.1",
-    "raf": "3.3.0",
-    "setimmediate2": "3.0.0"
+    "classnames": "^2.2.5",
+    "preact": "^7.2.0",
+    "preact-compat": "^3.14.0",
+    "raf": "^3.3.0",
+    "setimmediate2": "^3.0.0"
   }
 }

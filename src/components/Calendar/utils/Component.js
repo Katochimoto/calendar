@@ -1,15 +1,13 @@
-import { Component as ComponentCommon, PropTypes } from 'react';
+import React from 'react';
 import context from './Component/context';
 import stateful from './Component/stateful';
 import mutable from './Component/mutable';
 
-export { PropTypes };
-
-console.log(ComponentCommon, PropTypes)
+export const PropTypes = React.PropTypes;
 
 @context
 @stateful
-export class Component extends ComponentCommon {
+export class Component extends React.Component {
   constructor (props, context) {
     super(props, context);
     this.state = this.transformState(props, context);
@@ -19,7 +17,7 @@ export class Component extends ComponentCommon {
 @context
 @stateful
 @mutable('store')
-export class StoreComponent extends ComponentCommon {
+export class StoreComponent extends React.Component {
   constructor (props, context) {
     super(props, context);
     this.state = this.transformState(props, context);
@@ -29,7 +27,7 @@ export class StoreComponent extends ComponentCommon {
 @context
 @stateful
 @mutable('events')
-export class EventsComponent extends ComponentCommon {
+export class EventsComponent extends React.Component {
   constructor (props, context) {
     super(props, context);
     this.state = this.transformState(props, context);

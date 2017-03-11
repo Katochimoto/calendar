@@ -67,10 +67,18 @@ export default class DayEvents extends EventsComponent {
     }
   }
 
+  getRate (time) {
+    const HOURMS = this.context.datetime.HOURMS;
+    const hour = time / HOURMS ^ 0;
+    const ms = time % HOURMS;
+    const grid = this.state.hoursIdx[ hour ] * HOURMS + ms;
+    return Math.round(1000 * 100 * grid / this.state.dayms) / 1000;
+  }
+
   getItems () {
-    const datetime = this.context.datetime;
-    const { intervalsOfDay, dayms, hoursIdx } = this.state;
+    const intervalsOfDay = this.state.intervalsOfDay;
     const items = [];
+    const itemsFold = {};
 
     const len = this.state.events.length
     let i = 0;
@@ -78,37 +86,64 @@ export default class DayEvents extends EventsComponent {
     for (; i < len; i++) {
       const item = this.state.events[i];
 
+      let begin;
+      let end;
+      let beginFold = 0;
+      let endFold = 0;
       let partId = 0;
-      for (const begin in intervalsOfDay) {
-        const end = intervalsOfDay[ begin ];
 
-        if (item.timeEnd < begin || item.timeBegin > end) {
-          continue;
+      for (begin in intervalsOfDay) {
+        end = intervalsOfDay[ begin ];
+        endFold = begin;
+
+        if (!(item.timeEnd < beginFold || item.timeBegin > endFold)) {
+          const keyFold = `${beginFold}-${endFold}`;
+
+          if (!(keyFold in itemsFold)) {
+            itemsFold[ keyFold ] = {
+              begin: beginFold,
+              end: endFold,
+              items: []
+            };
+          }
+
+          itemsFold[ keyFold ].items.push({
+            key: `${item.id}-${partId}`,
+            title: item.title
+          });
+
+          partId++;
         }
 
-        const timeBegin = Math.max(item.timeBegin, begin);
-        const timeEnd = Math.min(item.timeEnd, end);
-        const hourBegin = timeBegin / datetime.HOURMS ^ 0;
-        const hourEnd = timeEnd / datetime.HOURMS ^ 0;
-        const msBegin = timeBegin % datetime.HOURMS;
-        const msEnd = timeEnd % datetime.HOURMS;
+        if (!(item.timeEnd < begin || item.timeBegin > end)) {
+          const rateBegin = this.getRate(Math.max(item.timeBegin, begin));
+          const rateEnd = 100 - this.getRate(Math.min(item.timeEnd, end));
 
-        const gridBegin = hoursIdx[ hourBegin ] * datetime.HOURMS + msBegin;
-        const gridEnd = hoursIdx[ hourEnd ] * datetime.HOURMS + msEnd;
+          items.push(
+            <DayEvent
+              key={`${item.id}-${partId}`}
+              rateBegin={rateBegin}
+              rateEnd={rateEnd}
+              title={item.title} />
+          );
 
-        const rateBegin = Math.round(1000 * 100 * gridBegin / dayms) / 1000;
-        const rateEnd = 100 - Math.round(1000 * 100 * gridEnd / dayms) / 1000;
+          partId++;
+        }
 
-        items.push(
-          <DayEvent
-            key={`${item.id}-${partId}`}
-            rateBegin={rateBegin}
-            rateEnd={rateEnd}
-            title={item.title} />
-        );
-
-        partId++;
+        beginFold = end;
       }
+    }
+
+    for (const keyFold in itemsFold) {
+      const item = itemsFold[ keyFold ];
+      const rateBegin = this.getRate(item.begin);
+
+      items.push(
+        <DayEvent
+          key={keyFold}
+          folded={true}
+          rateBegin={rateBegin} />
+      );
     }
 
     return items;

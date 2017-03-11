@@ -6,6 +6,7 @@ import { Component } from '../../utils/Component';
 /* @if NODE_ENV=='development' **
 import { PropTypes } from '../../utils/Component';
 /* @endif */
+import classnames from 'classnames';
 
 import styles from './index.less';
 
@@ -13,6 +14,7 @@ export default class DayEvent extends Component {
 
   shouldComponentUpdate (nextProps) {
     return (
+      this.props.folded !== nextProps.folded ||
       this.props.rateBegin !== nextProps.rateBegin ||
       this.props.rateEnd !== nextProps.rateEnd ||
       this.props.title !== nextProps.title
@@ -20,11 +22,23 @@ export default class DayEvent extends Component {
   }
 
   render () {
-    const style = `top: ${this.props.rateBegin}%; bottom: ${this.props.rateEnd}%;`;
+    const isFolded = this.props.folded;
+    const style = do {
+      if (isFolded) {
+        `top: ${this.props.rateBegin}%;`;
+      } else {
+        `top: ${this.props.rateBegin}%; bottom: ${this.props.rateEnd}%;`;
+      }
+    }
+
+    const classes = classnames({
+      [ styles.calendar_DayEvent ]: true,
+      [ styles.calendar_DayEvent__folded ]: isFolded
+    });
 
     return (
-      <div className={styles.calendar_DayEvent} style={style}>
-        {this.props.title}
+      <div className={classes} style={style}>
+        {isFolded ? null : this.props.title}
       </div>
     );
   }
@@ -32,8 +46,15 @@ export default class DayEvent extends Component {
 
 /* @if NODE_ENV=='development' **
 DayEvent.propTypes = {
-  title: PropTypes.string,
+  folded: PropTypes.boolean,
   rateBegin: PropTypes.number,
-  rateEnd: PropTypes.number
+  rateEnd: PropTypes.number,
+  title: PropTypes.string
 };
 /* @endif */
+
+DayEvent.defaultProps = {
+  folded: false,
+  rateBegin: 0,
+  rateEnd: 0
+};

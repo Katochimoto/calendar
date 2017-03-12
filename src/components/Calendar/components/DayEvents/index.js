@@ -76,6 +76,7 @@ export default class DayEvents extends EventsComponent {
   }
 
   getItems () {
+    const date = this.props.date;
     const intervalsOfDay = this.state.intervalsOfDay;
     const items = [];
     const itemsFold = {};
@@ -90,29 +91,25 @@ export default class DayEvents extends EventsComponent {
       let end;
       let beginFold = 0;
       let endFold = 0;
-      let partId = 0;
+      let keyInterval;
 
       for (begin in intervalsOfDay) {
+        keyInterval = `${date}-${begin}`;
         end = intervalsOfDay[ begin ];
         endFold = begin;
 
         if (!(item.timeEnd < beginFold || item.timeBegin > endFold)) {
-          const keyFold = `${beginFold}-${endFold}`;
-
-          if (!(keyFold in itemsFold)) {
-            itemsFold[ keyFold ] = {
+          if (!(beginFold in itemsFold)) {
+            itemsFold[ beginFold ] = {
               begin: beginFold,
               end: endFold,
               items: []
             };
           }
 
-          itemsFold[ keyFold ].items.push({
-            key: `${item.id}-${partId}`,
+          itemsFold[ beginFold ].items.push({
             title: item.title
           });
-
-          partId++;
         }
 
         if (!(item.timeEnd < begin || item.timeBegin > end)) {
@@ -121,13 +118,11 @@ export default class DayEvents extends EventsComponent {
 
           items.push(
             <DayEvent
-              key={`${item.id}-${partId}`}
+              key={`${keyInterval}--${item.id}`}
               rateBegin={rateBegin}
               rateEnd={rateEnd}
               title={item.title} />
           );
-
-          partId++;
         }
 
         beginFold = end;
@@ -137,10 +132,11 @@ export default class DayEvents extends EventsComponent {
     for (const keyFold in itemsFold) {
       const item = itemsFold[ keyFold ];
       const rateBegin = this.getRate(item.begin);
+      const keyInterval = `${date}-${item.begin}`;
 
       items.push(
         <DayEvent
-          key={keyFold}
+          key={keyInterval}
           folded={true}
           rateBegin={rateBegin} />
       );

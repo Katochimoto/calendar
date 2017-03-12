@@ -22,23 +22,23 @@ export default class DayEvent extends Component {
   }
 
   render () {
-    const isFolded = this.props.folded;
+    const { folded, title, rateBegin, rateEnd } = this.props;
     const style = do {
-      if (isFolded) {
-        `top: ${this.props.rateBegin}%;`;
+      if (folded) {
+        `top: ${rateBegin}%;`;
       } else {
-        `top: ${this.props.rateBegin}%; bottom: ${this.props.rateEnd}%;`;
+        `top: ${rateBegin}%; bottom: ${rateEnd}%;`;
       }
     }
 
     const classes = classnames({
       [ styles.calendar_DayEvent ]: true,
-      [ styles.calendar_DayEvent__folded ]: isFolded
+      [ styles.calendar_DayEvent__folded ]: folded
     });
 
     return (
       <div className={classes} style={style}>
-        {isFolded ? null : this.props.title}
+        {folded ? null : title}
       </div>
     );
   }

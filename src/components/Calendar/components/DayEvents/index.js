@@ -80,12 +80,17 @@ export default class DayEvents extends EventsComponent {
     const intervalsOfDay = this.state.intervalsOfDay;
     const items = [];
     const itemsFold = {};
+    let columns = [];
+    let columnsTimeMax = 0;
+
+    let test = {};
 
     const len = this.state.events.length
     let i = 0;
 
     for (; i < len; i++) {
       const item = this.state.events[i];
+      const { timeEnd, timeBegin } = item;
 
       let begin;
       let end;
@@ -98,7 +103,7 @@ export default class DayEvents extends EventsComponent {
         end = intervalsOfDay[ begin ];
         endFold = begin;
 
-        if (!(item.timeEnd < beginFold || item.timeBegin > endFold)) {
+        if (!(timeEnd < beginFold || timeBegin > endFold)) {
           if (!(beginFold in itemsFold)) {
             itemsFold[ beginFold ] = {
               begin: beginFold,
@@ -112,15 +117,50 @@ export default class DayEvents extends EventsComponent {
           });
         }
 
-        if (!(item.timeEnd < begin || item.timeBegin > end)) {
-          const rateBegin = this.getRate(Math.max(item.timeBegin, begin));
-          const rateEnd = 100 - this.getRate(Math.min(item.timeEnd, end));
+        if (!(timeEnd < begin || timeBegin > end)) {
+          const rateBegin = this.getRate(Math.max(timeBegin, begin));
+          const rateEnd = 100 - this.getRate(Math.min(timeEnd, end));
 
+          if (timeBegin > columnsTimeMax) {
+            columns = [];
+          }
+
+          if (timeEnd > columnsTimeMax) {
+            columnsTimeMax = timeEnd;
+          }
+
+          const column = do {
+            if (item.id in test) {
+              test[item.id];
+            } else if (columns[0] <= timeBegin) {
+              0;
+            } else if (columns[1] <= timeBegin) {
+              1;
+            } else if (columns[2] <= timeBegin) {
+              2;
+            } else if (columns[3] <= timeBegin) {
+              3;
+            } else if (columns[4] <= timeBegin) {
+              4;
+            } else if (columns[5] <= timeBegin) {
+              5;
+            } else {
+              columns.length;
+            }
+          };
+
+          columns[ column ] = timeEnd;
+          test[item.id] = column;
+
+          // TODO запоминать column глобально для события на день
+          // необходимо в случае разрыва
           items.push(
             <DayEvent
               key={`${keyInterval}--${item.id}`}
               rateBegin={rateBegin}
               rateEnd={rateEnd}
+              columns={columns}
+              column={column}
               title={item.title} />
           );
         }
@@ -146,13 +186,16 @@ export default class DayEvents extends EventsComponent {
   }
 
   render () {
+    var p = performance.now();
+    const items = this.getItems();
+    window.test.push(performance.now() - p);
     return (
-      <div className={styles.calendar_DayEvents}>
-        {this.getItems()}
-      </div>
+      <div className={styles.calendar_DayEvents}>{items}</div>
     );
   }
 }
+
+window.test = [];
 
 /* @if NODE_ENV=='development' **
 DayEvents.propTypes = {

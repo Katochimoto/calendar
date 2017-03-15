@@ -5,6 +5,8 @@ import RollupPluginReplace from 'rollup-plugin-replace';
 //import RollupPluginBabel from 'rollup-plugin-babel';
 import RollupPluginBuble from 'rollup-plugin-buble';
 
+const NODE_ENV = 'development'; // production
+
 export default {
   entry: 'src/vendor.js',
   dest: 'dist/vendor.js',
@@ -16,7 +18,7 @@ export default {
   moduleName: 'vendor',
   plugins: [
     RollupPluginReplace({
-      'process.env.NODE_ENV': JSON.stringify('production')
+      'process.env.NODE_ENV': JSON.stringify(NODE_ENV)
     }),
     /*RollupPluginBabel({
       babelrc: false,

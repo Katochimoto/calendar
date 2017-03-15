@@ -17,6 +17,9 @@ import postcss from 'postcss';
 import PostcssCsso from 'postcss-csso';
 import CssMqpacker from 'css-mqpacker';
 
+const NODE_ENV = 'development'; // production
+const IS_DEV = (NODE_ENV === 'development');
+
 let pkg = require('./package.json');
 let external = Object.keys(pkg.peerDependencies || {}).concat(Object.keys(pkg.dependencies || {}));
 
@@ -25,7 +28,7 @@ export default {
   dest: 'dist/app.js',
   exports: 'none',
   format: 'iife',
-  sourceMap: false,
+  sourceMap: !IS_DEV,
   useStrict: true,
   context: 'window',
   external: external,
@@ -69,11 +72,13 @@ export default {
               'Chrome >= 4',
             ]
           }),
-          CssMqpacker(),
-          PostcssCsso()
+          CssMqpacker()
+          //PostcssCsso()
         ]).process(css, {
           to: 'app.css',
-          map: { inline: false }
+          map: {
+            inline: false
+          }
         }).then(function (result) {
           return {
             css: result.css,
@@ -83,7 +88,7 @@ export default {
       }
     }),
     RollupPluginReplace({
-      'process.env.NODE_ENV': JSON.stringify('production')
+      'process.env.NODE_ENV': JSON.stringify(NODE_ENV)
     }),
     RollupPluginBabel({
       exclude: 'node_modules/**',
@@ -136,7 +141,7 @@ export default {
     }),
     RollupPluginPreprocess({
       context: {
-        NODE_ENV: 'production'
+        NODE_ENV: NODE_ENV
       }
     }),
     //RollupPluginUglify(),

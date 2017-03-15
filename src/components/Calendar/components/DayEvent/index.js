@@ -25,7 +25,7 @@ export default class DayEvent extends Component {
   render () {
     const { folded, title, rateBegin, rateEnd, columns, column } = this.props;
     const len = columns && columns.length;
-    const width = columns ? (100 / len - 1) : 100;
+    const width = columns ? (100 / len) : 100;
     const left = columns ? (100 - 100 * (len - column) / len) : 0;
     const fontSize = 0.9;
 

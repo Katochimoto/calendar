@@ -13,27 +13,27 @@ export default class EventsStrategyDefault extends EventsStrategy {
     const dateEnd = interval[1] || dateBegin;
     const data = [
       {
-        id: `${dateBegin}T07:30:00--${dateEnd}T11:30:00`,
+        id: `${dateBegin}T03:30:00--${dateEnd}T07:30:00`,
         dateBegin: dateBegin,
         dateEnd: dateEnd,
-        timeBegin: (7 * 60 + 30) * 60 * 1000,
-        timeEnd: (11 * 60 + 30) * 60 * 1000,
+        timeBegin: (3 * 60 + 30) * 60 * 1000,
+        timeEnd: (7 * 60 + 30) * 60 * 1000,
         title: `${dateBegin} 1`
       },
       {
-        id: `${dateBegin}T10:00:00--${dateEnd}T13:00:00`,
+        id: `${dateBegin}T06:00:00--${dateEnd}T09:00:00`,
         dateBegin: dateBegin,
         dateEnd: dateEnd,
-        timeBegin: (10 * 60) * 60 * 1000,
-        timeEnd: (13 * 60) * 60 * 1000,
+        timeBegin: (6 * 60) * 60 * 1000,
+        timeEnd: (9 * 60) * 60 * 1000,
         title: `${dateBegin} 2`
       },
       {
-        id: `${dateBegin}T11:30:00--${dateEnd}T14:00:00`,
+        id: `${dateBegin}T07:30:00--${dateEnd}T10:00:00`,
         dateBegin: dateBegin,
         dateEnd: dateEnd,
-        timeBegin: (11 * 60 + 30) * 60 * 1000,
-        timeEnd: (14 * 60) * 60 * 1000,
+        timeBegin: (7 * 60 + 30) * 60 * 1000,
+        timeEnd: (10 * 60) * 60 * 1000,
         title: `${dateBegin} 3`
       }
     ];

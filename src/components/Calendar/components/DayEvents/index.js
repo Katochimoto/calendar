@@ -8,6 +8,7 @@ import { PropTypes } from '../../utils/Component';
 /* @endif */
 
 import DayEvent from '../DayEvent';
+import DayEventFolded from '../DayEventFolded';
 
 import styles from './index.less';
 
@@ -175,10 +176,7 @@ export default class DayEvents extends EventsComponent {
       const keyInterval = `${date}-${item.begin}`;
 
       items.push(
-        <DayEvent
-          key={keyInterval}
-          folded={true}
-          rateBegin={rateBegin} />
+        <DayEventFolded key={keyInterval} rateBegin={rateBegin} />
       );
     }
 

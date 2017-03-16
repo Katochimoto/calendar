@@ -1,0 +1,18 @@
+@import (reference, once) "../../style/constant";
+
+.@{component}_DayEventFolded {
+  height: 0px;
+  left: 0;
+  right: 0;
+  visibility: visible;
+  pointer-events: auto;
+  position: absolute;
+  cursor: pointer;
+  border-bottom: 1px dashed darken(@day-event-border-color, 40%);
+  padding: 1px 0 1px 0;
+  margin: -2px 0 0 0;
+
+  &:hover {
+    border-bottom-style: solid;
+  }
+}

@@ -1,7 +1,3 @@
-/**
- *
- */
-
 import { Component } from '../../utils/Component';
 /* @if NODE_ENV=='development' **
 import { PropTypes } from '../../utils/Component';

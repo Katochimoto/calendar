@@ -30,5 +30,6 @@ DayEventFolded.propTypes = {
 /* @endif */
 
 DayEventFolded.defaultProps = {
+  events: [],
   rateBegin: 0
 };

@@ -1,4 +1,5 @@
 import { EventsComponent } from '../../utils/Component';
+import getColumn from '../../utils/getColumn';
 import { HOURMS } from '../../constant';
 /* @if NODE_ENV=='development' **
 import { PropTypes } from '../../utils/Component';
@@ -48,14 +49,8 @@ export default class DayEvents extends EventsComponent {
   transformState (props, context) {
     const interval = this.getInterval(props);
     const events = context.events.getByInterval(interval);
-    const { INTERVALS, DAYMS, GRID_HOURS } = context.store.getState();
-
-    return {
-      DAYMS,
-      events,
-      GRID_HOURS,
-      INTERVALS
-    };
+    const { DAYMS, GRID_HOURS, INTERVALS } = context.store.getState();
+    return { events, DAYMS, GRID_HOURS, INTERVALS };
   }
 
   upload () {
@@ -96,33 +91,33 @@ export default class DayEvents extends EventsComponent {
 
       for (let j = 0; j < ilen; j++) {
         const interval = INTERVALS[j];
-        const begin = interval[0];
-        const end = interval[1];
-        const folded = interval[2];
-        const key = `${date}-${begin}-${end}`;
+        const intervalBegin = interval[0];
+        const intervalEnd = interval[1];
+        const intervalFolded = interval[2];
+        const intervalKey = `${date}-${intervalBegin}-${intervalEnd}`;
 
-        if (timeEnd <= begin || timeBegin >= end) {
+        if (timeEnd <= intervalBegin || timeBegin >= intervalEnd) {
           continue;
         }
 
-        if (folded) {
-          if (key in eventsFolded) {
-            eventsFolded[ key ].push(event);
+        if (intervalFolded) {
+          if (intervalKey in eventsFolded) {
+            eventsFolded[ intervalKey ].push(event);
 
           } else {
-            eventsFolded[ key ] = [ event ];
+            eventsFolded[ intervalKey ] = [ event ];
 
             items.push(
               <DayEventFolded
-                key={key}
-                events={eventsFolded[ key ]}
-                rateBegin={this.getRate(begin - 1)} />
+                key={intervalKey}
+                events={eventsFolded[ intervalKey ]}
+                rateBegin={this.getRate(intervalBegin - 1)} />
             );
           }
 
         } else {
-          const rateBegin = this.getRate(Math.max(timeBegin, begin));
-          const rateEnd = 100 - this.getRate(Math.min(timeEnd, end - 1));
+          const rateBegin = this.getRate(Math.max(timeBegin, intervalBegin));
+          const rateEnd = 100 - this.getRate(Math.min(timeEnd, intervalEnd - 1));
 
           if (timeBegin > columnsTimeMax) {
             columns = [];
@@ -141,7 +136,7 @@ export default class DayEvents extends EventsComponent {
 
           items.push(
             <DayEvent
-              key={`${key}-${id}`}
+              key={`${intervalKey}-${id}`}
               rateBegin={rateBegin}
               rateEnd={rateEnd}
               columns={columns}
@@ -170,23 +165,3 @@ DayEvents.propTypes = {
   hoursOfDay: PropTypes.string
 };
 /* @endif */
-
-function getColumn (time, columns) {
-  return do {
-    if (columns[0] <= time) {
-      0;
-    } else if (columns[1] <= time) {
-      1;
-    } else if (columns[2] <= time) {
-      2;
-    } else if (columns[3] <= time) {
-      3;
-    } else if (columns[4] <= time) {
-      4;
-    } else if (columns[5] <= time) {
-      5;
-    } else {
-      columns.length;
-    }
-  };
-}

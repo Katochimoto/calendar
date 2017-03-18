@@ -12,15 +12,15 @@ import styles from './index.less';
 
 export default class InfiniteList extends StoreComponent {
   transformState (props, context) {
-    const { scrollX, listOffset, listRange, scrollWidth } = context.store.getState();
-    return { scrollX, listOffset, listRange, scrollWidth };
+    const { scrollX, listOffset, LIST_RANGE, scrollWidth } = context.store.getState();
+    return { scrollX, listOffset, LIST_RANGE, scrollWidth };
   }
 
   shouldComponentUpdate (nextProps, nextState) {
     return (
       this.props.itemSize !== nextProps.itemSize ||
       this.state.listOffset !== nextState.listOffset ||
-      this.state.listRange !== nextState.listRange ||
+      this.state.LIST_RANGE !== nextState.LIST_RANGE ||
       this.state.scrollX !== nextState.scrollX
     );
   }
@@ -30,12 +30,12 @@ export default class InfiniteList extends StoreComponent {
    */
   getItems () {
     const itemSize = this.props.itemSize;
-    const { scrollX, listOffset, listRange, scrollWidth } = this.state;
+    const { scrollX, listOffset, LIST_RANGE, scrollWidth } = this.state;
 
     let items = [];
-    let idxLocal = -(listRange); // local index minimizes redraw
-    let idx = listOffset - listRange;
-    let end = listOffset + listRange;
+    let idxLocal = -(LIST_RANGE); // local index minimizes redraw
+    let idx = listOffset - LIST_RANGE;
+    let end = listOffset + LIST_RANGE;
 
     for (; idx <= end; idx++) {
       const min = this.context.store.scrollXByOffset(idxLocal);
@@ -60,7 +60,7 @@ export default class InfiniteList extends StoreComponent {
   }
 
   render () {
-    const style = `transform: translateX(${this.state.scrollX}px)`;
+    const style = `transform: translateX(${this.state.scrollX}px);`;
 
     return (
       <div className={styles.calendar_InfiniteList}>

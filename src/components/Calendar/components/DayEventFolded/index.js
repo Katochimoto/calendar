@@ -15,14 +15,16 @@ export default class DayEventFolded extends Component {
 
   render () {
     return (
-      <div className={styles.calendar_DayEventFolded}
-        style={`top: ${this.props.rateBegin}%;`} />
+      <div
+        style={`top: ${this.props.rateBegin}%;`}
+        className={styles.calendar_DayEventFolded} />
     );
   }
 }
 
 /* @if NODE_ENV=='development' **
 DayEventFolded.propTypes = {
+  events: PropTypes.array,
   rateBegin: PropTypes.number
 };
 /* @endif */

@@ -3,7 +3,6 @@ import DatetimeStrategyDefault from './Datetime/DatetimeStrategyDefault';
 export default class Datetime {
   constructor (strategy) {
     this._strategy = strategy || new DatetimeStrategyDefault();
-    this.HOURMS = Datetime.HOURMS;
   }
 
   gridDaysHourTitle (hour) {
@@ -26,5 +25,3 @@ export default class Datetime {
     return this._strategy.parseDate(date);
   }
 }
-
-Datetime.HOURMS = 60 * 60 * 1000;

@@ -12,7 +12,9 @@
     "reload": "livereload 'dist'",
     "watch": "npm-run-all --parallel reload dev vendor",
     "start": "electron .",
-    "build": "electron-packager . $npm_package_name --platform=darwin --arch=x64 --version=$npm_package_electronVersion --app-version=$npm_package_version --out=build --ignore=build --prune"
+    "build": "electron-packager . $npm_package_name --platform=darwin --arch=x64 --version=$npm_package_electronVersion --app-version=$npm_package_version --out=build --ignore=build --prune",
+    "test": "mocha --require babel-register src/**/*.spec.js",
+    "test-dev": "mocha -w --require babel-register src/**/*.spec.js"
   },
   "devDependencies": {
     "autoprefixer": "^6.7.0",
@@ -24,9 +26,11 @@
     "babel-preset-react": "^6.16.0",
     "babel-preset-stage-0": "^6.16.0",
     "buble": "^0.15.2",
+    "chai": "^3.5.0",
     "css-mqpacker": "^5.0.1",
     "less-plugin-css-modules": "^0.0.3",
     "livereload": "^0.6.0",
+    "mocha": "^3.2.0",
     "npm-run-all": "^4.0.1",
     "postcss": "^5.2.11",
     "postcss-csso": "^1.1.2",

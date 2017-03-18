@@ -1,25 +1,54 @@
 import arr2obj from '../arr2obj';
+import createIntervals from '../createIntervals';
+import { HOURMS } from '../../constant';
 
-const HOURMS = 60 * 60 * 1000;
-const HOURS = '0,1,2,3,4,5,6,7,10,11,12,13,14,15,16,17,18,19,20,21,22,23'; //,8,9
+const HOURS = '0,1,2,3,4,5,6,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23'; //,7,8
 const HOURS_LIST = HOURS.split(',').map(Number);
 const INTERVALS = createIntervals(HOURS_LIST);
 const DAYMS = HOURS_LIST.length * HOURMS;
-const HOURS_IDX = arr2obj(HOURS_LIST);
+const GRID_HOURS = arr2obj(HOURS_LIST);
 
 export default function createState () {
   const currentValues = {
     scrollHeight: 0,
     scrollWidth: 0,
+
+    /**
+     * максимальное смещение при скроле влево = -1 * scrollWidth * ( LIST_RANGE * 2 )
+     * @type {number}
+     * @private
+     * @readonly
+     */
     scrollOffsetLeft: 0,
+
+    /**
+     * максимальное смещение при скроле вправо
+     * @constant {number}
+     * @private
+     * @readonly
+     */
     scrollOffsetRight: 0,
+
+    /**
+     * максимальное смещение при скроле вверх = -1 * scrollHeight
+     * @type {number}
+     * @private
+     * @readonly
+     */
     scrollOffsetTop: 0,
+
+    /**
+     * максимальное смещение при скроле вниз
+     * @constant {number}
+     * @private
+     * @readonly
+     */
     scrollOffsetBottom: 0,
     scrollX: undefined,
     scrollY: 0,
 
     listOffset: 0,
-    listRange: 1,
+    LIST_RANGE: 1,
 
     //stickyScrollX: false,   // ? залипающий скролл по X
     //stepScrollX: false,     // ? пошаговый скролл по X
@@ -41,9 +70,9 @@ export default function createState () {
     //grid: 'day',
     currentDate: 2017.0227,
     hoursOfDay: HOURS,
-    hoursIdx: HOURS_IDX,
-    dayms: DAYMS,
-    intervalsOfDay: INTERVALS,
+    GRID_HOURS: GRID_HOURS,
+    DAYMS: DAYMS,
+    INTERVALS: INTERVALS,
     weekends: '0,6',
     hideWeekends: false,
     beginningOfWeek: 1
@@ -86,7 +115,7 @@ export default function createState () {
         const listOffset = currentValues.listOffset;
 
         currentValues.scrollWidth = value;
-        currentValues.scrollOffsetLeft = -2 * currentValues.listRange * value;
+        currentValues.scrollOffsetLeft = -2 * currentValues.LIST_RANGE * value;
         // currentValues.speedScrollX = 0;
         currentValues.scrollX = currentValues.scrollX === undefined ?
           limitScrollX(getScrollXByOffset(0, currentValues), currentValues) :
@@ -99,47 +128,7 @@ export default function createState () {
     },
 
     /**
-     * максимальное смещение при скроле влево = -1 * scrollWidth * ( listRange * 2 )
-     * @type {number}
-     * @private
-     * @readonly
-     */
-    scrollOffsetLeft: {
-      get: () => currentValues.scrollOffsetLeft
-    },
-
-    /**
-     * максимальное смещение при скроле вправо
-     * @constant {number}
-     * @private
-     * @readonly
-     */
-    scrollOffsetRight: {
-      value: currentValues.scrollOffsetRight
-    },
-
-    /**
-     * максимальное смещение при скроле вверх = -1 * scrollHeight
-     * @type {number}
-     * @private
-     * @readonly
-     */
-    scrollOffsetTop: {
-      get: () => currentValues.scrollOffsetTop
-    },
-
-    /**
-     * максимальное смещение при скроле вниз
-     * @constant {number}
-     * @private
-     * @readonly
-     */
-    scrollOffsetBottom: {
-      value: currentValues.scrollOffsetBottom
-    },
-
-    /**
-     * смещение скрола по оси X = -1 * listRange * scrollWidth
+     * смещение скрола по оси X = -1 * LIST_RANGE * scrollWidth
      * @type {number}
      * @public
      */
@@ -198,9 +187,9 @@ export default function createState () {
      * @public
      * @readonly
      */
-    listRange: {
+    LIST_RANGE: {
       enumerable: true,
-      value: currentValues.listRange
+      value: currentValues.LIST_RANGE
     },
 
     /**
@@ -237,9 +226,9 @@ export default function createState () {
 
         if (value !== currentValues.hoursOfDay) {
           currentValues.hoursOfDay = value;
-          currentValues.dayms = list.length * HOURMS;
-          currentValues.hoursIdx = arr2obj(list);
-          currentValues.intervalsOfDay = createIntervals(list);
+          currentValues.DAYMS = list.length * HOURMS;
+          currentValues.GRID_HOURS = arr2obj(list);
+          currentValues.INTERVALS = createIntervals(list);
           isChangedValues = true;
         }
       }
@@ -251,9 +240,9 @@ export default function createState () {
      * @public
      * @readonly
      */
-    dayms: {
+    DAYMS: {
       enumerable: true,
-      get: () => currentValues.dayms
+      get: () => currentValues.DAYMS
     },
 
     /**
@@ -262,9 +251,9 @@ export default function createState () {
      * @public
      * @readonly
      */
-    hoursIdx: {
+    GRID_HOURS: {
       enumerable: true,
-      get: () => currentValues.hoursIdx
+      get: () => currentValues.GRID_HOURS
     },
 
     /**
@@ -273,9 +262,9 @@ export default function createState () {
      * @public
      * @readonly
      */
-    intervalsOfDay: {
+    INTERVALS: {
       enumerable: true,
-      get: () => currentValues.intervalsOfDay
+      get: () => currentValues.INTERVALS
     },
 
     /**
@@ -416,7 +405,7 @@ function limitScrollX (value, { scrollOffsetLeft, scrollOffsetRight }) {
 function correctScrollX (oldListOffset, state) {
   const {
     listOffset,
-    listRange,
+    LIST_RANGE,
     scrollWidth,
     scrollX
   } = state;
@@ -428,7 +417,7 @@ function correctScrollX (oldListOffset, state) {
   const diff = listOffset - oldListOffset;
 
   return do {
-    if (Math.abs(diff) > listRange) {
+    if (Math.abs(diff) > LIST_RANGE) {
       limitScrollX(getScrollXByOffset(listOffset, state), state);
     } else {
       limitScrollX(scrollX + diff * scrollWidth, state);
@@ -436,24 +425,6 @@ function correctScrollX (oldListOffset, state) {
   };
 }
 
-function getScrollXByOffset (listOffset, { listRange, scrollWidth }) {
-  return (listOffset + 1) * -1 * listRange * scrollWidth;
-}
-
-function createIntervals (list) {
-  const intervals = Object.create(null);
-  let prev = -2;
-  let start;
-
-  for (let i = 0, len = list.length; i < len; i++) {
-    let item = list[i];
-    if ((item - prev) > 1) {
-      start = item;
-    }
-
-    intervals[ start * HOURMS ] = (item + 1) * HOURMS - 1;
-    prev = item;
-  }
-
-  return Object.freeze(intervals);
+function getScrollXByOffset (listOffset, { LIST_RANGE, scrollWidth }) {
+  return (listOffset + 1) * -1 * LIST_RANGE * scrollWidth;
 }

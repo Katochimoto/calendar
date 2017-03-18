@@ -1,4 +1,5 @@
 import { EventsComponent } from '../../utils/Component';
+import { HOURMS } from '../../constant';
 /* @if NODE_ENV=='development' **
 import { PropTypes } from '../../utils/Component';
 /* @endif */
@@ -47,9 +48,14 @@ export default class DayEvents extends EventsComponent {
   transformState (props, context) {
     const interval = this.getInterval(props);
     const events = context.events.getByInterval(interval);
-    const { intervalsOfDay, dayms, hoursIdx } = context.store.getState();
+    const { INTERVALS, DAYMS, GRID_HOURS } = context.store.getState();
 
-    return { events, intervalsOfDay, dayms, hoursIdx };
+    return {
+      DAYMS,
+      events,
+      GRID_HOURS,
+      INTERVALS
+    };
   }
 
   upload () {
@@ -65,58 +71,58 @@ export default class DayEvents extends EventsComponent {
   }
 
   getRate (time) {
-    const HOURMS = this.context.datetime.HOURMS;
     const hour = time / HOURMS ^ 0;
     const ms = time % HOURMS;
-    const grid = this.state.hoursIdx[ hour ] * HOURMS + ms;
-    return Math.round(1000 * 100 * grid / this.state.dayms) / 1000;
+    const grid = this.state.GRID_HOURS[ hour ] * HOURMS + ms;
+    return Math.round(1000 * 100 * grid / this.state.DAYMS) / 1000;
   }
 
   getItems () {
-    const date = this.props.date;
-    const intervalsOfDay = this.state.intervalsOfDay;
     const items = [];
-    const itemsFold = {};
+    const date = this.props.date;
+    const INTERVALS = this.state.INTERVALS;
+    const events = this.state.events;
+    const eventsFolded = {};
+    const eventsColumn = {};
     let columns = [];
     let columnsTimeMax = 0;
 
-    let test = {};
+    const ilen = INTERVALS.length;
+    const len = events.length;
 
-    const len = this.state.events.length
-    let i = 0;
+    for (let i = 0; i < len; i++) {
+      const event = events[i];
+      const { id, timeEnd, timeBegin } = event;
 
-    for (; i < len; i++) {
-      const item = this.state.events[i];
-      const { timeEnd, timeBegin } = item;
+      for (let j = 0; j < ilen; j++) {
+        const interval = INTERVALS[j];
+        const begin = interval[0];
+        const end = interval[1];
+        const folded = interval[2];
+        const key = `${date}-${begin}-${end}`;
 
-      let begin;
-      let end;
-      let beginFold = 0;
-      let endFold = 0;
-      let keyInterval;
-
-      for (begin in intervalsOfDay) {
-        keyInterval = `${date}-${begin}`;
-        end = intervalsOfDay[ begin ];
-        endFold = begin;
-
-        if (!(timeEnd < beginFold || timeBegin > endFold)) {
-          if (!(beginFold in itemsFold)) {
-            itemsFold[ beginFold ] = {
-              begin: beginFold,
-              end: endFold,
-              items: []
-            };
-          }
-
-          itemsFold[ beginFold ].items.push({
-            title: item.title
-          });
+        if (timeEnd <= begin || timeBegin >= end) {
+          continue;
         }
 
-        if (!(timeEnd < begin || timeBegin > end)) {
+        if (folded) {
+          if (key in eventsFolded) {
+            eventsFolded[ key ].push(event);
+
+          } else {
+            eventsFolded[ key ] = [ event ];
+
+            items.push(
+              <DayEventFolded
+                key={key}
+                events={eventsFolded[ key ]}
+                rateBegin={this.getRate(begin - 1)} />
+            );
+          }
+
+        } else {
           const rateBegin = this.getRate(Math.max(timeBegin, begin));
-          const rateEnd = 100 - this.getRate(Math.min(timeEnd, end));
+          const rateEnd = 100 - this.getRate(Math.min(timeEnd, end - 1));
 
           if (timeBegin > columnsTimeMax) {
             columns = [];
@@ -126,70 +132,37 @@ export default class DayEvents extends EventsComponent {
             columnsTimeMax = timeEnd;
           }
 
-          const column = do {
-            if (item.id in test) {
-              test[item.id];
-            } else if (columns[0] <= timeBegin) {
-              0;
-            } else if (columns[1] <= timeBegin) {
-              1;
-            } else if (columns[2] <= timeBegin) {
-              2;
-            } else if (columns[3] <= timeBegin) {
-              3;
-            } else if (columns[4] <= timeBegin) {
-              4;
-            } else if (columns[5] <= timeBegin) {
-              5;
-            } else {
-              columns.length;
-            }
-          };
+          const column = (id in eventsColumn) ?
+            eventsColumn[ id ] :
+            getColumn(timeBegin, columns);
 
           columns[ column ] = timeEnd;
-          test[item.id] = column;
+          eventsColumn[ id ] = column;
 
-          // TODO запоминать column глобально для события на день
-          // необходимо в случае разрыва
           items.push(
             <DayEvent
-              key={`${keyInterval}--${item.id}`}
+              key={`${key}-${id}`}
               rateBegin={rateBegin}
               rateEnd={rateEnd}
               columns={columns}
               column={column}
-              title={item.title} />
+              event={event} />
           );
         }
-
-        beginFold = end;
       }
-    }
-
-    for (const keyFold in itemsFold) {
-      const item = itemsFold[ keyFold ];
-      const rateBegin = this.getRate(item.begin);
-      const keyInterval = `${date}-${item.begin}`;
-
-      items.push(
-        <DayEventFolded key={keyInterval} rateBegin={rateBegin} />
-      );
     }
 
     return items;
   }
 
   render () {
-    var p = performance.now();
-    const items = this.getItems();
-    window.test.push(performance.now() - p);
     return (
-      <div className={styles.calendar_DayEvents}>{items}</div>
+      <div className={styles.calendar_DayEvents}>
+        {this.getItems()}
+      </div>
     );
   }
 }
-
-window.test = [];
 
 /* @if NODE_ENV=='development' **
 DayEvents.propTypes = {
@@ -197,3 +170,23 @@ DayEvents.propTypes = {
   hoursOfDay: PropTypes.string
 };
 /* @endif */
+
+function getColumn (time, columns) {
+  return do {
+    if (columns[0] <= time) {
+      0;
+    } else if (columns[1] <= time) {
+      1;
+    } else if (columns[2] <= time) {
+      2;
+    } else if (columns[3] <= time) {
+      3;
+    } else if (columns[4] <= time) {
+      4;
+    } else if (columns[5] <= time) {
+      5;
+    } else {
+      columns.length;
+    }
+  };
+}

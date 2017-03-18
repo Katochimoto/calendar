@@ -11,13 +11,12 @@ export default class DayEvent extends Component {
     return (
       this.props.rateBegin !== nextProps.rateBegin ||
       this.props.rateEnd !== nextProps.rateEnd ||
-      this.props.title !== nextProps.title ||
       this.props.column !== nextProps.column
     );
   }
 
   render () {
-    const { title, rateBegin, rateEnd, columns, column } = this.props;
+    const { event, rateBegin, rateEnd, columns, column } = this.props;
     const len = columns.length;
     const left = 100 - 100 * (len - column) / len;
     const right = 100 - (left + 100 / len)
@@ -26,7 +25,7 @@ export default class DayEvent extends Component {
 
     return (
       <div className={styles.calendar_DayEvent} style={style}>
-        {title}
+        {event.title}
       </div>
     );
   }
@@ -36,7 +35,7 @@ export default class DayEvent extends Component {
 DayEvent.propTypes = {
   rateBegin: PropTypes.number,
   rateEnd: PropTypes.number,
-  title: PropTypes.string,
+  event: PropTypes.object,
   columns: PropTypes.array,
   column: PropTypes.number
 };

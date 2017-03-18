@@ -2,7 +2,6 @@ import RollupPluginNodeResolve from 'rollup-plugin-node-resolve';
 import RollupPluginCommonJS from 'rollup-plugin-commonjs';
 import RollupPluginFilesize from 'rollup-plugin-filesize';
 import RollupPluginReplace from 'rollup-plugin-replace';
-//import RollupPluginBabel from 'rollup-plugin-babel';
 import RollupPluginBuble from 'rollup-plugin-buble';
 
 const NODE_ENV = 'development'; // production
@@ -20,27 +19,23 @@ export default {
     RollupPluginReplace({
       'process.env.NODE_ENV': JSON.stringify(NODE_ENV)
     }),
-    /*RollupPluginBabel({
-      babelrc: false,
-      presets: [
-        [ 'es2015', { 'modules': false } ]
-      ]
-    }),*/
+
     RollupPluginBuble({
-      //target: { chrome: 48, firefox: 44 },
       transforms: {
         modules: false
       }
     }),
+
     RollupPluginNodeResolve({
-      jsnext: true,
-      module: true,
-      main: true,
-      browser: true
+      jsnext: false,
+      module: false,
+      main: true
     }),
+
     RollupPluginCommonJS({
       include: 'node_modules/**'
     }),
+
     RollupPluginFilesize()
   ]
 };

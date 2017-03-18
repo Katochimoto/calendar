@@ -39,6 +39,7 @@ export default {
   },
   plugins: [
     RollupPluginJSON(),
+    
     RollupPluginLess2({
       output: 'dist/app.css',
       // sourceMapOutput: 'dist/app.css.map',
@@ -87,9 +88,11 @@ export default {
         });
       }
     }),
+
     RollupPluginReplace({
       'process.env.NODE_ENV': JSON.stringify(NODE_ENV)
     }),
+
     RollupPluginBabel({
       exclude: 'node_modules/**',
       babelrc: false,
@@ -114,36 +117,30 @@ export default {
         ]
       ]
     }),
+
     RollupPluginInject({
       'h': [ 'preact', 'h' ]
     }),
+
     RollupPluginBuble({
-      exclude: 'node_modules/**',
-      //target: { chrome: 48, firefox: 44 },
-      /*transforms: {
-        arrow: true,
-        modules: false,
-        dangerousForOf: true
-      },*/
-      //jsx: 'preact.h'
-      //objectAssign: 'angular.extend',
+      exclude: 'node_modules/**'
     }),
+
     RollupPluginNodeResolve({
-      jsnext: true,
-      module: true,
-      main: true,
-      browser: true,
       skip: external
     }),
+
     RollupPluginCommonJS({
       include: 'node_modules/**',
       exclude: '**/*.less'
     }),
+
     RollupPluginPreprocess({
       context: {
         NODE_ENV: NODE_ENV
       }
     }),
+
     //RollupPluginUglify(),
     RollupPluginFilesize()
   ]

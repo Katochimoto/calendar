@@ -104,7 +104,7 @@ export default class DayEvents extends EventsComponent {
             items.push({
               folded: true,
               key: intervalKey,
-              top: store.getRate(intervalBegin - 1),
+              top: store.timeToRate(intervalBegin - 1),
               events: eventsFolded[ intervalKey ]
             });
           }
@@ -127,8 +127,8 @@ export default class DayEvents extends EventsComponent {
 
           items.push({
             key: `${intervalKey}-${id}`,
-            top: store.getRate(Math.max(timeBegin, intervalBegin)),
-            bottom: 100 - store.getRate(Math.min(timeEnd, intervalEnd - 1)),
+            top: store.timeToRate(Math.max(timeBegin, intervalBegin)),
+            bottom: 100 - store.timeToRate(Math.min(timeEnd, intervalEnd - 1)),
             column: column,
             columns: columns,
             event: event

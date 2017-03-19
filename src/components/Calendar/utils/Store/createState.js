@@ -365,7 +365,7 @@ export default function createState () {
       return getScrollXByOffset(listOffset, currentValues);
     },
 
-    getRate (time) {
+    timeToRate (time) {
       const hour = time / HOURMS ^ 0;
       const ms = time % HOURMS;
       const grid = currentValues.GRID_HOURS[ hour ] * HOURMS + ms;

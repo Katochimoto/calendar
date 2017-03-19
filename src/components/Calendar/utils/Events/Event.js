@@ -1,6 +1,10 @@
 export default class Event {
 
-  valueOf () {
+  getId () {
     
+  }
+
+  valueOf () {
+
   }
 }

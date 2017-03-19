@@ -22,7 +22,7 @@ export default class Store extends EventEmitter {
     return this._state.scrollXByOffset(listOffset);
   }
 
-  getRate (time) {
-    return this._state.getRate(time);
+  timeToRate (time) {
+    return this._state.timeToRate(time);
   }
 }

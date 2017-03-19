@@ -107,18 +107,15 @@ export default class DayEvents extends EventsComponent {
           } else {
             eventsFolded[ intervalKey ] = [ event ];
 
-            items.push(
-              <DayEventFolded
-                key={intervalKey}
-                events={eventsFolded[ intervalKey ]}
-                rateBegin={this.getRate(intervalBegin - 1)} />
-            );
+            items.push({
+              folded: true,
+              key: intervalKey,
+              top: this.getRate(intervalBegin - 1),
+              events: eventsFolded[ intervalKey ]
+            });
           }
 
         } else {
-          const rateBegin = this.getRate(Math.max(timeBegin, intervalBegin));
-          const rateEnd = 100 - this.getRate(Math.min(timeEnd, intervalEnd - 1));
-
           if (timeBegin > columnsTimeMax) {
             columns = [];
           }
@@ -134,16 +131,43 @@ export default class DayEvents extends EventsComponent {
           columns[ column ] = timeEnd;
           eventsColumn[ id ] = column;
 
-          items.push(
-            <DayEvent
-              key={`${intervalKey}-${id}`}
-              rateBegin={rateBegin}
-              rateEnd={rateEnd}
-              columns={columns}
-              column={column}
-              event={event} />
-          );
+          items.push({
+            key: `${intervalKey}-${id}`,
+            top: this.getRate(Math.max(timeBegin, intervalBegin)),
+            bottom: 100 - this.getRate(Math.min(timeEnd, intervalEnd - 1)),
+            column: column,
+            columns: columns,
+            event: event
+          });
         }
+      }
+    }
+
+    for (let i = 0, len = items.length; i < len; i++) {
+      const item = items[i];
+
+      if (item.folded) {
+        items[i] = (
+          <DayEventFolded
+            key={item.key}
+            top={item.top}
+            events={item.events} />
+        );
+
+      } else {
+        const clen = columns.length;
+        const left = 100 - 100 * (clen - item.column) / clen;
+        const right = 100 - (left + 100 / clen);
+
+        items[i] = (
+          <DayEvent
+            key={item.key}
+            left={left}
+            right={right}
+            top={item.top}
+            bottom={item.bottom}
+            event={item.event} />
+        );
       }
     }
 

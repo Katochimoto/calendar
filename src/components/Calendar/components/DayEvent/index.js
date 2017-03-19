@@ -9,19 +9,22 @@ export default class DayEvent extends Component {
 
   shouldComponentUpdate (nextProps) {
     return (
-      this.props.rateBegin !== nextProps.rateBegin ||
-      this.props.rateEnd !== nextProps.rateEnd ||
-      this.props.column !== nextProps.column
+      this.props.top !== nextProps.top ||
+      this.props.bottom !== nextProps.bottom ||
+      this.props.left !== nextProps.left ||
+      this.props.right !== nextProps.right
     );
   }
 
   render () {
-    const { event, rateBegin, rateEnd, columns, column } = this.props;
-    const len = columns.length;
-    const left = 100 - 100 * (len - column) / len;
-    const right = 100 - (left + 100 / len)
+    const { event, top, bottom, left, right } = this.props;
     const fontSize = 0.9;
-    const style = `font-size: ${fontSize}em; left: ${left}%; right: ${right}%; top: ${rateBegin}%; bottom: ${rateEnd}%;`;
+    const style = `
+      font-size: ${fontSize}em;
+      left: ${left}%;
+      right: ${right}%;
+      top: ${top}%;
+      bottom: ${bottom}%;`;
 
     return (
       <div className={styles.calendar_DayEvent} style={style}>
@@ -33,8 +36,8 @@ export default class DayEvent extends Component {
 
 /* @if NODE_ENV=='development' **
 DayEvent.propTypes = {
-  rateBegin: PropTypes.number,
-  rateEnd: PropTypes.number,
+  top: PropTypes.number,
+  bottom: PropTypes.number,
   event: PropTypes.object,
   columns: PropTypes.array,
   column: PropTypes.number
@@ -42,7 +45,7 @@ DayEvent.propTypes = {
 /* @endif */
 
 DayEvent.defaultProps = {
-  rateBegin: 0,
-  rateEnd: 0,
+  top: 0,
+  bottom: 0,
   column: 0
 };

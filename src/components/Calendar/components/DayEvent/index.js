@@ -38,14 +38,15 @@ export default class DayEvent extends Component {
 DayEvent.propTypes = {
   top: PropTypes.number,
   bottom: PropTypes.number,
-  event: PropTypes.object,
-  columns: PropTypes.array,
-  column: PropTypes.number
+  left: PropTypes.number,
+  right: PropTypes.number,
+  event: PropTypes.object
 };
 /* @endif */
 
 DayEvent.defaultProps = {
   top: 0,
   bottom: 0,
-  column: 0
+  left: 0,
+  right: 0
 };

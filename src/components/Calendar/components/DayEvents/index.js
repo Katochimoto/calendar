@@ -49,8 +49,8 @@ export default class DayEvents extends EventsComponent {
   transformState (props, context) {
     const interval = this.getInterval(props);
     const events = context.events.getByInterval(interval);
-    const { DAYMS, GRID_HOURS, INTERVALS } = context.store.getState();
-    return { events, DAYMS, GRID_HOURS, INTERVALS };
+    const { INTERVALS } = context.store.getState();
+    return { events, INTERVALS };
   }
 
   upload () {
@@ -65,15 +65,9 @@ export default class DayEvents extends EventsComponent {
     }
   }
 
-  getRate (time) {
-    const hour = time / HOURMS ^ 0;
-    const ms = time % HOURMS;
-    const grid = this.state.GRID_HOURS[ hour ] * HOURMS + ms;
-    return Math.round(1000 * 100 * grid / this.state.DAYMS) / 1000;
-  }
-
   getItems () {
     const items = [];
+    const store = this.context.store;
     const date = this.props.date;
     const INTERVALS = this.state.INTERVALS;
     const events = this.state.events;
@@ -110,7 +104,7 @@ export default class DayEvents extends EventsComponent {
             items.push({
               folded: true,
               key: intervalKey,
-              top: this.getRate(intervalBegin - 1),
+              top: store.getRate(intervalBegin - 1),
               events: eventsFolded[ intervalKey ]
             });
           }
@@ -133,8 +127,8 @@ export default class DayEvents extends EventsComponent {
 
           items.push({
             key: `${intervalKey}-${id}`,
-            top: this.getRate(Math.max(timeBegin, intervalBegin)),
-            bottom: 100 - this.getRate(Math.min(timeEnd, intervalEnd - 1)),
+            top: store.getRate(Math.max(timeBegin, intervalBegin)),
+            bottom: 100 - store.getRate(Math.min(timeEnd, intervalEnd - 1)),
             column: column,
             columns: columns,
             event: event

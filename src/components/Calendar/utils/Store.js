@@ -21,4 +21,8 @@ export default class Store extends EventEmitter {
   scrollXByOffset (listOffset) {
     return this._state.scrollXByOffset(listOffset);
   }
+
+  getRate (time) {
+    return this._state.getRate(time);
+  }
 }

@@ -363,6 +363,13 @@ export default function createState () {
 
     scrollXByOffset (listOffset) {
       return getScrollXByOffset(listOffset, currentValues);
+    },
+
+    getRate (time) {
+      const hour = time / HOURMS ^ 0;
+      const ms = time % HOURMS;
+      const grid = currentValues.GRID_HOURS[ hour ] * HOURMS + ms;
+      return Math.round(1000 * 100 * grid / currentValues.DAYMS) / 1000;
     }
   };
 }

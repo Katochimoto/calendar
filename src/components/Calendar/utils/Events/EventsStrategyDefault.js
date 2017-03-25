@@ -35,6 +35,14 @@ export default class EventsStrategyDefault extends EventsStrategy {
         timeBegin: (7 * 60 + 30) * 60 * 1000,
         timeEnd: (10 * 60) * 60 * 1000,
         title: `${dateBegin} 3`
+      },
+      {
+        id: `${dateBegin}T11:00:00--${dateEnd}T12:30:00`,
+        dateBegin: dateBegin,
+        dateEnd: dateEnd,
+        timeBegin: (11 * 60) * 60 * 1000,
+        timeEnd: (12 * 60 + 30) * 60 * 1000,
+        title: `${dateBegin} 4`
       }
     ];
 

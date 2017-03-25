@@ -149,7 +149,7 @@ export default class DayEvents extends EventsComponent {
         );
 
       } else {
-        const clen = columns.length;
+        const clen = item.columns.length;
         const left = 100 - 100 * (clen - item.column) / clen;
         const right = 100 - (left + 100 / clen);
 

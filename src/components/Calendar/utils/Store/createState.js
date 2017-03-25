@@ -1,4 +1,5 @@
 import arr2obj from '../arr2obj';
+import { offsetDay } from '../date';
 import createIntervals from '../createIntervals';
 import { HOURMS } from '../../constant';
 
@@ -47,7 +48,6 @@ export default function createState () {
     scrollX: undefined,
     scrollY: 0,
 
-    listOffset: 0,
     LIST_RANGE: 1,
 
     //stickyScrollX: false,   // ? залипающий скролл по X
@@ -111,7 +111,7 @@ export default function createState () {
       get: () => currentValues.scrollWidth,
       set: (value) => {
         const scrollWidth = currentValues.scrollWidth;
-        const listOffset = currentValues.listOffset;
+        const currentDate = currentValues.currentDate;
 
         currentValues.scrollWidth = value;
         currentValues.scrollOffsetLeft = -2 * currentValues.LIST_RANGE * value;
@@ -119,8 +119,8 @@ export default function createState () {
         currentValues.scrollX = currentValues.scrollX === undefined ?
           limitScrollX(getScrollXByOffset(0, currentValues), currentValues) :
           scrollWidth > 0 ? limitScrollX(currentValues.scrollX * value / scrollWidth, currentValues) : 0;
-        currentValues.listOffset = getListOffset(currentValues);
-        currentValues.scrollX = correctScrollX(listOffset, currentValues);
+        currentValues.currentDate = getCurrentDate(currentValues);
+        currentValues.scrollX = correctScrollX(currentDate, currentValues);
 
         isChangedValues = true;
       }
@@ -141,12 +141,12 @@ export default function createState () {
           return;
         }
 
-        const listOffset = currentValues.listOffset;
+        const currentDate = currentValues.currentDate;
 
         // currentValues.speedScrollX = currentValues.scrollX - value;
         currentValues.scrollX = value;
-        currentValues.listOffset = getListOffset(currentValues);
-        currentValues.scrollX = correctScrollX(listOffset, currentValues);
+        currentValues.currentDate = getCurrentDate(currentValues);
+        currentValues.scrollX = correctScrollX(currentDate, currentValues);
 
         isChangedValues = true;
       }
@@ -189,25 +189,6 @@ export default function createState () {
     LIST_RANGE: {
       enumerable: true,
       value: currentValues.LIST_RANGE
-    },
-
-    /**
-     * смещение начала списка. смещение определяется интервалами InfiniteList
-     * @type {number}
-     * @public
-     */
-    listOffset: {
-      enumerable: true,
-      get: () => currentValues.listOffset,
-      set: (value) => {
-        const listOffset = currentValues.listOffset;
-
-        currentValues.listOffset = value;
-        // currentValues.speedScrollX = 0;
-        currentValues.scrollX = correctScrollX(listOffset, currentValues);
-
-        isChangedValues = true;
-      }
     },
 
     /**
@@ -289,7 +270,11 @@ export default function createState () {
       enumerable: true,
       get: () => currentValues.currentDate,
       set: (value) => {
+        const currentDate = currentValues.currentDate;
+
         currentValues.currentDate = value;
+        currentValues.scrollX = correctScrollX(currentDate, currentValues);
+
         isChangedValues = true;
       }
     },
@@ -360,13 +345,16 @@ export default function createState () {
       return isChangedValues;
     },
 
-    isVisibleOffset (idx) {
-      const min = getScrollXByOffset(idx, currentValues);
-      const max = min - currentValues.scrollWidth;
+    isVisibleOffset (offset) {
       const scrollX = currentValues.scrollX;
+      const scrollWidth = currentValues.scrollWidth;
+      const LIST_RANGE = currentValues.LIST_RANGE;
+      const min = getScrollXByOffset(offset, currentValues);
+      const max = min - scrollWidth;
+
       return scrollX !== undefined && !Boolean(
-        max >= scrollX / currentValues.LIST_RANGE ||
-        min <= scrollX - currentValues.scrollWidth * currentValues.LIST_RANGE
+        max >= scrollX / LIST_RANGE ||
+        min <= scrollX - scrollWidth * LIST_RANGE
       );
     },
 
@@ -379,7 +367,7 @@ export default function createState () {
   };
 }
 
-function getListOffset ({ listOffset, scrollX, scrollOffsetLeft, scrollOffsetRight, LIST_RANGE }) {
+function getCurrentDate ({ currentDate, scrollX, scrollOffsetLeft, scrollOffsetRight, LIST_RANGE, gridDaysListItemSize }) {
   const scrollOffsetCenter = (scrollOffsetLeft + scrollOffsetRight) / 2;
   const scrollOffsetWidth = scrollOffsetLeft > scrollOffsetRight ?
     scrollOffsetLeft - scrollOffsetRight :
@@ -390,14 +378,16 @@ function getListOffset ({ listOffset, scrollX, scrollOffsetLeft, scrollOffsetRig
     scrollX - scrollOffsetCenter :
     scrollOffsetCenter - scrollX;
   const rate = centerOffsetWidth ? sign * scrollX2CenterWidth * 100 / centerOffsetWidth : 0;
+  const rateCompare = 100 / LIST_RANGE;
 
+  // FIXME setDate зависит от типа сетки
   return do {
-    if (rate <= -100 / LIST_RANGE) {
-      ++listOffset;
-    } else if (rate >= 100 / LIST_RANGE) {
-      --listOffset;
+    if (rate <= -(rateCompare)) {
+      offsetDay(currentDate, gridDaysListItemSize);
+    } else if (rate >= rateCompare) {
+      offsetDay(currentDate, -(gridDaysListItemSize));
     } else {
-      listOffset;
+      currentDate;
     }
   };
 }
@@ -414,18 +404,21 @@ function limitScrollX (value, { scrollOffsetLeft, scrollOffsetRight }) {
   return limitScroll(value, scrollOffsetLeft, scrollOffsetRight);
 }
 
-function correctScrollX (oldListOffset, state) {
+function correctScrollX (oldCurrentDate, state) {
   const {
-    listOffset,
-    LIST_RANGE,
     scrollWidth,
-    scrollX
+    scrollX,
+    currentDate
   } = state;
 
-  if (oldListOffset === listOffset) {
+  if (oldCurrentDate === currentDate) {
     return scrollX;
   }
 
+  const diff = currentDate > oldCurrentDate ? 1 : -1;
+  return limitScrollX(scrollX + diff * scrollWidth, state);
+
+  /*
   const diff = listOffset - oldListOffset;
 
   return do {
@@ -435,8 +428,9 @@ function correctScrollX (oldListOffset, state) {
       limitScrollX(scrollX + diff * scrollWidth, state);
     }
   };
+  */
 }
 
-function getScrollXByOffset (listOffset, { LIST_RANGE, scrollWidth }) {
-  return (listOffset + 1) * -1 * LIST_RANGE * scrollWidth;
+function getScrollXByOffset (offset, { LIST_RANGE, scrollWidth }) {
+  return (offset + 1) * -1 * LIST_RANGE * scrollWidth;
 }

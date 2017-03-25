@@ -24,4 +24,8 @@ export default class Datetime {
   parseDate (date) {
     return this._strategy.parseDate(date);
   }
+
+  formatDate (date) {
+    return this._strategy.formatDate(date);
+  }
 }

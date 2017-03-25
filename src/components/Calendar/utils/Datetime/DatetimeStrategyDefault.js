@@ -1,3 +1,4 @@
+import { parseDate, formatDate, offsetDay } from '../date';
 import DatetimeStrategy from './DatetimeStrategy';
 
 const DAYS = {
@@ -16,38 +17,24 @@ export default class DatetimeStrategyDefault extends DatetimeStrategy {
   }
 
   gridDaysDayTitle (date) {
-    const d = _parseDate(date);
+    const d = parseDate(date);
     return `${DAYS[ d.getDay() ]}, ${d.getDate()}`;
   }
 
   offsetDay (date, offset) {
-    const d = _parseDate(date);
-    d.setDate(d.getDate() + offset);
-    return _formatDate(d);
+    return offsetDay(date, offset);
   }
 
   getDay (date) {
-    const d = _parseDate(date);
+    const d = parseDate(date);
     return d.getDay();
   }
 
   parseDate (date) {
-    return _parseDate(date);
+    return parseDate(date);
   }
-}
 
-function _parseDate (date) {
-  const _ = 100 * date ^ 0;
-  const y = date ^ 0;
-  const m = (_ - 100 * y) - 1;
-  const d = (10000 * date ^ 0) - _ * 100;
-  return new Date(y, m, d);
-}
-
-function _formatDate (date) {
-  return ((date.getFullYear() * 10000) + ((date.getMonth() + 1) * 100) + date.getDate()) / 10000;
-}
-
-function o (v) {
-  return v < 10 ? '0' + v : '' + v;
+  formatDate (date) {
+    return formatDate(date);
+  }
 }

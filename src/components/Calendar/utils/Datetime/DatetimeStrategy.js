@@ -4,4 +4,5 @@ export default class DatetimeStrategy {
   offsetDay (date, offset) {}
   getDay (date) {}
   parseDate (date) {}
+  formatDate (date) {}
 }

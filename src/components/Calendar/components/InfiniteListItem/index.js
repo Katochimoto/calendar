@@ -8,17 +8,17 @@ import styles from './index.less';
 export default class InfiniteListItem extends Component {
   shouldComponentUpdate (nextProps) {
     return (
-      this.props.idx !== nextProps.idx ||
+      this.props.date !== nextProps.date ||
       this.props.itemSize !== nextProps.itemSize ||
       this.props.isVisible !== nextProps.isVisible
     );
   }
 
   render () {
-    const { idx, itemSize, isVisible, getItemElement } = this.props;
+    const { date, itemSize, isVisible, getItemElement } = this.props;
     return (
       <div className={styles.calendar_InfiniteListItem}>
-        {isVisible ? getItemElement(idx, itemSize) : null}
+        {isVisible ? getItemElement(date, itemSize) : null}
       </div>
     );
   }
@@ -26,7 +26,7 @@ export default class InfiniteListItem extends Component {
 
 /* @if NODE_ENV=='development' **
 InfiniteListItem.propTypes = {
-  idx: PropTypes.number,
+  date: PropTypes.number,
   itemSize: PropTypes.number,
   isVisible: PropTypes.boolean,
   getItemElement: PropTypes.function
@@ -34,7 +34,7 @@ InfiniteListItem.propTypes = {
 /* @endif */
 
 InfiniteListItem.defaultProps = {
-  idx: 0,
+  date: 0,
   itemSize: 0,
   isVisible: false,
   getItemElement: () => null

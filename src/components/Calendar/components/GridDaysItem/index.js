@@ -8,16 +8,15 @@ import styles from './index.less';
 
 export default class GridDaysItem extends StoreComponent {
   transformState (props, context) {
-    const { currentDate, weekends, hideWeekends, hoursOfDay } = context.store.getState();
-    return { currentDate, weekends, hideWeekends, hoursOfDay };
+    const { weekends, hideWeekends, hoursOfDay } = context.store.getState();
+    return { weekends, hideWeekends, hoursOfDay };
   }
 
   shouldComponentUpdate (nextProps, nextState) {
     return (
+      this.props.date !== nextProps.date ||
       this.props.itemSize !== nextProps.itemSize ||
-      this.props.listOffset !== nextProps.listOffset ||
 
-      this.state.currentDate !== nextState.currentDate ||
       this.state.hideWeekends !== nextState.hideWeekends ||
       this.state.weekends !== nextState.weekends ||
       this.state.hoursOfDay !== nextState.hoursOfDay
@@ -26,17 +25,35 @@ export default class GridDaysItem extends StoreComponent {
 
   getItems () {
     const datetime = this.context.datetime;
-    const { listOffset, itemSize, ItemComponent } = this.props;
-    const { currentDate, weekends, hideWeekends, hoursOfDay } = this.state;
-    const weekendsObj = weekends ? arr2obj(weekends.split(',')) : {};
+    const { date, itemSize, ItemComponent } = this.props;
+    const { hoursOfDay } = this.state;
+    const items = [];
 
-    let items = [];
+    //const { weekends, hideWeekends, hoursOfDay } = this.state;
+    //const weekendsObj = weekends ? arr2obj(weekends.split(',')) : {};
+
+    let idx = 0;
+
+    while (idx < itemSize) {
+      items.push(
+        <ItemComponent
+          key={idx}
+          date={datetime.offsetDay(date, idx)}
+          weekend={false}
+          hoursOfDay={hoursOfDay} />
+      );
+
+      idx++;
+    }
+
+
+    /*
     let idx = listOffset * itemSize;
     let end = listOffset * itemSize + itemSize - 1;
     let idxLocal = 0; // local index minimizes redraw
 
     for (; idx <= end; idx++) {
-      const date = datetime.offsetDay(currentDate, idx);
+      const date = datetime.offsetDay(, idx);
       const weekend = weekendsObj.hasOwnProperty(datetime.getDay(date));
 
       if (!weekend || !hideWeekends) {
@@ -50,6 +67,7 @@ export default class GridDaysItem extends StoreComponent {
         idxLocal++;
       }
     }
+    */
 
     return items;
   }
@@ -67,11 +85,11 @@ export default class GridDaysItem extends StoreComponent {
 GridDaysItem.propTypes = {
   ItemComponent: PropTypes.function,
   itemSize: PropTypes.number,
-  listOffset: PropTypes.number
+  date: PropTypes.number
 };
 /* @endif */
 
 GridDaysItem.defaultProps = {
   itemSize: 0,
-  listOffset: 0
+  date: 0
 };

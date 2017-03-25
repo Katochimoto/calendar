@@ -18,8 +18,8 @@ export default class Store extends EventEmitter {
     return this._state.state;
   }
 
-  isVisibleOffset (listOffset) {
-    return this._state.isVisibleOffset(listOffset);
+  isVisibleOffset (offset) {
+    return this._state.isVisibleOffset(offset);
   }
 
   timeToRate (time) {

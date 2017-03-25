@@ -29,12 +29,12 @@ export default class GridDaysContent extends StoreComponent {
     );
   }
 
-  getItemElement (listOffset, itemSize) {
+  getItemElement (date, itemSize) {
     return (
       <GridDaysItem
         ItemComponent={Day}
         itemSize={itemSize}
-        listOffset={listOffset} />
+        date={date} />
     );
   }
 

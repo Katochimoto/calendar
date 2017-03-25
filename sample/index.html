@@ -45,6 +45,11 @@
         case 'boolean':
           form += '<tr><td>' + name + '</td><td><input type="checkbox" name="' + name + '" ' + (value ? 'checked' : '') + ' value="1" ' + disabled + ' ' + style + ' /></td></tr>';
           break;
+        case 'object':
+          if (value instanceof Date) {
+            form += '<tr><td>' + name + '</td><td><input name="' + name + '" value="' + value + '" ' + disabled + ' ' + style + ' /></td></tr>';
+          }
+          break;
       }
     }
 
@@ -75,6 +80,11 @@
           case 'boolean':
             element.checked = Boolean(value);
             break;
+          case 'object':
+            if (value instanceof Date) {
+              element.value = value.toLocaleString ? value.toLocaleString() : value.toString();
+            }
+            break;
         }
       }
     }
@@ -92,7 +102,7 @@
         if (!isWritable) {
           continue;
         }
-        
+
         var element = document.querySelector('[name="' + name + '"]');
         if (!element) {
           continue;
@@ -112,6 +122,11 @@
           case 'boolean':
             newState[name] = element.checked;
             break;
+          /*case 'object':
+            if (value instanceof Date) {
+              newState[name] = new Date(element.value);
+            }
+            break;*/
         }
       }
 

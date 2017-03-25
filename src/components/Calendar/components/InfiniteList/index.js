@@ -1,7 +1,3 @@
-/**
- *
- */
-
 import { StoreComponent } from '../../utils/Component';
 /* @if NODE_ENV=='development' **
 import { PropTypes } from '../../utils/Component';
@@ -12,8 +8,8 @@ import styles from './index.less';
 
 export default class InfiniteList extends StoreComponent {
   transformState (props, context) {
-    const { scrollX, listOffset, LIST_RANGE, scrollWidth } = context.store.getState();
-    return { scrollX, listOffset, LIST_RANGE, scrollWidth };
+    const { scrollX, listOffset, LIST_RANGE } = context.store.getState();
+    return { scrollX, listOffset, LIST_RANGE };
   }
 
   shouldComponentUpdate (nextProps, nextState) {
@@ -30,7 +26,7 @@ export default class InfiniteList extends StoreComponent {
    */
   getItems () {
     const itemSize = this.props.itemSize;
-    const { scrollX, listOffset, LIST_RANGE, scrollWidth } = this.state;
+    const { listOffset, LIST_RANGE } = this.state;
 
     let items = [];
     let idxLocal = -(LIST_RANGE); // local index minimizes redraw
@@ -38,12 +34,7 @@ export default class InfiniteList extends StoreComponent {
     let end = listOffset + LIST_RANGE;
 
     for (; idx <= end; idx++) {
-      const min = this.context.store.scrollXByOffset(idxLocal);
-      const max = min - scrollWidth;
-      const isVisible = scrollX !== undefined && !Boolean(
-        max >= scrollX ||
-        min <= scrollX - scrollWidth
-      );
+      const isVisible = this.context.store.isVisibleOffset(idxLocal);
 
       items.push(
         <InfiniteListItem

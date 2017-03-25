@@ -66,7 +66,6 @@ export default function createState () {
     gridDaysListItemSize: 7,
     //gridWeekListItemSize: 1,  // количество недель в одном элементе InfiniteList
 
-
     //grid: 'day',
     currentDate: 2017.0227,
     hoursOfDay: HOURS,
@@ -361,8 +360,14 @@ export default function createState () {
       return isChangedValues;
     },
 
-    scrollXByOffset (listOffset) {
-      return getScrollXByOffset(listOffset, currentValues);
+    isVisibleOffset (idx) {
+      const min = getScrollXByOffset(idx, currentValues);
+      const max = min - currentValues.scrollWidth;
+      const scrollX = currentValues.scrollX;
+      return scrollX !== undefined && !Boolean(
+        max >= scrollX / currentValues.LIST_RANGE ||
+        min <= scrollX - currentValues.scrollWidth * currentValues.LIST_RANGE
+      );
     },
 
     timeToRate (time) {
@@ -374,7 +379,7 @@ export default function createState () {
   };
 }
 
-function getListOffset ({ listOffset, scrollX, scrollOffsetLeft, scrollOffsetRight }) {
+function getListOffset ({ listOffset, scrollX, scrollOffsetLeft, scrollOffsetRight, LIST_RANGE }) {
   const scrollOffsetCenter = (scrollOffsetLeft + scrollOffsetRight) / 2;
   const scrollOffsetWidth = scrollOffsetLeft > scrollOffsetRight ?
     scrollOffsetLeft - scrollOffsetRight :
@@ -387,9 +392,9 @@ function getListOffset ({ listOffset, scrollX, scrollOffsetLeft, scrollOffsetRig
   const rate = centerOffsetWidth ? sign * scrollX2CenterWidth * 100 / centerOffsetWidth : 0;
 
   return do {
-    if (rate <= -100) {
+    if (rate <= -100 / LIST_RANGE) {
       ++listOffset;
-    } else if (rate >= 100) {
+    } else if (rate >= 100 / LIST_RANGE) {
       --listOffset;
     } else {
       listOffset;

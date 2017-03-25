@@ -15,9 +15,3 @@ export function offsetDay (date, offset) {
   d.setDate(d.getDate() + offset);
   return formatDate(d);
 }
-
-/*
-function o (v) {
-  return v < 10 ? '0' + v : '' + v;
-}
-*/

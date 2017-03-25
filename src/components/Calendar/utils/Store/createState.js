@@ -270,11 +270,8 @@ export default function createState () {
       enumerable: true,
       get: () => currentValues.currentDate,
       set: (value) => {
-        const currentDate = currentValues.currentDate;
-
         currentValues.currentDate = value;
-        currentValues.scrollX = correctScrollX(currentDate, currentValues);
-
+        currentValues.scrollX = limitScrollX(getScrollXByOffset(0, currentValues), currentValues);
         isChangedValues = true;
       }
     },
@@ -417,18 +414,6 @@ function correctScrollX (oldCurrentDate, state) {
 
   const diff = currentDate > oldCurrentDate ? 1 : -1;
   return limitScrollX(scrollX + diff * scrollWidth, state);
-
-  /*
-  const diff = listOffset - oldListOffset;
-
-  return do {
-    if (Math.abs(diff) > LIST_RANGE) {
-      limitScrollX(getScrollXByOffset(listOffset, state), state);
-    } else {
-      limitScrollX(scrollX + diff * scrollWidth, state);
-    }
-  };
-  */
 }
 
 function getScrollXByOffset (offset, { LIST_RANGE, scrollWidth }) {

@@ -1,31 +1,41 @@
+// @flow
+
+import { offsetDay, getDay, parseDate, formatDate } from './date';
 import DatetimeStrategyDefault from './Datetime/DatetimeStrategyDefault';
 
+interface DatetimeStrategy {
+  gridDaysHourTitle (hour: number): string;
+  gridDaysDayTitle (date: Date): string;
+}
+
 export default class Datetime {
-  constructor (strategy) {
-    this._strategy = strategy || new DatetimeStrategyDefault();
+  _strategy: DatetimeStrategy;
+
+  constructor (strategy: ?DatetimeStrategy) {
+    this._strategy = strategy || (new DatetimeStrategyDefault(): DatetimeStrategy);
   }
 
-  gridDaysHourTitle (hour) {
+  gridDaysHourTitle (hour: number): string {
     return this._strategy.gridDaysHourTitle(hour);
   }
 
-  gridDaysDayTitle (date) {
-    return this._strategy.gridDaysDayTitle(date);
+  gridDaysDayTitle (date: number): string {
+    return this._strategy.gridDaysDayTitle(parseDate(date));
   }
 
-  offsetDay (date, offset) {
-    return this._strategy.offsetDay(date, offset);
+  offsetDay (date: number, offset: number): number {
+    return offsetDay(date, offset);
   }
 
-  getDay (date) {
-    return this._strategy.getDay(date);
+  getDay (date: number): number {
+    return getDay(date);
   }
 
-  parseDate (date) {
-    return this._strategy.parseDate(date);
+  parseDate (date: number): Date {
+    return parseDate(date);
   }
 
-  formatDate (date) {
-    return this._strategy.formatDate(date);
+  formatDate (date: Date): number {
+    return formatDate(date);
   }
 }

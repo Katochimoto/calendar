@@ -35,6 +35,7 @@ export default class InfiniteList extends StoreComponent {
 
     while (offset <= LIST_RANGE) {
       // FIXME setDate зависит от типа сетки
+      // gridDaysListItemSize может изменяться при вычете выходных
       const date = datetime.offsetDay(currentDate, offset * gridDaysListItemSize);
       const isVisible = store.isVisibleOffset(offset);
 

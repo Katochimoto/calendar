@@ -1,14 +1,12 @@
-import context from '../../context';
+// @flow
+
 import { lazy } from '../lazy';
-import EventsStrategy from './EventsStrategy';
+import EventEmitter from '../EventEmitter';
 
-export default class EventsStrategyDefault extends EventsStrategy {
-  constructor () {
-    super();
-    this._state = [];
-  }
+export default class EventsStrategyDefault extends EventEmitter {
+  getById (id: string): ?Object {}
 
-  getByInterval (interval) {
+  getByInterval (interval: number[]): Array<Object> {
     const dateBegin = interval[0]
     const dateEnd = interval[1] || dateBegin;
     const data = [
@@ -50,8 +48,8 @@ export default class EventsStrategyDefault extends EventsStrategy {
   }
 
   @lazy
-  uploadByInterval (interval) {
-    context.setTimeout(() => {
+  uploadByInterval (interval: number[]): void {
+    setTimeout(() => {
       this.emitChange();
     }, 500);
   }

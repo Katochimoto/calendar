@@ -2,7 +2,7 @@ import { StoreComponent } from '../../utils/Component';
 /* @if NODE_ENV=='development' **
 import { PropTypes } from '../../utils/Component';
 /* @endif */
-import arr2obj from '../../utils/arr2obj';
+import { toObject } from '../../utils/array';
 
 import styles from './index.less';
 
@@ -30,7 +30,7 @@ export default class GridDaysItem extends StoreComponent {
     const items = [];
 
     //const { weekends, hideWeekends, hoursOfDay } = this.state;
-    //const weekendsObj = weekends ? arr2obj(weekends.split(',')) : {};
+    //const weekendsObj = weekends ? toObject(weekends.split(',')) : {};
 
     let idx = 0;
 

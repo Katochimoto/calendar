@@ -2,7 +2,6 @@ import { StoreComponent } from '../../utils/Component';
 /* @if NODE_ENV=='development' **
 import { PropTypes } from '../../utils/Component';
 /* @endif */
-import { toObject } from '../../utils/array';
 
 import styles from './index.less';
 
@@ -24,50 +23,32 @@ export default class GridDaysItem extends StoreComponent {
   }
 
   getItems () {
-    const datetime = this.context.datetime;
+    const { datetime, store } = this.context;
     const { date, itemSize, ItemComponent } = this.props;
-    const { hoursOfDay } = this.state;
+    const { hoursOfDay, hideWeekends } = this.state;
     const items = [];
 
-    //const { weekends, hideWeekends, hoursOfDay } = this.state;
-    //const weekendsObj = weekends ? toObject(weekends.split(',')) : {};
-
     let idx = 0;
-
-    while (idx < itemSize) {
-      items.push(
-        <ItemComponent
-          key={idx}
-          date={datetime.offsetDay(date, idx)}
-          weekend={false}
-          hoursOfDay={hoursOfDay} />
-      );
-
-      idx++;
-    }
-
-
-    /*
-    let idx = listOffset * itemSize;
-    let end = listOffset * itemSize + itemSize - 1;
     let idxLocal = 0; // local index minimizes redraw
 
-    for (; idx <= end; idx++) {
-      const date = datetime.offsetDay(, idx);
-      const weekend = weekendsObj.hasOwnProperty(datetime.getDay(date));
+    while (idx < itemSize) {
+      const itemDate = datetime.offsetOnDay(date, idx);
+      const isWeekend = store.checkWeekend(itemDate);
 
-      if (!weekend || !hideWeekends) {
+      if (!isWeekend || !hideWeekends) {
         items.push(
           <ItemComponent
             key={idxLocal}
-            date={date}
-            weekend={weekend}
+            date={itemDate}
+            weekend={isWeekend}
             hoursOfDay={hoursOfDay} />
         );
+
         idxLocal++;
       }
+
+      idx++;
     }
-    */
 
     return items;
   }

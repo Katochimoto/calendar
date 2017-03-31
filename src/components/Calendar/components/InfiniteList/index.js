@@ -8,8 +8,8 @@ import styles from './index.less';
 
 export default class InfiniteList extends StoreComponent {
   transformState (props, context) {
-    const { scrollX, LIST_RANGE, currentDate, gridDaysListItemSize } = context.store.getState();
-    return { scrollX, LIST_RANGE, currentDate, gridDaysListItemSize };
+    const { scrollX, LIST_RANGE, currentDate } = context.store.getState();
+    return { scrollX, LIST_RANGE, currentDate };
   }
 
   shouldComponentUpdate (nextProps, nextState) {
@@ -28,15 +28,15 @@ export default class InfiniteList extends StoreComponent {
     const store = this.context.store;
     const datetime = this.context.datetime;
     const itemSize = this.props.itemSize;
-    const { LIST_RANGE, currentDate, gridDaysListItemSize } = this.state;
+    const { LIST_RANGE, currentDate } = this.state;
     const items = [];
 
     let offset = -(LIST_RANGE);
 
     while (offset <= LIST_RANGE) {
-      // FIXME setDate зависит от типа сетки
-      // gridDaysListItemSize может изменяться при вычете выходных
-      const date = datetime.offsetDay(currentDate, offset * gridDaysListItemSize);
+      // FIXME offsetOnDay зависит от типа сетки
+      // itemSize может изменяться при вычете выходных
+      const date = datetime.offsetOnDay(currentDate, offset * itemSize);
       const isVisible = store.isVisibleOffset(offset);
 
       items.push(

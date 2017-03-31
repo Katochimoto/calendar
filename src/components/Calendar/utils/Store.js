@@ -25,4 +25,8 @@ export default class Store extends EventEmitter {
   timeToRate (time) {
     return this._state.timeToRate(time);
   }
+
+  checkWeekend (date) {
+    return this._state.checkWeekend(date);
+  }
 }

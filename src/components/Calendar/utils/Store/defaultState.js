@@ -7,6 +7,9 @@ const INTERVALS = createIntervals(HOURS_LIST);
 const DAYMS = HOURS_LIST.length * HOURMS;
 const GRID_HOURS = toObject(HOURS_LIST);
 
+const WEEKENDS = '0,6';
+const WEEKENDS_SET = toObject(WEEKENDS.split(',').map(Number));
+
 export default {
   scrollHeight: 0,
   scrollWidth: 0,
@@ -60,7 +63,7 @@ export default {
   //viewportMinutesBegin: 0,
   //viewportMinutesEnd: 0,
 
-  gridDaysListItemSize: 7,
+  gridDaysItemSize: 7,
   //gridWeekListItemSize: 1,  // количество недель в одном элементе InfiniteList
 
   //grid: 'day',
@@ -69,7 +72,8 @@ export default {
   GRID_HOURS: GRID_HOURS,
   DAYMS: DAYMS,
   INTERVALS: INTERVALS,
-  weekends: '0,6',
+  weekends: WEEKENDS,
+  weekendsSet: WEEKENDS_SET,
   hideWeekends: false,
   beginningOfWeek: 1
 };

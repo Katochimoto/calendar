@@ -12,12 +12,17 @@ export function formatDate (date: Date): number {
   return ((date.getFullYear() * 10000) + ((date.getMonth() + 1) * 100) + date.getDate()) / 10000;
 }
 
-export function offsetDay (date: number, offset: number): number {
+export function offsetOnDay (date: number, offset: number): number {
   const d = parseDate(date);
   d.setDate(d.getDate() + offset);
   return formatDate(d);
 }
 
+/**
+ * День недели
+ * @param {number} date
+ * @returns {number}
+ */
 export function getDay (date: number): number {
   return parseDate(date).getDay();
 }

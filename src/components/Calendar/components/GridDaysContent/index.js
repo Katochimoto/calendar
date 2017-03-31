@@ -18,14 +18,14 @@ export default class GridDaysContent extends StoreComponent {
   }
 
   transformState (props, context) {
-    const { scrollY, gridDaysListItemSize } = context.store.getState();
-    return { scrollY, gridDaysListItemSize };
+    const { scrollY, gridDaysItemSize } = context.store.getState();
+    return { scrollY, gridDaysItemSize };
   }
 
   shouldComponentUpdate (nextProps, nextState) {
     return (
       this.state.scrollY !== nextState.scrollY ||
-      this.state.gridDaysListItemSize !== nextState.gridDaysListItemSize
+      this.state.gridDaysItemSize !== nextState.gridDaysItemSize
     );
   }
 
@@ -60,7 +60,7 @@ export default class GridDaysContent extends StoreComponent {
 
           <InfiniteList
             getItemElement={this.getItemElement}
-            itemSize={this.state.gridDaysListItemSize} />
+            itemSize={this.state.gridDaysItemSize} />
         </div>
       </div>
     );

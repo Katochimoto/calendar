@@ -17,13 +17,13 @@ export default class GridDaysHeader extends StoreComponent {
   }
 
   transformState (props, context) {
-    const { gridDaysListItemSize } = context.store.getState();
-    return { gridDaysListItemSize };
+    const { gridDaysItemSize } = context.store.getState();
+    return { gridDaysItemSize };
   }
 
   shouldComponentUpdate (nextProps, nextState) {
     return (
-      this.state.gridDaysListItemSize !== nextState.gridDaysListItemSize
+      this.state.gridDaysItemSize !== nextState.gridDaysItemSize
     );
   }
 
@@ -42,7 +42,7 @@ export default class GridDaysHeader extends StoreComponent {
         <div className={styles.calendar_GridDaysHeader_Content}>
           <InfiniteList
             getItemElement={this.getItemElement}
-            itemSize={this.state.gridDaysListItemSize} />
+            itemSize={this.state.gridDaysItemSize} />
         </div>
       </div>
     );

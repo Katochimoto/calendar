@@ -1,10 +1,10 @@
 import { toObject, createIntervals } from '../array';
-import { offsetDay } from '../date';
+import { offsetOnDay, getDay } from '../date';
 import { HOURMS } from '../../constant';
 import defaultState from './defaultState';
 
 export default function createState () {
-  const currentValues = { ...defaultState };
+  const current = { ...defaultState };
   const state = Object.create(null);
 
   let isChangedValues = false;
@@ -17,13 +17,13 @@ export default function createState () {
      */
     scrollHeight: {
       enumerable: true,
-      get: () => currentValues.scrollHeight,
+      get: () => current.scrollHeight,
       set: (value) => {
-        const scrollHeight = currentValues.scrollHeight;
+        const scrollHeight = current.scrollHeight;
 
-        currentValues.scrollHeight = value;
-        currentValues.scrollOffsetTop = -1 * value;
-        currentValues.scrollY = scrollHeight > 0 ? limitScrollY(currentValues.scrollY * value / scrollHeight, currentValues) : 0;
+        current.scrollHeight = value;
+        current.scrollOffsetTop = -1 * value;
+        current.scrollY = scrollHeight > 0 ? limitScrollY(current.scrollY * value / scrollHeight, current) : 0;
 
         isChangedValues = true;
       }
@@ -36,19 +36,19 @@ export default function createState () {
      */
     scrollWidth: {
       enumerable: true,
-      get: () => currentValues.scrollWidth,
+      get: () => current.scrollWidth,
       set: (value) => {
-        const scrollWidth = currentValues.scrollWidth;
-        const currentDate = currentValues.currentDate;
+        const scrollWidth = current.scrollWidth;
+        const currentDate = current.currentDate;
 
-        currentValues.scrollWidth = value;
-        currentValues.scrollOffsetLeft = -2 * currentValues.LIST_RANGE * value;
-        // currentValues.speedScrollX = 0;
-        currentValues.scrollX = currentValues.scrollX === undefined ?
-          limitScrollX(getScrollXByOffset(0, currentValues), currentValues) :
-          scrollWidth > 0 ? limitScrollX(currentValues.scrollX * value / scrollWidth, currentValues) : 0;
-        currentValues.currentDate = getCurrentDate(currentValues);
-        currentValues.scrollX = correctScrollX(currentDate, currentValues);
+        current.scrollWidth = value;
+        current.scrollOffsetLeft = -2 * current.LIST_RANGE * value;
+        // current.speedScrollX = 0;
+        current.scrollX = current.scrollX === undefined ?
+          limitScrollX(getScrollXByOffset(0, current), current) :
+          scrollWidth > 0 ? limitScrollX(current.scrollX * value / scrollWidth, current) : 0;
+        current.currentDate = getCurrentDate(current);
+        current.scrollX = correctScrollX(currentDate, current);
 
         isChangedValues = true;
       }
@@ -61,20 +61,20 @@ export default function createState () {
      */
     scrollX: {
       enumerable: true,
-      get: () => currentValues.scrollX,
+      get: () => current.scrollX,
       set: (value) => {
-        value = limitScrollX(value, currentValues);
-        if (value === currentValues.scrollX) {
-          // currentValues.speedScrollX = 0;
+        value = limitScrollX(value, current);
+        if (value === current.scrollX) {
+          // current.speedScrollX = 0;
           return;
         }
 
-        const currentDate = currentValues.currentDate;
+        const currentDate = current.currentDate;
 
-        // currentValues.speedScrollX = currentValues.scrollX - value;
-        currentValues.scrollX = value;
-        currentValues.currentDate = getCurrentDate(currentValues);
-        currentValues.scrollX = correctScrollX(currentDate, currentValues);
+        // current.speedScrollX = current.scrollX - value;
+        current.scrollX = value;
+        current.currentDate = getCurrentDate(current);
+        current.scrollX = correctScrollX(currentDate, current);
 
         isChangedValues = true;
       }
@@ -88,7 +88,7 @@ export default function createState () {
      */
     // speedScrollX: {
     //   enumerable: true,
-    //   get: () => currentValues.speedScrollX
+    //   get: () => current.speedScrollX
     // },
 
     /**
@@ -98,11 +98,11 @@ export default function createState () {
      */
     scrollY: {
       enumerable: true,
-      get: () => currentValues.scrollY,
+      get: () => current.scrollY,
       set: (value) => {
-        value = limitScrollY(value, currentValues)
-        if (value !== currentValues.scrollY) {
-          currentValues.scrollY = value;
+        value = limitScrollY(value, current)
+        if (value !== current.scrollY) {
+          current.scrollY = value;
           isChangedValues = true;
         }
       }
@@ -116,7 +116,7 @@ export default function createState () {
      */
     LIST_RANGE: {
       enumerable: true,
-      value: currentValues.LIST_RANGE
+      value: current.LIST_RANGE
     },
 
     /**
@@ -126,17 +126,17 @@ export default function createState () {
      */
     hoursOfDay: {
       enumerable: true,
-      get: () => currentValues.hoursOfDay,
+      get: () => current.hoursOfDay,
       set: (value) => {
         const list = value.split(',').map(Number).filter(item => (item >= 0 && item <= 23));
         list.sort((a, b) => (a - b));
         value = list.join(',');
 
-        if (value !== currentValues.hoursOfDay) {
-          currentValues.hoursOfDay = value;
-          currentValues.DAYMS = list.length * HOURMS;
-          currentValues.GRID_HOURS = toObject(list);
-          currentValues.INTERVALS = createIntervals(list);
+        if (value !== current.hoursOfDay) {
+          current.hoursOfDay = value;
+          current.DAYMS = list.length * HOURMS;
+          current.GRID_HOURS = toObject(list);
+          current.INTERVALS = createIntervals(list);
           isChangedValues = true;
         }
       }
@@ -150,7 +150,7 @@ export default function createState () {
      */
     DAYMS: {
       enumerable: true,
-      get: () => currentValues.DAYMS
+      get: () => current.DAYMS
     },
 
     /**
@@ -161,7 +161,7 @@ export default function createState () {
      */
     GRID_HOURS: {
       enumerable: true,
-      get: () => currentValues.GRID_HOURS
+      get: () => current.GRID_HOURS
     },
 
     /**
@@ -172,19 +172,20 @@ export default function createState () {
      */
     INTERVALS: {
       enumerable: true,
-      get: () => currentValues.INTERVALS
+      get: () => current.INTERVALS
     },
 
     /**
-     * количество дней в одном элементе InfiniteList
+     * Количество дней в одном элементе InfiniteList.
+     * Для сетки по дням.
      * @type {number}
      * @public
      */
-    gridDaysListItemSize: {
+    gridDaysItemSize: {
       enumerable: true,
-      get: () => currentValues.gridDaysListItemSize,
+      get: () => current.gridDaysItemSize,
       set: (value) => {
-        currentValues.gridDaysListItemSize = value;
+        current.gridDaysItemSize = value;
         isChangedValues = true;
       }
     },
@@ -196,10 +197,10 @@ export default function createState () {
      */
     currentDate: {
       enumerable: true,
-      get: () => currentValues.currentDate,
+      get: () => current.currentDate,
       set: (value) => {
-        currentValues.currentDate = value;
-        currentValues.scrollX = limitScrollX(getScrollXByOffset(0, currentValues), currentValues);
+        current.currentDate = value;
+        current.scrollX = limitScrollX(getScrollXByOffset(0, current), current);
         isChangedValues = true;
       }
     },
@@ -211,10 +212,17 @@ export default function createState () {
      */
     weekends: {
       enumerable: true,
-      get: () => currentValues.weekends,
+      get: () => current.weekends,
       set: (value) => {
-        currentValues.weekends = value;
-        isChangedValues = true;
+        const list = value.split(',').map(Number).filter(item => (item >= 0 && item <= 6));
+        list.sort((a, b) => (a - b));
+        value = list.join(',');
+
+        if (value !== current.weekends) {
+          current.weekends = value;
+          current.weekendsSet = toObject(list);
+          isChangedValues = true;
+        }
       }
     },
 
@@ -225,9 +233,9 @@ export default function createState () {
      */
     beginningOfWeek: {
       enumerable: true,
-      get: () => currentValues.beginningOfWeek,
+      get: () => current.beginningOfWeek,
       set: (value) => {
-        currentValues.beginningOfWeek = value;
+        current.beginningOfWeek = value;
         isChangedValues = true;
       }
     },
@@ -239,11 +247,11 @@ export default function createState () {
      */
     hideWeekends: {
       enumerable: true,
-      get: () => currentValues.hideWeekends,
+      get: () => current.hideWeekends,
       set: (value) => {
         value = Boolean(value);
-        if (value !== currentValues.hideWeekends) {
-          currentValues.hideWeekends = value;
+        if (value !== current.hideWeekends) {
+          current.hideWeekends = value;
           isChangedValues = true;
         }
       }
@@ -271,10 +279,10 @@ export default function createState () {
     },
 
     isVisibleOffset (offset) {
-      const scrollX = currentValues.scrollX;
-      const scrollWidth = currentValues.scrollWidth;
-      const LIST_RANGE = currentValues.LIST_RANGE;
-      const min = getScrollXByOffset(offset, currentValues);
+      const scrollX = current.scrollX;
+      const scrollWidth = current.scrollWidth;
+      const LIST_RANGE = current.LIST_RANGE;
+      const min = getScrollXByOffset(offset, current);
       const max = min - scrollWidth;
 
       return scrollX !== undefined && !Boolean(
@@ -286,13 +294,17 @@ export default function createState () {
     timeToRate (time) {
       const hour = time / HOURMS ^ 0;
       const ms = time % HOURMS;
-      const grid = currentValues.GRID_HOURS[ hour ] * HOURMS + ms;
-      return Math.round(1000 * 100 * grid / currentValues.DAYMS) / 1000;
+      const grid = current.GRID_HOURS[ hour ] * HOURMS + ms;
+      return Math.round(1000 * 100 * grid / current.DAYMS) / 1000;
+    },
+
+    checkWeekend (date) {
+      return (getDay(date) in current.weekendsSet);
     }
   };
 }
 
-function getCurrentDate ({ currentDate, scrollX, scrollOffsetLeft, scrollOffsetRight, LIST_RANGE, gridDaysListItemSize }) {
+function getCurrentDate ({ currentDate, scrollX, scrollOffsetLeft, scrollOffsetRight, LIST_RANGE, gridDaysItemSize }) {
   const scrollOffsetCenter = (scrollOffsetLeft + scrollOffsetRight) / 2;
   const scrollOffsetWidth = scrollOffsetLeft > scrollOffsetRight ?
     scrollOffsetLeft - scrollOffsetRight :
@@ -305,13 +317,13 @@ function getCurrentDate ({ currentDate, scrollX, scrollOffsetLeft, scrollOffsetR
   const rate = centerOffsetWidth ? sign * scrollX2CenterWidth * 100 / centerOffsetWidth : 0;
   const rateCompare = 100 / LIST_RANGE;
 
-  // FIXME setDate зависит от типа сетки
-  // gridDaysListItemSize может быть плавающим в зависимости от рабочих дней
+  // FIXME offsetOnDay зависит от типа сетки
+  // gridDaysItemSize может быть плавающим в зависимости от рабочих дней
   return do {
     if (rate <= -(rateCompare)) {
-      offsetDay(currentDate, gridDaysListItemSize);
+      offsetOnDay(currentDate, gridDaysItemSize);
     } else if (rate >= rateCompare) {
-      offsetDay(currentDate, -(gridDaysListItemSize));
+      offsetOnDay(currentDate, -(gridDaysItemSize));
     } else {
       currentDate;
     }

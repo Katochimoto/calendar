@@ -25,18 +25,15 @@ export default class InfiniteList extends StoreComponent {
    * FIXME подумать над оптимизацией - вызывается при каждом изменении scrollX
    */
   getItems () {
-    const store = this.context.store;
-    const datetime = this.context.datetime;
-    const itemSize = this.props.itemSize;
+    const { store } = this.context;
+    const { itemSize } = this.props;
     const { LIST_RANGE, currentDate } = this.state;
     const items = [];
 
     let offset = -(LIST_RANGE);
 
     while (offset <= LIST_RANGE) {
-      // FIXME offsetOnDay зависит от типа сетки
-      // itemSize может изменяться при вычете выходных
-      const date = datetime.offsetOnDay(currentDate, offset * itemSize);
+      const date = store.gridDateOffset(currentDate, offset * itemSize);
       const isVisible = store.isVisibleOffset(offset);
 
       items.push(

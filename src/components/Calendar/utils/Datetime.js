@@ -1,6 +1,6 @@
 // @flow
 
-import { offsetOnDay, getDay, parseDate, formatDate } from './date';
+import { getDay, parseDate, formatDate } from './date';
 import DatetimeStrategyDefault from './Datetime/DatetimeStrategyDefault';
 
 interface DatetimeStrategy {
@@ -21,10 +21,6 @@ export default class Datetime {
 
   gridDaysDayTitle (date: number): string {
     return this._strategy.gridDaysDayTitle(parseDate(date));
-  }
-
-  offsetOnDay (date: number, offset: number): number {
-    return offsetOnDay(date, offset);
   }
 
   /**

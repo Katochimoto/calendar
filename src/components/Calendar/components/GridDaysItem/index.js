@@ -23,7 +23,7 @@ export default class GridDaysItem extends StoreComponent {
   }
 
   getItems () {
-    const { datetime, store } = this.context;
+    const { store } = this.context;
     const { date, itemSize, ItemComponent } = this.props;
     const { hoursOfDay, hideWeekends } = this.state;
     const items = [];
@@ -32,7 +32,7 @@ export default class GridDaysItem extends StoreComponent {
     let idxLocal = 0; // local index minimizes redraw
 
     while (idx < itemSize) {
-      const itemDate = datetime.offsetOnDay(date, idx);
+      const itemDate = store.gridDateOffset(date, idx);
       const isWeekend = store.checkWeekend(itemDate);
 
       if (!isWeekend || !hideWeekends) {

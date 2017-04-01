@@ -1,4 +1,4 @@
-import { HOURMS } from '../../constant';
+import { HOURMS } from '../date';
 import { toObject, createIntervals } from '../array';
 
 const HOURS = '0,1,2,3,4,5,6,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23'; //,7,8
@@ -69,11 +69,25 @@ export default {
   //grid: 'day',
   currentDate: 2017.0227,
   hoursOfDay: HOURS,
+
+  /**
+   * Объект соответствия рабочего часа с реальным положением в сетке
+   * @constant {Object.<string, number>}
+   */
   GRID_HOURS: GRID_HOURS,
+
   DAYMS: DAYMS,
+
   INTERVALS: INTERVALS,
+
   weekends: WEEKENDS,
-  weekendsSet: WEEKENDS_SET,
+
+  /**
+   * Объект дней недели
+   * @constant {Object.<string, number>}
+   */
+  WEEKENDS_SET: WEEKENDS_SET,
+
   hideWeekends: false,
   beginningOfWeek: 1
 };

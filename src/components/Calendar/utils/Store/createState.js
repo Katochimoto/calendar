@@ -1,6 +1,5 @@
 import { toObject, createIntervals } from '../array';
-import { offsetOnDay, getDay } from '../date';
-import { HOURMS } from '../../constant';
+import { offsetOnDay, offsetOnWorksDay, HOURMS } from '../date';
 import defaultState from './defaultState';
 
 export default function createState () {
@@ -128,8 +127,13 @@ export default function createState () {
       enumerable: true,
       get: () => current.hoursOfDay,
       set: (value) => {
-        const list = value.split(',').map(Number).filter(item => (item >= 0 && item <= 23));
+        const list = value
+          .split(',')
+          .map(Number)
+          .filter(item => (item >= 0 && item <= 23));
+
         list.sort((a, b) => (a - b));
+
         value = list.join(',');
 
         if (value !== current.hoursOfDay) {
@@ -155,9 +159,8 @@ export default function createState () {
 
     /**
      * Объект соответствия рабочего часа с реальным положением в сетке
-     * @type {Object}
+     * @constant {Object.<string, number>}
      * @public
-     * @readonly
      */
     GRID_HOURS: {
       enumerable: true,
@@ -214,16 +217,31 @@ export default function createState () {
       enumerable: true,
       get: () => current.weekends,
       set: (value) => {
-        const list = value.split(',').map(Number).filter(item => (item >= 0 && item <= 6));
+        const list = value
+          .split(',')
+          .map(Number)
+          .filter(item => (item >= 0 && item <= 6));
+
         list.sort((a, b) => (a - b));
+
         value = list.join(',');
 
         if (value !== current.weekends) {
           current.weekends = value;
-          current.weekendsSet = toObject(list);
+          current.WEEKENDS_SET = toObject(list);
           isChangedValues = true;
         }
       }
+    },
+
+    /**
+     * Объект дней недели
+     * @constant {Object.<string, number>}
+     * @public
+     */
+    WEEKENDS_SET: {
+      enumerable: true,
+      get: () => current.WEEKENDS_SET
     },
 
     /**
@@ -291,20 +309,22 @@ export default function createState () {
       );
     },
 
-    timeToRate (time) {
-      const hour = time / HOURMS ^ 0;
-      const ms = time % HOURMS;
-      const grid = current.GRID_HOURS[ hour ] * HOURMS + ms;
-      return Math.round(1000 * 100 * grid / current.DAYMS) / 1000;
-    },
-
-    checkWeekend (date) {
-      return (getDay(date) in current.weekendsSet);
+    gridDateOffset (date, offset) {
+      return gridDateOffset(date, offset, current);
     }
   };
 }
 
-function getCurrentDate ({ currentDate, scrollX, scrollOffsetLeft, scrollOffsetRight, LIST_RANGE, gridDaysItemSize }) {
+function getCurrentDate (state) {
+  const {
+    currentDate,
+    gridDaysItemSize,
+    LIST_RANGE,
+    scrollOffsetLeft,
+    scrollOffsetRight,
+    scrollX
+  } = state;
+
   const scrollOffsetCenter = (scrollOffsetLeft + scrollOffsetRight) / 2;
   const scrollOffsetWidth = scrollOffsetLeft > scrollOffsetRight ?
     scrollOffsetLeft - scrollOffsetRight :
@@ -317,17 +337,29 @@ function getCurrentDate ({ currentDate, scrollX, scrollOffsetLeft, scrollOffsetR
   const rate = centerOffsetWidth ? sign * scrollX2CenterWidth * 100 / centerOffsetWidth : 0;
   const rateCompare = 100 / LIST_RANGE;
 
-  // FIXME offsetOnDay зависит от типа сетки
-  // gridDaysItemSize может быть плавающим в зависимости от рабочих дней
   return do {
     if (rate <= -(rateCompare)) {
-      offsetOnDay(currentDate, gridDaysItemSize);
+      gridDateOffset(currentDate, gridDaysItemSize, state);
     } else if (rate >= rateCompare) {
-      offsetOnDay(currentDate, -(gridDaysItemSize));
+      gridDateOffset(currentDate, -(gridDaysItemSize), state);
     } else {
       currentDate;
     }
   };
+}
+
+function gridDateOffset (date, offset, state) {
+  const {
+    hideWeekends,
+    WEEKENDS_SET
+  } = state;
+
+  // day grid
+  if (hideWeekends) {
+    return offsetOnWorksDay(date, offset, WEEKENDS_SET);
+  } else {
+    return offsetOnDay(date, offset);
+  }
 }
 
 function limitScroll (value, min, max) {

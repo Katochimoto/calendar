@@ -1,8 +1,10 @@
 // @flow
 
-import { HOURMS } from '../constant';
+import { HOURMS } from '../utils/date';
 
-export function toObject (value: Array<string|number>): {[id:string|number]: number} {
+export function toObject (
+  value: Array<string|number>
+): {[id:string|number]: number} {
   const data: {[id:string|number]: number} = {};
   for (let i = 0, len = value.length; i < len; i++) {
      data[ value[ i ] ] = i;
@@ -10,7 +12,10 @@ export function toObject (value: Array<string|number>): {[id:string|number]: num
   return data;
 }
 
-export function createIntervals (list: number[], ms: boolean = true): Array<[number, number, number]> {
+export function createIntervals (
+  list: number[],
+  ms: boolean = true
+): Array<[number, number, number]> {
   let intervals: Array<[number, number, number]> = [];
   let common: {[id:number]: [number, number]} = {};
   let work: {[id:number]: [number, number]} = {};

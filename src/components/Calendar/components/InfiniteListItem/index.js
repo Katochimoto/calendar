@@ -15,7 +15,13 @@ export default class InfiniteListItem extends Component {
   }
 
   render () {
-    const { date, itemSize, isVisible, getItemElement } = this.props;
+    const {
+      date,
+      getItemElement,
+      isVisible,
+      itemSize
+    } = this.props;
+
     return (
       <div className={styles.calendar_InfiniteListItem}>
         {isVisible ? getItemElement(date, itemSize) : null}

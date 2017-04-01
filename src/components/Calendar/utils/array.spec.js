@@ -1,5 +1,5 @@
 import { assert } from 'chai';
-import createIntervals from './createIntervals';
+import { createIntervals } from './array';
 
 describe('createIntervals', function () {
   [

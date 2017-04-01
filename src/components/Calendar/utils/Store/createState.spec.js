@@ -44,11 +44,6 @@ describe('createState', function () {
       assert.equal(this.store.state.scrollX, -1000);
     });
 
-    it('начальное значение listOffset равно 0 при любом значении scrollWidth', function () {
-      this.store.update({ scrollWidth: 1000 });
-      assert.equal(this.store.state.listOffset, 0);
-    });
-
     it('пропорциональное изменение scrollX', function () {
       this.store.update({ scrollWidth: 1000, scrollX: -100 });
       this.store.update({ scrollWidth: 650 });

@@ -1,0 +1,5 @@
+[include]
+src/**/*.js
+
+[options]
+esproposal.decorators=ignore

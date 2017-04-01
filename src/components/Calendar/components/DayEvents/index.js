@@ -1,6 +1,6 @@
 import { EventsComponent } from '../../utils/Component';
 import getColumn from '../../utils/getColumn';
-import { HOURMS } from '../../constant';
+import { HOURMS } from '../../utils/date';
 /* @if NODE_ENV=='development' **
 import { PropTypes } from '../../utils/Component';
 /* @endif */

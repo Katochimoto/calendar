@@ -8,14 +8,14 @@ import styles from './index.less';
 
 export default class InfiniteList extends StoreComponent {
   transformState (props, context) {
-    const { scrollX, listOffset, LIST_RANGE } = context.store.getState();
-    return { scrollX, listOffset, LIST_RANGE };
+    const { scrollX, LIST_RANGE, currentDate } = context.store.getState();
+    return { scrollX, LIST_RANGE, currentDate };
   }
 
   shouldComponentUpdate (nextProps, nextState) {
     return (
       this.props.itemSize !== nextProps.itemSize ||
-      this.state.listOffset !== nextState.listOffset ||
+      this.state.currentDate !== nextState.currentDate ||
       this.state.LIST_RANGE !== nextState.LIST_RANGE ||
       this.state.scrollX !== nextState.scrollX
     );
@@ -25,26 +25,27 @@ export default class InfiniteList extends StoreComponent {
    * FIXME подумать над оптимизацией - вызывается при каждом изменении scrollX
    */
   getItems () {
-    const itemSize = this.props.itemSize;
-    const { listOffset, LIST_RANGE } = this.state;
+    const { store } = this.context;
+    const { itemSize } = this.props;
+    const { LIST_RANGE, currentDate } = this.state;
+    const items = [];
 
-    let items = [];
-    let idxLocal = -(LIST_RANGE); // local index minimizes redraw
-    let idx = listOffset - LIST_RANGE;
-    let end = listOffset + LIST_RANGE;
+    let offset = -(LIST_RANGE);
 
-    for (; idx <= end; idx++) {
-      const isVisible = this.context.store.isVisibleOffset(idxLocal);
+    while (offset <= LIST_RANGE) {
+      const date = store.gridDateOffset(currentDate, offset * itemSize);
+      const isVisible = store.isVisibleOffset(offset);
 
       items.push(
         <InfiniteListItem
-          idx={idx}
+          key={offset}
+          date={date}
           itemSize={itemSize}
           isVisible={isVisible}
           getItemElement={this.props.getItemElement} />
       );
 
-      idxLocal++;
+      offset++;
     }
 
     return items;
@@ -55,7 +56,7 @@ export default class InfiniteList extends StoreComponent {
 
     return (
       <div className={styles.calendar_InfiniteList}>
-        <div ref={node => this._contentNode = node} className={styles.calendar_InfiniteList_Content} style={style}>
+        <div className={styles.calendar_InfiniteList_Content} style={style}>
           {this.getItems()}
         </div>
       </div>

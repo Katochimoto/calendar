@@ -39,7 +39,7 @@ export default {
   },
   plugins: [
     RollupPluginJSON(),
-    
+
     RollupPluginLess2({
       output: 'dist/app.css',
       // sourceMapOutput: 'dist/app.css.map',
@@ -102,8 +102,10 @@ export default {
         //'react'
       ],
       plugins: [
+        'transform-flow-strip-types',
         'transform-decorators-legacy',
         'transform-do-expressions',
+        'transform-object-rest-spread',
         [ 'transform-react-jsx', { pragma: 'h' } ],
         [
           'module-resolver',

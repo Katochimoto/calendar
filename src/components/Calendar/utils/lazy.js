@@ -17,8 +17,9 @@ export function lazy (target, key, descriptor) {
     args.length && callback._args.push(args);
 
     if (!callback._timer) {
-      callback._timer = context.setImmediate(() => {
-        lazyRun.call(this);
+      const that = this;
+      callback._timer = context.setImmediate(function lazyImmediate () {
+        lazyRun.call(that);
       });
     }
   };

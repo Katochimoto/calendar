@@ -33,12 +33,21 @@ export default class Store extends EventEmitter {
   }
 
   updateScroll (deltaX: number, deltaY: number) {
-    this.update({
-      scrollX: this._state.state.scrollX + deltaX,
-      scrollY: this._state.state.scrollY + deltaY,
-      speedScrollX: deltaX,
-      speedScrollY: deltaY
-    });
+    const scrollX = this._state.state.scrollX + deltaX;
+    const scrollY = this._state.state.scrollY + deltaY;
+
+    let updX = this._state.update({ scrollX });
+    let updY = this._state.update({ scrollY });
+
+    const speedScrollX = updX ? deltaX : 0;
+    const speedScrollY = updY ? deltaY : 0;
+
+    updX = this._state.update({ speedScrollX }) || updX;
+    updY = this._state.update({ speedScrollY }) || updY;
+
+    if (updX || updY) {
+      this.emitChange();
+    }
   }
 
   getState () {

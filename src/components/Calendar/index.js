@@ -23,6 +23,7 @@ export default class Calendar extends Component {
       store: new Store()
     };
 
+    // FIXME remove later
     window.store = this.state.store;
 
     this.handleWheel = wrapWheelCallback(this.handleWheel.bind(this));
@@ -72,15 +73,8 @@ export default class Calendar extends Component {
   handleWheel (event) {
     event.preventDefault();
 
-    const deltaX = event.deltaX;
-    const deltaY = event.deltaY;
-
-    if (!deltaX && !deltaY) {
-      return;
-    }
-
-    this._deltaX = deltaX + (this._timerUpdateStoreByWheel ? this._deltaX : 0);
-    this._deltaY = deltaY + (this._timerUpdateStoreByWheel ? this._deltaY : 0);
+    this._deltaX = event.deltaX + (this._timerUpdateStoreByWheel ? this._deltaX : 0);
+    this._deltaY = event.deltaY + (this._timerUpdateStoreByWheel ? this._deltaY : 0);
 
     if (!this._timerUpdateStoreByWheel) {
       this._timerUpdateStoreByWheel = context.requestAnimationFrame(this.updateStoreByWheel);
@@ -88,21 +82,7 @@ export default class Calendar extends Component {
   }
 
   updateStoreByWheel () {
-    if (this._deltaX || this._deltaY) {
-      const state = this.state.store.getState();
-      const newState = {};
-
-      if (this._deltaX) {
-        newState.scrollX = state.scrollX + this._deltaX;
-      }
-
-      if (this._deltaY) {
-        newState.scrollY = state.scrollY + this._deltaY;
-      }
-
-      this.state.store.update(newState);
-    }
-
+    this.state.store.updateScroll(this._deltaX, this._deltaY);
     this._timerUpdateStoreByWheel = 0;
   }
 
@@ -130,6 +110,8 @@ Calendar.childContextTypes = {
   store: PropTypes.instanceOf(Store)
 };
 
+/* @if NODE_ENV=='development' **
 Calendar.propTypes = {};
+/* @endif */
 
 Calendar.defaultProps = {};

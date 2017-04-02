@@ -42,7 +42,6 @@ export default function createState () {
 
         current.scrollWidth = value;
         current.scrollOffsetLeft = -2 * current.LIST_RANGE * value;
-        // current.speedScrollX = 0;
         current.scrollX = current.scrollX === undefined ?
           limitScrollX(getScrollXByOffset(0, current), current) :
           scrollWidth > 0 ? limitScrollX(current.scrollX * value / scrollWidth, current) : 0;
@@ -63,32 +62,17 @@ export default function createState () {
       get: () => current.scrollX,
       set: (value) => {
         value = limitScrollX(value, current);
-        if (value === current.scrollX) {
-          // current.speedScrollX = 0;
-          return;
+        if (value !== current.scrollX) {
+          const currentDate = current.currentDate;
+
+          current.scrollX = value;
+          current.currentDate = getCurrentDate(current);
+          current.scrollX = correctScrollX(currentDate, current);
+
+          isChangedValues = true;
         }
-
-        const currentDate = current.currentDate;
-
-        // current.speedScrollX = current.scrollX - value;
-        current.scrollX = value;
-        current.currentDate = getCurrentDate(current);
-        current.scrollX = correctScrollX(currentDate, current);
-
-        isChangedValues = true;
       }
     },
-
-    /**
-     * скорость скролла по X: вправо > 0; влево < 0;
-     * @type {number}
-     * @public
-     * @readonly
-     */
-    // speedScrollX: {
-    //   enumerable: true,
-    //   get: () => current.speedScrollX
-    // },
 
     /**
      * смещение скрола по оси Y
@@ -104,6 +88,34 @@ export default function createState () {
           current.scrollY = value;
           isChangedValues = true;
         }
+      }
+    },
+
+    /**
+     * скорость скролла по X: вправо > 0; влево < 0;
+     * @type {number}
+     * @public
+     */
+    speedScrollX: {
+      enumerable: true,
+      get: () => current.speedScrollX,
+      set: (value) => {
+        current.speedScrollX = value;
+        isChangedValues = true;
+      }
+    },
+
+    /**
+     * скорость скролла по Y: вверх > 0; вниз < 0;
+     * @type {number}
+     * @public
+     */
+    speedScrollY: {
+      enumerable: true,
+      get: () => current.speedScrollY,
+      set: (value) => {
+        current.speedScrollY = value;
+        isChangedValues = true;
       }
     },
 

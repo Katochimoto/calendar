@@ -1,23 +1,23 @@
 // @flow
 
 import EventEmitter from './EventEmitter';
-import createState from './Store/createState';
+import StoreStrategyDefault from './Store/StoreStrategyDefault';
 import { getDay, HOURMS } from './date';
 import { lazy } from './lazy';
 
-interface IState {
+interface StoreInterface {
   state: {[id:string]: any};
-  update (data: {[id:string]: any}): void;
+  update (data: {[id:string]: any}): boolean;
   isVisibleOffset (offset: number): boolean;
   gridDateOffset (date: number, offset: number): number;
 }
 
 export default class Store extends EventEmitter {
-  _state: IState;
+  _state: StoreInterface;
 
   constructor (data: {[id:string]: any}) {
     super();
-    this._state = createState();
+    this._state = (new StoreStrategyDefault: StoreInterface);
     this._state.update(data);
   }
 

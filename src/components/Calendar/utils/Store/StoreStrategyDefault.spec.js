@@ -1,9 +1,9 @@
 import { assert } from 'chai';
-import createState from './createState';
+import StoreStrategyDefault from './StoreStrategyDefault';
 
-describe('createState', function () {
+describe('StoreStrategyDefault', function () {
   beforeEach(function () {
-    this.store = createState();
+    this.store = new StoreStrategyDefault();
   });
 
   afterEach(function () {

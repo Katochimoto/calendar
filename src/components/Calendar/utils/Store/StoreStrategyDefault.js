@@ -326,14 +326,34 @@ export default class StoreStrategyDefault {
     return this.isChanged;
   }
 
+  updateScroll (deltaX: number, deltaY: number) {
+    const scrollX = this.current.scrollX + deltaX;
+    const scrollY = this.current.scrollY + deltaY;
+
+    let updX = this.update({ scrollX });
+    let updY = this.update({ scrollY });
+
+    const speedScrollX = updX ? deltaX : 0;
+    const speedScrollY = updY ? deltaY : 0;
+
+    updX = this.update({ speedScrollX }) || updX;
+    updY = this.update({ speedScrollY }) || updY;
+
+    return (updX || updY);
+  }
+
   isVisibleOffset (offset: number): boolean {
-    const { scrollX, scrollWidth, LIST_RANGE } = this.current;
+    const { scrollX, scrollWidth, LIST_RANGE, speedScrollX } = this.current;
     const min = this._getScrollXByOffset(offset);
     const max = min - scrollWidth;
+    const maxOffset = scrollX / LIST_RANGE;
+    const minOffset = scrollX - scrollWidth * LIST_RANGE;
 
     return scrollX !== undefined && !Boolean(
-      max >= scrollX / LIST_RANGE ||
-      min <= scrollX - scrollWidth * LIST_RANGE
+      (max > maxOffset) ||
+      (max === maxOffset && speedScrollX <= 0) ||
+      (min < minOffset) ||
+      (min === minOffset && speedScrollX >= 0)
     );
   }
 
@@ -344,6 +364,13 @@ export default class StoreStrategyDefault {
     } else {
       return offsetOnDay(date, offset);
     }
+  }
+
+  timeToRate (time: number): number {
+    const hour = time / HOURMS ^ 0;
+    const ms = time % HOURMS;
+    const grid = this.current.GRID_HOURS[ hour ] * HOURMS + ms;
+    return Math.round(1000 * 100 * grid / this.current.DAYMS) / 1000;
   }
 
   _getScrollXByOffset (offset) {

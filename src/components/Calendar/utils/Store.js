@@ -3,13 +3,14 @@
 import EventEmitter from './EventEmitter';
 import StoreStrategyDefault from './Store/StoreStrategyDefault';
 import { getDay, HOURMS } from './date';
-import { lazy } from './lazy';
 
 interface StoreInterface {
   state: {[id:string]: any};
   update (data: {[id:string]: any}): boolean;
+  updateScroll (deltaX: number, deltaY: number): boolean;
   isVisibleOffset (offset: number): boolean;
   gridDateOffset (date: number, offset: number): number;
+  timeToRate (time: number): number;
 }
 
 export default class Store extends EventEmitter {
@@ -21,11 +22,6 @@ export default class Store extends EventEmitter {
     this._state.update(data);
   }
 
-  @lazy
-  emitChange () {
-    super.emitChange();
-  }
-
   update (data: {[id:string]: any}) {
     if (this._state.update(data)) {
       this.emitChange();
@@ -33,19 +29,7 @@ export default class Store extends EventEmitter {
   }
 
   updateScroll (deltaX: number, deltaY: number) {
-    const scrollX = this._state.state.scrollX + deltaX;
-    const scrollY = this._state.state.scrollY + deltaY;
-
-    let updX = this._state.update({ scrollX });
-    let updY = this._state.update({ scrollY });
-
-    const speedScrollX = updX ? deltaX : 0;
-    const speedScrollY = updY ? deltaY : 0;
-
-    updX = this._state.update({ speedScrollX }) || updX;
-    updY = this._state.update({ speedScrollY }) || updY;
-
-    if (updX || updY) {
+    if (this._state.updateScroll(deltaX, deltaY)) {
       this.emitChange();
     }
   }
@@ -63,10 +47,7 @@ export default class Store extends EventEmitter {
   }
 
   timeToRate (time: number): number {
-    const hour = time / HOURMS ^ 0;
-    const ms = time % HOURMS;
-    const grid = this._state.state.GRID_HOURS[ hour ] * HOURMS + ms;
-    return Math.round(1000 * 100 * grid / this._state.state.DAYMS) / 1000;
+    return this._state.timeToRate(time);
   }
 
   checkWeekend (date: number): boolean {

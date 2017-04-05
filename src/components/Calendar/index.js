@@ -84,6 +84,22 @@ export default class Calendar extends Component {
   updateStoreByWheel () {
     this.state.store.updateScroll(this._deltaX, this._deltaY);
     this._timerUpdateStoreByWheel = 0;
+
+    context.requestAnimationFrame(() => {
+      if (this._timerScrollStop) {
+        context.clearTimeout(this._timerScrollStop);
+        this._timerScrollStop = 0;
+      }
+
+      if (!this._timerUpdateStoreByWheel) {
+        this._timerScrollStop = context.setTimeout(() => {
+          this._timerScrollStop = 0;
+          if (!this._timerUpdateStoreByWheel) {
+            this.state.store.updateScroll(0, 0);
+          }
+        }, 150);
+      }
+    });
   }
 
   getRecalculationSize () {

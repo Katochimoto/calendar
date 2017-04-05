@@ -1,5 +1,7 @@
 // @flow
 
+import { lazy } from './lazy';
+
 export default class EventEmitter {
   _callbacks: Array<[Function, Object]>;
 
@@ -7,11 +9,16 @@ export default class EventEmitter {
     this._callbacks = [];
   }
 
-  emitChange (): void {
+  emitChangeSync (): void {
     for (let i = 0, len = this._callbacks.length; i < len; i++) {
       const item = this._callbacks[i];
       item[0].call(item[1]);
     }
+  }
+
+  @lazy
+  emitChange (): void {
+    this.emitChangeSync();
   }
 
   addChangeListener (callback: Function, ctx: Object): void {

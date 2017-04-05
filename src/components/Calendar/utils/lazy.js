@@ -1,6 +1,6 @@
 import context from '../context';
 
-const callbacks = [];
+const CALLBACKS = [];
 
 export function lazy (target, key, descriptor) {
   const callback = descriptor.value;
@@ -14,11 +14,12 @@ export function lazy (target, key, descriptor) {
   };
 
   descriptor.value = function (...args) {
-    callback._args.push(args);
+    args.length && callback._args.push(args);
 
     if (!callback._timer) {
-      callback._timer = context.setImmediate(() => {
-        lazyRun.call(this);
+      const that = this;
+      callback._timer = context.setImmediate(function lazyImmediate () {
+        lazyRun.call(that);
       });
     }
   };
@@ -27,21 +28,21 @@ export function lazy (target, key, descriptor) {
 }
 
 export function qlazy (callback) {
-  if (!callbacks.length) {
+  if (!CALLBACKS.length) {
     context.setTimeout(run, 200);
   }
 
   callback.cancel = () => cancel(callback);
-  callbacks.push(callback);
+  CALLBACKS.push(callback);
   return callback;
 }
 
 function cancel (callback) {
   let i = 0;
-  while (i < callbacks.length) {
-    if (callbacks[i] === callback) {
-      callbacks.splice(i, 1);
-      
+  while (i < CALLBACKS.length) {
+    if (CALLBACKS[i] === callback) {
+      CALLBACKS.splice(i, 1);
+
     } else {
       i++;
     }
@@ -50,7 +51,7 @@ function cancel (callback) {
 
 function run () {
   let task;
-  while ((task = callbacks.shift())) {
+  while ((task = CALLBACKS.shift())) {
     task();
   }
 }

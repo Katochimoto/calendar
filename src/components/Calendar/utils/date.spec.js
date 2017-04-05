@@ -26,7 +26,19 @@ describe('offsetOnWorksDay', function () {
     [
       [2017.0406, 4, { 0: 0, 1: 1, 2: 2, 3: 3, 4: 4, 5: 5, 6: 6 }],
       2017.0410
-    ]
+    ],
+    [
+      [2017.0402, -4],
+      2017.0329
+    ],
+    [
+      [2017.0402, -4, { 0: 0, 6: 1 }],
+      2017.0328
+    ],
+    [
+      [2017.0402, -7, { 0: 0, 6: 1 }],
+      2017.0323
+    ],
   ].forEach(item => {
     it(`${JSON.stringify(item[0])} === ${item[1]}`, function () {
       assert.equal(offsetOnWorksDay.apply(null, item[0]), item[1]);

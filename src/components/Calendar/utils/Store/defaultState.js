@@ -55,8 +55,8 @@ export default {
   //freeScrollX: false,     // ? свободный скролл по X
   //freeScrollY: false,     // ? свободный скролл по Y
 
-  //speedScrollX: 0,
-  //speedScrollY: 0,        // ? скорость скролла по Y: старт = abs(new) > abs(old); вниз > 0; вверх < 0;
+  speedScrollX: 0,
+  speedScrollY: 0,
 
   //gridHeight: 0,
   //viewportHeight: 0,

@@ -5,7 +5,9 @@
 import { Component, PropTypes } from './utils/Component';
 import { onWheel, offWheel, wrapWheelCallback } from './utils/wheel';
 import context from './context';
+
 import GridDays from './components/GridDays';
+import GridMonth from './components/GridMonth';
 
 import Datetime from './utils/Datetime';
 import Events from './utils/Events';
@@ -131,3 +133,7 @@ Calendar.propTypes = {};
 /* @endif */
 
 Calendar.defaultProps = {};
+
+
+// <GridDays ref={gridComponent => this._gridComponent = gridComponent} />
+// <GridMonth ref={gridComponent => this._gridComponent = gridComponent} />

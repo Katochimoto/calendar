@@ -1,25 +1,39 @@
-/**
- * Вывод:
- * - 12 часов во вьюпорте
- */
-
 import { Component } from '../../utils/Component';
 
-export default class Month extends Component {
-  constructor (props, context) {
-    super(props, context);
-    this.state = {};
-  }
+import styles from './index.less';
+
+export default class GridMonth extends Component {
 
   shouldComponentUpdate () {
     return false;
   }
 
+  getRect () {
+    return {
+      scrollHeight: 0,
+      scrollWidth: 0
+    }
+  }
+
   render () {
     return (
-      <div>
-
-      </div>
+      <table className={styles.calendar_GridMonth}>
+        <col width="100%" valign="top" />
+        <thead>
+          <tr>
+            <td className={styles.calendar_GridMonth_Header}>
+              1
+            </td>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td className={styles.calendar_GridMonth_Content}>
+              2
+            </td>
+          </tr>
+        </tbody>
+      </table>
     );
   }
 }

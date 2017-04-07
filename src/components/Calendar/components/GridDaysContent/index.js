@@ -1,7 +1,3 @@
-/**
- *
- */
-
 import { StoreComponent } from '../../utils/Component';
 
 import Day from '../Day';

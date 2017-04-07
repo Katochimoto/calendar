@@ -373,23 +373,23 @@ export default class StoreStrategyDefault {
     return Math.round(1000 * 100 * grid / this.current.DAYMS) / 1000;
   }
 
-  _getScrollXByOffset (offset) {
+  _getScrollXByOffset (offset: number): number {
     return (offset + 1) * -1 * this.current.LIST_RANGE * this.current.scrollWidth;
   }
 
-  _limitScroll (value, min, max) {
+  _limitScroll (value: number, min: number, max: number): number {
     return value < min ? min : value > max ? max : Math.round(value);
   }
 
-  _limitScrollY (value) {
+  _limitScrollY (value: number): number {
     return this._limitScroll(value, this.current.scrollOffsetTop, this.current.scrollOffsetBottom);
   }
 
-  _limitScrollX (value) {
+  _limitScrollX (value: number): number {
     return this._limitScroll(value, this.current.scrollOffsetLeft, this.current.scrollOffsetRight);
   }
 
-  _correctScrollX (oldCurrentDate) {
+  _correctScrollX (oldCurrentDate: number): number {
     if (oldCurrentDate === this.current.currentDate) {
       return this.current.scrollX;
     }
@@ -398,7 +398,7 @@ export default class StoreStrategyDefault {
     return this._limitScrollX(this.current.scrollX + diff * this.current.scrollWidth);
   }
 
-  _getCurrentDate () {
+  _getCurrentDate (): number {
     const {
       currentDate,
       gridDaysItemSize,
@@ -420,16 +420,13 @@ export default class StoreStrategyDefault {
     const rate = centerOffsetWidth ? sign * scrollX2CenterWidth * 100 / centerOffsetWidth : 0;
     const rateCompare = 100 / LIST_RANGE;
 
-    /*::`*/
-    return do {
-      if (rate <= -(rateCompare)) {
-        this.gridDateOffset(currentDate, gridDaysItemSize);
-      } else if (rate >= rateCompare) {
-        this.gridDateOffset(currentDate, -(gridDaysItemSize));
-      } else {
-        currentDate;
-      }
-    };
-    /*::`;*/
+    if (rate <= -(rateCompare)) {
+      return this.gridDateOffset(currentDate, gridDaysItemSize);
+
+    } else if (rate >= rateCompare) {
+      return this.gridDateOffset(currentDate, -(gridDaysItemSize));
+    }
+
+    return currentDate;
   }
 }

@@ -11,6 +11,7 @@ const WEEKENDS = '0,6';
 const WEEKENDS_SET = toObject(WEEKENDS.split(',').map(Number));
 
 export default {
+  updated: 0,
   scrollHeight: 0,
   scrollWidth: 0,
 

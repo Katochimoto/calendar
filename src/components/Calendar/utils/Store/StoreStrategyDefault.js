@@ -19,6 +19,15 @@ export default class StoreStrategyDefault {
 
     /*::`*/
     Object.defineProperties(state, {
+      updated: {
+        enumerable: true,
+        get: () => this.current.updated,
+        set: (value) => {
+          this.current.updated = value;
+          this.isChanged = true;
+        }
+      },
+
       /**
        * [scrollHeight description]
        * @type {number}

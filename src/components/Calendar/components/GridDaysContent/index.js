@@ -11,21 +11,38 @@ export default class GridDaysContent extends StoreComponent {
   constructor (props, context) {
     super(props, context);
     this.getItemElement = this.getItemElement.bind(this);
+    this._updated = 0;
   }
 
   transformState (props, context) {
-    const { scrollY, gridDaysItemSize } = context.store.getState();
-    return { scrollY, gridDaysItemSize };
+    const { scrollY, gridDaysItemSize, currentDate } = context.store.getState();
+    return { scrollY, gridDaysItemSize, currentDate };
   }
 
   shouldComponentUpdate (nextProps, nextState) {
     return (
       this.state.scrollY !== nextState.scrollY ||
-      this.state.gridDaysItemSize !== nextState.gridDaysItemSize
+      this.state.gridDaysItemSize !== nextState.gridDaysItemSize ||
+      this.state.currentDate !== nextState.currentDate
     );
   }
 
-  getItemElement (date, itemSize/*, offset*/) {
+  componentWillUpdate (nextProps, nextState) {
+    if (
+      this.state.gridDaysItemSize !== nextState.gridDaysItemSize ||
+      this.state.currentDate !== nextState.currentDate
+    ) {
+      this.context.store.update({
+        updated: ++this._updated
+      });
+    }
+  }
+
+  getItemElement (offset) {
+    const itemSize = this.state.gridDaysItemSize;
+    const currentDate = this.state.currentDate;
+    const date = store.gridDateOffset(currentDate, offset * itemSize);
+
     return (
       <GridDaysItem
         date={date}
@@ -54,9 +71,7 @@ export default class GridDaysContent extends StoreComponent {
 
           <DayHours />
 
-          <InfiniteList
-            getItemElement={this.getItemElement}
-            itemSize={this.state.gridDaysItemSize} />
+          <InfiniteList getItemElement={this.getItemElement} />
         </div>
       </div>
     );

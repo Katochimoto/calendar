@@ -7,10 +7,15 @@ import styles from './index.less';
 
 export default class InfiniteListItem extends Component {
   shouldComponentUpdate (nextProps) {
+    const props = this.props;
+
     return (
-      this.props.date !== nextProps.date ||
-      this.props.itemSize !== nextProps.itemSize ||
-      this.props.isVisible !== nextProps.isVisible
+      props.updated !== nextProps.updated ||
+      props.offset !== nextProps.offset ||
+
+      props.date !== nextProps.date ||
+      props.itemSize !== nextProps.itemSize ||
+      props.isVisible !== nextProps.isVisible
     );
   }
 
@@ -19,12 +24,13 @@ export default class InfiniteListItem extends Component {
       date,
       getItemElement,
       isVisible,
-      itemSize
+      itemSize,
+      offset,
     } = this.props;
 
     return (
-      <div className={styles.calendar_InfiniteListItem}>
-        {isVisible ? getItemElement(date, itemSize) : null}
+      <div className={styles.InfiniteListItem}>
+        {isVisible ? getItemElement(date, itemSize, offset) : null}
       </div>
     );
   }
@@ -33,15 +39,19 @@ export default class InfiniteListItem extends Component {
 /* @if NODE_ENV=='development' **
 InfiniteListItem.propTypes = {
   date: PropTypes.number,
-  itemSize: PropTypes.number,
+  getItemElement: PropTypes.function,
   isVisible: PropTypes.boolean,
-  getItemElement: PropTypes.function
+  itemSize: PropTypes.number,
+  offset: PropTypes.number,
+  updated: PropTypes.number,
 };
 /* @endif */
 
 InfiniteListItem.defaultProps = {
   date: 0,
-  itemSize: 0,
+  getItemElement: () => null,
   isVisible: false,
-  getItemElement: () => null
+  itemSize: 0,
+  offset: 0,
+  updated: 0,
 };

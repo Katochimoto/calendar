@@ -8,41 +8,55 @@ import styles from './index.less';
 
 export default class InfiniteList extends StoreComponent {
   transformState (props, context) {
-    const { scrollX, LIST_RANGE, currentDate } = context.store.getState();
-    return { scrollX, LIST_RANGE, currentDate };
+    const state = context.store.getState();
+
+    return {
+      currentDate: state.currentDate,
+      listRange: state.listRange,
+      scrollX: props.axis === InfiniteList.AXIS_X ? state.scrollX : 0,
+      scrollY: props.axis === InfiniteList.AXIS_Y ? state.scrollY : 0
+    };
   }
 
   shouldComponentUpdate (nextProps, nextState) {
+    const state = this.state;
+    const props = this.props;
+    const axis = props.axis;
+
     return (
-      this.props.itemSize !== nextProps.itemSize ||
-      this.state.currentDate !== nextState.currentDate ||
-      this.state.LIST_RANGE !== nextState.LIST_RANGE ||
-      this.state.scrollX !== nextState.scrollX
+      axis !== nextProps.axis ||
+      props.itemSize !== nextProps.itemSize ||
+      props.updated !== nextProps.updated ||
+
+      state.currentDate !== nextState.currentDate ||
+      state.listRange !== nextState.listRange ||
+      (axis === InfiniteList.AXIS_X && state.scrollX !== nextState.scrollX) ||
+      (axis === InfiniteList.AXIS_Y && state.scrollY !== nextState.scrollY)
     );
   }
 
-  /**
-   * FIXME подумать над оптимизацией - вызывается при каждом изменении scrollX
-   */
   getItems () {
-    const { store } = this.context;
-    const { itemSize } = this.props;
-    const { LIST_RANGE, currentDate } = this.state;
+    const store = this.context.store;
+    const { itemSize, updated } = this.props;
+    const { listRange, currentDate } = this.state;
     const items = [];
 
-    let offset = -(LIST_RANGE);
+    let offset = -(listRange);
 
-    while (offset <= LIST_RANGE) {
+    while (offset <= listRange) {
       const date = store.gridDateOffset(currentDate, offset * itemSize);
       const isVisible = store.isVisibleOffset(offset);
 
       items.push(
         <InfiniteListItem
           key={offset}
-          date={date}
-          itemSize={itemSize}
+          offset={offset}
+          updated={updated}
           isVisible={isVisible}
-          getItemElement={this.props.getItemElement} />
+          getItemElement={this.props.getItemElement}
+
+          date={date}
+          itemSize={itemSize} />
       );
 
       offset++;
@@ -52,11 +66,20 @@ export default class InfiniteList extends StoreComponent {
   }
 
   render () {
-    const style = `transform: translateX(${this.state.scrollX}px);`;
+    const axis = this.props.axis;
+    const style = do {
+      if (axis === InfiniteList.AXIS_X) {
+        `transform: translateX(${this.state.scrollX}px);`;
+      } else if (axis === InfiniteList.AXIS_Y) {
+        `transform: translateY(${this.state.scrollY}px);`;
+      } else {
+        '';
+      }
+    };
 
     return (
-      <div className={styles.calendar_InfiniteList}>
-        <div className={styles.calendar_InfiniteList_Content} style={style}>
+      <div className={styles.InfiniteList}>
+        <div className={styles.InfiniteList_Content} style={style}>
           {this.getItems()}
         </div>
       </div>
@@ -64,14 +87,21 @@ export default class InfiniteList extends StoreComponent {
   }
 }
 
+InfiniteList.AXIS_X = 0;
+InfiniteList.AXIS_Y = 1;
+
 /* @if NODE_ENV=='development' **
 InfiniteList.propTypes = {
+  axis: PropTypes.oneOf([ InfiniteList.AXIS_X, InfiniteList.AXIS_Y ]),
+  getItemElement: PropTypes.function,
   itemSize: PropTypes.number,
-  getItemElement: PropTypes.function
+  updated: PropTypes.number
 };
 /* @endif */
 
 InfiniteList.defaultProps = {
+  axis: InfiniteList.AXIS_X,
+  getItemElement: () => null,
   itemSize: 0,
-  getItemElement: () => null
+  updated: 0
 };

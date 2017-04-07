@@ -25,7 +25,7 @@ export default class GridDaysContent extends StoreComponent {
     );
   }
 
-  getItemElement (date, itemSize) {
+  getItemElement (date, itemSize/*, offset*/) {
     return (
       <GridDaysItem
         date={date}

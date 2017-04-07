@@ -57,7 +57,7 @@ export default class StoreStrategyDefault {
           const currentDate = this.current.currentDate;
 
           this.current.scrollWidth = value;
-          this.current.scrollOffsetLeft = -2 * this.current.LIST_RANGE * value;
+          this.current.scrollOffsetLeft = -2 * this.current.listRange * value;
           this.current.scrollX = this.current.scrollX === undefined ?
             this._limitScrollX(this._getScrollXByOffset(0)) :
             scrollWidth > 0 ? this._limitScrollX(this.current.scrollX * value / scrollWidth) : 0;
@@ -69,7 +69,7 @@ export default class StoreStrategyDefault {
       },
 
       /**
-       * смещение скрола по оси X = -1 * LIST_RANGE * scrollWidth
+       * смещение скрола по оси X = -1 * listRange * scrollWidth
        * @type {number}
        * @public
        */
@@ -141,9 +141,9 @@ export default class StoreStrategyDefault {
        * @public
        * @readonly
        */
-      LIST_RANGE: {
+      listRange: {
         enumerable: true,
-        get: () => this.current.LIST_RANGE
+        get: () => this.current.listRange
       },
 
       /**
@@ -343,11 +343,11 @@ export default class StoreStrategyDefault {
   }
 
   isVisibleOffset (offset: number): boolean {
-    const { scrollX, scrollWidth, LIST_RANGE, speedScrollX } = this.current;
+    const { scrollX, scrollWidth, listRange, speedScrollX } = this.current;
     const min = this._getScrollXByOffset(offset);
     const max = min - scrollWidth;
-    const maxOffset = scrollX / LIST_RANGE;
-    const minOffset = scrollX - scrollWidth * LIST_RANGE;
+    const maxOffset = scrollX / listRange;
+    const minOffset = scrollX - scrollWidth * listRange;
 
     return scrollX !== undefined && !Boolean(
       (max > maxOffset) ||
@@ -374,7 +374,7 @@ export default class StoreStrategyDefault {
   }
 
   _getScrollXByOffset (offset: number): number {
-    return (offset + 1) * -1 * this.current.LIST_RANGE * this.current.scrollWidth;
+    return (offset + 1) * -1 * this.current.listRange * this.current.scrollWidth;
   }
 
   _limitScroll (value: number, min: number, max: number): number {
@@ -402,7 +402,7 @@ export default class StoreStrategyDefault {
     const {
       currentDate,
       gridDaysItemSize,
-      LIST_RANGE,
+      listRange,
       scrollOffsetLeft,
       scrollOffsetRight,
       scrollX
@@ -418,7 +418,7 @@ export default class StoreStrategyDefault {
       scrollX - scrollOffsetCenter :
       scrollOffsetCenter - scrollX;
     const rate = centerOffsetWidth ? sign * scrollX2CenterWidth * 100 / centerOffsetWidth : 0;
-    const rateCompare = 100 / LIST_RANGE;
+    const rateCompare = 100 / listRange;
 
     if (rate <= -(rateCompare)) {
       return this.gridDateOffset(currentDate, gridDaysItemSize);

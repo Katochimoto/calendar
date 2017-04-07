@@ -39,7 +39,7 @@ describe('StoreStrategyDefault', function () {
       assert.isNotOk(this.store.update({ scrollWidth: 1000 }));
     });
 
-    it('начальное значение scrollX равно отрицательному scrollWidth, умноженному на колчество LIST_RANGE', function () {
+    it('начальное значение scrollX равно отрицательному scrollWidth, умноженному на колчество listRange', function () {
       this.store.update({ scrollWidth: 1000 });
       assert.equal(this.store.state.scrollX, -1000);
     });

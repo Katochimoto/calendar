@@ -15,7 +15,7 @@ export default {
   scrollWidth: 0,
 
   /**
-   * максимальное смещение при скроле влево = -1 * scrollWidth * ( LIST_RANGE * 2 )
+   * максимальное смещение при скроле влево = -1 * scrollWidth * ( listRange * 2 )
    * @type {number}
    * @private
    * @readonly
@@ -48,7 +48,7 @@ export default {
   scrollX: undefined,
   scrollY: 0,
 
-  LIST_RANGE: 1,
+  listRange: 1,
 
   //stickyScrollX: false,   // ? залипающий скролл по X
   //stepScrollX: false,     // ? пошаговый скролл по X

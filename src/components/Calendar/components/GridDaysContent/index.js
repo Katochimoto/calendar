@@ -1,8 +1,4 @@
 import { StoreComponent } from '../../utils/Component';
-/* @if NODE_ENV=='development' **
-import { PropTypes } from '../../utils/Component';
-import InfiniteStore from '../../utils/InfiniteStore';
-/* @endif */
 
 import Day from '../Day';
 import DayHours from '../DayHours';
@@ -19,7 +15,7 @@ export default class GridDaysContent extends StoreComponent {
 
   transformState (props, context) {
     const { gridDaysItemSize, currentDate } = context.store.getState();
-    const { scrollY } = props.infiniteStore.getState();
+    const { scrollY } = context.infiniteStore.getState();
     return { scrollY, gridDaysItemSize, currentDate };
   }
 
@@ -34,15 +30,15 @@ export default class GridDaysContent extends StoreComponent {
   componentDidMount () {
     super.componentDidMount();
 
-    this.props.infiniteStore.addChangeListener(this.updateState, this);
+    this.context.infiniteStore.addChangeListener(this.updateState, this);
 
-    this.props.infiniteStore.addListener('next', () => {
+    this.context.infiniteStore.addListener('next', () => {
       const { gridDaysItemSize, currentDate } = this.state;
       const date = this.context.store.gridDateOffset(currentDate, gridDaysItemSize);
       this.context.store.update({ currentDate: date });
     }, this);
 
-    this.props.infiniteStore.addListener('prev', () => {
+    this.context.infiniteStore.addListener('prev', () => {
       const { gridDaysItemSize, currentDate } = this.state;
       const date = this.context.store.gridDateOffset(currentDate, -(gridDaysItemSize));
       this.context.store.update({ currentDate: date });
@@ -52,18 +48,20 @@ export default class GridDaysContent extends StoreComponent {
   componentWillUnmount () {
     super.componentWillUnmount();
 
-    this.props.infiniteStore.removeChangeListener(this.updateState, this);
+    this.context.infiniteStore.removeChangeListener(this.updateState, this);
 
-    //this.props.infiniteStore.removeListener('next');
-    //this.props.infiniteStore.removeListener('prev');
+    //this.context.infiniteStore.removeListener('next');
+    //this.context.infiniteStore.removeListener('prev');
   }
 
+  // TODO сделать forceUpdated при изменении стора сетки
   componentWillUpdate (nextProps, nextState) {
     if (
       this.state.gridDaysItemSize !== nextState.gridDaysItemSize ||
       this.state.currentDate !== nextState.currentDate
+      // hideWeekends
     ) {
-      this.props.infiniteStore.forceUpdated();
+      this.context.infiniteStore.forceUpdated();
     }
   }
 
@@ -100,18 +98,9 @@ export default class GridDaysContent extends StoreComponent {
           <DayHours />
 
           <InfiniteList
-            getItemElement={this.getItemElement}
-            store={this.props.infiniteStore} />
+            getItemElement={this.getItemElement} />
         </div>
       </div>
     );
   }
 }
-
-/* @if NODE_ENV=='development' **
-GridDaysContent.propTypes = {
-  infiniteStore: PropTypes.instanceOf(InfiniteStore).isRequired,
-};
-/* @endif */
-
-GridDaysContent.defaultProps = {};

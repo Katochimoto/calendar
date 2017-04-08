@@ -33,3 +33,13 @@ export class EventsComponent extends React.Component {
     this.state = this.transformState(props, context);
   }
 }
+
+@context
+@stateful
+@mutable('infiniteStore')
+export class InfiniteStoreComponent extends React.Component {
+  constructor (props, context) {
+    super(props, context);
+    this.state = this.transformState(props, context);
+  }
+}

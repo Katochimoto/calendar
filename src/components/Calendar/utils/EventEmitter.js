@@ -14,15 +14,20 @@ export default class EventEmitter {
   }
 
   emitSync (name: string): void {
-    if (!(name in this._callbacks)) {
+    const callbacks = this._callbacks[ name ];
+
+    if (!callbacks) {
       return;
     }
 
-    const callbacks = this._callbacks[ name ];
     for (let i = 0, len = callbacks.length; i < len; i++) {
       const item = callbacks[i];
       item[0].call(item[1]);
     }
+  }
+
+  emitChangeSync (): void {
+    this.emitSync('change');
   }
 
   @lazy
@@ -30,10 +35,6 @@ export default class EventEmitter {
     names
       .filter((item, pos) => (names.indexOf(item) === pos))
       .forEach(this.emitSync, this);
-  }
-
-  emitChangeSync (): void {
-    this.emitSync('change');
   }
 
   @lazy
@@ -57,11 +58,11 @@ export default class EventEmitter {
   }
 
   removeListener (name: string, callback: Function, ctx: Object): void {
-    if (!(name in this._callbacks)) {
+    const callbacks = this._callbacks[ name ];
+
+    if (!callbacks) {
       return;
     }
-
-    const callbacks = this._callbacks[ name ];
 
     let i = 0;
     while (i < callbacks.length) {

@@ -13,18 +13,16 @@ export default class StoreStrategy extends EventEmitter {
 
     /*::`*/
     const props = Object.keys(data).reduce((data, name) => {
-      const isConst = name === name.toUpperCase();
-
       data[ name ] = {
         enumerable: true,
         get: () => this.current[ name ]
       };
 
-      if (!isConst) {
+      if (name !== name.toUpperCase()) {
         const sname = `_${name}Setter`;
-        
+
         data[ name ].set = (value) => {
-          if (this[ sname ]) {
+          if (sname in this) {
             this[ sname ](value);
           } else {
             this.current[ name ] = value;
@@ -38,6 +36,12 @@ export default class StoreStrategy extends EventEmitter {
 
     Object.defineProperties(this.state, props);
     /*::`;*/
+  }
+
+  destroy () {
+    super.destroy();
+    this.current = undefined;
+    this.state = undefined;
   }
 
   update (data: {[id:string]: any}): boolean {

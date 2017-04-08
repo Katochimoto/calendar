@@ -12,56 +12,66 @@
     </script>
 
     <style>
-      form { float: right; }
-      form input { width: 80px; }
+      html, body { height: 100%; padding: 0; margin: 0;}
+      #app { position: relative; height: 100%; }
+      form { font-size: 12px; }
+      form.toggle { display: none; }
+      form input { width: 60px; }
+      .btn { position: absolute; z-index: 999;}
     </style>
 </head>
 <body>
+  <table width="100%" height="100%">
+    <tr>
+      <td width="100%" valign="top">
+        <input class="btn" type="button" value="toggle" onclick="document.forms[0].classList.toggle('toggle')" />
+        <div id="app"></div>
+      </td>
+      <td valign="top">
+        <form onsubmit="return onSubmit(event);">
+          <div id="form"></div>
+          <input type="submit" />
+        </form>
+      </td>
+    </tr>
+  </table>
+
   <script src="../dist/vendor.js"></script>
   <script src="../dist/app.js"></script>
 
-  <form onsubmit="return onSubmit(event);">
-    <div id="form"></div>
-    <input type="submit" />
-  </form>
-
   <script>
-    var state = window.store.getState();
-    var form = '<table>';
+    function createForm(state) {
+      var form = '<table>';
 
-    for (var name in state) {
-      var value = state[name];
-      var type = typeof value;
-      var descriptor = Object.getOwnPropertyDescriptor(state, name);
-      var disabled = descriptor.writable || descriptor.set ? '' : '';
-      var style = descriptor.writable || descriptor.set ? '' : 'style="background: #eee;"';
+      for (var name in state) {
+        var value = state[name];
+        var type = typeof value;
+        var descriptor = Object.getOwnPropertyDescriptor(state, name);
+        var disabled = descriptor.writable || descriptor.set ? '' : '';
+        var style = descriptor.writable || descriptor.set ? '' : 'style="background: #eee;"';
 
-      switch (type) {
-        case 'string':
-        case 'number':
-        case 'undefined':
-          form += '<tr><td>' + name + '</td><td><input name="' + name + '" value="' + value + '" ' + disabled + ' ' + style + ' /></td></tr>';
-          break;
-        case 'boolean':
-          form += '<tr><td>' + name + '</td><td><input type="checkbox" name="' + name + '" ' + (value ? 'checked' : '') + ' value="1" ' + disabled + ' ' + style + ' /></td></tr>';
-          break;
-        case 'object':
-          if (value instanceof Date) {
+        switch (type) {
+          case 'string':
+          case 'number':
+          case 'undefined':
             form += '<tr><td>' + name + '</td><td><input name="' + name + '" value="' + value + '" ' + disabled + ' ' + style + ' /></td></tr>';
-          }
-          break;
+            break;
+          case 'boolean':
+            form += '<tr><td>' + name + '</td><td><input type="checkbox" name="' + name + '" ' + (value ? 'checked' : '') + ' value="1" ' + disabled + ' ' + style + ' /></td></tr>';
+            break;
+          case 'object':
+            if (value instanceof Date) {
+              form += '<tr><td>' + name + '</td><td><input name="' + name + '" value="' + value + '" ' + disabled + ' ' + style + ' /></td></tr>';
+            }
+            break;
+        }
       }
+
+      form += '</table>';
+      return form;
     }
 
-    form += '</table>';
-
-    document.getElementById('form').innerHTML = form;
-
-    window.store.addChangeListener(upgrade);
-
-    function upgrade () {
-      var state = window.store.getState();
-
+    function updateForm(state) {
       for (var name in state) {
         var element = document.querySelector('[name="' + name + '"]');
         if (!element) {
@@ -89,10 +99,7 @@
       }
     }
 
-    function onSubmit (event) {
-      event.preventDefault();
-
-      var state = window.store.getState();
+    function getFormData(state) {
       var newState = {};
 
       for (var name in state) {
@@ -130,8 +137,45 @@
         }
       }
 
-      console.log(newState);
+      return newState;
+    }
+  </script>
+
+  <script>
+    var state = window.store.getState();
+    var infiniteState = window.infiniteStore.getState();
+
+    document.getElementById('form').innerHTML = (
+      createForm(state) +
+      '<hr/>' +
+      createForm(infiniteState) +
+      '<hr/>'
+    );
+
+    window.store.addChangeListener(upgrade);
+    window.infiniteStore.addChangeListener(upgrade);
+
+    function upgrade () {
+      var state = window.store.getState();
+      var infiniteState = window.infiniteStore.getState();
+      updateForm(state);
+      updateForm(infiniteState);
+    }
+
+    function onSubmit (event) {
+      event.preventDefault();
+
+      var state = window.store.getState();
+      var newState = getFormData(state);
+
+      console.log('grid', newState);
       window.store.update(newState);
+
+      state = window.infiniteStore.getState();
+      newState = getFormData(state);
+
+      console.log('infinite', newState);
+      window.infiniteStore.update(newState);
 
       return false;
     }

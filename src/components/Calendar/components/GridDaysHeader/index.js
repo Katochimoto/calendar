@@ -1,8 +1,4 @@
 import { StoreComponent } from '../../utils/Component';
-/* @if NODE_ENV=='development' **
-import { PropTypes } from '../../utils/Component';
-import InfiniteStore from '../../utils/InfiniteStore';
-/* @endif */
 
 import DayHeader from '../DayHeader';
 import InfiniteList from '../InfiniteList';
@@ -45,18 +41,9 @@ export default class GridDaysHeader extends StoreComponent {
       <div className={styles.calendar_GridDaysHeader}>
         <div className={styles.calendar_GridDaysHeader_Content}>
           <InfiniteList
-            getItemElement={this.getItemElement}
-            store={this.props.infiniteStore} />
+            getItemElement={this.getItemElement} />
         </div>
       </div>
     );
   }
 }
-
-/* @if NODE_ENV=='development' **
-GridDaysHeader.propTypes = {
-  infiniteStore: PropTypes.instanceOf(InfiniteStore),
-};
-/* @endif */
-
-GridDaysHeader.defaultProps = {};

@@ -7,6 +7,7 @@ import GridMonth from './components/GridMonth';
 import Datetime from './utils/Datetime';
 import Events from './utils/Events';
 import GridStore from './utils/GridStore';
+import InfiniteStore from './utils/InfiniteStore';
 
 import styles from './index.less';
 
@@ -17,17 +18,20 @@ export default class Calendar extends Component {
     this.state = {
       datetime: new Datetime(),
       events: new Events(),
-      store: new GridStore()
+      infiniteStore: new InfiniteStore(),
+      store: new GridStore(),
     };
 
     // FIXME remove later
     window.store = this.state.store;
+    window.infiniteStore = this.state.infiniteStore;
   }
 
   getChildContext () {
     return {
       datetime: this.state.datetime,
       events: this.state.events,
+      infiniteStore: this.state.infiniteStore,
       store: this.state.store
     };
   }
@@ -48,6 +52,7 @@ export default class Calendar extends Component {
 Calendar.childContextTypes = {
   datetime: PropTypes.instanceOf(Datetime),
   events: PropTypes.instanceOf(Events),
+  infiniteStore: PropTypes.instanceOf(InfiniteStore),
   store: PropTypes.instanceOf(GridStore),
 };
 

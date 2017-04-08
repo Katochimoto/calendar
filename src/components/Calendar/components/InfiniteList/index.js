@@ -1,19 +1,23 @@
-import { StoreComponent } from '../../utils/Component';
+import { Component } from '../../utils/Component';
 /* @if NODE_ENV=='development' **
 import { PropTypes } from '../../utils/Component';
 /* @endif */
+
+import InfiniteStore from '../../utils/InfiniteStore';
 import InfiniteListItem from '../InfiniteListItem';
 
 import styles from './index.less';
 
-export default class InfiniteList extends StoreComponent {
-  transformState (props, context) {
-    const state = context.store.getState();
+export default class InfiniteList extends Component {
+
+  transformState (props) {
+    const { listRange, scrollX, scrollY, updated } = props.store.getState();
+
     return {
-      listRange: state.listRange,
-      scrollX: props.axis === InfiniteList.AXIS_X ? state.scrollX : 0,
-      scrollY: props.axis === InfiniteList.AXIS_Y ? state.scrollY : 0,
-      updated: state.updated,
+      listRange,
+      scrollX: props.axis === InfiniteList.AXIS_X ? scrollX : 0,
+      scrollY: props.axis === InfiniteList.AXIS_Y ? scrollY : 0,
+      updated,
     };
   }
 
@@ -31,15 +35,22 @@ export default class InfiniteList extends StoreComponent {
     );
   }
 
+  componentDidMount () {
+    this.props.store.addChangeListener(this.updateState, this);
+  }
+
+  componentWillUnmount () {
+    this.props.store.removeChangeListener(this.updateState, this);
+  }
+
   getItems () {
-    const store = this.context.store;
     const { listRange, updated } = this.state;
     const items = [];
 
     let offset = -(listRange);
 
     while (offset <= listRange) {
-      const isVisible = store.isVisibleOffset(offset);
+      const isVisible = this.props.store.isVisibleOffset(offset);
 
       items.push(
         <InfiniteListItem
@@ -80,16 +91,17 @@ export default class InfiniteList extends StoreComponent {
 
 InfiniteList.AXIS_X = 0;
 InfiniteList.AXIS_Y = 1;
-InfiniteList.Store = () => null;
 
 /* @if NODE_ENV=='development' **
 InfiniteList.propTypes = {
   axis: PropTypes.oneOf([ InfiniteList.AXIS_X, InfiniteList.AXIS_Y ]),
-  getItemElement: PropTypes.function
+  getItemElement: PropTypes.function,
+  store: PropTypes.instanceOf(InfiniteStore).isRequired,
 };
 /* @endif */
 
 InfiniteList.defaultProps = {
+  store: new InfiniteStore(),
   axis: InfiniteList.AXIS_X,
-  getItemElement: () => null
+  getItemElement: () => null,
 };

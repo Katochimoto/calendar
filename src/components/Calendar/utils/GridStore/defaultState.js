@@ -11,64 +11,35 @@ const WEEKENDS = '0,6';
 const WEEKENDS_SET = toObject(WEEKENDS.split(',').map(Number));
 
 export default {
-  updated: 0,
-  scrollHeight: 0,
-  scrollWidth: 0,
 
-  /**
-   * максимальное смещение при скроле влево = -1 * scrollWidth * ( listRange * 2 )
-   * @type {number}
-   * @private
-   * @readonly
-   */
-  scrollOffsetLeft: 0,
-
-  /**
-   * максимальное смещение при скроле вправо
-   * @constant {number}
-   * @private
-   * @readonly
-   */
-  scrollOffsetRight: 0,
-
-  /**
-   * максимальное смещение при скроле вверх = -1 * scrollHeight
-   * @type {number}
-   * @private
-   * @readonly
-   */
-  scrollOffsetTop: 0,
-
-  /**
-   * максимальное смещение при скроле вниз
-   * @constant {number}
-   * @private
-   * @readonly
-   */
-  scrollOffsetBottom: 0,
-  scrollX: undefined,
-  scrollY: 0,
-
-  listRange: 1,
-
-  //stickyScrollX: false,   // ? залипающий скролл по X
-  //stepScrollX: false,     // ? пошаговый скролл по X
-  //freeScrollX: false,     // ? свободный скролл по X
-  //freeScrollY: false,     // ? свободный скролл по Y
-
-  speedScrollX: 0,
-  speedScrollY: 0,
 
   //gridHeight: 0,
   //viewportHeight: 0,
   //viewportMinutesBegin: 0,
   //viewportMinutesEnd: 0,
 
+  /**
+   * Количество дней в одном элементе InfiniteList.
+   * Для сетки по дням.
+   * @type {number}
+   * @public
+   */
   gridDaysItemSize: 7,
   //gridWeekListItemSize: 1,  // количество недель в одном элементе InfiniteList
 
   //grid: 'day',
+  /**
+   * Текущая дата
+   * @type {string}
+   * @public
+   */
   currentDate: 2017.0227,
+
+  /**
+   * Рабочие часы в сутках
+   * @type {string}
+   * @public
+   */
   hoursOfDay: HOURS,
 
   /**
@@ -77,10 +48,27 @@ export default {
    */
   GRID_HOURS: GRID_HOURS,
 
+  /**
+   * Количество миллисекунд в сутках
+   * @type {number}
+   * @public
+   * @readonly
+   */
   DAYMS: DAYMS,
 
+  /**
+   * Рабочие интервалы в сутках
+   * @type {Object}
+   * @public
+   * @readonly
+   */
   INTERVALS: INTERVALS,
 
+  /**
+   * Выходные дни недели
+   * @type {string}
+   * @public
+   */
   weekends: WEEKENDS,
 
   /**
@@ -89,6 +77,17 @@ export default {
    */
   WEEKENDS_SET: WEEKENDS_SET,
 
+  /**
+   * Скрывать выходные
+   * @type {boolean}
+   * @public
+   */
   hideWeekends: false,
+
+  /**
+   * Начинать неделю с дня
+   * @type {number}
+   * @public
+   */
   beginningOfWeek: 1
 };

@@ -1,4 +1,8 @@
 import { StoreComponent } from '../../utils/Component';
+/* @if NODE_ENV=='development' **
+import { PropTypes } from '../../utils/Component';
+import InfiniteStore from '../../utils/InfiniteStore';
+/* @endif */
 
 import Day from '../Day';
 import DayHours from '../DayHours';
@@ -11,11 +15,11 @@ export default class GridDaysContent extends StoreComponent {
   constructor (props, context) {
     super(props, context);
     this.getItemElement = this.getItemElement.bind(this);
-    this._updated = 0;
   }
 
   transformState (props, context) {
-    const { scrollY, gridDaysItemSize, currentDate } = context.store.getState();
+    const { gridDaysItemSize, currentDate } = context.store.getState();
+    const { scrollY } = props.infiniteStore.getState();
     return { scrollY, gridDaysItemSize, currentDate };
   }
 
@@ -27,26 +31,50 @@ export default class GridDaysContent extends StoreComponent {
     );
   }
 
+  componentDidMount () {
+    super.componentDidMount();
+
+    this.props.infiniteStore.addChangeListener(this.updateState, this);
+
+    this.props.infiniteStore.addListener('next', () => {
+      const { gridDaysItemSize, currentDate } = this.state;
+      const date = this.context.store.gridDateOffset(currentDate, gridDaysItemSize);
+      this.context.store.update({ currentDate: date });
+    }, this);
+
+    this.props.infiniteStore.addListener('prev', () => {
+      const { gridDaysItemSize, currentDate } = this.state;
+      const date = this.context.store.gridDateOffset(currentDate, -(gridDaysItemSize));
+      this.context.store.update({ currentDate: date });
+    }, this);
+  }
+
+  componentWillUnmount () {
+    super.componentWillUnmount();
+
+    this.props.infiniteStore.removeChangeListener(this.updateState, this);
+
+    //this.props.infiniteStore.removeListener('next');
+    //this.props.infiniteStore.removeListener('prev');
+  }
+
   componentWillUpdate (nextProps, nextState) {
     if (
       this.state.gridDaysItemSize !== nextState.gridDaysItemSize ||
       this.state.currentDate !== nextState.currentDate
     ) {
-      this.context.store.update({
-        updated: ++this._updated
-      });
+      this.props.infiniteStore.forceUpdated();
     }
   }
 
   getItemElement (offset) {
-    const itemSize = this.state.gridDaysItemSize;
-    const currentDate = this.state.currentDate;
-    const date = store.gridDateOffset(currentDate, offset * itemSize);
+    const { gridDaysItemSize, currentDate } = this.state;
+    const date = this.context.store.gridDateOffset(currentDate, offset * gridDaysItemSize);
 
     return (
       <GridDaysItem
         date={date}
-        itemSize={itemSize}
+        itemSize={gridDaysItemSize}
         ItemComponent={Day} />
     );
   }
@@ -71,9 +99,19 @@ export default class GridDaysContent extends StoreComponent {
 
           <DayHours />
 
-          <InfiniteList getItemElement={this.getItemElement} />
+          <InfiniteList
+            getItemElement={this.getItemElement}
+            store={this.props.infiniteStore} />
         </div>
       </div>
     );
   }
 }
+
+/* @if NODE_ENV=='development' **
+GridDaysContent.propTypes = {
+  infiniteStore: PropTypes.instanceOf(InfiniteStore).isRequired,
+};
+/* @endif */
+
+GridDaysContent.defaultProps = {};

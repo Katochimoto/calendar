@@ -1,8 +1,8 @@
-/**
- *
- */
-
 import { StoreComponent } from '../../utils/Component';
+/* @if NODE_ENV=='development' **
+import { PropTypes } from '../../utils/Component';
+import InfiniteStore from '../../utils/InfiniteStore';
+/* @endif */
 
 import DayHeader from '../DayHeader';
 import InfiniteList from '../InfiniteList';
@@ -29,14 +29,13 @@ export default class GridDaysHeader extends StoreComponent {
   }
 
   getItemElement (offset) {
-    const itemSize = this.state.gridDaysItemSize;
-    const currentDate = this.state.currentDate;
-    const date = store.gridDateOffset(currentDate, offset * itemSize);
+    const { gridDaysItemSize, currentDate } = this.state;
+    const date = this.context.store.gridDateOffset(currentDate, offset * gridDaysItemSize);
 
     return (
       <GridDaysItem
         ItemComponent={DayHeader}
-        itemSize={itemSize}
+        itemSize={gridDaysItemSize}
         date={date} />
     );
   }
@@ -45,9 +44,19 @@ export default class GridDaysHeader extends StoreComponent {
     return (
       <div className={styles.calendar_GridDaysHeader}>
         <div className={styles.calendar_GridDaysHeader_Content}>
-          <InfiniteList getItemElement={this.getItemElement} />
+          <InfiniteList
+            getItemElement={this.getItemElement}
+            store={this.props.infiniteStore} />
         </div>
       </div>
     );
   }
 }
+
+/* @if NODE_ENV=='development' **
+GridDaysHeader.propTypes = {
+  infiniteStore: PropTypes.instanceOf(InfiniteStore),
+};
+/* @endif */
+
+GridDaysHeader.defaultProps = {};

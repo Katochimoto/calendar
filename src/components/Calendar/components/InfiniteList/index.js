@@ -1,4 +1,4 @@
-import { InfiniteStoreComponent } from '../../utils/Component';
+import { Component } from '../../utils/Component';
 /* @if NODE_ENV=='development' **
 import { PropTypes } from '../../utils/Component';
 /* @endif */
@@ -6,7 +6,7 @@ import { PropTypes } from '../../utils/Component';
 import InfiniteListItem from '../InfiniteListItem';
 import styles from './index.less';
 
-export default class InfiniteList extends InfiniteStoreComponent {
+export default class InfiniteList extends Component {
 
   transformState (props, context) {
     const {
@@ -38,23 +38,22 @@ export default class InfiniteList extends InfiniteStoreComponent {
   }
 
   componentDidMount () {
-    super.componentDidMount();
     const store = this.context.infiniteStore;
-    this.props.change && store.addListener('change', this.props.change);
+    store.addListener('change', this.handleChange, this);
     this.props.next && store.addListener('next', this.props.next);
     this.props.prev && store.addListener('prev', this.props.prev);
   }
 
   componentWillUnmount () {
-    super.componentWillUnmount();
     const store = this.context.infiniteStore;
-    this.props.change && store.removeListener('change', this.props.change);
+    store.removeListener('change', this.handleChange, this);
     this.props.next && store.removeListener('next', this.props.next);
     this.props.prev && store.removeListener('prev', this.props.prev);
   }
 
-  forceUpdated () {
-    this.context.infiniteStore.forceUpdated();
+  handleChange () {
+    this.updateState();
+    this.props.change && this.props.change();
   }
 
   getItems () {

@@ -9,38 +9,63 @@ import styles from './index.less';
 export default class InfiniteList extends InfiniteStoreComponent {
 
   transformState (props, context) {
-    const { listRange, scrollX, scrollY, updated } = context.infiniteStore.getState();
+    const {
+      listRange,
+      SAXISX,
+      scrollX,
+      scrollY,
+      updated,
+    } = context.infiniteStore.getState();
 
     return {
       listRange,
-      scrollX: props.axis === InfiniteList.AXIS_X ? scrollX : 0,
-      scrollY: props.axis === InfiniteList.AXIS_Y ? scrollY : 0,
+      SAXISX,
+      scrollX: SAXISX && scrollX || 0,
+      scrollY: !SAXISX && scrollY || 0,
       updated,
     };
   }
 
   shouldComponentUpdate (nextProps, nextState) {
     const state = this.state;
-    const props = this.props;
-    const axis = props.axis;
 
     return (
-      axis !== nextProps.axis ||
       state.updated !== nextState.updated ||
       state.listRange !== nextState.listRange ||
-      (axis === InfiniteList.AXIS_X && state.scrollX !== nextState.scrollX) ||
-      (axis === InfiniteList.AXIS_Y && state.scrollY !== nextState.scrollY)
+      (state.SAXISX && state.scrollX !== nextState.scrollX) ||
+      (!state.SAXISX && state.scrollY !== nextState.scrollY)
     );
   }
 
+  componentDidMount () {
+    super.componentDidMount();
+    const store = this.context.infiniteStore;
+    this.props.change && store.addListener('change', this.props.change);
+    this.props.next && store.addListener('next', this.props.next);
+    this.props.prev && store.addListener('prev', this.props.prev);
+  }
+
+  componentWillUnmount () {
+    super.componentWillUnmount();
+    const store = this.context.infiniteStore;
+    this.props.change && store.removeListener('change', this.props.change);
+    this.props.next && store.removeListener('next', this.props.next);
+    this.props.prev && store.removeListener('prev', this.props.prev);
+  }
+
+  forceUpdated () {
+    this.context.infiniteStore.forceUpdated();
+  }
+
   getItems () {
+    const store = this.context.infiniteStore;
     const { listRange, updated } = this.state;
     const items = [];
 
     let offset = -(listRange);
 
     while (offset <= listRange) {
-      const isVisible = this.context.infiniteStore.isVisibleOffset(offset);
+      const isVisible = store.isVisibleOffset(offset);
 
       items.push(
         <InfiniteListItem
@@ -58,14 +83,11 @@ export default class InfiniteList extends InfiniteStoreComponent {
   }
 
   render () {
-    const axis = this.props.axis;
     const style = do {
-      if (axis === InfiniteList.AXIS_X) {
+      if (this.state.SAXISX) {
         `transform: translateX(${this.state.scrollX}px);`;
-      } else if (axis === InfiniteList.AXIS_Y) {
-        `transform: translateY(${this.state.scrollY}px);`;
       } else {
-        '';
+        `transform: translateY(${this.state.scrollY}px);`;
       }
     };
 
@@ -79,17 +101,15 @@ export default class InfiniteList extends InfiniteStoreComponent {
   }
 }
 
-InfiniteList.AXIS_X = 0;
-InfiniteList.AXIS_Y = 1;
-
 /* @if NODE_ENV=='development' **
 InfiniteList.propTypes = {
-  axis: PropTypes.oneOf([ InfiniteList.AXIS_X, InfiniteList.AXIS_Y ]),
   getItemElement: PropTypes.function,
+  change: PropTypes.function,
+  next: PropTypes.function,
+  prev: PropTypes.function,
 };
 /* @endif */
 
 InfiniteList.defaultProps = {
-  axis: InfiniteList.AXIS_X,
   getItemElement: () => null,
 };

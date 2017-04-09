@@ -22,7 +22,11 @@ export default class EventEmitter {
 
     for (let i = 0, len = callbacks.length; i < len; i++) {
       const item = callbacks[i];
-      item[0].call(item[1]);
+      if (item[1]) {
+        item[0].call(item[1]);
+      } else {
+        item[0]();
+      }
     }
   }
 

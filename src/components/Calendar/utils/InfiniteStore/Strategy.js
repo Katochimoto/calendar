@@ -1,10 +1,7 @@
 import StoreStrategy from '../StoreStrategy';
 import defaultState from './defaultState';
 
-const LIMIT_PREV = 1;
-const LIMIT_NEXT = 2;
-
-class Strategy extends StoreStrategy {
+export default class Strategy extends StoreStrategy {
   constructor (data: {[id:string]: any} = defaultState) {
     super(data);
   }
@@ -52,22 +49,6 @@ class Strategy extends StoreStrategy {
     return true;
   }
 
-  _getScrollXByOffset (offset: number): number {
-    return (
-      -1 * (offset + 1) *
-      this.current.listRange *
-      this.current.scrollWidth
-    );
-  }
-
-  _getScrollYByOffset (offset: number): number {
-    return (
-      -1 * (offset + 1) *
-      this.current.listRange *
-      this.current.scrollHeight
-    );
-  }
-
   _limitScroll (value: number, min: number, max: number): number {
     return (
       value < min ? min :
@@ -94,31 +75,13 @@ class Strategy extends StoreStrategy {
 
   _correctScroll (limit, scroll, size) {
     switch (limit) {
-      case LIMIT_PREV:
+      case Strategy.LIMIT_PREV:
         return scroll - size;
-      case LIMIT_NEXT:
+      case Strategy.LIMIT_NEXT:
         return scroll + size;
       default:
         return scroll;
     }
-  }
-
-  _correctScrollX () {
-    const limit = this._checkLimitOffsetX();
-    this.current.scrollX = this._limitScrollX(this._correctScroll(
-      limit,
-      this.current.scrollX,
-      this.current.scrollWidth
-    ));
-  }
-
-  _correctScrollY () {
-    const limit = this._checkLimitOffsetY();
-    this.current.scrollY = this._limitScrollY(this._correctScroll(
-      limit,
-      this.current.scrollY,
-      this.current.scrollHeight
-    ));
   }
 
   _checkLimitOffset (scroll, offsetPrev, offsetNext): number {
@@ -131,151 +94,22 @@ class Strategy extends StoreStrategy {
     const scroll2CenterWidth = scroll > scrollOffsetCenter ?
       scroll - scrollOffsetCenter :
       scrollOffsetCenter - scroll;
-    const rate = centerOffsetWidth ? sign * scroll2CenterWidth * 100 / centerOffsetWidth : 0;
+    const rate = centerOffsetWidth ?
+      sign * scroll2CenterWidth * 100 / centerOffsetWidth : 0;
     const rateCompare = 100 / this.current.listRange;
 
     if (rate <= -(rateCompare)) {
       this.emitSync('next');
-      return LIMIT_NEXT;
+      return Strategy.LIMIT_NEXT;
 
     } else if (rate >= rateCompare) {
       this.emitSync('prev');
-      return LIMIT_PREV;
+      return Strategy.LIMIT_PREV;
     }
 
     return 0;
   }
-
-  _checkLimitOffsetX (): number {
-    return this._checkLimitOffset(
-      this.current.scrollX,
-      this.current.scrollOffsetLeft,
-      this.current.scrollOffsetRight
-    );
-  }
-
-  _checkLimitOffsetY (): number {
-    return this._checkLimitOffset(
-      this.current.scrollY,
-      this.current.scrollOffsetTop,
-      this.current.scrollOffsetBottom
-    );
-  }
 }
 
-export class StrategyX extends Strategy {
-
-  isVisibleOffset (offset: number): boolean {
-    const { scrollX, scrollWidth, listRange, speedScrollX } = this.current;
-    const min = this._getScrollXByOffset(offset);
-    const max = min - scrollWidth;
-    const maxOffset = scrollX / listRange;
-    const minOffset = scrollX - scrollWidth * listRange;
-
-    return scrollX !== undefined && !Boolean(
-      (max > maxOffset) ||
-      (max === maxOffset && speedScrollX <= 0) ||
-      (min < minOffset) ||
-      (min === minOffset && speedScrollX >= 0)
-    );
-  }
-
-  _scrollHeightSetter (value) {
-    const scrollHeight = this.current.scrollHeight;
-
-    this.current.scrollHeight = value;
-    this.current.scrollOffsetTop = -1 * value;
-
-    this.current.scrollY = this._limitScrollY(
-      this.current.scrollY === undefined ? this._getScrollYByOffset(0) :
-      scrollHeight > 0 ? this.current.scrollY * value / scrollHeight :
-      0
-    );
-
-    this.isChanged = true;
-  }
-
-  _scrollWidthSetter (value) {
-    const scrollWidth = this.current.scrollWidth;
-
-    this.current.scrollWidth = value;
-    // -2 потому что listRange слева и справа
-    this.current.scrollOffsetLeft = -2 * this.current.listRange * value;
-
-    this.current.scrollX = this._limitScrollX(
-      this.current.scrollX === undefined ? this._getScrollXByOffset(0) :
-      scrollWidth > 0 ? this.current.scrollX * value / scrollWidth :
-      0
-    );
-
-    this._correctScrollX();
-    this.isChanged = true;
-  }
-
-  _scrollXSetter (value) {
-    value = this._limitScrollX(value);
-    if (value !== this.current.scrollX) {
-      this.current.scrollX = value;
-      this._correctScrollX();
-      this.isChanged = true;
-    }
-  }
-
-  _scrollYSetter (value) {
-    value = this._limitScrollY(value);
-    if (value !== this.current.scrollY) {
-      this.current.scrollY = value;
-      this.isChanged = true;
-    }
-  }
-}
-
-export class StrategyY extends Strategy {
-
-  isVisibleOffset (offset: number): boolean {
-    const { scrollY, scrollHeight, listRange, speedScrollY } = this.current;
-    const min = this._getScrollYByOffset(offset);
-    const max = min - scrollHeight;
-    const maxOffset = scrollY / listRange;
-    const minOffset = scrollY - scrollHeight * listRange;
-
-    return scrollY !== undefined && !Boolean(
-      (max > maxOffset) ||
-      (max === maxOffset && speedScrollY <= 0) ||
-      (min < minOffset) ||
-      (min === minOffset && speedScrollY >= 0)
-    );
-  }
-
-  _scrollHeightSetter (value) {
-    const scrollHeight = this.current.scrollHeight;
-
-    this.current.scrollHeight = value;
-    // -2 потому что listRange сверху и снизу
-    this.current.scrollOffsetTop = -2 * this.current.listRange * value;
-
-    this.current.scrollY = this._limitScrollY(
-      this.current.scrollY === undefined ? this._getScrollYByOffset(0) :
-      scrollHeight > 0 ? this.current.scrollY * value / scrollHeight :
-      0
-    );
-
-    this._correctScrollY();
-    this.isChanged = true;
-  }
-
-  _scrollWidthSetter (value) {
-    const scrollWidth = this.current.scrollWidth;
-
-    this.current.scrollWidth = value;
-    this.current.scrollOffsetLeft = -1 * value;
-
-    this.current.scrollX = this._limitScrollX(
-      this.current.scrollX === undefined ? this._getScrollXByOffset(0) :
-      scrollWidth > 0 ? this.current.scrollX * value / scrollWidth :
-      0
-    );
-
-    this.isChanged = true;
-  }
-}
+Strategy.LIMIT_PREV = 1;
+Strategy.LIMIT_NEXT = 2;

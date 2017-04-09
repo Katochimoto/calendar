@@ -11,6 +11,9 @@ export default class GridDaysContent extends StoreComponent {
   constructor (props, context) {
     super(props, context);
     this.getItemElement = this.getItemElement.bind(this);
+    this.handleInfiniteNext = this.handleInfiniteNext.bind(this);
+    this.handleInfinitePrev = this.handleInfinitePrev.bind(this);
+    this.handleInfiniteChange = this.handleInfiniteChange.bind(this);
   }
 
   transformState (props, context) {
@@ -27,33 +30,6 @@ export default class GridDaysContent extends StoreComponent {
     );
   }
 
-  componentDidMount () {
-    super.componentDidMount();
-
-    this.context.infiniteStore.addChangeListener(this.updateState, this);
-
-    this.context.infiniteStore.addListener('next', () => {
-      const { gridDaysItemSize, currentDate } = this.state;
-      const date = this.context.store.gridDateOffset(currentDate, gridDaysItemSize);
-      this.context.store.update({ currentDate: date });
-    }, this);
-
-    this.context.infiniteStore.addListener('prev', () => {
-      const { gridDaysItemSize, currentDate } = this.state;
-      const date = this.context.store.gridDateOffset(currentDate, -(gridDaysItemSize));
-      this.context.store.update({ currentDate: date });
-    }, this);
-  }
-
-  componentWillUnmount () {
-    super.componentWillUnmount();
-
-    this.context.infiniteStore.removeChangeListener(this.updateState, this);
-
-    //this.context.infiniteStore.removeListener('next');
-    //this.context.infiniteStore.removeListener('prev');
-  }
-
   // TODO сделать forceUpdated при изменении стора сетки
   componentWillUpdate (nextProps, nextState) {
     if (
@@ -63,6 +39,22 @@ export default class GridDaysContent extends StoreComponent {
     ) {
       this.context.infiniteStore.forceUpdated();
     }
+  }
+
+  handleInfiniteNext () {
+    const { gridDaysItemSize, currentDate } = this.state;
+    const date = this.context.store.gridDateOffset(currentDate, gridDaysItemSize);
+    this.context.store.update({ currentDate: date });
+  }
+
+  handleInfinitePrev () {
+    const { gridDaysItemSize, currentDate } = this.state;
+    const date = this.context.store.gridDateOffset(currentDate, -(gridDaysItemSize));
+    this.context.store.update({ currentDate: date });
+  }
+
+  handleInfiniteChange () {
+    this.updateState();
   }
 
   getItemElement (offset) {
@@ -98,7 +90,10 @@ export default class GridDaysContent extends StoreComponent {
           <DayHours />
 
           <InfiniteList
-            getItemElement={this.getItemElement} />
+            getItemElement={this.getItemElement}
+            next={this.handleInfiniteNext}
+            prev={this.handleInfinitePrev}
+            change={this.handleInfiniteChange} />
         </div>
       </div>
     );

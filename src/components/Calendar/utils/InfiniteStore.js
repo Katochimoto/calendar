@@ -1,6 +1,6 @@
 import EventEmitter from './EventEmitter';
 import StoreStrategy from './StoreStrategy';
-import { StrategyX } from './InfiniteStore/Strategy';
+import StrategyX from './InfiniteStore/StrategyX';
 
 export default class InfiniteStore extends EventEmitter {
   _strategy: StoreStrategy;
@@ -8,8 +8,8 @@ export default class InfiniteStore extends EventEmitter {
   constructor (strategy: StoreStrategy) {
     super();
     this._strategy = strategy || (new StrategyX: StoreStrategy);
-    this._strategy.addListener('next', () => this.emitSync('next'), this);
-    this._strategy.addListener('prev', () => this.emitSync('prev'), this);
+    this._strategy.addListener('next', this._proxyNextEvent, this);
+    this._strategy.addListener('prev', this._proxyPrevEvent, this);
   }
 
   getState () {
@@ -30,5 +30,13 @@ export default class InfiniteStore extends EventEmitter {
 
   isVisibleOffset (offset: number): boolean {
     return this._strategy.isVisibleOffset(offset);
+  }
+
+  _proxyNextEvent () {
+    this.emitSync('next')
+  }
+
+  _proxyPrevEvent () {
+    this.emitSync('prev')
   }
 }

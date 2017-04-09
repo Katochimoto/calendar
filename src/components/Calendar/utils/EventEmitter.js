@@ -37,7 +37,8 @@ export default class EventEmitter {
   @lazy
   emit (names: array): void {
     names
-      .filter((item, pos) => (names.indexOf(item) === pos))
+      .map(item => item[0])
+      .filter((item, pos, source) => (source.indexOf(item) === pos))
       .forEach(this.emitSync, this);
   }
 

@@ -1,14 +1,15 @@
 import context from '../context';
 
-const WHEELX = Symbol('wheel-delta-x');
-const WHEELY = Symbol('wheel-delta-y');
-const ONWHEEL = Symbol('wheel-callback');
-const ONUPDATE = Symbol('wheel-update');
 const ONSTOP = Symbol('wheel-stop');
 const ONSTOPSUCCESS = Symbol('wheel-stop-success');
-const WTIMER = Symbol('wheel-timer');
+const ONUPDATE = Symbol('wheel-update');
+const ONWHEEL = Symbol('wheel-callback');
 const STIMER = Symbol('wheel-stop-timer');
 const STIMERSUCCESS = Symbol('wheel-stop-timer-success');
+const WHEELSTART = Symbol('wheel-start');
+const WHEELX = Symbol('wheel-delta-x');
+const WHEELY = Symbol('wheel-delta-y');
+const WTIMER = Symbol('wheel-timer');
 
 const DOCUMENT = context.document;
 const EVENT_NAME = do {
@@ -29,6 +30,11 @@ const onWheel = wrapWheelCallback(function _onWheel (event) {
   event.preventDefault();
   const timer = this[ WTIMER ];
 
+  if (!this[ WHEELSTART ]) {
+    this[ WHEELSTART ] = true;
+    this.handleWheelStart && this.handleWheelStart();
+  }
+
   this[ WHEELX ] = event.deltaX + (timer ? this[ WHEELX ] : 0);
   this[ WHEELY ] = event.deltaY + (timer ? this[ WHEELY ] : 0);
 
@@ -38,7 +44,7 @@ const onWheel = wrapWheelCallback(function _onWheel (event) {
 });
 
 const onWheelUpdate = function _onWheelUpdate () {
-  this.handleWheel(this[ WHEELX ], this[ WHEELY ]);
+  this.handleWheel && this.handleWheel(this[ WHEELX ], this[ WHEELY ]);
   this[ WTIMER ] = 0;
   this[ STIMER ] = context.requestAnimationFrame(this[ ONSTOP ]);
 };
@@ -57,7 +63,8 @@ const onWheelStop = function _onWheelStop () {
 const onWheelStopSuccess = function _onWheelStopSuccess () {
   this[ STIMERSUCCESS ] = 0;
   if (!this[ WTIMER ]) {
-    this.handleWheelStop();
+    this[ WHEELSTART ] = false;
+    this.handleWheelStop && this.handleWheelStop();
   }
 };
 
@@ -79,6 +86,8 @@ export default function wheel (component) {
 
   proto.componentWillUnmount = function () {
     willUnmount && willUnmount.call(this);
+
+    this[ WHEELSTART ] = false;
 
     this._rootNode.removeEventListener(EVENT_NAME, this[ ONWHEEL ], false);
 

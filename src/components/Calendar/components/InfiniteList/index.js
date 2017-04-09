@@ -20,8 +20,8 @@ export default class InfiniteList extends Component {
     return {
       listRange,
       SAXISX,
-      scrollX: SAXISX && scrollX || 0,
-      scrollY: !SAXISX && scrollY || 0,
+      scrollX,
+      scrollY,
       updated,
     };
   }

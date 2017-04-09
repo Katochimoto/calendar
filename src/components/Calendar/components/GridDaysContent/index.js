@@ -1,4 +1,5 @@
 import { StoreComponent } from '../../utils/Component';
+import resize from '../../utils/resize';
 
 import Day from '../Day';
 import DayHours from '../DayHours';
@@ -7,6 +8,7 @@ import GridDaysItem from '../GridDaysItem';
 
 import styles from './index.less';
 
+@resize
 export default class GridDaysContent extends StoreComponent {
   constructor (props, context) {
     super(props, context);
@@ -17,24 +19,35 @@ export default class GridDaysContent extends StoreComponent {
   }
 
   transformState (props, context) {
-    const { gridDaysItemSize, currentDate } = context.store.getState();
+    const { gridDaysItemSize, currentDate, scaleY } = context.store.getState();
     const { scrollY } = context.infiniteStore.getState();
-    return { scrollY, gridDaysItemSize, currentDate };
+    return {
+      currentDate,
+      gridDaysItemSize,
+      scaleY,
+      scrollY,
+    };
   }
 
   shouldComponentUpdate (nextProps, nextState) {
     return (
-      this.state.scrollY !== nextState.scrollY ||
+      this.state.currentDate !== nextState.currentDate ||
       this.state.gridDaysItemSize !== nextState.gridDaysItemSize ||
-      this.state.currentDate !== nextState.currentDate
+      this.state.scaleY !== nextState.scaleY ||
+      this.state.scrollY !== nextState.scrollY
     );
   }
 
-  // TODO сделать forceUpdated при изменении стора сетки
-  componentWillUpdate (nextProps, nextState) {
+  componentDidUpdate (prevProps, prevState) {
+    super.componentDidUpdate(prevProps, prevState);
+    if (this.state.scaleY !== prevState.scaleY) {
+      this.handleResize();
+    }
+
+    // TODO сделать forceUpdated при изменении стора сетки
     if (
-      this.state.gridDaysItemSize !== nextState.gridDaysItemSize ||
-      this.state.currentDate !== nextState.currentDate
+      this.state.gridDaysItemSize !== prevState.gridDaysItemSize ||
+      this.state.currentDate !== prevState.currentDate
       // hideWeekends
     ) {
       this.context.infiniteStore.forceUpdated();
@@ -42,19 +55,33 @@ export default class GridDaysContent extends StoreComponent {
   }
 
   handleInfiniteNext () {
-    const { gridDaysItemSize, currentDate } = this.state;
-    const date = this.context.store.gridDateOffset(currentDate, gridDaysItemSize);
-    this.context.store.update({ currentDate: date });
+    const store = this.context.store;
+
+    store.update({
+      currentDate: store.gridDateOffset(
+        this.state.currentDate,
+        this.state.gridDaysItemSize
+      )
+    });
   }
 
   handleInfinitePrev () {
-    const { gridDaysItemSize, currentDate } = this.state;
-    const date = this.context.store.gridDateOffset(currentDate, -(gridDaysItemSize));
-    this.context.store.update({ currentDate: date });
+    const store = this.context.store;
+
+    store.update({
+      currentDate: store.gridDateOffset(
+        this.state.currentDate,
+        -(this.state.gridDaysItemSize)
+      )
+    });
   }
 
   handleInfiniteChange () {
     this.updateState();
+  }
+
+  handleResize () {
+    this.context.infiniteStore.update(this.getRect());
   }
 
   getItemElement (offset) {
@@ -77,7 +104,9 @@ export default class GridDaysContent extends StoreComponent {
   }
 
   render () {
-    const style = `transform: translateY(${this.state.scrollY}px)`;
+    const style = `
+      transform: translateY(${this.state.scrollY}px);
+      height: ${this.state.scaleY}%;`;
 
     return (
       <div ref={node => this._contentNode = node}

@@ -1,6 +1,5 @@
 import { Component } from '../../utils/Component';
 import wheel from '../../utils/wheel';
-import resize from '../../utils/resize';
 
 import GridDaysHeader from '../GridDaysHeader';
 import GridDaysContent from '../GridDaysContent';
@@ -8,15 +7,10 @@ import GridDaysContent from '../GridDaysContent';
 import styles from './index.less';
 
 @wheel
-@resize
 export default class GridDays extends Component {
 
   shouldComponentUpdate () {
     return false;
-  }
-
-  getRect () {
-    return this._contentComponent.getRect();
   }
 
   handleWheel (deltaX, deltaY) {
@@ -25,10 +19,11 @@ export default class GridDays extends Component {
 
   handleWheelStop () {
     this.context.infiniteStore.updateScroll(0, 0);
+    // this._testNode.classList.remove(styles.calendar_GridDays__scroll);
   }
 
-  handleResize () {
-    this.context.infiniteStore.update(this.getRect());
+  handleWheelStart () {
+    // this._testNode.classList.add(styles.calendar_GridDays__scroll);
   }
 
   render () {
@@ -49,7 +44,7 @@ export default class GridDays extends Component {
         <tbody>
           <tr>
             <td className={styles.calendar_GridDays_Content}>
-              <GridDaysContent ref={component => this._contentComponent = component} />
+              <GridDaysContent />
             </td>
           </tr>
         </tbody>

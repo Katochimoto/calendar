@@ -13,7 +13,7 @@ export default function resize (component) {
     this[ ONRESIZE ] = this.handleResize.bind(this);
 
     this[ RTIMER ] = context.requestAnimationFrame(() => {
-      this.handleResize();
+      this[ ONRESIZE ]();
       context.addEventListener('resize', this[ ONRESIZE ], false);
     });
   };

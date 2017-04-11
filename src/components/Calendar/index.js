@@ -40,6 +40,18 @@ export default class Calendar extends Component {
     this.state.store.update(nextProps);
   }
 
+  componentDidMount () {
+    this.state.store.addListener('change', this.handleChange, this);
+  }
+
+  componentWillUnmount () {
+    this.state.store.removeListener('change', this.handleChange, this);
+  }
+
+  handleChange () {
+    this.state.infiniteStore.forceUpdated();
+  }
+
   render () {
     return (
       <div className={styles.calendar}>

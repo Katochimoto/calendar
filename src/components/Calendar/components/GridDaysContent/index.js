@@ -41,17 +41,9 @@ export default class GridDaysContent extends StoreComponent {
 
   componentDidUpdate (prevProps, prevState) {
     super.componentDidUpdate(prevProps, prevState);
+
     if (this.state.scaleY !== prevState.scaleY) {
       this.handleResize();
-    }
-
-    // TODO сделать forceUpdated при изменении стора сетки
-    if (
-      this.state.gridDaysItemSize !== prevState.gridDaysItemSize ||
-      this.state.currentDate !== prevState.currentDate
-      // hideWeekends
-    ) {
-      this.context.infiniteStore.forceUpdated();
     }
   }
 

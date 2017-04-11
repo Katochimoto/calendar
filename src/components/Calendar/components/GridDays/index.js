@@ -22,9 +22,9 @@ export default class GridDays extends Component {
     // this._testNode.classList.remove(styles.calendar_GridDays__scroll);
   }
 
-  handleWheelStart () {
+  // handleWheelStart () {
     // this._testNode.classList.add(styles.calendar_GridDays__scroll);
-  }
+  // }
 
   render () {
     return (

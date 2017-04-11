@@ -3,6 +3,7 @@ import { Component } from '../../utils/Component';
 import { PropTypes } from '../../utils/Component';
 /* @endif */
 
+import classnames from 'classnames';
 import styles from './index.less';
 
 export default class InfiniteListItem extends Component {
@@ -20,10 +21,16 @@ export default class InfiniteListItem extends Component {
       getItemElement,
       isVisible,
       offset,
+      saxisx,
     } = this.props;
 
+    const classes = classnames({
+      [ styles.InfiniteListItem ]: true,
+      [ styles.InfiniteListItem__axisX ]: saxisx,
+    });
+
     return (
-      <div className={styles.InfiniteListItem}>
+      <div className={classes}>
         {isVisible ? getItemElement(offset) : null}
       </div>
     );
@@ -35,6 +42,7 @@ InfiniteListItem.propTypes = {
   getItemElement: PropTypes.function,
   isVisible: PropTypes.boolean,
   offset: PropTypes.number,
+  saxisx: PropTypes.boolean,
   updated: PropTypes.number,
 };
 /* @endif */
@@ -43,5 +51,6 @@ InfiniteListItem.defaultProps = {
   getItemElement: () => null,
   isVisible: false,
   offset: 0,
+  saxisx: 0,
   updated: 0,
 };

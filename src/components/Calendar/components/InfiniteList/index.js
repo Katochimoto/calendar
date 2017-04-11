@@ -58,7 +58,7 @@ export default class InfiniteList extends Component {
 
   getItems () {
     const store = this.context.infiniteStore;
-    const { listRange, updated } = this.state;
+    const { listRange, updated, SAXISX } = this.state;
     const items = [];
 
     let offset = -(listRange);
@@ -69,9 +69,10 @@ export default class InfiniteList extends Component {
       items.push(
         <InfiniteListItem
           key={offset}
-          offset={offset}
-          updated={updated}
           isVisible={isVisible}
+          offset={offset}
+          saxisx={SAXISX}
+          updated={updated}
           getItemElement={this.props.getItemElement} />
       );
 

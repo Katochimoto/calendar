@@ -7,23 +7,34 @@ import styles from './index.less';
 
 export default class GridDaysItem extends StoreComponent {
   transformState (props, context) {
-    const { weekends, hideWeekends, hoursOfDay } = context.store.getState();
-    return { weekends, hideWeekends, hoursOfDay };
+    const {
+      hideWeekends,
+      hoursOfDay,
+      weekends,
+    } = context.store.getState();
+
+    return {
+      hideWeekends,
+      hoursOfDay,
+      weekends,
+    };
   }
 
   shouldComponentUpdate (nextProps, nextState) {
-    return (
-      this.props.date !== nextProps.date ||
-      this.props.itemSize !== nextProps.itemSize ||
+    const state = this.state;
+    const props = this.props;
 
-      this.state.hideWeekends !== nextState.hideWeekends ||
-      this.state.weekends !== nextState.weekends ||
-      this.state.hoursOfDay !== nextState.hoursOfDay
+    return (
+      props.date !== nextProps.date ||
+      props.itemSize !== nextProps.itemSize ||
+      state.hideWeekends !== nextState.hideWeekends ||
+      state.hoursOfDay !== nextState.hoursOfDay ||
+      state.weekends !== nextState.weekends
     );
   }
 
   getItems () {
-    const { store } = this.context;
+    const store = this.context.store;
     const { date, itemSize, ItemComponent } = this.props;
     const { hoursOfDay, hideWeekends } = this.state;
     const items = [];

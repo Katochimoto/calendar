@@ -53,8 +53,9 @@ export function offsetOnWorksDay (
 
   if (len > 0 && len < 7) {
     const sig = offset < 0 ? -1 : 1;
-    let idx = 0;
     offset = Math.abs(offset);
+
+    let idx = 0;
     while (idx < offset) {
       d.setDate(d.getDate() + sig);
       if (!(d.getDay() in weekends)) {

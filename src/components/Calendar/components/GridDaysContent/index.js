@@ -21,6 +21,7 @@ export default class GridDaysContent extends StoreComponent {
   transformState (props, context) {
     const { gridDaysItemSize, currentDate, scaleY } = context.store.getState();
     const { scrollY } = context.infiniteStore.getState();
+
     return {
       currentDate,
       gridDaysItemSize,
@@ -99,7 +100,8 @@ export default class GridDaysContent extends StoreComponent {
   getRect () {
     return {
       scrollHeight: this._contentNode.scrollHeight - this._contentNode.clientHeight,
-      scrollWidth: this._contentScrollNode.clientWidth
+      //scrollHeight: this._contentScrollNode.clientHeight,
+      scrollWidth: this._contentScrollNode.clientWidth,
     };
   }
 

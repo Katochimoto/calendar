@@ -1,18 +1,10 @@
-/**
- * Вывод:
- * - 12 часов во вьюпорте
- * - невидимые события показываются сверху или снизу вьюпорта
- * - показывать только определенный промежуток
- */
-
 import { Component } from '../../utils/Component';
 /* @if NODE_ENV=='development' **
 import { PropTypes } from '../../utils/Component';
 /* @endif */
+
 import classnames from 'classnames';
-
 import DayEvents from '../DayEvents';
-
 import styles from './index.less';
 
 export default class Day extends Component {

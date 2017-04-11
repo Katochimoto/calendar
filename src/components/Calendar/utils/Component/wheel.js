@@ -1,4 +1,4 @@
-import context from '../context';
+import context from '../../context';
 
 const ONSTOP = Symbol('wheel-stop');
 const ONSTOPSUCCESS = Symbol('wheel-stop-success');

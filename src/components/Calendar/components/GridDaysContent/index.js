@@ -1,5 +1,5 @@
 import { StoreComponent } from '../../utils/Component';
-import resize from '../../utils/resize';
+import resize from '../../utils/Component/resize';
 
 import Day from '../Day';
 import DayHours from '../DayHours';

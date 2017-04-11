@@ -1,5 +1,5 @@
 import { Component } from '../../utils/Component';
-import wheel from '../../utils/wheel';
+import wheel from '../../utils/Component/wheel';
 
 import GridDaysHeader from '../GridDaysHeader';
 import GridDaysContent from '../GridDaysContent';

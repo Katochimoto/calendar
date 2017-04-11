@@ -1,4 +1,4 @@
-import context from '../context';
+import context from '../../context';
 
 const ONRESIZE = Symbol('resize-callback');
 const RTIMER = Symbol('resize-timer');

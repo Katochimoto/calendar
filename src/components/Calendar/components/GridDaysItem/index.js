@@ -77,11 +77,11 @@ export default class GridDaysItem extends StoreComponent {
 GridDaysItem.propTypes = {
   ItemComponent: PropTypes.function,
   itemSize: PropTypes.number,
-  date: PropTypes.number
+  date: PropTypes.number,
 };
 /* @endif */
 
 GridDaysItem.defaultProps = {
   itemSize: 0,
-  date: 0
+  date: 0,
 };

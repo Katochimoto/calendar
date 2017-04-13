@@ -1,6 +1,11 @@
 import StoreStrategy from '../StoreStrategy';
 import defaultState from './defaultState';
 
+import {
+  EV_INFINITE_NEXT,
+  EV_INFINITE_PREV,
+} from '../../constant';
+
 export default class Strategy extends StoreStrategy {
   constructor (data: {[id:string]: any} = defaultState) {
     super(data);
@@ -99,11 +104,11 @@ export default class Strategy extends StoreStrategy {
     const rateCompare = 100 / this.current.listRange;
 
     if (rate <= -(rateCompare)) {
-      this.emitSync('next');
+      this.emitSync(EV_INFINITE_NEXT);
       return Strategy.LIMIT_NEXT;
 
     } else if (rate >= rateCompare) {
-      this.emitSync('prev');
+      this.emitSync(EV_INFINITE_PREV);
       return Strategy.LIMIT_PREV;
     }
 

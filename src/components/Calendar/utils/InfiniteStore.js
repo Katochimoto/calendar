@@ -2,14 +2,22 @@ import EventEmitter from './EventEmitter';
 import StoreStrategy from './StoreStrategy';
 import StrategyX from './InfiniteStore/StrategyX';
 
+import {
+  EV_INFINITE_NEXT,
+  EV_INFINITE_PREV,
+} from '../constant';
+
 export default class InfiniteStore extends EventEmitter {
   _strategy: StoreStrategy;
 
   constructor (strategy: StoreStrategy) {
     super();
-    this._strategy = strategy || (new StrategyX: StoreStrategy);
-    this._strategy.addListener('next', this._proxyNextEvent, this);
-    this._strategy.addListener('prev', this._proxyPrevEvent, this);
+    this._setStrategy(strategy || (new StrategyX: StoreStrategy));
+  }
+
+  setStrategy (strategy: StoreStrategy) {
+    this._setStrategy(strategy);
+    // this.emitChange();
   }
 
   getState () {
@@ -33,10 +41,17 @@ export default class InfiniteStore extends EventEmitter {
   }
 
   _proxyNextEvent () {
-    this.emitSync('next')
+    this.emitSync(EV_INFINITE_NEXT);
   }
 
   _proxyPrevEvent () {
-    this.emitSync('prev')
+    this.emitSync(EV_INFINITE_PREV);
+  }
+
+  _setStrategy (strategy: StoreStrategy) {
+    this._strategy && this._strategy.destroy();
+    this._strategy = strategy;
+    this._strategy.addListener(EV_INFINITE_NEXT, this._proxyNextEvent, this);
+    this._strategy.addListener(EV_INFINITE_PREV, this._proxyPrevEvent, this);
   }
 }

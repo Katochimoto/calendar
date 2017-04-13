@@ -4,6 +4,7 @@ export default class StrategyX extends Strategy {
   constructor (data: {[id:string]: any}) {
     super(data);
     this.current.SAXISX = true;
+    this.current.scrollY = 0;
   }
 
   isVisibleOffset (offset: number): boolean {

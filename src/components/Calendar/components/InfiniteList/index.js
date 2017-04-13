@@ -3,6 +3,11 @@ import { Component } from '../../utils/Component';
 import { PropTypes } from '../../utils/Component';
 /* @endif */
 
+import {
+  EV_INFINITE_NEXT,
+  EV_INFINITE_PREV,
+} from '../../constant';
+
 import InfiniteListItem from '../InfiniteListItem';
 import styles from './index.less';
 
@@ -39,16 +44,16 @@ export default class InfiniteList extends Component {
 
   componentDidMount () {
     const store = this.context.infiniteStore;
-    store.addListener('change', this.handleChange, this);
-    this.props.next && store.addListener('next', this.props.next);
-    this.props.prev && store.addListener('prev', this.props.prev);
+    store.addChangeListener(this.handleChange, this);
+    this.props.next && store.addListener(EV_INFINITE_NEXT, this.props.next);
+    this.props.prev && store.addListener(EV_INFINITE_PREV, this.props.prev);
   }
 
   componentWillUnmount () {
     const store = this.context.infiniteStore;
-    store.removeListener('change', this.handleChange, this);
-    this.props.next && store.removeListener('next', this.props.next);
-    this.props.prev && store.removeListener('prev', this.props.prev);
+    store.removeChangeListener(this.handleChange, this);
+    this.props.next && store.removeListener(EV_INFINITE_NEXT, this.props.next);
+    this.props.prev && store.removeListener(EV_INFINITE_PREV, this.props.prev);
   }
 
   handleChange () {

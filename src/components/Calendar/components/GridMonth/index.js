@@ -1,24 +1,43 @@
 import { Component } from '../../utils/Component';
+import StrategyY from '../../utils/InfiniteStore/StrategyY';
+import wheel from '../../utils/Component/wheel';
+
+import GridMonthContent from '../GridMonthContent';
 
 import styles from './index.less';
 
+@wheel
 export default class GridMonth extends Component {
+  constructor (props, context) {
+    super(props, context);
+    const state = context.infiniteStore.getState();
+    context.infiniteStore.setStrategy(new StrategyY(state));
+  }
 
   shouldComponentUpdate () {
     return false;
   }
 
-  getRect () {
-    return {
-      scrollHeight: 0,
-      scrollWidth: 0
-    }
+  handleWheel (deltaX, deltaY) {
+    this.context.infiniteStore.updateScroll(deltaX, deltaY);
+  }
+
+  handleWheelStop () {
+    this.context.infiniteStore.updateScroll(0, 0);
+    // this._testNode.classList.remove(styles.calendar_GridDays__scroll);
+  }
+
+  handleWheelStart () {
+    // this._testNode.classList.add(styles.calendar_GridDays__scroll);
   }
 
   render () {
     return (
-      <table className={styles.calendar_GridMonth}>
+      <table ref={rootNode => this._rootNode = rootNode}
+        className={styles.calendar_GridMonth}>
+
         <col width="100%" valign="top" />
+
         <thead>
           <tr>
             <td className={styles.calendar_GridMonth_Header}>
@@ -26,10 +45,11 @@ export default class GridMonth extends Component {
             </td>
           </tr>
         </thead>
+
         <tbody>
           <tr>
             <td className={styles.calendar_GridMonth_Content}>
-              2
+              <GridMonthContent />
             </td>
           </tr>
         </tbody>

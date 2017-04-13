@@ -11,6 +11,7 @@ const WEEKENDS = '0,6';
 const WEEKENDS_SET = toObject(WEEKENDS.split(',').map(Number));
 
 export default {
+  grid: 'day',
   scaleY: 200,
 
   //gridHeight: 0,
@@ -27,7 +28,6 @@ export default {
   gridDaysItemSize: 7,
   //gridWeekListItemSize: 1,  // количество недель в одном элементе InfiniteList
 
-  //grid: 'day',
   /**
    * Текущая дата
    * @type {string}

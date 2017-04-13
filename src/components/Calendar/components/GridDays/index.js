@@ -1,4 +1,5 @@
 import { Component } from '../../utils/Component';
+import StrategyX from '../../utils/InfiniteStore/StrategyX';
 import wheel from '../../utils/Component/wheel';
 
 import GridDaysHeader from '../GridDaysHeader';
@@ -8,6 +9,11 @@ import styles from './index.less';
 
 @wheel
 export default class GridDays extends Component {
+  constructor (props, context) {
+    super(props, context);
+    const state = context.infiniteStore.getState();
+    context.infiniteStore.setStrategy(new StrategyX(state));
+  }
 
   shouldComponentUpdate () {
     return false;
@@ -22,9 +28,9 @@ export default class GridDays extends Component {
     // this._testNode.classList.remove(styles.calendar_GridDays__scroll);
   }
 
-  // handleWheelStart () {
+  handleWheelStart () {
     // this._testNode.classList.add(styles.calendar_GridDays__scroll);
-  // }
+  }
 
   render () {
     return (

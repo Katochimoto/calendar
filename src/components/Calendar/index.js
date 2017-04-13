@@ -1,8 +1,7 @@
 import { Component, PropTypes } from './utils/Component';
 import context from './context';
 
-import GridDays from './components/GridDays';
-import GridMonth from './components/GridMonth';
+import CalendarGrid from './components/CalendarGrid';
 
 import Datetime from './utils/Datetime';
 import Events from './utils/Events';
@@ -41,11 +40,11 @@ export default class Calendar extends Component {
   }
 
   componentDidMount () {
-    this.state.store.addListener('change', this.handleChange, this);
+    this.state.store.addChangeListener(this.handleChange, this);
   }
 
   componentWillUnmount () {
-    this.state.store.removeListener('change', this.handleChange, this);
+    this.state.store.removeChangeListener(this.handleChange, this);
   }
 
   handleChange () {
@@ -55,7 +54,7 @@ export default class Calendar extends Component {
   render () {
     return (
       <div className={styles.calendar}>
-        <GridDays />
+        <CalendarGrid />
       </div>
     );
   }
@@ -73,7 +72,3 @@ Calendar.propTypes = {};
 /* @endif */
 
 Calendar.defaultProps = {};
-
-
-// <GridDays />
-// <GridMonth />

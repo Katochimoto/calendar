@@ -3,10 +3,10 @@
 export const HOURMS = 60 * 60 * 1000;
 
 export function parseDate (date: number): Date {
-  const _ = 100 * date ^ 0;
-  const y = date ^ 0;
+  const _ = date / 100 ^ 0;
+  const y = date / 10000 ^ 0;
   const m = (_ - 100 * y) - 1;
-  const d = (10000 * date ^ 0) - _ * 100;
+  const d = date - _ * 100;
   return new Date(y, m, d, 0, 0, 0, 0);
 }
 
@@ -15,7 +15,7 @@ export function formatDate (date: Date): number {
     (date.getFullYear() * 10000) +
     ((date.getMonth() + 1) * 100) +
     date.getDate()
-  ) / 10000;
+  );
 }
 
 /**

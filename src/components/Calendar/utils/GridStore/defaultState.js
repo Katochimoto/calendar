@@ -33,7 +33,7 @@ export default {
    * @type {string}
    * @public
    */
-  currentDate: 2017.0227,
+  currentDate: 20170227,
 
   /**
    * Рабочие часы в сутках

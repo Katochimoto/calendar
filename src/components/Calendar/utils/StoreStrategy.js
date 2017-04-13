@@ -1,12 +1,9 @@
-import EventEmitter from './EventEmitter';
-
-export default class StoreStrategy extends EventEmitter {
+export default class StoreStrategy {
   state: {[id:string]: any};
   current: {[id:string]: any};
   isChanged: boolean;
 
   constructor (data: {[id:string]: any} = {}) {
-    super();
     this.current = { ...data };
     this.isChanged = false;
     this.state = Object.create(null);
@@ -39,7 +36,6 @@ export default class StoreStrategy extends EventEmitter {
   }
 
   destroy () {
-    super.destroy();
     this.current = undefined;
     this.state = undefined;
   }

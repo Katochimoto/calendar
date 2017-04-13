@@ -2,6 +2,7 @@ export default {
   SAXISX: undefined,
 
   updated: 0,
+  scrollDirection: 0,
 
   /**
    * Количество предзагружаемых заранее интервалов InfiniteList слева и справа от текущего

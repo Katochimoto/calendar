@@ -1,14 +1,11 @@
 import StoreStrategy from '../StoreStrategy';
 import defaultState from './defaultState';
 
-import {
-  EV_INFINITE_NEXT,
-  EV_INFINITE_PREV,
-} from '../../constant';
-
 export default class Strategy extends StoreStrategy {
   constructor (data: {[id:string]: any} = defaultState) {
     super(data);
+    this.LIMIT_PREV = 1;
+    this.LIMIT_NEXT = 2;
   }
 
   /**
@@ -78,14 +75,14 @@ export default class Strategy extends StoreStrategy {
     );
   }
 
-  _correctScroll (limit, scroll, size) {
+  _correctLimitOffset (limit, value, size) {
     switch (limit) {
-      case Strategy.LIMIT_PREV:
-        return scroll - size;
-      case Strategy.LIMIT_NEXT:
-        return scroll + size;
+      case this.LIMIT_PREV:
+        return value - size;
+      case this.LIMIT_NEXT:
+        return value + size;
       default:
-        return scroll;
+        return value;
     }
   }
 
@@ -104,17 +101,12 @@ export default class Strategy extends StoreStrategy {
     const rateCompare = 100 / this.current.listRange;
 
     if (rate <= -(rateCompare)) {
-      this.emitSync(EV_INFINITE_NEXT);
-      return Strategy.LIMIT_NEXT;
+      return this.LIMIT_NEXT;
 
     } else if (rate >= rateCompare) {
-      this.emitSync(EV_INFINITE_PREV);
-      return Strategy.LIMIT_PREV;
+      return this.LIMIT_PREV;
     }
 
     return 0;
   }
 }
-
-Strategy.LIMIT_PREV = 1;
-Strategy.LIMIT_NEXT = 2;

@@ -3,11 +3,6 @@ import { Component } from '../../utils/Component';
 import { PropTypes } from '../../utils/Component';
 /* @endif */
 
-import {
-  EV_INFINITE_NEXT,
-  EV_INFINITE_PREV,
-} from '../../constant';
-
 import InfiniteListItem from '../InfiniteListItem';
 import styles from './index.less';
 
@@ -17,6 +12,7 @@ export default class InfiniteList extends Component {
     const {
       listRange,
       SAXISX,
+      scrollDirection,
       scrollX,
       scrollY,
       updated,
@@ -25,6 +21,7 @@ export default class InfiniteList extends Component {
     return {
       listRange,
       SAXISX,
+      scrollDirection,
       scrollX,
       scrollY,
       updated,
@@ -43,22 +40,34 @@ export default class InfiniteList extends Component {
   }
 
   componentDidMount () {
-    const store = this.context.infiniteStore;
-    store.addChangeListener(this.handleChange, this);
-    this.props.next && store.addListener(EV_INFINITE_NEXT, this.props.next);
-    this.props.prev && store.addListener(EV_INFINITE_PREV, this.props.prev);
+    this.context.infiniteStore.addChangeListener(this.handleChange, this);
   }
 
   componentWillUnmount () {
-    const store = this.context.infiniteStore;
-    store.removeChangeListener(this.handleChange, this);
-    this.props.next && store.removeListener(EV_INFINITE_NEXT, this.props.next);
-    this.props.prev && store.removeListener(EV_INFINITE_PREV, this.props.prev);
+    this.context.infiniteStore.removeChangeListener(this.handleChange, this);
   }
 
   handleChange () {
+    const prevScrollDirection = this.state.scrollDirection;
     this.updateState();
-    this.props.change && this.props.change();
+    const nextScrollDirection = this.state.scrollDirection;
+
+    if (
+      this.props.next &&
+      nextScrollDirection > prevScrollDirection
+    ) {
+      this.props.next();
+
+    } else if (
+      this.props.prev &&
+      nextScrollDirection < prevScrollDirection
+    ) {
+      this.props.prev();
+    }
+
+    if (this.props.change) {
+      this.props.change();
+    }
   }
 
   getItems () {
@@ -108,8 +117,8 @@ export default class InfiniteList extends Component {
 
 /* @if NODE_ENV=='development' **
 InfiniteList.propTypes = {
-  getItemElement: PropTypes.function,
   change: PropTypes.function,
+  getItemElement: PropTypes.function,
   next: PropTypes.function,
   prev: PropTypes.function,
 };

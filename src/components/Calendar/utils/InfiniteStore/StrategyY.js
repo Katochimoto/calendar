@@ -31,19 +31,23 @@ export default class StrategyY extends Strategy {
   }
 
   _correctScrollY () {
-    this.current.scrollY = this._limitScrollY(this._correctScroll(
-      this._checkLimitOffsetY(),
-      this.current.scrollY,
-      this.current.scrollHeight
-    ));
-  }
-
-  _checkLimitOffsetY (): number {
-    return this._checkLimitOffset(
+    const limitOffset = this._checkLimitOffset(
       this.current.scrollY,
       this.current.scrollOffsetTop,
       this.current.scrollOffsetBottom
     );
+
+    this.current.scrollDirection = this._correctLimitOffset(
+      limitOffset,
+      this.current.scrollDirection,
+      1
+    );
+
+    this.current.scrollY = this._limitScrollY(this._correctLimitOffset(
+      limitOffset,
+      this.current.scrollY,
+      this.current.scrollHeight
+    ));
   }
 
   _scrollHeightSetter (value) {

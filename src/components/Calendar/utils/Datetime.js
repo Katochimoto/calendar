@@ -12,7 +12,7 @@ export default class Datetime {
   _strategy: DatetimeStrategy;
 
   constructor (strategy: ?DatetimeStrategy) {
-    this._strategy = strategy || (new DatetimeStrategyDefault(): DatetimeStrategy);
+    this._strategy = strategy || (new DatetimeStrategyDefault: DatetimeStrategy);
   }
 
   gridDaysHourTitle (hour: number): string {

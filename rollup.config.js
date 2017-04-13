@@ -129,7 +129,7 @@ export default {
     }),
 
     RollupPluginNodeResolve({
-      skip: external
+      externals: external
     }),
 
     RollupPluginCommonJS({

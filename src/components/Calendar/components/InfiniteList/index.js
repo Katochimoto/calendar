@@ -1,47 +1,83 @@
-import { StoreComponent } from '../../utils/Component';
+import { Component } from '../../utils/Component';
 /* @if NODE_ENV=='development' **
 import { PropTypes } from '../../utils/Component';
 /* @endif */
-import InfiniteListItem from '../InfiniteListItem';
 
+import {
+  EV_INFINITE_NEXT,
+  EV_INFINITE_PREV,
+} from '../../constant';
+
+import InfiniteListItem from '../InfiniteListItem';
 import styles from './index.less';
 
-export default class InfiniteList extends StoreComponent {
+export default class InfiniteList extends Component {
+
   transformState (props, context) {
-    const { scrollX, LIST_RANGE, currentDate } = context.store.getState();
-    return { scrollX, LIST_RANGE, currentDate };
+    const {
+      listRange,
+      SAXISX,
+      scrollX,
+      scrollY,
+      updated,
+    } = context.infiniteStore.getState();
+
+    return {
+      listRange,
+      SAXISX,
+      scrollX,
+      scrollY,
+      updated,
+    };
   }
 
   shouldComponentUpdate (nextProps, nextState) {
+    const state = this.state;
+
     return (
-      this.props.itemSize !== nextProps.itemSize ||
-      this.state.currentDate !== nextState.currentDate ||
-      this.state.LIST_RANGE !== nextState.LIST_RANGE ||
-      this.state.scrollX !== nextState.scrollX
+      state.updated !== nextState.updated ||
+      state.listRange !== nextState.listRange ||
+      (state.SAXISX && state.scrollX !== nextState.scrollX) ||
+      (!state.SAXISX && state.scrollY !== nextState.scrollY)
     );
   }
 
-  /**
-   * FIXME подумать над оптимизацией - вызывается при каждом изменении scrollX
-   */
+  componentDidMount () {
+    const store = this.context.infiniteStore;
+    store.addChangeListener(this.handleChange, this);
+    this.props.next && store.addListener(EV_INFINITE_NEXT, this.props.next);
+    this.props.prev && store.addListener(EV_INFINITE_PREV, this.props.prev);
+  }
+
+  componentWillUnmount () {
+    const store = this.context.infiniteStore;
+    store.removeChangeListener(this.handleChange, this);
+    this.props.next && store.removeListener(EV_INFINITE_NEXT, this.props.next);
+    this.props.prev && store.removeListener(EV_INFINITE_PREV, this.props.prev);
+  }
+
+  handleChange () {
+    this.updateState();
+    this.props.change && this.props.change();
+  }
+
   getItems () {
-    const { store } = this.context;
-    const { itemSize } = this.props;
-    const { LIST_RANGE, currentDate } = this.state;
+    const store = this.context.infiniteStore;
+    const { listRange, updated, SAXISX } = this.state;
     const items = [];
 
-    let offset = -(LIST_RANGE);
+    let offset = -(listRange);
 
-    while (offset <= LIST_RANGE) {
-      const date = store.gridDateOffset(currentDate, offset * itemSize);
+    while (offset <= listRange) {
       const isVisible = store.isVisibleOffset(offset);
 
       items.push(
         <InfiniteListItem
           key={offset}
-          date={date}
-          itemSize={itemSize}
           isVisible={isVisible}
+          offset={offset}
+          saxisx={SAXISX}
+          updated={updated}
           getItemElement={this.props.getItemElement} />
       );
 
@@ -52,11 +88,17 @@ export default class InfiniteList extends StoreComponent {
   }
 
   render () {
-    const style = `transform: translateX(${this.state.scrollX}px);`;
+    const style = do {
+      if (this.state.SAXISX) {
+        `transform: translateX(${this.state.scrollX}px);`;
+      } else {
+        `transform: translateY(${this.state.scrollY}px);`;
+      }
+    };
 
     return (
-      <div className={styles.calendar_InfiniteList}>
-        <div className={styles.calendar_InfiniteList_Content} style={style}>
+      <div className={styles.InfiniteList}>
+        <div className={styles.InfiniteList_Content} style={style}>
           {this.getItems()}
         </div>
       </div>
@@ -66,12 +108,13 @@ export default class InfiniteList extends StoreComponent {
 
 /* @if NODE_ENV=='development' **
 InfiniteList.propTypes = {
-  itemSize: PropTypes.number,
-  getItemElement: PropTypes.function
+  getItemElement: PropTypes.function,
+  change: PropTypes.function,
+  next: PropTypes.function,
+  prev: PropTypes.function,
 };
 /* @endif */
 
 InfiniteList.defaultProps = {
-  itemSize: 0,
-  getItemElement: () => null
+  getItemElement: () => null,
 };

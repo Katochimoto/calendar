@@ -1,7 +1,3 @@
-/**
- *
- */
-
 import { StoreComponent } from '../../utils/Component';
 
 import DayHeader from '../DayHeader';
@@ -17,21 +13,25 @@ export default class GridDaysHeader extends StoreComponent {
   }
 
   transformState (props, context) {
-    const { gridDaysItemSize } = context.store.getState();
-    return { gridDaysItemSize };
+    const { gridDaysItemSize, currentDate } = context.store.getState();
+    return { gridDaysItemSize, currentDate };
   }
 
   shouldComponentUpdate (nextProps, nextState) {
     return (
-      this.state.gridDaysItemSize !== nextState.gridDaysItemSize
+      this.state.gridDaysItemSize !== nextState.gridDaysItemSize ||
+      this.state.currentDate !== nextState.currentDate
     );
   }
 
-  getItemElement (date, itemSize) {
+  getItemElement (offset) {
+    const { gridDaysItemSize, currentDate } = this.state;
+    const date = this.context.store.gridDateOffset(currentDate, offset * gridDaysItemSize);
+
     return (
       <GridDaysItem
         ItemComponent={DayHeader}
-        itemSize={itemSize}
+        itemSize={gridDaysItemSize}
         date={date} />
     );
   }
@@ -41,8 +41,7 @@ export default class GridDaysHeader extends StoreComponent {
       <div className={styles.calendar_GridDaysHeader}>
         <div className={styles.calendar_GridDaysHeader_Content}>
           <InfiniteList
-            getItemElement={this.getItemElement}
-            itemSize={this.state.gridDaysItemSize} />
+            getItemElement={this.getItemElement} />
         </div>
       </div>
     );

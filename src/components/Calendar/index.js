@@ -1,42 +1,36 @@
-/**
- *
- */
-
 import { Component, PropTypes } from './utils/Component';
-import { onWheel, offWheel, wrapWheelCallback } from './utils/wheel';
 import context from './context';
 
-import GridDays from './components/GridDays';
-import GridMonth from './components/GridMonth';
+import CalendarGrid from './components/CalendarGrid';
 
 import Datetime from './utils/Datetime';
 import Events from './utils/Events';
-import Store from './utils/Store';
+import GridStore from './utils/GridStore';
+import InfiniteStore from './utils/InfiniteStore';
 
 import styles from './index.less';
 
 export default class Calendar extends Component {
-  constructor (props, context) {
-    super(props, context);
+  constructor (props, componentContext) {
+    super(props, componentContext);
 
     this.state = {
       datetime: new Datetime(),
       events: new Events(),
-      store: new Store()
+      infiniteStore: new InfiniteStore(),
+      store: new GridStore(),
     };
 
     // FIXME remove later
     window.store = this.state.store;
-
-    this.handleWheel = wrapWheelCallback(this.handleWheel.bind(this));
-    this.handleResize = this.handleResize.bind(this);
-    this.updateStoreByWheel = this.updateStoreByWheel.bind(this);
+    window.infiniteStore = this.state.infiniteStore;
   }
 
   getChildContext () {
     return {
       datetime: this.state.datetime,
       events: this.state.events,
+      infiniteStore: this.state.infiniteStore,
       store: this.state.store
     };
   }
@@ -46,77 +40,21 @@ export default class Calendar extends Component {
   }
 
   componentDidMount () {
-    this._timerRecalculationSize = context.requestAnimationFrame(() => {
-      this.state.store.update(this.getRecalculationSize());
-      context.addEventListener('resize', this.handleResize, false);
-      onWheel(this._calendarNode, this.handleWheel);
-    });
+    this.state.store.addChangeListener(this.handleChange, this);
   }
 
   componentWillUnmount () {
-    if (this._timerRecalculationSize) {
-      context.cancelAnimationFrame(this._timerRecalculationSize);
-      this._timerRecalculationSize = 0;
-    }
-
-    if (this._timerUpdateStoreByWheel) {
-      context.cancelAnimationFrame(this._timerUpdateStoreByWheel);
-      this._timerUpdateStoreByWheel = 0;
-    }
-
-    context.removeEventListener('resize', this.handleResize, false);
-    offWheel(this._calendarNode, this.handleWheel);
+    this.state.store.removeChangeListener(this.handleChange, this);
   }
 
-  handleResize () {
-    this.state.store.update(this.getRecalculationSize());
-  }
-
-  handleWheel (event) {
-    event.preventDefault();
-
-    this._deltaX = event.deltaX + (this._timerUpdateStoreByWheel ? this._deltaX : 0);
-    this._deltaY = event.deltaY + (this._timerUpdateStoreByWheel ? this._deltaY : 0);
-
-    if (!this._timerUpdateStoreByWheel) {
-      this._timerUpdateStoreByWheel = context.requestAnimationFrame(this.updateStoreByWheel);
-    }
-  }
-
-  updateStoreByWheel () {
-    this.state.store.updateScroll(this._deltaX, this._deltaY);
-    this._timerUpdateStoreByWheel = 0;
-
-    context.requestAnimationFrame(() => {
-      if (this._timerScrollStop) {
-        context.clearTimeout(this._timerScrollStop);
-        this._timerScrollStop = 0;
-      }
-
-      if (!this._timerUpdateStoreByWheel) {
-        this._timerScrollStop = context.setTimeout(() => {
-          this._timerScrollStop = 0;
-          if (!this._timerUpdateStoreByWheel) {
-            this.state.store.updateScroll(0, 0);
-          }
-        }, 150);
-      }
-    });
-  }
-
-  getRecalculationSize () {
-    const { scrollHeight, scrollWidth } = this._gridComponent.getRect();
-
-    return {
-      scrollHeight,
-      scrollWidth
-    };
+  handleChange () {
+    this.state.infiniteStore.forceUpdated();
   }
 
   render () {
     return (
-      <div ref={calendarNode => this._calendarNode = calendarNode} className={styles.calendar}>
-        <GridDays ref={gridComponent => this._gridComponent = gridComponent} />
+      <div className={styles.calendar}>
+        <CalendarGrid />
       </div>
     );
   }
@@ -125,7 +63,8 @@ export default class Calendar extends Component {
 Calendar.childContextTypes = {
   datetime: PropTypes.instanceOf(Datetime),
   events: PropTypes.instanceOf(Events),
-  store: PropTypes.instanceOf(Store)
+  infiniteStore: PropTypes.instanceOf(InfiniteStore),
+  store: PropTypes.instanceOf(GridStore),
 };
 
 /* @if NODE_ENV=='development' **
@@ -133,7 +72,3 @@ Calendar.propTypes = {};
 /* @endif */
 
 Calendar.defaultProps = {};
-
-
-// <GridDays ref={gridComponent => this._gridComponent = gridComponent} />
-// <GridMonth ref={gridComponent => this._gridComponent = gridComponent} />

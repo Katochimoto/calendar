@@ -1,19 +1,45 @@
 // @flow
 
-import { lazy } from './lazy';
+import { lazy } from './Component/lazy';
 
 export default class EventEmitter {
   _callbacks: Array<[Function, Object]>;
 
   constructor () {
-    this._callbacks = [];
+    this._callbacks = Object.create(null);
+  }
+
+  destroy () {
+    this._callbacks = undefined;
+  }
+
+  emitSync (name: string): void {
+    const callbacks = this._callbacks[ name ];
+
+    if (!callbacks) {
+      return;
+    }
+
+    for (let i = 0, len = callbacks.length; i < len; i++) {
+      const item = callbacks[i];
+      if (item[1]) {
+        item[0].call(item[1]);
+      } else {
+        item[0]();
+      }
+    }
   }
 
   emitChangeSync (): void {
-    for (let i = 0, len = this._callbacks.length; i < len; i++) {
-      const item = this._callbacks[i];
-      item[0].call(item[1]);
-    }
+    this.emitSync('change');
+  }
+
+  @lazy
+  emit (names: array): void {
+    names
+      .map(item => item[0])
+      .filter((item, pos, source) => (source.indexOf(item) === pos))
+      .forEach(this.emitSync, this);
   }
 
   @lazy
@@ -22,16 +48,33 @@ export default class EventEmitter {
   }
 
   addChangeListener (callback: Function, ctx: Object): void {
-    this._callbacks.push([ callback, ctx ]);
+    this.addListener('change', callback, ctx);
   }
 
   removeChangeListener (callback: Function, ctx: Object): void {
+    this.removeListener('change', callback, ctx);
+  }
+
+  addListener (name: string, callback: Function, ctx: Object): void {
+    if (!(name in this._callbacks)) {
+      this._callbacks[ name ] = [];
+    }
+    this._callbacks[ name ].push([ callback, ctx ]);
+  }
+
+  removeListener (name: string, callback: Function, ctx: Object): void {
+    const callbacks = this._callbacks[ name ];
+
+    if (!callbacks) {
+      return;
+    }
+
     let i = 0;
-    while (i < this._callbacks.length) {
-      const item = this._callbacks[i];
+    while (i < callbacks.length) {
+      const item = callbacks[ i ];
 
       if (item[0] === callback && item[1] === ctx) {
-        this._callbacks.splice(i, 1);
+        callbacks.splice(i, 1);
 
       } else {
         i++;

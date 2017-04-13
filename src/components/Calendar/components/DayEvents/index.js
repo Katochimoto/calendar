@@ -1,5 +1,5 @@
 import { EventsComponent } from '../../utils/Component';
-import getColumn from '../../utils/getColumn';
+import { getColumn } from '../../utils/array';
 import { HOURMS } from '../../utils/date';
 /* @if NODE_ENV=='development' **
 import { PropTypes } from '../../utils/Component';
@@ -15,8 +15,8 @@ export default class DayEvents extends EventsComponent {
   shouldComponentUpdate (nextProps, nextState) {
     return (
       this.props.date !== nextProps.date ||
-      this.props.hoursOfDay !== nextProps.hoursOfDay ||
-      this.state.events !== nextState.events
+      this.props.hoursOfDay !== nextProps.hoursOfDay
+      // this.state.events !== nextState.events // вернуть после Immutable событий
     );
   }
 

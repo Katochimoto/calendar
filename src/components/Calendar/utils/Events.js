@@ -1,6 +1,6 @@
 // @flow
 
-import { qlazy } from './lazy';
+import { qlazy } from './Component/lazy';
 import EventEmitter from './EventEmitter';
 import EventsStrategyDefault from './Events/EventsStrategyDefault';
 
@@ -18,7 +18,7 @@ export default class Events extends EventEmitter {
 
   constructor (strategy: ?EventsStrategy) {
     super();
-    this._strategy = strategy || (new EventsStrategyDefault(): EventsStrategy);
+    this._strategy = strategy || (new EventsStrategyDefault: EventsStrategy);
     this._strategy.addChangeListener(this._handleChangeEventsStrategy, this);
   }
 

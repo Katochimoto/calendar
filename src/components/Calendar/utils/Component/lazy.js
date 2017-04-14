@@ -24,6 +24,8 @@ export function lazy (target, key, descriptor) {
     }
   };
 
+  descriptor.value.displayName = key;
+
   return descriptor;
 }
 

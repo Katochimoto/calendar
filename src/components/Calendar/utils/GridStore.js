@@ -1,24 +1,13 @@
 // @flow
 
-import EventEmitter from './EventEmitter';
+import Store from './Store';
 import StoreStrategy from './StoreStrategy';
 import Strategy from './GridStore/Strategy';
 import { getDay } from './date';
 
-export default class GridStore extends EventEmitter {
-  _strategy: StoreInterface;
-
+export default class GridStore extends Store {
   constructor (strategy: StoreStrategy) {
-    super();
-    this._strategy = strategy || (new Strategy: StoreStrategy);
-  }
-
-  update (data: {[id:string]: any}) {
-    this._strategy.update(data) && this.emitChange();
-  }
-
-  getState () {
-    return this._strategy.state;
+    super(strategy || (new Strategy: StoreStrategy));
   }
 
   gridDateOffset (date: number, offset: number): number {

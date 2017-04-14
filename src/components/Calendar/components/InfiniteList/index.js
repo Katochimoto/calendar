@@ -3,6 +3,7 @@ import { Component } from '../../utils/Component';
 import { PropTypes } from '../../utils/Component';
 /* @endif */
 
+import classnames from 'classnames';
 import InfiniteListItem from '../InfiniteListItem';
 import styles from './index.less';
 
@@ -15,6 +16,8 @@ export default class InfiniteList extends Component {
       scrollDirection,
       scrollX,
       scrollY,
+      speedScrollX,
+      speedScrollY,
       updated,
     } = context.infiniteStore.getState();
 
@@ -24,6 +27,8 @@ export default class InfiniteList extends Component {
       scrollDirection,
       scrollX,
       scrollY,
+      speedScrollX,
+      speedScrollY,
       updated,
     };
   }
@@ -34,8 +39,14 @@ export default class InfiniteList extends Component {
     return (
       state.updated !== nextState.updated ||
       state.listRange !== nextState.listRange ||
-      (state.SAXISX && state.scrollX !== nextState.scrollX) ||
-      (!state.SAXISX && state.scrollY !== nextState.scrollY)
+      (state.SAXISX && (
+        state.scrollX !== nextState.scrollX ||
+        state.speedScrollX !== nextState.speedScrollX
+      )) ||
+      (!state.SAXISX && (
+        state.scrollY !== nextState.scrollY ||
+        state.speedScrollY !== nextState.speedScrollY
+      ))
     );
   }
 
@@ -97,17 +108,33 @@ export default class InfiniteList extends Component {
   }
 
   render () {
+    const {
+      SAXISX,
+      scrollX,
+      scrollY,
+      speedScrollX,
+      speedScrollY,
+    } = this.state;
+
     const style = do {
-      if (this.state.SAXISX) {
-        `transform: translateX(${this.state.scrollX}px);`;
+      if (SAXISX) {
+        `transform: translateX(${scrollX}px);`;
       } else {
-        `transform: translateY(${this.state.scrollY}px);`;
+        `transform: translateY(${scrollY}px);`;
       }
     };
 
+    const classes = classnames({
+      [ styles.InfiniteList_Content ]: true,
+      [ styles.InfiniteList_Content__transition ]: false,
+      [ styles.InfiniteList_Content__scrolling ]: SAXISX ?
+        speedScrollX !== 0 :
+        speedScrollY !== 0,
+    });
+
     return (
       <div className={styles.InfiniteList}>
-        <div className={styles.InfiniteList_Content} style={style}>
+        <div className={classes} style={style}>
           {this.getItems()}
         </div>
       </div>

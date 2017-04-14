@@ -26,6 +26,17 @@ export default class Strategy extends StoreStrategy {
    * @return {boolean}
    */
   updateScroll (deltaX: number, deltaY: number) {
+    deltaX = Math.ceil(deltaX / 2);
+    deltaY = Math.ceil(deltaY / 2);
+
+    deltaX = deltaX > 0 ?
+      Math.min(deltaX, 100) :
+      Math.max(deltaX, -100);
+
+    deltaY = deltaY > 0 ?
+      Math.min(deltaY, 100) :
+      Math.max(deltaY, -100);
+
     const scrollX = this.current.scrollX + deltaX;
     const scrollY = this.current.scrollY + deltaY;
 

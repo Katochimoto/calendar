@@ -10,22 +10,24 @@ export default class StoreStrategy {
 
     /*::`*/
     const props = Object.keys(data).reduce((data, name) => {
-      data[ name ] = {
+      const prop = data[ name ] = {
         enumerable: true,
         get: () => this.current[ name ]
       };
 
+      prop.get.displayName = `_${name}Getter`;
+
       if (name !== name.toUpperCase()) {
         const sname = `_${name}Setter`;
 
-        data[ name ].set = (value) => {
-          if (sname in this) {
-            this[ sname ](value);
-          } else {
+        prop.set = (sname in this) ?
+          (value) => this[ sname ](value) :
+          (value) => {
             this.current[ name ] = value;
             this.isChanged = true;
-          }
-        };
+          };
+
+        prop.set.displayName = sname;
       }
 
       return data;

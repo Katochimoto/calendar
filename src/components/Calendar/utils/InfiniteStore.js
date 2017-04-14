@@ -1,42 +1,25 @@
-import EventEmitter from './EventEmitter';
+import Store from './Store';
 import StoreStrategy from './StoreStrategy';
 import StrategyX from './InfiniteStore/StrategyX';
 
-export default class InfiniteStore extends EventEmitter {
-  _strategy: StoreStrategy;
-
+export default class InfiniteStore extends Store {
   constructor (strategy: StoreStrategy) {
-    super();
-    this._setStrategy(strategy || (new StrategyX: StoreStrategy));
-  }
-
-  setStrategy (strategy: StoreStrategy) {
-    this._setStrategy(strategy);
-    // this.emitChange();
-  }
-
-  getState () {
-    return this._strategy.state;
-  }
-
-  update (data: {[id:string]: any}) {
-    this._strategy.update(data) && this.emitChange();
+    super(strategy || (new StrategyX: StoreStrategy));
   }
 
   forceUpdated () {
-    this._strategy.forceUpdated() && this.emitChange();
+    if (this._strategy.forceUpdated()) {
+      this.emitChange();
+    }
   }
 
   updateScroll (deltaX: number, deltaY: number) {
-    this._strategy.updateScroll(deltaX, deltaY) && this.emitChange();
+    if (this._strategy.updateScroll(deltaX, deltaY)) {
+      this.emitChange();
+    }
   }
 
   isVisibleOffset (offset: number): boolean {
     return this._strategy.isVisibleOffset(offset);
-  }
-
-  _setStrategy (strategy: StoreStrategy) {
-    this._strategy && this._strategy.destroy();
-    this._strategy = strategy;
   }
 }

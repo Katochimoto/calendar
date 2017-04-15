@@ -39,7 +39,9 @@ const onWheel = wrapWheelCallback(function _onWheel (event) {
   this[ WHEELY ] = event.deltaY + (timer ? this[ WHEELY ] : 0);
 
   if (!timer) {
+    //this[ WTIMER ] = context.requestAnimationFrame(() => {
     this[ WTIMER ] = context.requestAnimationFrame(this[ ONUPDATE ]);
+    //});
   }
 });
 

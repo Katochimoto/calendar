@@ -51,7 +51,8 @@ export default class GridDaysItem extends StoreComponent {
           <ItemComponent
             key={idxLocal}
             date={itemDate}
-            weekend={isWeekend}
+            isWeekend={isWeekend}
+            isVisible={true}
             hoursOfDay={hoursOfDay} />
         );
 

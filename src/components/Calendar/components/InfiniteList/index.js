@@ -3,6 +3,7 @@ import { Component } from '../../utils/Component';
 import { PropTypes } from '../../utils/Component';
 /* @endif */
 
+import { ASCROLL } from '../../constant';
 import classnames from 'classnames';
 import InfiniteListItem from '../InfiniteListItem';
 import styles from './index.less';
@@ -13,6 +14,7 @@ export default class InfiniteList extends Component {
     const {
       listRange,
       SAXISX,
+      scrollAnimation,
       scrollDirection,
       scrollX,
       scrollY,
@@ -24,6 +26,7 @@ export default class InfiniteList extends Component {
     return {
       listRange,
       SAXISX,
+      scrollAnimation,
       scrollDirection,
       scrollX,
       scrollY,
@@ -39,6 +42,7 @@ export default class InfiniteList extends Component {
     return (
       state.updated !== nextState.updated ||
       state.listRange !== nextState.listRange ||
+      state.scrollAnimation !== nextState.scrollAnimation ||
       (state.SAXISX && (
         state.scrollX !== nextState.scrollX ||
         state.speedScrollX !== nextState.speedScrollX
@@ -56,6 +60,16 @@ export default class InfiniteList extends Component {
 
   componentWillUnmount () {
     this.context.infiniteStore.removeChangeListener(this.handleChange, this);
+  }
+
+  componentDidUpdate (prevProps, prevState) {
+    super.componentDidUpdate(prevProps, prevState);
+
+    if (this.state.scrollAnimation === ASCROLL.STOP) {
+      this.context.infiniteStore.update({
+        scrollAnimation: ASCROLL.OFF
+      });
+    }
   }
 
   handleChange () {
@@ -110,6 +124,7 @@ export default class InfiniteList extends Component {
   render () {
     const {
       SAXISX,
+      scrollAnimation,
       scrollX,
       scrollY,
       speedScrollX,
@@ -126,7 +141,7 @@ export default class InfiniteList extends Component {
 
     const classes = classnames({
       [ styles.InfiniteList_Content ]: true,
-      [ styles.InfiniteList_Content__transition ]: false,
+      [ styles.InfiniteList_Content__animation ]: scrollAnimation === ASCROLL.ON,
       [ styles.InfiniteList_Content__scrolling ]: SAXISX ?
         speedScrollX !== 0 :
         speedScrollY !== 0,

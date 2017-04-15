@@ -1,3 +1,4 @@
+import { ASCROLL } from '../../constant';
 import StoreStrategy from '../StoreStrategy';
 import defaultState from './defaultState';
 
@@ -37,19 +38,36 @@ export default class Strategy extends StoreStrategy {
       Math.min(deltaY, 100) :
       Math.max(deltaY, -100);
 
-    const scrollX = this.current.scrollX + deltaX;
-    const scrollY = this.current.scrollY + deltaY;
+    const updX = deltaX !== 0 ? this.update({
+      scrollX: this.current.scrollX + deltaX
+    }) : false;
 
-    let updX = this.update({ scrollX });
-    let updY = this.update({ scrollY });
+    const updY = deltaY !== 0 ? this.update({
+      scrollY: this.current.scrollY + deltaY
+    }) : false;
 
-    const speedScrollX = updX ? deltaX : 0;
-    const speedScrollY = updY ? deltaY : 0;
+    const {
+      scrollAnimation,
+      speedScrollX,
+      speedScrollY,
+    } = this.current;
 
-    updX = this.update({ speedScrollX }) || updX;
-    updY = this.update({ speedScrollY }) || updY;
+    this.current.speedScrollX = updX ? deltaX : 0;
+    this.current.speedScrollY = updY ? deltaY : 0;
 
-    return (updX || updY);
+    if (scrollAnimation >= 0) {
+      this.current.scrollAnimation = updX || updY ?
+        ASCROLL.ON :
+        ASCROLL.OFF;
+    }
+
+    return (
+      updX ||
+      updY ||
+      scrollAnimation !== this.current.scrollAnimation ||
+      speedScrollX !== this.current.speedScrollX ||
+      speedScrollY !== this.current.speedScrollY
+    );
   }
 
   /**

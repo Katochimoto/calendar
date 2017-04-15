@@ -12,7 +12,7 @@ export default class Day extends Component {
   shouldComponentUpdate (nextProps) {
     return (
       this.props.date !== nextProps.date ||
-      this.props.weekend !== nextProps.weekend ||
+      this.props.isWeekend !== nextProps.isWeekend ||
       this.props.hoursOfDay !== nextProps.hoursOfDay
     );
   }
@@ -20,7 +20,7 @@ export default class Day extends Component {
   render () {
     const classes = classnames({
       [ styles.calendar_Day ]: true,
-      [ styles.calendar_Day__weekend ]: this.props.weekend
+      [ styles.calendar_Day__weekend ]: this.props.isWeekend
     });
 
     return (
@@ -36,11 +36,11 @@ export default class Day extends Component {
 /* @if NODE_ENV=='development' **
 Day.propTypes = {
   date: PropTypes.number,
-  weekend: PropTypes.boolean,
+  isWeekend: PropTypes.boolean,
   hoursOfDay: PropTypes.string
 };
 /* @endif */
 
 Day.defaultProps = {
-  weekend: false
+  isWeekend: false
 };

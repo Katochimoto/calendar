@@ -1,3 +1,4 @@
+import { ASCROLL } from '../../constant';
 import Strategy from './Strategy';
 
 export default class StrategyY extends Strategy {
@@ -36,6 +37,17 @@ export default class StrategyY extends Strategy {
       this.current.scrollOffsetTop,
       this.current.scrollOffsetBottom
     );
+
+    if (!limitOffset) {
+      return;
+    }
+
+    if (
+      this.current.scrollAnimation === ASCROLL.ON ||
+      this.current.scrollAnimation === ASCROLL.OFF
+    ) {
+      this.current.scrollAnimation = ASCROLL.STOP;
+    }
 
     this.current.scrollDirection = this._correctLimitOffset(
       limitOffset,

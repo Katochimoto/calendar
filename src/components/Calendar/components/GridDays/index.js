@@ -20,11 +20,11 @@ export default class GridDays extends Component {
   }
 
   handleWheel (deltaX, deltaY) {
-    this.context.infiniteStore.updateScroll(deltaX, deltaY);
+    this.context.infiniteStore.updateScrollByWheel(deltaX, deltaY);
   }
 
   handleWheelStop () {
-    this.context.infiniteStore.updateScroll(0, 0);
+    this.context.infiniteStore.updateScrollByWheel(0, 0);
     // this._testNode.classList.remove(styles.calendar_GridDays__scroll);
   }
 

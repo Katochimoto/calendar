@@ -12,22 +12,32 @@ export default class Day extends Component {
   shouldComponentUpdate (nextProps) {
     return (
       this.props.date !== nextProps.date ||
-      this.props.isWeekend !== nextProps.isWeekend ||
-      this.props.hoursOfDay !== nextProps.hoursOfDay
+      this.props.hoursOfDay !== nextProps.hoursOfDay ||
+      this.props.isVisible !== nextProps.isVisible ||
+      this.props.isWeekend !== nextProps.isWeekend
     );
   }
 
   render () {
+    const {
+      date,
+      hoursOfDay,
+      isVisible,
+      isWeekend,
+    } = this.props;
+
     const classes = classnames({
       [ styles.calendar_Day ]: true,
-      [ styles.calendar_Day__weekend ]: this.props.isWeekend
+      [ styles.calendar_Day__weekend ]: isWeekend
     });
 
     return (
       <div className={classes}>
-        <DayEvents
-          date={this.props.date}
-          hoursOfDay={this.props.hoursOfDay} />
+        { isVisible ? (
+          <DayEvents
+            date={date}
+            hoursOfDay={hoursOfDay} />
+        ) : null }
       </div>
     );
   }
@@ -36,11 +46,13 @@ export default class Day extends Component {
 /* @if NODE_ENV=='development' **
 Day.propTypes = {
   date: PropTypes.number,
+  hoursOfDay: PropTypes.string,
+  isVisible: PropTypes.boolean,
   isWeekend: PropTypes.boolean,
-  hoursOfDay: PropTypes.string
 };
 /* @endif */
 
 Day.defaultProps = {
-  isWeekend: false
+  isVisible: true,
+  isWeekend: false,
 };

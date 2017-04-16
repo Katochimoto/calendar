@@ -13,8 +13,8 @@ export default class InfiniteStore extends Store {
     }
   }
 
-  updateScroll (deltaX: number, deltaY: number) {
-    if (this._strategy.updateScroll(deltaX, deltaY)) {
+  updateScrollByWheel (deltaX: number, deltaY: number) {
+    if (this._strategy.updateScrollByWheel(deltaX, deltaY)) {
       this.emitChange();
     }
   }

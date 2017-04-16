@@ -21,15 +21,16 @@ export default class DayHeader extends Component {
 
   render () {
     const datetime = this.context.datetime;
+    const { date, isWeekend } = this.props;
     const classes = classnames({
       [ styles.calendar_DayHeader ]: true,
-      [ styles.calendar_DayHeader__weekend ]: this.props.isWeekend
+      [ styles.calendar_DayHeader__weekend ]: isWeekend
     });
 
     return (
       <div className={classes}>
         <div className={styles.calendar_DayHeader_Title}>
-          {datetime.gridDaysDayTitle(this.props.date)}
+          {datetime.gridDaysDayTitle(date)}
         </div>
       </div>
     );
@@ -39,10 +40,10 @@ export default class DayHeader extends Component {
 /* @if NODE_ENV=='development' **
 DayHeader.propTypes = {
   date: PropTypes.number,
-  isWeekend: PropTypes.boolean
+  isWeekend: PropTypes.boolean,
 };
 /* @endif */
 
 DayHeader.defaultProps = {
-  isWeekend: false
+  isWeekend: false,
 };

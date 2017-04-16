@@ -26,7 +26,7 @@ export default class Strategy extends StoreStrategy {
    * @param {number} deltaY
    * @return {boolean}
    */
-  updateScroll (deltaX: number, deltaY: number) {
+  updateScrollByWheel (deltaX: number, deltaY: number) {
     deltaX = Math.ceil(deltaX / 2);
     deltaY = Math.ceil(deltaY / 2);
 

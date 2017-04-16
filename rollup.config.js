@@ -8,7 +8,7 @@ import RollupPluginReplace from 'rollup-plugin-replace';
 import RollupPluginInject from 'rollup-plugin-inject';
 import RollupPluginBuble from 'rollup-plugin-buble';
 import RollupPluginPreprocess from 'rollup-plugin-preprocess';
-//import RollupPluginUglify from 'rollup-plugin-uglify';
+import RollupPluginUglify from 'rollup-plugin-uglify';
 
 import LessPluginCssModules from 'less-plugin-css-modules';
 
@@ -73,7 +73,7 @@ export default {
               'Chrome >= 4',
             ]
           }),
-          CssMqpacker()
+          CssMqpacker(),
           //PostcssCsso()
         ]).process(css, {
           to: 'app.css',
@@ -143,7 +143,37 @@ export default {
       }
     }),
 
-    //RollupPluginUglify(),
+    /*RollupPluginUglify({
+      compress: false,
+      mangle: false,
+      sourceMap: false,
+      output: {
+        beautify: true,
+        quote_style: 1,
+        indent_level: 2
+      },
+
+      sourceMap: true,
+      compress: {
+        sequences: false,
+        dead_code: true,
+        global_defs: {
+            DEBUG: false
+        },
+        drop_debugger: true,
+        conditionals: true,
+        comparisons: true,
+        evaluate: true,
+        booleans: true,
+        loops: true,
+        unused: true,
+        if_return: true,
+        join_vars: true,
+        collapse_vars: true,
+        drop_console: true,
+      }
+    }),*/
+
     RollupPluginFilesize()
   ]
 };

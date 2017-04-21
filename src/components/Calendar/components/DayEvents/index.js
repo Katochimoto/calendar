@@ -27,14 +27,18 @@ export default class DayEvents extends EventsComponent {
 
   componentWillReceiveProps (nextProps) {
     this.updateState(nextProps);
+
+    if (this.props.date !== nextProps.date) {
+      this.upload(this.getInterval(nextProps));
+    }
   }
 
   componentDidUpdate (prevProps) {
     super.componentDidUpdate();
 
-    if (this.props.date !== prevProps.date) {
-      this.upload();
-    }
+    //if (this.props.date !== prevProps.date) {
+    //  this.upload();
+    //}
   }
 
   componentWillUnmount () {
@@ -53,9 +57,9 @@ export default class DayEvents extends EventsComponent {
     return { events, INTERVALS };
   }
 
-  upload () {
+  upload (interval = this.getInterval()) {
     this.cancelUpload();
-    this._upload = this.context.events.uploadByInterval(this.getInterval());
+    this._upload = this.context.events.uploadByInterval(interval);
   }
 
   cancelUpload () {

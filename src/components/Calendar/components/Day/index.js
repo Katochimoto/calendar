@@ -10,11 +10,13 @@ import styles from './index.less';
 export default class Day extends Component {
 
   shouldComponentUpdate (nextProps) {
+    const props = this.props;
+
     return (
-      this.props.date !== nextProps.date ||
-      this.props.hoursOfDay !== nextProps.hoursOfDay ||
-      this.props.isVisible !== nextProps.isVisible ||
-      this.props.isWeekend !== nextProps.isWeekend
+      props.date !== nextProps.date ||
+      props.hoursOfDay !== nextProps.hoursOfDay ||
+      props.isVisible !== nextProps.isVisible ||
+      props.isWeekend !== nextProps.isWeekend
     );
   }
 

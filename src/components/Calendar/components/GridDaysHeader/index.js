@@ -30,9 +30,9 @@ export default class GridDaysHeader extends StoreComponent {
 
     return (
       <GridDaysItem
+        date={date}
         ItemComponent={DayHeader}
-        itemSize={gridDaysItemSize}
-        date={date} />
+        itemSize={gridDaysItemSize} />
     );
   }
 

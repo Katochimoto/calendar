@@ -51,9 +51,9 @@ export default class GridDaysItem extends StoreComponent {
           <ItemComponent
             key={idxLocal}
             date={itemDate}
-            isWeekend={isWeekend}
+            hoursOfDay={hoursOfDay}
             isVisible={true}
-            hoursOfDay={hoursOfDay} />
+            isWeekend={isWeekend} />
         );
 
         idxLocal++;
@@ -76,13 +76,13 @@ export default class GridDaysItem extends StoreComponent {
 
 /* @if NODE_ENV=='development' **
 GridDaysItem.propTypes = {
+  date: PropTypes.number,
   ItemComponent: PropTypes.function,
   itemSize: PropTypes.number,
-  date: PropTypes.number,
 };
 /* @endif */
 
 GridDaysItem.defaultProps = {
-  itemSize: 0,
   date: 0,
+  itemSize: 0,
 };

@@ -85,7 +85,8 @@ export default class GridDaysContent extends StoreComponent {
       <GridDaysItem
         date={date}
         ItemComponent={Day}
-        itemSize={gridDaysItemSize} />
+        itemSize={gridDaysItemSize}
+        offset={offset} />
     );
   }
 
@@ -113,6 +114,7 @@ export default class GridDaysContent extends StoreComponent {
           <DayHours />
 
           <InfiniteList
+            checkVisible={true}
             getItemElement={this.getItemElement}
             next={this.handleInfiniteNext}
             prev={this.handleInfinitePrev}

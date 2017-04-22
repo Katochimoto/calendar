@@ -35,7 +35,7 @@ export default class GridDaysItem extends StoreComponent {
 
   getItems () {
     const store = this.context.store;
-    const { date, itemSize, ItemComponent } = this.props;
+    const { date, itemSize, ItemComponent, offset } = this.props;
     const { hoursOfDay, hideWeekends } = this.state;
     const items = [];
 
@@ -52,8 +52,8 @@ export default class GridDaysItem extends StoreComponent {
             key={idxLocal}
             date={itemDate}
             hoursOfDay={hoursOfDay}
-            isVisible={true}
-            isWeekend={isWeekend} />
+            isWeekend={isWeekend}
+            offset={offset} />
         );
 
         idxLocal++;
@@ -79,10 +79,12 @@ GridDaysItem.propTypes = {
   date: PropTypes.number,
   ItemComponent: PropTypes.function,
   itemSize: PropTypes.number,
+  offset: PropTypes.number,
 };
 /* @endif */
 
 GridDaysItem.defaultProps = {
   date: 0,
   itemSize: 0,
+  offset: 0,
 };

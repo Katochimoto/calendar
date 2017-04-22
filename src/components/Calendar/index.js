@@ -7,6 +7,7 @@ import Datetime from './utils/Datetime';
 import Events from './utils/Events';
 import GridStore from './utils/GridStore';
 import InfiniteStore from './utils/InfiniteStore';
+import ElementVisible from './utils/ElementVisible';
 
 import styles from './index.less';
 
@@ -19,6 +20,7 @@ export default class Calendar extends Component {
       events: new Events(),
       infiniteStore: new InfiniteStore(),
       store: new GridStore(),
+      visible: new ElementVisible(),
     };
 
     // FIXME remove later
@@ -27,11 +29,20 @@ export default class Calendar extends Component {
   }
 
   getChildContext () {
+    const {
+      datetime,
+      events,
+      infiniteStore,
+      store,
+      visible,
+    } = this.state;
+
     return {
-      datetime: this.state.datetime,
-      events: this.state.events,
-      infiniteStore: this.state.infiniteStore,
-      store: this.state.store
+      datetime,
+      events,
+      infiniteStore,
+      store,
+      visible,
     };
   }
 
@@ -65,6 +76,7 @@ Calendar.childContextTypes = {
   events: PropTypes.instanceOf(Events),
   infiniteStore: PropTypes.instanceOf(InfiniteStore),
   store: PropTypes.instanceOf(GridStore),
+  visible: PropTypes.instanceOf(ElementVisible),
 };
 
 /* @if NODE_ENV=='development' **

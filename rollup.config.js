@@ -106,6 +106,7 @@ export default {
         'transform-decorators-legacy',
         'transform-do-expressions',
         'transform-object-rest-spread',
+        'transform-function-bind',
         [ 'transform-react-jsx', { pragma: 'h' } ],
         [
           'module-resolver',

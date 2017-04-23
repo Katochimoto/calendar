@@ -26,7 +26,7 @@ export default class Strategy extends StoreStrategy {
     return Math.round(1000 * 100 * grid / this.current.DAYMS) / 1000;
   }
 
-  _hoursOfDaySetter (value) {
+  _hoursOfDaySetter (value: string) {
     const list = value
       .split(',')
       .map(Number)
@@ -45,7 +45,7 @@ export default class Strategy extends StoreStrategy {
     }
   }
 
-  _weekendsSetter (value) {
+  _weekendsSetter (value: string) {
     const list = value
       .split(',')
       .map(Number)
@@ -62,7 +62,7 @@ export default class Strategy extends StoreStrategy {
     }
   }
 
-  _hideWeekendsSetter (value) {
+  _hideWeekendsSetter (value: boolean) {
     value = Boolean(value);
     if (value !== this.current.hideWeekends) {
       this.current.hideWeekends = value;

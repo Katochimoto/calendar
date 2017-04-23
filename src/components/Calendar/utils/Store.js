@@ -4,7 +4,7 @@ import EventEmitter from './EventEmitter';
 import StoreStrategy from './StoreStrategy';
 
 export default class Store extends EventEmitter {
-  _strategy: StoreInterface;
+  _strategy: StoreStrategy;
 
   constructor (strategy: StoreStrategy) {
     super();

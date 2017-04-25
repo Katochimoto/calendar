@@ -17,7 +17,7 @@ export default class DayEventFolded extends Component {
     return (
       <div
         style={`top: ${this.props.top}%;`}
-        className={styles.calendar_DayEventFolded} />
+        className={styles.DayEventFolded} />
     );
   }
 }

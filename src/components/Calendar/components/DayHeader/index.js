@@ -23,13 +23,13 @@ export default class DayHeader extends Component {
     const datetime = this.context.datetime;
     const { date, isWeekend } = this.props;
     const classes = classnames({
-      [ styles.calendar_DayHeader ]: true,
-      [ styles.calendar_DayHeader__weekend ]: isWeekend
+      [ styles.DayHeader ]: true,
+      [ styles.DayHeader__weekend ]: isWeekend
     });
 
     return (
       <div className={classes}>
-        <div className={styles.calendar_DayHeader_Title}>
+        <div className={styles.DayHeader_Title}>
           {datetime.gridDaysDayTitle(date)}
         </div>
       </div>

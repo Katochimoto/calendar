@@ -33,7 +33,7 @@ export default class DayHours extends StoreComponent {
 
       items.push(
         <div key={hour}
-          className={styles.calendar_DayHours_Item}
+          className={styles.DayHours_Item}
           data-hour={datetime.gridDaysHourTitle(hour)} />
       );
     }
@@ -42,7 +42,7 @@ export default class DayHours extends StoreComponent {
 
     items.push(
       <div key={`next-${hour}`}
-        className={styles.calendar_DayHours_Item}
+        className={styles.DayHours_Item}
         data-hour={datetime.gridDaysHourTitle(hour)} />
     );
 
@@ -51,7 +51,7 @@ export default class DayHours extends StoreComponent {
 
   render () {
     return (
-      <div className={styles.calendar_DayHours}>
+      <div className={styles.DayHours}>
         {this.getItems()}
       </div>
     );

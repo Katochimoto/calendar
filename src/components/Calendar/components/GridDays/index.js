@@ -25,23 +25,18 @@ export default class GridDays extends Component {
 
   handleWheelStop () {
     this.context.infiniteStore.updateScrollByWheel(0, 0);
-    // this._testNode.classList.remove(styles.calendar_GridDays__scroll);
-  }
-
-  handleWheelStart () {
-    // this._testNode.classList.add(styles.calendar_GridDays__scroll);
   }
 
   render () {
     return (
       <table ref={rootNode => this._rootNode = rootNode}
-        className={styles.calendar_GridDays}>
+        className={styles.GridDays}>
 
         <col width="100%" valign="top" />
 
         <thead>
           <tr>
-            <td className={styles.calendar_GridDays_Header}>
+            <td className={styles.GridDays_Header}>
               <GridDaysHeader />
             </td>
           </tr>
@@ -49,7 +44,7 @@ export default class GridDays extends Component {
 
         <tbody>
           <tr>
-            <td className={styles.calendar_GridDays_Content}>
+            <td className={styles.GridDays_Content}>
               <GridDaysContent />
             </td>
           </tr>

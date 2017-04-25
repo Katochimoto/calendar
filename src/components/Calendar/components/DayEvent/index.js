@@ -27,7 +27,7 @@ export default class DayEvent extends Component {
       bottom: ${bottom}%;`;
 
     return (
-      <div className={styles.calendar_DayEvent} style={style}>
+      <div className={styles.DayEvent} style={style}>
         {event.title}
       </div>
     );

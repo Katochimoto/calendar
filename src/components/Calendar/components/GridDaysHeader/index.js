@@ -38,8 +38,8 @@ export default class GridDaysHeader extends StoreComponent {
 
   render () {
     return (
-      <div className={styles.calendar_GridDaysHeader}>
-        <div className={styles.calendar_GridDaysHeader_Content}>
+      <div className={styles.GridDaysHeader}>
+        <div className={styles.GridDaysHeader_Content}>
           <InfiniteList
             getItemElement={this.getItemElement} />
         </div>

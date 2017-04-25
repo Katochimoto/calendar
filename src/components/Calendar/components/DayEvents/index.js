@@ -174,7 +174,7 @@ export default class DayEvents extends EventsComponent {
 
   render () {
     return (
-      <div className={styles.calendar_DayEvents}>
+      <div className={styles.DayEvents}>
         {this.getItems()}
       </div>
     );

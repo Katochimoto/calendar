@@ -93,7 +93,6 @@ export default class GridDaysContent extends StoreComponent {
   getRect () {
     return {
       scrollHeight: this._contentNode.scrollHeight - this._contentNode.clientHeight,
-      //scrollHeight: this._contentScrollNode.clientHeight,
       scrollWidth: this._contentScrollNode.clientWidth,
     };
   }
@@ -105,10 +104,10 @@ export default class GridDaysContent extends StoreComponent {
 
     return (
       <div ref={node => this._contentNode = node}
-        className={styles.calendar_GridDaysContent}>
+        className={styles.GridDaysContent}>
 
         <div ref={node => this._contentScrollNode = node}
-          className={styles.calendar_GridDaysContent_Scroll}
+          className={styles.GridDaysContent_Scroll}
           style={style}>
 
           <DayHours />

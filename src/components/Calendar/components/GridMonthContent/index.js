@@ -84,7 +84,7 @@ export default class GridMonthContent extends StoreComponent {
   render () {
     return (
       <div ref={node => this._contentNode = node}
-        className={styles.calendar_GridMonthContent}>
+        className={styles.GridMonthContent}>
 
         <InfiniteList
           getItemElement={this.getItemElement}

@@ -58,8 +58,8 @@ export default class Day extends Component {
 
   render () {
     const classes = classnames({
-      [ styles.calendar_Day ]: true,
-      [ styles.calendar_Day__weekend ]: this.props.isWeekend,
+      [ styles.Day ]: true,
+      [ styles.Day__weekend ]: this.props.isWeekend,
     });
 
     return (

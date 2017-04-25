@@ -67,7 +67,7 @@ export default class GridDaysItem extends StoreComponent {
 
   render () {
     return (
-      <div className={styles.calendar_GridDaysItem}>
+      <div className={styles.GridDaysItem}>
         {this.getItems()}
       </div>
     );

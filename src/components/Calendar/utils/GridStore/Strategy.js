@@ -11,9 +11,12 @@ export default class Strategy extends StoreStrategy {
   }
 
   gridDateOffset (date: number, offset: number): number {
-    // day grid
-    if (this.current.hideWeekends) {
+    if (this.current.grid === 'month') {
+      return offsetOnDay(date, offset);
+
+    } else if (this.current.hideWeekends) {
       return offsetOnWorksDay(date, offset, this.current.WEEKENDS_SET);
+
     } else {
       return offsetOnDay(date, offset);
     }

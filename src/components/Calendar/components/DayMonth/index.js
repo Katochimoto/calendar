@@ -4,17 +4,16 @@ import { PropTypes } from '../../utils/Component';
 /* @endif */
 
 import classnames from 'classnames';
-import DayEvents from '../DayEvents';
 import styles from './index.less';
 
-export default class Day extends Component {
+export default class DayMonth extends Component {
 
   componentDidMount () {
-    this.context.visible.observe(this._dayNode, ::this.handleVisible);
+    this.context.visible.observe(this._rootNode, ::this.handleVisible);
   }
 
   componentWillUnmount () {
-    this.context.visible.unobserve(this._dayNode);
+    this.context.visible.unobserve(this._rootNode);
   }
 
   componentWillReceiveProps (nextProps) {
@@ -27,15 +26,18 @@ export default class Day extends Component {
 
     return (
       props.date !== nextProps.date ||
-      props.hoursOfDay !== nextProps.hoursOfDay ||
       props.isWeekend !== nextProps.isWeekend ||
       state.isVisible !== nextState.isVisible
     );
   }
 
   transformState (props, context) {
+    const date = context.datetime.parseDate(props.date);
+
     return {
-      isVisible: props.offset === 0 || context.visible.check(this._dayNode)
+      isVisible: props.offset === 0 || context.visible.check(this._rootNode),
+      weekDay: date.getDay(),
+      monthDate: date.getDate()
     };
   }
 
@@ -44,46 +46,60 @@ export default class Day extends Component {
   }
 
   getEvents () {
-    if (!this.state.isVisible) {
-      return null;
-    }
-
     const {
       date,
-      hoursOfDay,
     } = this.props;
 
+    return null;
+  }
+
+  getHeader () {
     return (
-      <DayEvents
-        date={date}
-        hoursOfDay={hoursOfDay} />
+      <div className={styles.DayMonth_Title}>
+        {this.state.monthDate}
+      </div>
     );
   }
 
   render () {
     const classes = classnames({
-      [ styles.Day ]: true,
-      [ styles.Day__weekend ]: this.props.isWeekend,
+      [ styles.DayMonth ]: true,
+      [ styles.DayMonth__weekend ]: this.props.isWeekend
     });
 
+    const content = do {
+      if (this.state.isVisible) {
+        [
+          <div className={styles.DayMonth_Header}>
+            {this.getHeader()}
+          </div>,
+          <div className={styles.DayMonth_Content}>
+            {this.getEvents()}
+          </div>
+        ];
+      } else {
+        null;
+      }
+    };
+
     return (
-      <div className={classes} ref={node => this._dayNode = node}>
-        {this.getEvents()}
+      <div ref={node => this._rootNode = node}
+        className={classes}>
+        {content}
       </div>
     );
   }
 }
 
 /* @if NODE_ENV=='development' **
-Day.propTypes = {
+DayMonth.propTypes = {
   date: PropTypes.number,
-  hoursOfDay: PropTypes.string,
   isWeekend: PropTypes.boolean,
   offset: PropTypes.number,
 };
 /* @endif */
 
-Day.defaultProps = {
+DayMonth.defaultProps = {
   isWeekend: false,
   offset: 0,
 };

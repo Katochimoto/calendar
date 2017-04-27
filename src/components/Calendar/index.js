@@ -64,7 +64,7 @@ export default class Calendar extends Component {
 
   render () {
     return (
-      <div className={styles.calendar}>
+      <div className={styles.Calendar}>
         <CalendarGrid />
       </div>
     );

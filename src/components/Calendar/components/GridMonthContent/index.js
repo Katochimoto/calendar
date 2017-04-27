@@ -1,10 +1,8 @@
 import { StoreComponent } from '../../utils/Component';
 import resize from '../../utils/Component/resize';
 
-import Day from '../Day';
-import DayHours from '../DayHours';
 import InfiniteList from '../InfiniteList';
-import GridDaysItem from '../GridDaysItem';
+import GridMonthItem from '../GridMonthItem';
 
 import styles from './index.less';
 
@@ -19,20 +17,20 @@ export default class GridMonthContent extends StoreComponent {
 
   transformState (props, context) {
     const {
-      gridDaysItemSize,
       currentDate,
+      gridMonthItemSize,
     } = context.store.getState();
 
     return {
       currentDate,
-      gridDaysItemSize,
+      gridMonthItemSize,
     };
   }
 
   shouldComponentUpdate (nextProps, nextState) {
     return (
       this.state.currentDate !== nextState.currentDate ||
-      this.state.gridDaysItemSize !== nextState.gridDaysItemSize
+      this.state.gridMonthItemSize !== nextState.gridMonthItemSize
     );
   }
 
@@ -42,7 +40,7 @@ export default class GridMonthContent extends StoreComponent {
     store.update({
       currentDate: store.gridDateOffset(
         this.state.currentDate,
-        this.state.gridDaysItemSize
+        this.state.gridMonthItemSize
       )
     });
   }
@@ -53,7 +51,7 @@ export default class GridMonthContent extends StoreComponent {
     store.update({
       currentDate: store.gridDateOffset(
         this.state.currentDate,
-        -(this.state.gridDaysItemSize)
+        -(this.state.gridMonthItemSize)
       )
     });
   }
@@ -63,14 +61,14 @@ export default class GridMonthContent extends StoreComponent {
   }
 
   getItemElement (offset) {
-    const { gridDaysItemSize, currentDate } = this.state;
-    const date = this.context.store.gridDateOffset(currentDate, offset * gridDaysItemSize);
+    const { gridMonthItemSize, currentDate } = this.state;
+    const date = this.context.store.gridDateOffset(currentDate, offset * gridMonthItemSize);
 
     return (
-      <GridDaysItem
+      <GridMonthItem
         date={date}
-        itemSize={gridDaysItemSize}
-        ItemComponent={Day} />
+        itemSize={gridMonthItemSize}
+        offset={offset} />
     );
   }
 
@@ -87,6 +85,7 @@ export default class GridMonthContent extends StoreComponent {
         className={styles.GridMonthContent}>
 
         <InfiniteList
+          checkVisible={true}
           getItemElement={this.getItemElement}
           next={this.handleInfiniteNext}
           prev={this.handleInfinitePrev} />

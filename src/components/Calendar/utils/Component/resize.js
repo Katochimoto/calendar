@@ -12,9 +12,10 @@ export default function resize (component) {
     didMount && didMount.call(this);
     this[ ONRESIZE ] = this.handleResize.bind(this);
 
-    this[ RTIMER ] = context.requestAnimationFrame(() => {
-      this[ ONRESIZE ]();
-      context.addEventListener('resize', this[ ONRESIZE ], false);
+    const that = this;
+    this[ RTIMER ] = context.requestAnimationFrame(function _resizeMount () {
+      that[ ONRESIZE ]();
+      context.addEventListener('resize', that[ ONRESIZE ], false);
     });
   };
 

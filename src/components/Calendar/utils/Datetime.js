@@ -24,7 +24,7 @@ export default class Datetime {
   }
 
   /**
-   * День недели
+   * День недели.
    * @param {number} date
    * @returns {number}
    */

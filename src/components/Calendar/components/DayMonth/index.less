@@ -1,0 +1,35 @@
+@import (reference, once) "../../style/constant";
+
+.DayMonth {
+  display: table-cell;
+  position: relative;
+  width: 1%;
+  box-sizing: border-box;
+  border-right: 1px solid #ddd;
+
+  &:last-child {
+    border-right: none;
+  }
+
+  &__weekend {
+    background: @day-weekend-background-color;
+  }
+
+  &_Header {
+    height: 24px;
+    line-height: 24px;
+  }
+
+  &_Content {
+    position: absolute;
+    top: 24px;
+    bottom: 0;
+    left: 0;
+    right: 0;
+  }
+
+  &_Title {
+    padding: 0 6px;
+    font-size: 1.2em;
+  }
+}

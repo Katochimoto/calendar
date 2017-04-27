@@ -10,7 +10,10 @@ import styles from './index.less';
 export default class GridMonth extends Component {
   constructor (props, context) {
     super(props, context);
-    const state = context.infiniteStore.getState();
+
+    const state = { ...context.infiniteStore.getState() };
+    state.scrollY = undefined;
+    state.scrollX = undefined;
     context.infiniteStore.setStrategy(new StrategyY(state));
   }
 

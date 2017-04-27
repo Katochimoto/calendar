@@ -6,7 +6,7 @@ export function lazy (target, key, descriptor) {
   const callback = descriptor.value;
   callback._args = [];
 
-  const lazyRun = function () {
+  const _lazyRun = function () {
     const saveArgs = callback._args;
     callback._timer = 0;
     callback._args = [];
@@ -18,8 +18,8 @@ export function lazy (target, key, descriptor) {
 
     if (!callback._timer) {
       const that = this;
-      callback._timer = context.setImmediate(function lazyImmediate () {
-        lazyRun.call(that);
+      callback._timer = context.setImmediate(function _lazyImmediate () {
+        _lazyRun.call(that);
       });
     }
   };

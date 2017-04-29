@@ -1,41 +1,25 @@
-import { StoreComponent } from '../../utils/Component';
+import { Component } from '../../utils/Component';
 /* @if NODE_ENV=='development' **
 import { PropTypes } from '../../utils/Component';
 /* @endif */
 
-import classnames from 'classnames';
-import WeekMonth from '../WeekMonth';
+import MonthWeek from '../MonthWeek';
 import styles from './index.less';
 
-export default class GridMonthItem extends StoreComponent {
-  transformState (props, context) {
-    const {
-      hideWeekends,
-      weekends,
-    } = context.store.getState();
+export default class GridMonthItem extends Component {
 
-    return {
-      hideWeekends,
-      weekends,
-    };
-  }
-
-  shouldComponentUpdate (nextProps, nextState) {
-    const state = this.state;
+  shouldComponentUpdate (nextProps) {
     const props = this.props;
 
     return (
       props.date !== nextProps.date ||
-      props.itemSize !== nextProps.itemSize ||
-      state.hideWeekends !== nextState.hideWeekends ||
-      state.weekends !== nextState.weekends
+      props.itemSize !== nextProps.itemSize
     );
   }
 
   getItems () {
     const store = this.context.store;
     const { date, itemSize, offset } = this.props;
-    const { hideWeekends } = this.state;
     const items = [];
 
     let idx = 0;
@@ -44,10 +28,9 @@ export default class GridMonthItem extends StoreComponent {
       const itemDate = store.gridDateOffset(date, idx * 7);
 
       items.push(
-        <WeekMonth
+        <MonthWeek
           key={idx}
           date={itemDate}
-          hideWeekends={hideWeekends}
           offset={offset} />
       );
 

@@ -33,11 +33,14 @@ export default class DayMonth extends Component {
 
   transformState (props, context) {
     const date = context.datetime.parseDate(props.date);
+    const monthDate = date.getDate();
+    const weekDay = date.getDay();
 
     return {
+      isFirstDay: monthDate === 1,
       isVisible: props.offset === 0 || context.visible.check(this._rootNode),
-      weekDay: date.getDay(),
-      monthDate: date.getDate()
+      monthDate,
+      weekDay,
     };
   }
 
@@ -55,8 +58,10 @@ export default class DayMonth extends Component {
 
   getHeader () {
     return (
-      <div className={styles.DayMonth_Title}>
-        {this.state.monthDate}
+      <div>
+        <span className={styles.DayMonth_Date}>
+          {this.state.monthDate}
+        </span>
       </div>
     );
   }
@@ -64,7 +69,8 @@ export default class DayMonth extends Component {
   render () {
     const classes = classnames({
       [ styles.DayMonth ]: true,
-      [ styles.DayMonth__weekend ]: this.props.isWeekend
+      [ styles.DayMonth__current ]: this.props.isCurrentDate,
+      [ styles.DayMonth__weekend ]: this.props.isWeekend,
     });
 
     const content = do {
@@ -94,12 +100,14 @@ export default class DayMonth extends Component {
 /* @if NODE_ENV=='development' **
 DayMonth.propTypes = {
   date: PropTypes.number,
+  isCurrentDate: PropTypes.boolean,
   isWeekend: PropTypes.boolean,
   offset: PropTypes.number,
 };
 /* @endif */
 
 DayMonth.defaultProps = {
+  isCurrentDate: false,
   isWeekend: false,
   offset: 0,
 };

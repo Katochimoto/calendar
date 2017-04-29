@@ -16,20 +16,33 @@
   }
 
   &_Header {
-    height: 24px;
-    line-height: 24px;
+    height: 26px;
+    line-height: 26px;
   }
 
   &_Content {
     position: absolute;
-    top: 24px;
+    top: 26px;
     bottom: 0;
     left: 0;
     right: 0;
   }
 
-  &_Title {
-    padding: 0 6px;
-    font-size: 1.2em;
+  &_Date {
+    display: inline-block;
+    font-size: 13px;
+    line-height: 18px;
+    margin: 4px 5px;
+
+    .DayMonth__current & {
+      background: #f00;
+      border-radius: 50%;
+      color: #fff;
+      height: 18px;
+      width: 18px;
+      text-align: center;
+      padding: 1px;
+      margin: 3px;
+    }
   }
 }

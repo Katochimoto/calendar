@@ -4,7 +4,7 @@ import { PropTypes } from '../../utils/Component';
 /* @endif */
 
 import classnames from 'classnames';
-import DayMonth from '../DayMonth';
+import WeekMonth from '../WeekMonth';
 import styles from './index.less';
 
 export default class GridMonthItem extends StoreComponent {
@@ -44,7 +44,7 @@ export default class GridMonthItem extends StoreComponent {
       const itemDate = store.gridDateOffset(date, idx * 7);
 
       items.push(
-        <Week
+        <WeekMonth
           key={idx}
           date={itemDate}
           hideWeekends={hideWeekends}
@@ -79,35 +79,3 @@ GridMonthItem.defaultProps = {
   itemSize: 0,
   offset: 0,
 };
-
-function Week ({ date, offset, hideWeekends }, { store }) {
-  const items = [];
-
-  let idx = 0;
-  let idxLocal = 0;
-
-  while (idx < 7) {
-    const itemDate = store.gridDateOffset(date, idx);
-    const isWeekend = store.checkWeekend(itemDate);
-
-    if (!isWeekend || !hideWeekends) {
-      items.push(
-        <DayMonth
-          key={idxLocal}
-          date={itemDate}
-          isWeekend={isWeekend}
-          offset={offset} />
-      );
-
-      idxLocal++;
-    }
-
-    idx++;
-  }
-
-  return (
-    <div className={styles.GridMonthItem_Week}>
-      {items}
-    </div>
-  );
-}

@@ -18,6 +18,7 @@
       form.toggle { display: none; }
       form input { width: 60px; }
       .btn { position: absolute; z-index: 999;}
+      .code {width: 60px; overflow-x: hidden; overflow-y: auto; word-wrap: break-word; height: 50px; font-size: 10px;}
     </style>
 </head>
 <body>
@@ -29,7 +30,7 @@
       </td>
       <td valign="top">
         <form onsubmit="return onSubmit(event);">
-          <div id="form"></div>
+          <div id="form" style="overflow-y: scroll;height: 600px;"></div>
           <input type="submit" />
         </form>
       </td>
@@ -54,16 +55,18 @@
           case 'string':
           case 'number':
           case 'undefined':
-            form += '<tr><td>' + name + '</td><td><input name="' + name + '" value="' + value + '" ' + disabled + ' ' + style + ' /></td></tr>';
+            form += '<tr><td valign="top">' + name + '</td><td><input name="' + name + '" value="' + value + '" ' + disabled + ' ' + style + ' /></td></tr>';
             break;
           case 'boolean':
-            form += '<tr><td>' + name + '</td><td><input type="checkbox" name="' + name + '" ' + (value ? 'checked' : '') + ' value="1" ' + disabled + ' ' + style + ' /></td></tr>';
+            form += '<tr><td valign="top">' + name + '</td><td><input type="checkbox" name="' + name + '" ' + (value ? 'checked' : '') + ' value="1" ' + disabled + ' ' + style + ' /></td></tr>';
             break;
           case 'object':
+          default:
             if (value instanceof Date) {
-              form += '<tr><td>' + name + '</td><td><input name="' + name + '" value="' + value + '" ' + disabled + ' ' + style + ' /></td></tr>';
+              form += '<tr><td valign="top">' + name + '</td><td><input name="' + name + '" value="' + value + '" ' + disabled + ' ' + style + ' /></td></tr>';
+            } else {
+              form += '<tr><td valign="top">' + name + '</td><td><div name="' + name + '" class="code">' + JSON.stringify(value) + '</div></td></tr>';
             }
-            break;
         }
       }
 
@@ -91,10 +94,12 @@
             element.checked = Boolean(value);
             break;
           case 'object':
+          default:
             if (value instanceof Date) {
               element.value = value.toLocaleString ? value.toLocaleString() : value.toString();
+            } else {
+              element.innerText = JSON.stringify(value);
             }
-            break;
         }
       }
     }

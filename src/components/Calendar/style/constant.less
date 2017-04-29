@@ -1,5 +1,6 @@
 @base-font: 13px Arial, Helvetica, sans-serif;
 @base-font-color: #333;
+@base-font-size: 13px;
 
 @day-hours-width: 4em;
 @day-weekend-background-color: fade(#f1f1f1, 50%);
@@ -22,6 +23,13 @@
 @day-header-title-line-height: 1.3em;
 @day-header-title-font-size-mobile: 1em;
 @day-header-title-line-height-mobile: 1.2em;
+
+// сетка на месяц
+@month-title-date-font-size: @base-font-size;
+@month-title-date-margin: 4px;
+@month-title-current-date-padding: 1px;
+@month-title-date-size: @month-title-date-font-size + 4;
+@month-title-height: @month-title-date-size + @month-title-date-margin * 2;
 
 .mobile (@rules) {
   @media screen and (max-width: 480px) {

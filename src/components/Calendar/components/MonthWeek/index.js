@@ -68,9 +68,7 @@ export default class MonthWeek extends StoreComponent {
 
     return (
       <div className={styles.MonthWeek} ref={node => this._rootNode = node}>
-        <div className={styles.MonthWeek_Content}>
-          {content}
-        </div>
+        {content}
       </div>
     );
   }
@@ -123,9 +121,7 @@ function MonthWeekDays ({ date, hideWeekends }, { datetime }) {
 
   return (
     <div className={styles.MonthWeekDays}>
-      <div className={styles.MonthWeekDays_Content}>
-        {items}
-      </div>
+      {items}
     </div>
   );
 }
@@ -140,12 +136,24 @@ function MonthWeekDay ({ date, isCurrentDate, isWeekend }, { datetime }) {
     [ styles.MonthWeekDay ]: true,
     [ styles.MonthWeekDay__current ]: isCurrentDate,
     [ styles.MonthWeekDay__weekend ]: isWeekend,
+    [ styles.MonthWeekDay__first ]: isFirstDay,
   });
+
+  const monthName = do {
+    if (isFirstDay) {
+      'мая';
+    } else {
+      null;
+    }
+  };
 
   return (
     <div className={classes}>
-      <span className={styles.MonthWeekDay_Date}>
-        {monthDate}
+      <span className={styles.MonthWeekDay_DateTitle}>
+        <span className={styles.MonthWeekDay_Date}>
+          {monthDate}
+        </span>
+        {monthName}
       </span>
     </div>
   );

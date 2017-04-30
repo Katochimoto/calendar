@@ -3,7 +3,7 @@ import context from '../../context';
 const ONRESIZE = Symbol('resize-callback');
 const RTIMER = Symbol('resize-timer');
 
-export default function resize (component) {
+export function resize (component) {
   const proto = component.prototype;
   const didMount = proto.componentDidMount;
   const willUnmount = proto.componentWillUnmount;

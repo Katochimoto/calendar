@@ -8,6 +8,7 @@ import Events from './utils/Events';
 import GridStore from './utils/GridStore';
 import InfiniteStore from './utils/InfiniteStore';
 import ElementVisible from './utils/ElementVisible';
+import DateVisible from './utils/DateVisible';
 
 import styles from './index.less';
 
@@ -22,6 +23,11 @@ export default class Calendar extends Component {
       store: new GridStore(),
       visible: new ElementVisible(),
     };
+
+    new DateVisible(
+      this.state.store,
+      this.state.infiniteStore
+    );
 
     // FIXME remove later
     window.store = this.state.store;

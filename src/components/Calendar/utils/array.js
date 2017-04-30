@@ -3,12 +3,14 @@
 import { HOURMS } from '../utils/date';
 
 export function toObject (
-  value: Array<string|number>
-): {[id:string|number]: number} {
-  const data: {[id:string|number]: number} = {};
+  value: number[]
+): {[id:number]: number} {
+  const data: {[id:number]: number} = {};
+
   for (let i = 0, len = value.length; i < len; i++) {
      data[ value[ i ] ] = i;
   }
+
   return data;
 }
 

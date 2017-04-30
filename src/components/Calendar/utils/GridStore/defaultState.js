@@ -1,3 +1,4 @@
+import { GRID } from '../../constant';
 import { HOURMS } from '../date';
 import { toObject, createIntervals } from '../array';
 
@@ -11,7 +12,7 @@ const WEEKENDS = '0,6';
 const WEEKENDS_SET = toObject(WEEKENDS.split(',').map(Number));
 
 export default {
-  grid: 'month',
+  grid: GRID.MONTH,
   scaleY: 200,
 
   //gridHeight: 0,
@@ -33,14 +34,14 @@ export default {
    * @type {number}
    * @public
    */
-  gridMonthItemSize: 7 * 5,
+  gridMonthItemSize: 5,
 
   /**
    * Текущая дата
    * @type {string}
    * @public
    */
-  currentDate: 20170327,
+  currentDate: 20170501,
 
   /**
    * Рабочие часы в сутках

@@ -3,6 +3,7 @@
 import StoreStrategy from '../StoreStrategy';
 import { toObject, createIntervals } from '../array';
 import { offsetOnDay, offsetOnWorksDay, HOURMS } from '../date';
+import { GRID } from '../../constant';
 import defaultState from './defaultState';
 
 export default class Strategy extends StoreStrategy {
@@ -11,7 +12,7 @@ export default class Strategy extends StoreStrategy {
   }
 
   gridDateOffset (date: number, offset: number): number {
-    if (this.current.grid === 'month') {
+    if (this.current.grid === GRID.MONTH) {
       return offsetOnDay(date, offset);
 
     } else if (this.current.hideWeekends) {
@@ -33,9 +34,9 @@ export default class Strategy extends StoreStrategy {
     const list = value
       .split(',')
       .map(Number)
-      .filter(item => (item >= 0 && item <= 23));
+      .filter((item: number) => (item >= 0 && item <= 23));
 
-    list.sort((a, b) => (a - b));
+    list.sort((a: number, b: number) => (a - b));
 
     value = list.join(',');
 
@@ -52,9 +53,9 @@ export default class Strategy extends StoreStrategy {
     const list = value
       .split(',')
       .map(Number)
-      .filter(item => (item >= 0 && item <= 6));
+      .filter((item: number) => (item >= 0 && item <= 6));
 
-    list.sort((a, b) => (a - b));
+    list.sort((a: number, b: number) => (a - b));
 
     value = list.join(',');
 

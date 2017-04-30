@@ -10,11 +10,14 @@ export default class EventEmitter {
   }
 
   destroy () {
-    this._callbacks = undefined;
+    this._callbacks = [];
   }
 
   emitChangeSync (): void {
-    for (let i = 0, len = this._callbacks.length; i < len; i++) {
+    const len = this._callbacks.length;
+    let i = 0;
+
+    for (; i < len; i++) {
       const item = this._callbacks[i];
       if (item[1]) {
         item[0].call(item[1]);

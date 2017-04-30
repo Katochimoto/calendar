@@ -1,20 +1,23 @@
-import { StoreComponent } from '../../utils/Component';
+import { Component } from '../../utils/Component';
 /* @if NODE_ENV=='development' **
 import { PropTypes } from '../../utils/Component';
 /* @endif */
 
-import classnames from 'classnames';
+import MonthWeekDays from '../MonthWeekDays';
+import MonthWeekEvents from '../MonthWeekEvents';
 import styles from './index.less';
 
-export default class MonthWeek extends StoreComponent {
+export default class MonthWeek extends Component {
+  constructor (props, context) {
+    super(props, context);
+    this.handleVisible = this.handleVisible.bind(this);
+  }
 
   componentDidMount () {
-    super.componentDidMount();
-    this.context.visible.observe(this._rootNode, ::this.handleVisible);
+    this.context.visible.observe(this._rootNode, this.handleVisible);
   }
 
   componentWillUnmount () {
-    super.componentWillUnmount();
     this.context.visible.unobserve(this._rootNode);
   }
 
@@ -28,23 +31,21 @@ export default class MonthWeek extends StoreComponent {
 
     return (
       props.date !== nextProps.date ||
+      props.hideWeekends !== nextProps.hideWeekends ||
       props.offset !== nextProps.offset ||
-      state.isVisible !== nextState.isVisible ||
-      state.hideWeekends !== nextState.hideWeekends ||
-      state.weekends !== nextState.weekends
+      props.weekends !== nextProps.weekends ||
+      state.isVisible !== nextState.isVisible
     );
   }
 
   transformState (props, context) {
-    const {
-      hideWeekends,
-      weekends,
-    } = context.store.getState();
+    const isVisible = (
+      props.offset === 0 ||
+      context.visible.check(this._rootNode)
+    );
 
     return {
-      isVisible: props.offset === 0 || context.visible.check(this._rootNode),
-      hideWeekends,
-      weekends,
+      isVisible
     };
   }
 
@@ -53,12 +54,13 @@ export default class MonthWeek extends StoreComponent {
   }
 
   render () {
+    const { date, hideWeekends } = this.props;
     const content = do {
       if (this.state.isVisible) {
         [
           <MonthWeekDays
-            date={this.props.date}
-            hideWeekends={this.state.hideWeekends} />,
+            date={date}
+            hideWeekends={hideWeekends} />,
           <MonthWeekEvents />
         ];
       } else {
@@ -77,84 +79,15 @@ export default class MonthWeek extends StoreComponent {
 /* @if NODE_ENV=='development' **
 MonthWeek.propTypes = {
   date: PropTypes.number,
+  hideWeekends: PropTypes.boolean,
   offset: PropTypes.number,
+  weekends: PropTypes.string,
 };
 /* @endif */
 
 MonthWeek.defaultProps = {
   date: 0,
+  hideWeekends: false,
   offset: 0,
+  weekends: '',
 };
-
-function MonthWeekEvents ({ date, hideWeekends }, { datetime }) {
-  return (
-    <div className={styles.MonthWeekEvents}>
-
-    </div>
-  );
-}
-
-function MonthWeekDays ({ date, hideWeekends }, { datetime }) {
-  const items = [];
-
-  let idx = 0;
-  let idxLocal = 0;
-
-  while (idx < 7) {
-    const itemDate = store.gridDateOffset(date, idx);
-    const isWeekend = store.checkWeekend(itemDate);
-
-    if (!isWeekend || !hideWeekends) {
-      items.push(
-        <MonthWeekDay
-          key={idxLocal}
-          date={itemDate}
-          isCurrentDate={isWeekend}
-          isWeekend={isWeekend} />
-      );
-
-      idxLocal++;
-    }
-
-    idx++;
-  }
-
-  return (
-    <div className={styles.MonthWeekDays}>
-      {items}
-    </div>
-  );
-}
-
-function MonthWeekDay ({ date, isCurrentDate, isWeekend }, { datetime }) {
-  date = datetime.parseDate(date);
-  const monthDate = date.getDate();
-  const weekDay = date.getDay();
-  const isFirstDay = monthDate === 1;
-
-  const classes = classnames({
-    [ styles.MonthWeekDay ]: true,
-    [ styles.MonthWeekDay__current ]: isCurrentDate,
-    [ styles.MonthWeekDay__weekend ]: isWeekend,
-    [ styles.MonthWeekDay__first ]: isFirstDay,
-  });
-
-  const monthName = do {
-    if (isFirstDay) {
-      'мая';
-    } else {
-      null;
-    }
-  };
-
-  return (
-    <div className={classes}>
-      <span className={styles.MonthWeekDay_DateTitle}>
-        <span className={styles.MonthWeekDay_Date}>
-          {monthDate}
-        </span>
-        {monthName}
-      </span>
-    </div>
-  );
-}

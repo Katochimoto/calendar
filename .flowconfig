@@ -1,5 +1,11 @@
+[ignore]
+src/**/*.spec.js
+
 [include]
 src/**/*.js
 
 [options]
+emoji=true
+module.use_strict=true
 esproposal.decorators=ignore
+server.max_workers=1

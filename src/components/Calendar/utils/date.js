@@ -2,6 +2,13 @@
 
 export const HOURMS = 60 * 60 * 1000;
 
+export const WEEKDAYS = 7;
+
+/**
+ * Формирование объекта даты из числового представления.
+ * @param {number} date 
+ * @returns {Date}
+ */
 export function parseDate (date: number): Date {
   const _ = date / 100 ^ 0;
   const y = date / 10000 ^ 0;
@@ -10,6 +17,11 @@ export function parseDate (date: number): Date {
   return new Date(y, m, d, 0, 0, 0, 0);
 }
 
+/**
+ * Формирование числового представления даты из объекта.
+ * @param {Date} date 
+ * @returns {number}
+ */
 export function formatDate (date: Date): number {
   return (
     (date.getFullYear() * 10000) +
@@ -51,7 +63,7 @@ export function offsetOnWorksDay (
   const d = parseDate(date);
   let len = Object.keys(weekends).length;
 
-  if (len > 0 && len < 7) {
+  if (len > 0 && len < WEEKDAYS) {
     const sig = offset < 0 ? -1 : 1;
     offset = Math.abs(offset);
 

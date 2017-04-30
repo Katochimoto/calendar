@@ -4,3 +4,8 @@ export const ASCROLL = {
   ON: 1,
   STOP: -1,
 };
+
+export const GRID = {
+  DAY: 'day',
+  MONTH: 'month',
+};

@@ -1,18 +1,19 @@
 // @flow
 
 import { getDay, parseDate, formatDate } from './date';
-import DatetimeStrategyDefault from './Datetime/DatetimeStrategyDefault';
+import Strategy from './Datetime/Strategy';
 
 interface DatetimeStrategy {
-  gridDaysHourTitle (hour: number): string;
   gridDaysDayTitle (date: Date): string;
+  gridDaysHourTitle (hour: number): string;
+  monthNameGenShort (date: Date): string;
 }
 
 export default class Datetime {
   _strategy: DatetimeStrategy;
 
   constructor (strategy: ?DatetimeStrategy) {
-    this._strategy = strategy || (new DatetimeStrategyDefault: DatetimeStrategy);
+    this._strategy = strategy || (new Strategy: DatetimeStrategy);
   }
 
   gridDaysHourTitle (hour: number): string {
@@ -21,6 +22,10 @@ export default class Datetime {
 
   gridDaysDayTitle (date: number): string {
     return this._strategy.gridDaysDayTitle(parseDate(date));
+  }
+
+  monthNameGenShort (date: number): string {
+    return this._strategy.monthNameGenShort(parseDate(date));
   }
 
   /**

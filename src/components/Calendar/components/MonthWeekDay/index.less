@@ -1,0 +1,59 @@
+@import (reference, once) "../../style/constant";
+
+.MonthWeekDay {
+  flex-grow: 1;
+  flex-basis: 0;
+  flex-shrink: 0;
+  box-sizing: border-box;
+  border-right: 1px solid #ddd;
+  border-top: 1px solid #ddd;
+  position: relative;
+  overflow: hidden;
+
+  &:last-child {
+    border-right: none;
+  }
+
+  &__weekend {
+    background: @day-weekend-background-color;
+  }
+
+  &_DateTitle {
+    position: absolute;
+    top: 0;
+    right: 0;
+    display: inline-block;
+    line-height: @month-title-date-size;
+    margin: @month-title-date-margin;
+    font-size: @month-title-date-font-size;
+    cursor: pointer;
+    text-transform: lowercase;
+
+    .MonthWeekDay__current & {
+      margin: @month-title-date-margin - @month-title-current-date-padding;
+    }
+
+    .MonthWeekDay__first & {
+      margin-left: @month-title-date-margin;
+      margin-right: @month-title-date-margin;
+    }
+  }
+
+  &_Date {
+    display: inline-block;
+
+    .MonthWeekDay__current & {
+      background: #f00;
+      border-radius: 50%;
+      color: #fff;
+      height: @month-title-date-size;
+      width: @month-title-date-size;
+      text-align: center;
+      padding: @month-title-current-date-padding;
+    }
+
+    .MonthWeekDay__first & {
+      margin-right: 3px;
+    }
+  }
+}

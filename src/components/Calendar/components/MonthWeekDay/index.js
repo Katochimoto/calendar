@@ -9,14 +9,26 @@ export default function MonthWeekDay ({ date, isCurrentDate, isWeekend }, { date
 
   const classes = classnames({
     [ styles.MonthWeekDay ]: true,
-    [ styles.MonthWeekDay__current ]: isCurrentDate,
-    [ styles.MonthWeekDay__first ]: isFirstDay,
     [ styles.MonthWeekDay__weekend ]: isWeekend,
+  });
+
+  const classesDateTitle = classnames({
+    [ styles.MonthWeekDay_DateTitle ]: true,
+    [ styles.MonthWeekDay_DateTitle__current ]: isCurrentDate,
+  });
+
+  const classesDate = classnames({
+    [ styles.MonthWeekDay_Date ]: true,
+    [ styles.MonthWeekDay_Date__current ]: isCurrentDate,
   });
 
   const monthName = do {
     if (isFirstDay) {
-      datetime.monthNameGenShort(date);
+      (
+        <span className={styles.MonthWeekDay_Month}>
+          {datetime.monthNameGenShort(date)}
+        </span>
+      );
     } else {
       null;
     }
@@ -24,8 +36,8 @@ export default function MonthWeekDay ({ date, isCurrentDate, isWeekend }, { date
 
   return (
     <div className={classes}>
-      <span className={styles.MonthWeekDay_DateTitle}>
-        <span className={styles.MonthWeekDay_Date}>
+      <span className={classesDateTitle}>
+        <span className={classesDate}>
           {monthDate}
         </span>
         {monthName}

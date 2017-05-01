@@ -1,6 +1,6 @@
 // @flow
 
-import { lazy } from './Component/lazy';
+import { lazy } from './decorators/lazy';
 
 export default class EventEmitter {
   _callbacks: Array<[Function, Object]>;

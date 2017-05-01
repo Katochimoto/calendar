@@ -1,6 +1,6 @@
 // @flow
 
-import { lazy } from '../Component/lazy';
+import { lazy } from '../decorators/lazy';
 import EventEmitter from '../EventEmitter';
 
 export default class EventsStrategyDefault extends EventEmitter {

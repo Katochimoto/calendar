@@ -1,6 +1,6 @@
 // @flow
 
-import { qlazy } from './Component/lazy';
+import { qlazy } from './decorators/lazy';
 import EventEmitter from './EventEmitter';
 import EventsStrategyDefault from './Events/EventsStrategyDefault';
 

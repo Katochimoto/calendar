@@ -8,7 +8,7 @@ import Events from './utils/Events';
 import GridStore from './utils/GridStore';
 import InfiniteStore from './utils/InfiniteStore';
 import ElementVisible from './utils/ElementVisible';
-import DateVisible from './utils/DateVisible';
+import DateVisible from './utils/components/DateVisible';
 
 import styles from './index.less';
 

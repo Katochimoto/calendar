@@ -1,7 +1,7 @@
 import React from 'react';
-import context from './Component/context';
-import stateful from './Component/stateful';
-import mutable from './Component/mutable';
+import context from './decorators/context';
+import stateful from './decorators/stateful';
+import mutable from './decorators/mutable';
 
 export const PropTypes = React.PropTypes;
 

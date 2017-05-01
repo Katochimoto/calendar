@@ -1,14 +1,14 @@
 @import (reference, once) "../../style/constant";
 
 .MonthWeekDay {
-  flex-grow: 1;
-  flex-basis: 0;
-  flex-shrink: 0;
-  box-sizing: border-box;
   border-right: 1px solid #ddd;
   border-top: 1px solid #ddd;
-  position: relative;
+  box-sizing: border-box;
+  flex-basis: 0;
+  flex-grow: 1;
+  flex-shrink: 0;
   overflow: hidden;
+  position: relative;
 
   &:last-child {
     border-right: none;
@@ -28,32 +28,32 @@
     font-size: @month-title-date-font-size;
     cursor: pointer;
     text-transform: lowercase;
+    text-align: right;
 
-    .MonthWeekDay__current & {
+    &__current {
       margin: @month-title-date-margin - @month-title-current-date-padding;
-    }
-
-    .MonthWeekDay__first & {
-      margin-left: @month-title-date-margin;
-      margin-right: @month-title-date-margin;
     }
   }
 
   &_Date {
     display: inline-block;
 
-    .MonthWeekDay__current & {
-      background: #f00;
+    &__current {
+      background: @month-title-current-background;
       border-radius: 50%;
-      color: #fff;
+      color: @month-title-current-color;
       height: @month-title-date-size;
-      width: @month-title-date-size;
-      text-align: center;
       padding: @month-title-current-date-padding;
+      text-align: center;
+      width: @month-title-date-size;
     }
+  }
 
-    .MonthWeekDay__first & {
-      margin-right: 3px;
-    }
+  &_Month {
+    margin-left: 3px;
+
+    .mobile({
+      display: none;
+    })
   }
 }

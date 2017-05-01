@@ -1,6 +1,6 @@
 import { StoreComponent } from '../../utils/Component';
 import { WEEKDAYS } from '../../utils/date';
-import { resize } from '../../utils/Component/resize';
+import { resize } from '../../utils/decorators/resize';
 
 import InfiniteList from '../InfiniteList';
 import GridMonthItem from '../GridMonthItem';

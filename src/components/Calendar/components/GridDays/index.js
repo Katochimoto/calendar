@@ -1,6 +1,6 @@
 import { Component } from '../../utils/Component';
 import StrategyX from '../../utils/InfiniteStore/StrategyX';
-import wheel from '../../utils/Component/wheel';
+import wheel from '../../utils/decorators/wheel';
 
 import GridDaysHeader from '../GridDaysHeader';
 import GridDaysContent from '../GridDaysContent';

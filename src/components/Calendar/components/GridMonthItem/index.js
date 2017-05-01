@@ -3,8 +3,6 @@ import { StoreComponent } from '../../utils/Component';
 import { PropTypes } from '../../utils/Component';
 /* @endif */
 
-import { WEEKDAYS } from '../../utils/date';
-
 import MonthWeek from '../MonthWeek';
 import styles from './index.less';
 
@@ -44,7 +42,7 @@ export default class GridMonthItem extends StoreComponent {
     let idx = 0;
 
     while (idx < itemSize) {
-      const itemDate = store.gridDateOffset(date, idx * WEEKDAYS);
+      const itemDate = store.gridDateOffset(date, idx);
 
       items.push(
         <MonthWeek

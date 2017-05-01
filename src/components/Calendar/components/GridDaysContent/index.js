@@ -78,8 +78,15 @@ export default class GridDaysContent extends StoreComponent {
   }
 
   getItemElement (offset) {
-    const { gridDaysItemSize, currentDate } = this.state;
-    const date = this.context.store.gridDateOffset(currentDate, offset * gridDaysItemSize);
+    const {
+      currentDate,
+      gridDaysItemSize,
+    } = this.state;
+    
+    const date = this.context.store.gridDateOffset(
+      currentDate,
+      offset * gridDaysItemSize
+    );
 
     return (
       <GridDaysItem

@@ -102,6 +102,7 @@ export default {
         //'react'
       ],
       plugins: [
+        'external-helpers',
         'transform-flow-strip-types',
         'transform-decorators-legacy',
         'transform-do-expressions',

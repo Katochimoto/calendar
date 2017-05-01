@@ -2,7 +2,7 @@
 
 import StoreStrategy from '../StoreStrategy';
 import { toObject, createIntervals } from '../array';
-import { offsetOnDay, offsetOnWorksDay, HOURMS } from '../date';
+import { offsetOnDay, offsetOnWorksDay, HOURMS, WEEKDAYS } from '../date';
 import { GRID } from '../../constant';
 import defaultState from './defaultState';
 
@@ -13,7 +13,7 @@ export default class Strategy extends StoreStrategy {
 
   gridDateOffset (date: number, offset: number): number {
     if (this.current.grid === GRID.MONTH) {
-      return offsetOnDay(date, offset);
+      return offsetOnDay(date, offset * WEEKDAYS);
 
     } else if (this.current.hideWeekends) {
       return offsetOnWorksDay(date, offset, this.current.WEEKENDS_SET);

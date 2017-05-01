@@ -1,5 +1,4 @@
 import { StoreComponent } from '../../utils/Component';
-import { WEEKDAYS } from '../../utils/date';
 import { resize } from '../../utils/decorators/resize';
 
 import InfiniteList from '../InfiniteList';
@@ -24,7 +23,6 @@ export default class GridMonthContent extends StoreComponent {
 
     return {
       currentDate,
-      gridMonthDaysOffset: gridMonthItemSize * WEEKDAYS,
       gridMonthItemSize,
     };
   }
@@ -42,7 +40,7 @@ export default class GridMonthContent extends StoreComponent {
     store.update({
       currentDate: store.gridDateOffset(
         this.state.currentDate,
-        this.state.gridMonthDaysOffset
+        this.state.gridMonthItemSize
       )
     });
   }
@@ -53,7 +51,7 @@ export default class GridMonthContent extends StoreComponent {
     store.update({
       currentDate: store.gridDateOffset(
         this.state.currentDate,
-        -(this.state.gridMonthDaysOffset)
+        -(this.state.gridMonthItemSize)
       )
     });
   }
@@ -65,13 +63,12 @@ export default class GridMonthContent extends StoreComponent {
   getItemElement (offset) {
     const {
       currentDate,
-      gridMonthDaysOffset,
       gridMonthItemSize,
     } = this.state;
 
     const date = this.context.store.gridDateOffset(
       currentDate,
-      offset * gridMonthDaysOffset
+      offset * gridMonthItemSize
     );
 
     return (

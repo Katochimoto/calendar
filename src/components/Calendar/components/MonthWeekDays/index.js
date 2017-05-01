@@ -3,14 +3,14 @@ import { WEEKDAYS } from '../../utils/date';
 import MonthWeekDay from '../MonthWeekDay';
 import styles from './index.less';
 
-export default function MonthWeekDays ({ date, hideWeekends }, { store }) {
+export default function MonthWeekDays ({ date, hideWeekends }, { store, datetime }) {
   const items = [];
 
   let idx = 0;
   let idxLocal = 0;
 
   while (idx < WEEKDAYS) {
-    const itemDate = store.gridDateOffset(date, idx);
+    const itemDate = datetime.offsetOnDay(date, idx);
     const isWeekend = store.checkWeekend(itemDate);
 
     if (!isWeekend || !hideWeekends) {

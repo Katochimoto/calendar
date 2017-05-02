@@ -65,9 +65,9 @@ export default class DateVisible {
     }
 
     const rangeY = [
-      visibleStart | 0,
+      (visibleStart | 0) - gridMonthItemSize,
       visibleRateStart,
-      visibleEnd | 0,
+      (visibleEnd | 0) - gridMonthItemSize,
       visibleRateEnd
     ];
 

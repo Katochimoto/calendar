@@ -23,6 +23,13 @@ export default class StrategyY extends Strategy {
     );
   }
 
+  getVisibleRange () {
+    return this._getVisibleRange(
+      this.current.scrollY,
+      this.current.scrollHeight
+    );
+  }
+
   _getScrollYByOffset (offset: number): number {
     return (
       -1 * (offset + 1) *
@@ -106,6 +113,14 @@ export default class StrategyY extends Strategy {
     if (value !== this.current.scrollY) {
       this.current.scrollY = value;
       this._correctScrollY();
+      this.isChanged = true;
+    }
+  }
+
+  _listRangeSetter (value) {
+    value = value | 0;
+    if (value > 0 && value !== this.current.listRange) {
+      this.current.listRange = value;
       this.isChanged = true;
     }
   }

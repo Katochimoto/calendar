@@ -49,7 +49,7 @@ export default class DateVisible {
       scrollY,
     } = this._state;
 
-    const itemCount = listRange * 2 + 1;
+    /*const itemCount = listRange * 2 + 1;
     const itemSize = itemCount * gridMonthItemSize;
     const height = itemCount * scrollHeight;
     const itemHeight = height / itemSize;
@@ -69,6 +69,24 @@ export default class DateVisible {
       visibleRateStart,
       (visibleEnd | 0) - gridMonthItemSize,
       visibleRateEnd
+    ];*/
+
+    const itemSize = listRange * 2 + 1;
+    const visibleStart = Math.abs(scrollY / scrollHeight);
+    const visibleRateStart = 10000 - (visibleStart % 1 * 10000 | 0);
+    let visibleEnd = visibleStart + 1;
+    let visibleRateEnd = 10000 - visibleRateStart;
+
+    if (visibleRateEnd === 0) {
+      visibleEnd--;
+      visibleRateEnd = 10000;
+    }
+
+    const rangeY = [
+      (visibleStart | 0) - listRange,
+      visibleRateStart / 100,
+      (visibleEnd | 0) - listRange,
+      visibleRateEnd / 100
     ];
 
     console.log(rangeY);

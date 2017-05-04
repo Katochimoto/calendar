@@ -80,6 +80,14 @@ export default class Strategy extends StoreStrategy {
     return true;
   }
 
+  /**
+   * @abstract
+   * @returns {Object}
+   */
+  getVisibleRange () {
+    return {};
+  }
+
   _limitScroll (value: number, min: number, max: number): number {
     return (
       value < min ? min :
@@ -137,5 +145,25 @@ export default class Strategy extends StoreStrategy {
     }
 
     return 0;
+  }
+
+  _getVisibleRange (scroll, size) {
+    const precision = 10000;
+    const listRange = this.current.listRange;
+    const itemSize = listRange * 2 + 1;
+    const visibleStart = Math.abs(scroll / size);
+    const visibleRateStart = precision - (visibleStart % 1 * precision | 0);
+    let visibleEnd = visibleStart + 1;
+    let visibleRateEnd = precision - visibleRateStart;
+
+    if (visibleRateEnd === 0) {
+      visibleEnd--;
+      visibleRateEnd = precision;
+    }
+
+    return {
+      [ (visibleStart | 0) - listRange ]: visibleRateStart / 100,
+      [ (visibleEnd | 0) - listRange ]: visibleRateEnd / 100,
+    };
   }
 }

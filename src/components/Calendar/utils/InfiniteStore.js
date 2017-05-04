@@ -22,4 +22,8 @@ export default class InfiniteStore extends Store {
   isVisibleOffset (offset: number): boolean {
     return this._strategy.isVisibleOffset(offset);
   }
+
+  getVisibleRange () {
+    return this._strategy.getVisibleRange();
+  }
 }

@@ -23,6 +23,13 @@ export default class StrategyX extends Strategy {
     );
   }
 
+  getVisibleRange () {
+    return this._getVisibleRange(
+      this.current.scrollX,
+      this.current.scrollWidth
+    );
+  }
+
   _getScrollXByOffset (offset: number): number {
     return (
       -1 * (offset + 1) *

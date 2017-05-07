@@ -3,7 +3,7 @@
 import Store from './Store';
 import StoreStrategy from './StoreStrategy';
 import Strategy from './GridStore/Strategy';
-import { getDay } from './date';
+import { getDay } from '../utils/date';
 
 export default class GridStore extends Store {
   constructor (strategy: StoreStrategy) {

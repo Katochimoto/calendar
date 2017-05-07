@@ -1,3 +1,5 @@
+// @flow
+
 export default class StoreStrategy {
   state: {[id:string]: any};
   current: {[id:string]: any};

@@ -1,13 +1,21 @@
 // @flow
-import GridStore from '../GridStore';
-import InfiniteStore from '../InfiniteStore';
-import { idle } from '../decorators/lazy';
 
-export default class DateVisible {
+import Store from './Store';
+import StoreStrategy from './StoreStrategy';
+import Strategy from './DateVisible/Strategy';
+
+import GridStore from './GridStore';
+import InfiniteStore from './InfiniteStore';
+
+import { idle } from '../utils/decorators/lazy';
+
+export default class DateVisible extends Store {
   _grid: ?GridStore;
   _infinite: ?InfiniteStore;
 
   constructor (grid: GridStore, infinite: InfiniteStore) {
+    super(new Strategy: StoreStrategy);
+
     this._grid = grid;
     this._infinite = infinite;
 
@@ -27,6 +35,8 @@ export default class DateVisible {
       this._infinite.removeChangeListener(this._handleChange, this);
       this._infinite = null;
     }
+
+    super.destroy();
   }
 
   /**
@@ -42,54 +52,30 @@ export default class DateVisible {
     this._updateState();
 
     const {
+      currentDate,
+      gridDaysItemSize,
       gridMonthItemSize,
-
-      listRange,
-      scrollHeight,
-      scrollY,
+      hideWeekends,
+      weekends,
     } = this._state;
 
-    /*const itemCount = listRange * 2 + 1;
-    const itemSize = itemCount * gridMonthItemSize;
-    const height = itemCount * scrollHeight;
-    const itemHeight = height / itemSize;
+    const range = this._infinite.getVisibleRange();
+    const len = range.length;
 
-    const visibleStart = Math.abs(scrollY / itemHeight);
-    let visibleEnd = visibleStart + gridMonthItemSize;
-    const visibleRateStart = 100 - (visibleStart % 1 * 100 | 0);
-    let visibleRateEnd = 100 - visibleRateStart;
+    for (let i = 0; i < len; i = i + 2) {
+      const item = range[i];
+      const rate = range[i + 1];
 
-    if (visibleRateEnd === 0) {
-      visibleEnd--;
-      visibleRateEnd = 100;
+      // обход с начала
+      if (i % 4) {
+
+      // обход с конца
+      } else {
+
+      }
     }
 
-    const rangeY = [
-      (visibleStart | 0) - gridMonthItemSize,
-      visibleRateStart,
-      (visibleEnd | 0) - gridMonthItemSize,
-      visibleRateEnd
-    ];*/
-
-    const itemSize = listRange * 2 + 1;
-    const visibleStart = Math.abs(scrollY / scrollHeight);
-    const visibleRateStart = 10000 - (visibleStart % 1 * 10000 | 0);
-    let visibleEnd = visibleStart + 1;
-    let visibleRateEnd = 10000 - visibleRateStart;
-
-    if (visibleRateEnd === 0) {
-      visibleEnd--;
-      visibleRateEnd = 10000;
-    }
-
-    const rangeY = [
-      (visibleStart | 0) - listRange,
-      visibleRateStart / 100,
-      (visibleEnd | 0) - listRange,
-      visibleRateEnd / 100
-    ];
-
-    console.log(rangeY);
+    console.log(range);
   }
 
   _updateState () {

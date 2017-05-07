@@ -1,20 +1,20 @@
 import { Component, PropTypes } from './utils/Component';
-import context from './context';
 
 import CalendarGrid from './components/CalendarGrid';
 
 import Datetime from './utils/Datetime';
 import Events from './utils/Events';
-import GridStore from './utils/GridStore';
-import InfiniteStore from './utils/InfiniteStore';
 import ElementVisible from './utils/ElementVisible';
-import DateVisible from './utils/components/DateVisible';
+
+import GridStore from './stores/GridStore';
+import InfiniteStore from './stores/InfiniteStore';
+import DateVisible from './stores/DateVisible';
 
 import styles from './index.less';
 
 export default class Calendar extends Component {
-  constructor (props, componentContext) {
-    super(props, componentContext);
+  constructor (props, context) {
+    super(props, context);
 
     this.state = {
       datetime: new Datetime(),

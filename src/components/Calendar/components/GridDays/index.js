@@ -1,5 +1,4 @@
 import { Component } from '../../utils/Component';
-import StrategyX from '../../utils/InfiniteStore/StrategyX';
 import wheel from '../../utils/decorators/wheel';
 
 import GridDaysHeader from '../GridDaysHeader';
@@ -11,12 +10,7 @@ import styles from './index.less';
 export default class GridDays extends Component {
   constructor (props, context) {
     super(props, context);
-    const state = context.infiniteStore.getState();
-    context.infiniteStore.setStrategy(new StrategyX(state));
-  }
-
-  shouldComponentUpdate () {
-    return false;
+    context.infiniteStore.switchStrategyX();
   }
 
   handleWheel (deltaX, deltaY) {

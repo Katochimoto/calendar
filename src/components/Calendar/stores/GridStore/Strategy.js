@@ -1,8 +1,8 @@
 // @flow
 
 import StoreStrategy from '../StoreStrategy';
-import { toObject, createIntervals } from '../array';
-import { offsetOnDay, offsetOnWorksDay, HOURMS, WEEKDAYS } from '../date';
+import { toObject, createIntervals } from '../../utils/array';
+import { offsetOnDay, offsetOnWorksDay, HOURMS, WEEKDAYS } from '../../utils/date';
 import { GRID } from '../../constant';
 import defaultState from './defaultState';
 

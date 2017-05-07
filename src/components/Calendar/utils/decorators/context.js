@@ -1,9 +1,10 @@
 import React from 'react';
 import Datetime from '../Datetime';
 import Events from '../Events';
-import GridStore from '../GridStore';
-import InfiniteStore from '../InfiniteStore';
 import ElementVisible from '../ElementVisible';
+
+import GridStore from '../../stores/GridStore';
+import InfiniteStore from '../../stores/InfiniteStore';
 
 export default function context (component) {
   component.contextTypes = {

@@ -1,5 +1,4 @@
 import { Component } from '../../utils/Component';
-import StrategyY from '../../utils/InfiniteStore/StrategyY';
 import wheel from '../../utils/decorators/wheel';
 
 import GridMonthContent from '../GridMonthContent';
@@ -10,15 +9,7 @@ import styles from './index.less';
 export default class GridMonth extends Component {
   constructor (props, context) {
     super(props, context);
-
-    const state = { ...context.infiniteStore.getState() };
-    state.scrollY = undefined;
-    state.scrollX = undefined;
-    context.infiniteStore.setStrategy(new StrategyY(state));
-  }
-
-  shouldComponentUpdate () {
-    return false;
+    context.infiniteStore.switchStrategyY();
   }
 
   handleWheel (deltaX, deltaY) {

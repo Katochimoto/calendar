@@ -24,7 +24,7 @@ export default class Calendar extends Component {
       visible: new ElementVisible(),
     };
 
-    new DateVisible(
+    this._visible = new DateVisible(
       this.state.store,
       this.state.infiniteStore
     );
@@ -32,6 +32,7 @@ export default class Calendar extends Component {
     // FIXME remove later
     window.store = this.state.store;
     window.infiniteStore = this.state.infiniteStore;
+    window.visibleStore = this._visible;
   }
 
   getChildContext () {

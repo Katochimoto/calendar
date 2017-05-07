@@ -6,7 +6,7 @@ export const WEEKDAYS = 7;
 
 /**
  * Формирование объекта даты из числового представления.
- * @param {number} date 
+ * @param {number} date
  * @returns {Date}
  */
 export function parseDate (date: number): Date {
@@ -19,7 +19,7 @@ export function parseDate (date: number): Date {
 
 /**
  * Формирование числового представления даты из объекта.
- * @param {Date} date 
+ * @param {Date} date
  * @returns {number}
  */
 export function formatDate (date: Date): number {
@@ -89,4 +89,15 @@ export function offsetOnWorksDay (
  */
 export function getDay (date: number): number {
   return parseDate(date).getDay();
+}
+
+/**
+ * Первый день месяца.
+ * @param {number} date
+ * @returns {number}
+ */
+export function getMonthDate (date: number): number {
+  const d = parseDate(date);
+  d.setDate(1);
+  return formatDate(d);
 }

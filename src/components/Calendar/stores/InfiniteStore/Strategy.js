@@ -155,13 +155,6 @@ export default class Strategy extends StoreStrategy {
     const startRate = precision - (start % 1 * precision | 0);
     const startItem = (start | 0) - listRange;
 
-    if (startRate === precision) {
-      return [
-        startItem,
-        startRate / 100
-      ];
-    }
-
     return [
       startItem,
       startRate / 100,

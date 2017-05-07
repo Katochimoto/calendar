@@ -8,6 +8,7 @@ import GridStore from './GridStore';
 import InfiniteStore from './InfiniteStore';
 
 import { idle } from '../utils/decorators/lazy';
+import { offsetOnDay, getMonthDate } from '../utils/date';
 
 export default class DateVisible extends Store {
   _grid: ?GridStore;
@@ -18,11 +19,8 @@ export default class DateVisible extends Store {
 
     this._grid = grid;
     this._infinite = infinite;
-
     this._grid.addChangeListener(this._handleChange, this);
     this._infinite.addChangeListener(this._handleChange, this);
-
-    this._updateState();
   }
 
   destroy () {
@@ -49,36 +47,6 @@ export default class DateVisible extends Store {
 
   @idle
   _handleChange () {
-    this._updateState();
-
-    const {
-      currentDate,
-      gridDaysItemSize,
-      gridMonthItemSize,
-      hideWeekends,
-      weekends,
-    } = this._state;
-
-    const range = this._infinite.getVisibleRange();
-    const len = range.length;
-
-    for (let i = 0; i < len; i = i + 2) {
-      const item = range[i];
-      const rate = range[i + 1];
-
-      // обход с начала
-      if (i % 4) {
-
-      // обход с конца
-      } else {
-
-      }
-    }
-
-    console.log(range);
-  }
-
-  _updateState () {
     const {
       currentDate,
       gridDaysItemSize,
@@ -87,36 +55,47 @@ export default class DateVisible extends Store {
       weekends,
     } = this._grid.getState();
 
-    const {
-      listRange,
-      SAXISX,
-      scrollHeight,
-      scrollOffsetBottom,
-      scrollOffsetLeft,
-      scrollOffsetRight,
-      scrollOffsetTop,
-      scrollWidth,
-      scrollX,
-      scrollY,
-    } = this._infinite.getState();
+    const range = this._infinite.getVisibleRange();
+    const startItem = range[0];
+    const startRate = range[1];
+    const endItem = range[2];
+    const endRate = range[3];
+    const itemRate = 100 / gridMonthItemSize;
+    const daysInItem = 7;
+    const itemSize = gridMonthItemSize * daysInItem;
 
-    this._state = {
-      currentDate,
-      gridDaysItemSize,
-      gridMonthItemSize,
-      hideWeekends,
-      weekends,
+    const startFullVisibleItem = startRate / itemRate | 0;
+    const startRateRest = startRate % itemRate;
+    const startPartVisibleItem = startFullVisibleItem + (startRateRest ? 1 : 0);
+    const rateBegin = 100 * startRateRest / itemRate | 0;
 
-      listRange,
-      SAXISX,
-      scrollHeight,
-      scrollOffsetBottom,
-      scrollOffsetLeft,
-      scrollOffsetRight,
-      scrollOffsetTop,
-      scrollWidth,
-      scrollX,
-      scrollY,
-    };
+    const endFullVisibleItem = endRate / itemRate | 0;
+    const endRateRest = endRate % itemRate;
+    const endPartVisibleItem = endFullVisibleItem + (endRateRest ? 1 : 0);
+    const rateEnd = 100 * endRateRest / itemRate | 0;
+
+    const daysFullBegin = itemSize + (startItem * itemSize) - startFullVisibleItem * daysInItem;
+    const daysFullEnd = endItem * itemSize + endFullVisibleItem * daysInItem - 1;
+    const daysPartBegin = itemSize + (startItem * itemSize) - startPartVisibleItem * daysInItem;
+    const daysPartEnd = endItem * itemSize + endPartVisibleItem * daysInItem - 1;
+
+    const dateFullBegin = offsetOnDay(currentDate, daysFullBegin);
+    const dateFullEnd = offsetOnDay(currentDate, daysFullEnd);
+    const datePartBegin = offsetOnDay(currentDate, daysPartBegin);
+    const datePartEnd = offsetOnDay(currentDate, daysPartEnd);
+
+    const day = dateFullBegin;
+    const month = getMonthDate(offsetOnDay(dateFullBegin, 10));
+
+    this.update({
+      dateFullBegin,
+      dateFullEnd,
+      datePartBegin,
+      datePartEnd,
+      day,
+      month,
+      rateBegin,
+      rateEnd,
+    });
   }
 }

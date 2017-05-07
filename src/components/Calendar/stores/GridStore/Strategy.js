@@ -24,7 +24,7 @@ export default class Strategy extends StoreStrategy {
   }
 
   timeToRate (time: number): number {
-    const hour = time / HOURMS ^ 0;
+    const hour = time / HOURMS | 0;
     const ms = time % HOURMS;
     const grid = this.current.GRID_HOURS[ hour ] * HOURMS + ms;
     return Math.round(1000 * 100 * grid / this.current.DAYMS) / 1000;

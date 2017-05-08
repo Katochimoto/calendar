@@ -4,7 +4,6 @@ import CalendarGrid from './components/CalendarGrid';
 
 import Datetime from './utils/Datetime';
 import Events from './utils/Events';
-import ElementVisible from './utils/ElementVisible';
 
 import GridStore from './stores/GridStore';
 import InfiniteStore from './stores/InfiniteStore';
@@ -21,7 +20,6 @@ export default class Calendar extends Component {
       events: new Events(),
       infiniteStore: new InfiniteStore(),
       store: new GridStore(),
-      visible: new ElementVisible(),
     };
 
     this._visible = new DateVisible(
@@ -41,7 +39,6 @@ export default class Calendar extends Component {
       events,
       infiniteStore,
       store,
-      visible,
     } = this.state;
 
     return {
@@ -49,7 +46,7 @@ export default class Calendar extends Component {
       events,
       infiniteStore,
       store,
-      visible,
+      visible: this._visible,
     };
   }
 
@@ -63,6 +60,7 @@ export default class Calendar extends Component {
 
   componentWillUnmount () {
     this.state.store.removeChangeListener(this.handleChange, this);
+    this._visible.destroy();
   }
 
   handleChange () {
@@ -83,7 +81,7 @@ Calendar.childContextTypes = {
   events: PropTypes.instanceOf(Events),
   infiniteStore: PropTypes.instanceOf(InfiniteStore),
   store: PropTypes.instanceOf(GridStore),
-  visible: PropTypes.instanceOf(ElementVisible),
+  visible: PropTypes.instanceOf(DateVisible),
 };
 
 /* @if NODE_ENV=='development' **

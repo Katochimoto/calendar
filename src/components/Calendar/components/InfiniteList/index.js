@@ -56,18 +56,10 @@ export default class InfiniteList extends Component {
 
   componentDidMount () {
     this.context.infiniteStore.addChangeListener(this.handleChange, this);
-    if (this.props.checkVisible) {
-      this.context.visible.initialize(this._infiniteListNode);
-      this._infiniteListCheckVisible = true;
-    }
   }
 
   componentWillUnmount () {
     this.context.infiniteStore.removeChangeListener(this.handleChange, this);
-    if (this._infiniteListCheckVisible) {
-      this.context.visible.destroy();
-      this._infiniteListCheckVisible = false;
-    }
   }
 
   componentDidUpdate (prevProps, prevState) {
@@ -156,9 +148,7 @@ export default class InfiniteList extends Component {
     });
 
     return (
-      <div ref={node => this._infiniteListNode = node}
-        className={styles.InfiniteList}>
-
+      <div className={styles.InfiniteList}>
         <div className={classes} style={style}>
           {this.getItems()}
         </div>
@@ -170,7 +160,6 @@ export default class InfiniteList extends Component {
 /* @if NODE_ENV=='development' **
 InfiniteList.propTypes = {
   change: PropTypes.function,
-  checkVisible: PropTypes.boolean,
   getItemElement: PropTypes.function,
   next: PropTypes.function,
   prev: PropTypes.function,
@@ -178,6 +167,5 @@ InfiniteList.propTypes = {
 /* @endif */
 
 InfiniteList.defaultProps = {
-  checkVisible: false,
   getItemElement: () => null,
 };

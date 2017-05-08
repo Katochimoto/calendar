@@ -8,13 +8,17 @@ import DayEvents from '../DayEvents';
 import styles from './index.less';
 
 export default class Day extends Component {
+  constructor (props, context) {
+    super(props, context);
+    this.handleVisible = this.handleVisible.bind(this);
+  }
 
   componentDidMount () {
-    this.context.visible.observe(this._dayNode, ::this.handleVisible);
+    this.context.visible.addChangeListener(this.handleVisible, this);
   }
 
   componentWillUnmount () {
-    this.context.visible.unobserve(this._dayNode);
+    this.context.visible.removeChangeListener(this.handleVisible, this);
   }
 
   componentWillReceiveProps (nextProps) {
@@ -34,8 +38,12 @@ export default class Day extends Component {
   }
 
   transformState (props, context) {
+    const isVisible = (
+      context.visible.isVisible(props.date)
+    );
+
     return {
-      isVisible: props.offset === 0 || context.visible.check(this._dayNode)
+      isVisible
     };
   }
 
@@ -67,7 +75,7 @@ export default class Day extends Component {
     });
 
     return (
-      <div className={classes} ref={node => this._dayNode = node}>
+      <div className={classes}>
         {this.getEvents()}
       </div>
     );
@@ -79,11 +87,9 @@ Day.propTypes = {
   date: PropTypes.number,
   hoursOfDay: PropTypes.string,
   isWeekend: PropTypes.boolean,
-  offset: PropTypes.number,
 };
 /* @endif */
 
 Day.defaultProps = {
   isWeekend: false,
-  offset: 0,
 };

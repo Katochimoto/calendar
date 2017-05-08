@@ -82,7 +82,7 @@ export default class GridDaysContent extends StoreComponent {
       currentDate,
       gridDaysItemSize,
     } = this.state;
-    
+
     const date = this.context.store.gridDateOffset(
       currentDate,
       offset * gridDaysItemSize
@@ -92,8 +92,7 @@ export default class GridDaysContent extends StoreComponent {
       <GridDaysItem
         date={date}
         ItemComponent={Day}
-        itemSize={gridDaysItemSize}
-        offset={offset} />
+        itemSize={gridDaysItemSize} />
     );
   }
 
@@ -120,7 +119,6 @@ export default class GridDaysContent extends StoreComponent {
           <DayHours />
 
           <InfiniteList
-            checkVisible={true}
             getItemElement={this.getItemElement}
             next={this.handleInfiniteNext}
             prev={this.handleInfinitePrev}

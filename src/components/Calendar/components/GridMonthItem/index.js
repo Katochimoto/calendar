@@ -27,7 +27,6 @@ export default class GridMonthItem extends StoreComponent {
     return (
       props.date !== nextProps.date ||
       props.itemSize !== nextProps.itemSize ||
-      props.offset !== nextProps.offset ||
       state.hideWeekends !== nextState.hideWeekends ||
       state.weekends !== nextState.weekends
     );
@@ -35,7 +34,7 @@ export default class GridMonthItem extends StoreComponent {
 
   getItems () {
     const store = this.context.store;
-    const { date, itemSize, offset } = this.props;
+    const { date, itemSize } = this.props;
     const { hideWeekends, weekends } = this.state;
     const items = [];
 
@@ -48,7 +47,6 @@ export default class GridMonthItem extends StoreComponent {
         <MonthWeek
           key={idx}
           date={itemDate}
-          offset={offset}
           hideWeekends={hideWeekends}
           weekends={weekends} />
       );
@@ -72,12 +70,10 @@ export default class GridMonthItem extends StoreComponent {
 GridMonthItem.propTypes = {
   date: PropTypes.number,
   itemSize: PropTypes.number,
-  offset: PropTypes.number,
 };
 /* @endif */
 
 GridMonthItem.defaultProps = {
   date: 0,
   itemSize: 0,
-  offset: 0,
 };

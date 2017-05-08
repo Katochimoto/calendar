@@ -42,7 +42,11 @@ export default class DateVisible extends Store {
    * @returns {number} процент видимости даты
    */
   check (date: number): number {
+    return this._strategy.check(date);
+  }
 
+  isVisible (date: number): boolean {
+    return this._strategy.isVisible(date);
   }
 
   @idle

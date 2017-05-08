@@ -74,8 +74,7 @@ export default class GridMonthContent extends StoreComponent {
     return (
       <GridMonthItem
         date={date}
-        itemSize={gridMonthItemSize}
-        offset={offset} />
+        itemSize={gridMonthItemSize} />
     );
   }
 
@@ -92,7 +91,6 @@ export default class GridMonthContent extends StoreComponent {
         className={styles.GridMonthContent}>
 
         <InfiniteList
-          checkVisible={true}
           getItemElement={this.getItemElement}
           next={this.handleInfiniteNext}
           prev={this.handleInfinitePrev} />

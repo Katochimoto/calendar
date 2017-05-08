@@ -14,11 +14,11 @@ export default class MonthWeek extends Component {
   }
 
   componentDidMount () {
-    this.context.visible.observe(this._rootNode, this.handleVisible);
+    this.context.visible.addChangeListener(this.handleVisible, this);
   }
 
   componentWillUnmount () {
-    this.context.visible.unobserve(this._rootNode);
+    this.context.visible.removeChangeListener(this.handleVisible, this);
   }
 
   componentWillReceiveProps (nextProps) {
@@ -32,7 +32,6 @@ export default class MonthWeek extends Component {
     return (
       props.date !== nextProps.date ||
       props.hideWeekends !== nextProps.hideWeekends ||
-      props.offset !== nextProps.offset ||
       props.weekends !== nextProps.weekends ||
       state.isVisible !== nextState.isVisible
     );
@@ -40,8 +39,7 @@ export default class MonthWeek extends Component {
 
   transformState (props, context) {
     const isVisible = (
-      props.offset === 0 ||
-      context.visible.check(this._rootNode)
+      context.visible.isVisible(props.date)
     );
 
     return {
@@ -69,7 +67,7 @@ export default class MonthWeek extends Component {
     };
 
     return (
-      <div className={styles.MonthWeek} ref={node => this._rootNode = node}>
+      <div className={styles.MonthWeek}>
         {content}
       </div>
     );
@@ -80,7 +78,6 @@ export default class MonthWeek extends Component {
 MonthWeek.propTypes = {
   date: PropTypes.number,
   hideWeekends: PropTypes.boolean,
-  offset: PropTypes.number,
   weekends: PropTypes.string,
 };
 /* @endif */
@@ -88,6 +85,5 @@ MonthWeek.propTypes = {
 MonthWeek.defaultProps = {
   date: 0,
   hideWeekends: false,
-  offset: 0,
   weekends: '',
 };

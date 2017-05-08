@@ -39,6 +39,10 @@ export default class GridDaysContent extends StoreComponent {
     );
   }
 
+  componentWillUpdate () {
+    this.context.infiniteStore.forceUpdated();
+  }
+
   componentDidUpdate (prevProps, prevState) {
     super.componentDidUpdate(prevProps, prevState);
 

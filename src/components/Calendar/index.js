@@ -54,17 +54,8 @@ export default class Calendar extends Component {
     this.state.store.update(nextProps);
   }
 
-  componentDidMount () {
-    this.state.store.addChangeListener(this.handleChange, this);
-  }
-
   componentWillUnmount () {
-    this.state.store.removeChangeListener(this.handleChange, this);
     this._visible.destroy();
-  }
-
-  handleChange () {
-    this.state.infiniteStore.forceUpdated();
   }
 
   render () {

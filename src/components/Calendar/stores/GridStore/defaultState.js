@@ -12,7 +12,7 @@ const WEEKENDS = '0,6';
 const WEEKENDS_SET = toObject(WEEKENDS.split(',').map(Number));
 
 export default {
-  grid: GRID.MONTH,
+  grid: GRID.DAY,
   scaleY: 200,
 
   //gridHeight: 0,

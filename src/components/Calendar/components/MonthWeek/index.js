@@ -8,11 +8,6 @@ import MonthWeekEvents from '../MonthWeekEvents';
 import styles from './index.less';
 
 export default class MonthWeek extends Component {
-  constructor (props, context) {
-    super(props, context);
-    this.handleVisible = this.handleVisible.bind(this);
-  }
-
   componentDidMount () {
     this.context.visible.addChangeListener(this.handleVisible, this);
   }

@@ -9,6 +9,10 @@ import InfiniteListItem from '../InfiniteListItem';
 import styles from './index.less';
 
 export default class InfiniteList extends Component {
+  constructor (props, context) {
+    super(props, context);
+    this._scrollDirection = 0;
+  }
 
   transformState (props, context) {
     const {
@@ -73,19 +77,18 @@ export default class InfiniteList extends Component {
   }
 
   handleChange () {
-    const prevScrollDirection = this.state.scrollDirection;
     this.updateState();
     const nextScrollDirection = this.state.scrollDirection;
 
     if (
       this.props.next &&
-      nextScrollDirection > prevScrollDirection
+      nextScrollDirection > this._scrollDirection
     ) {
       this.props.next();
 
     } else if (
       this.props.prev &&
-      nextScrollDirection < prevScrollDirection
+      nextScrollDirection < this._scrollDirection
     ) {
       this.props.prev();
     }
@@ -93,6 +96,8 @@ export default class InfiniteList extends Component {
     if (this.props.change) {
       this.props.change();
     }
+
+    this._scrollDirection = nextScrollDirection;
   }
 
   getItems () {

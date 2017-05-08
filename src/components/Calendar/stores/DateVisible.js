@@ -59,29 +59,31 @@ export default class DateVisible extends Store {
       weekends,
     } = this._grid.getState();
 
+    const itemSize = gridDaysItemSize;
+    const daysInItem = 1;
+
     const range = this._infinite.getVisibleRange();
     const startItem = range[0];
     const startRate = range[1];
     const endItem = range[2];
     const endRate = range[3];
-    const itemRate = 100 / gridMonthItemSize;
-    const daysInItem = 7;
-    const itemSize = gridMonthItemSize * daysInItem;
+    const itemRate = 100 / itemSize;
+    const gridItemSize = itemSize * daysInItem;
 
     const startFullVisibleItem = startRate / itemRate | 0;
-    const startRateRest = startRate % itemRate;
+    const startRateRest = startRate === 100 ? 0 : startRate % itemRate;
     const startPartVisibleItem = startFullVisibleItem + (startRateRest ? 1 : 0);
     const rateBegin = 100 * startRateRest / itemRate | 0;
 
     const endFullVisibleItem = endRate / itemRate | 0;
-    const endRateRest = endRate % itemRate;
+    const endRateRest = endRate === 100 ? 0 : endRate % itemRate;
     const endPartVisibleItem = endFullVisibleItem + (endRateRest ? 1 : 0);
     const rateEnd = 100 * endRateRest / itemRate | 0;
 
-    const daysFullBegin = itemSize + (startItem * itemSize) - startFullVisibleItem * daysInItem;
-    const daysFullEnd = endItem * itemSize + endFullVisibleItem * daysInItem - 1;
-    const daysPartBegin = itemSize + (startItem * itemSize) - startPartVisibleItem * daysInItem;
-    const daysPartEnd = endItem * itemSize + endPartVisibleItem * daysInItem - 1;
+    const daysFullBegin = gridItemSize + (startItem * gridItemSize) - startFullVisibleItem * daysInItem;
+    const daysFullEnd = endItem * gridItemSize + endFullVisibleItem * daysInItem - 1;
+    const daysPartBegin = gridItemSize + (startItem * gridItemSize) - startPartVisibleItem * daysInItem;
+    const daysPartEnd = endItem * gridItemSize + endPartVisibleItem * daysInItem - 1;
 
     const dateFullBegin = offsetOnDay(currentDate, daysFullBegin);
     const dateFullEnd = offsetOnDay(currentDate, daysFullEnd);

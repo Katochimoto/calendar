@@ -33,6 +33,7 @@ export default class EventEmitter {
   }
 
   addChangeListener (callback: Function, ctx: Object): void {
+    this.removeChangeListener(callback, ctx);
     this._callbacks.push([ callback, ctx ]);
   }
 

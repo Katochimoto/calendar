@@ -12,7 +12,7 @@ const WEEKENDS = '0,6';
 const WEEKENDS_SET = toObject(WEEKENDS.split(',').map(Number));
 
 export default {
-  grid: GRID.DAY,
+  grid: GRID.MONTH,
   scaleY: 200,
 
   //gridHeight: 0,
@@ -97,5 +97,14 @@ export default {
    * @type {number}
    * @public
    */
-  beginningOfWeek: 1
+  beginningOfWeek: 1,
+
+  dateFullBegin: 0,
+  dateFullEnd: 0,
+  datePartBegin: 0,
+  datePartEnd: 0,
+  visibleDay: 0,
+  visiblemonth: 0,
+  visibleRateBegin: 0,
+  visibleRateEnd: 0,
 };

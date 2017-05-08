@@ -42,10 +42,7 @@ export default class GridMonthContent extends StoreComponent {
       gridMonthItemSize,
     } = this.state;
 
-    const date = this.context.store.gridDateOffset(
-      currentDate,
-      offset * gridMonthItemSize
-    );
+    const date = this.context.store.gridDateItemOffset(currentDate, offset);
 
     return (
       <GridMonthItem

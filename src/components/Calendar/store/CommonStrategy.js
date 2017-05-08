@@ -1,49 +1,49 @@
 import StoreStrategy from '../utils/StoreStrategy';
+import mixin from '../utils/decorators/mixin';
+
 import stateGrid from './state/grid';
 import stateInfinite from './state/infinite';
-import stateVisible from './state/visible';
-import { strategyGrid, strategyGridConstructor } from './decorators/strategyGrid';
-import { strategyGridDay, strategyGridDayConstructor } from './decorators/strategyGridDay';
-import { strategyGridMonth, strategyGridMonthConstructor } from './decorators/strategyGridMonth';
-import { strategyInfinite, strategyInfiniteConstructor } from './decorators/strategyInfinite';
-import { strategyInfiniteX, strategyInfiniteXConstructor } from './decorators/strategyInfiniteX';
-import { strategyInfiniteY, strategyInfiniteYConstructor } from './decorators/strategyInfiniteY';
-import { strategyVisible, strategyVisibleConstructor } from './decorators/strategyVisible';
+
+import { createGrid, ctorGrid } from './decorators/strategyGrid';
+import { createGridDay, ctorGridDay } from './decorators/strategyGridDay';
+import { createGridMonth, ctorGridMonth } from './decorators/strategyGridMonth';
+import { createInfinite, ctorInfinite } from './decorators/strategyInfinite';
+import { createInfiniteX, ctorInfiniteX } from './decorators/strategyInfiniteX';
+import { createInfiniteY, ctorInfiniteY } from './decorators/strategyInfiniteY';
 
 const defaultState = {
   ...stateGrid,
-  ...stateInfinite,
-  ...stateVisible
+  ...stateInfinite
 };
 
-@strategyVisible
-@strategyGridDay
-@strategyGrid
-@strategyInfiniteX
-@strategyInfinite
+@mixin([
+  createGrid(),
+  createGridDay(),
+  createInfinite(),
+  createInfiniteX()
+])
 export class GridDayStrategy extends StoreStrategy {
   constructor (data: {[id:string]: any} = defaultState) {
     super(data);
-    strategyGridConstructor.call(this);
-    strategyGridDayConstructor.call(this);
-    strategyInfiniteConstructor.call(this);
-    strategyInfiniteXConstructor.call(this);
-    strategyVisibleConstructor.call(this);
+    ctorGrid.call(this);
+    ctorGridDay.call(this);
+    ctorInfinite.call(this);
+    ctorInfiniteX.call(this);
   }
 }
 
-@strategyVisible
-@strategyGridMonth
-@strategyGrid
-@strategyInfiniteY
-@strategyInfinite
+@mixin([
+  createGrid(),
+  createGridMonth(),
+  createInfinite(),
+  createInfiniteY()
+])
 export class GridMonthStrategy extends StoreStrategy {
   constructor (data: {[id:string]: any} = defaultState) {
     super(data);
-    strategyGridConstructor.call(this);
-    strategyGridMonthConstructor.call(this);
-    strategyInfiniteConstructor.call(this);
-    strategyInfiniteYConstructor.call(this);
-    strategyVisibleConstructor.call(this);
+    ctorGrid.call(this);
+    ctorGridMonth.call(this);
+    ctorInfinite.call(this);
+    ctorInfiniteY.call(this);
   }
 }

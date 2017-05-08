@@ -30,10 +30,7 @@ export default class GridDaysHeader extends StoreComponent {
       gridDaysItemSize,
     } = this.state;
 
-    const date = this.context.store.gridDateOffset(
-      currentDate,
-      offset * gridDaysItemSize
-    );
+    const date = this.context.store.gridDateItemOffset(currentDate, offset);
 
     return (
       <GridDaysItem

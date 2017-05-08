@@ -1,13 +1,15 @@
 import { ASCROLL } from '../../constant';
-import Strategy from './Strategy';
 
-export default class StrategyX extends Strategy {
-  constructor (data: {[id:string]: any}) {
-    super(data);
-    this.current.SAXISX = true;
-    this.current.scrollY = 0;
-  }
+export function strategyInfiniteX (component) {
+  Object.assign(component.prototype, protoInfiniteX);
+}
 
+export function strategyInfiniteXConstructor () {
+  this.current.SAXISX = true;
+  this.current.scrollY = 0;
+}
+
+const protoInfiniteX = {
   isVisibleOffset (offset: number): boolean {
     const { scrollX, scrollWidth, listRange, speedScrollX } = this.current;
     const min = this._getScrollXByOffset(offset);
@@ -21,14 +23,14 @@ export default class StrategyX extends Strategy {
       (min < minOffset) ||
       (min === minOffset && speedScrollX >= 0)
     );
-  }
+  },
 
   getVisibleRange () {
     return this._getVisibleRange(
       this.current.scrollX,
       this.current.scrollWidth
     );
-  }
+  },
 
   _getScrollXByOffset (offset: number): number {
     return (
@@ -36,7 +38,7 @@ export default class StrategyX extends Strategy {
       this.current.listRange *
       this.current.scrollWidth
     );
-  }
+  },
 
   _correctScrollX () {
     const limitOffset = this._checkLimitOffset(
@@ -67,7 +69,16 @@ export default class StrategyX extends Strategy {
       this.current.scrollX,
       this.current.scrollWidth
     ));
-  }
+
+    switch (limitOffset) {
+      case this.LIMIT_PREV:
+        this._gridDateOffsetPrev();
+        break;
+      case this.LIMIT_NEXT:
+        this._gridDateOffsetNext();
+        break;
+    }
+  },
 
   _scrollHeightSetter (value) {
     const scrollHeight = this.current.scrollHeight;
@@ -81,7 +92,7 @@ export default class StrategyX extends Strategy {
     );
 
     this.isChanged = true;
-  }
+  },
 
   _scrollWidthSetter (value) {
     const scrollWidth = this.current.scrollWidth;
@@ -97,17 +108,19 @@ export default class StrategyX extends Strategy {
     );
 
     this._correctScrollX();
+    this._updateVisibleDate();
     this.isChanged = true;
-  }
+  },
 
   _scrollXSetter (value) {
     value = this._limitScrollX(value);
     if (value !== this.current.scrollX) {
       this.current.scrollX = value;
       this._correctScrollX();
+      this._updateVisibleDate();
       this.isChanged = true;
     }
-  }
+  },
 
   _scrollYSetter (value) {
     value = this._limitScrollY(value);
@@ -116,4 +129,4 @@ export default class StrategyX extends Strategy {
       this.isChanged = true;
     }
   }
-}
+};

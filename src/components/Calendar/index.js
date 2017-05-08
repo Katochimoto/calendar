@@ -4,10 +4,7 @@ import CalendarGrid from './components/CalendarGrid';
 
 import Datetime from './utils/Datetime';
 import Events from './utils/Events';
-
-import GridStore from './stores/GridStore';
-import InfiniteStore from './stores/InfiniteStore';
-import DateVisible from './stores/DateVisible';
+import CommonStore from './store/CommonStore';
 
 import styles from './index.less';
 
@@ -15,47 +12,28 @@ export default class Calendar extends Component {
   constructor (props, context) {
     super(props, context);
 
-    this.state = {
-      datetime: new Datetime(),
-      events: new Events(),
-      infiniteStore: new InfiniteStore(),
-      store: new GridStore(),
-    };
-
-    this._visible = new DateVisible(
-      this.state.store,
-      this.state.infiniteStore
-    );
+    this._datetime = new Datetime();
+    this._events = new Events();
+    this._store = new CommonStore();
 
     // FIXME remove later
-    window.store = this.state.store;
-    window.infiniteStore = this.state.infiniteStore;
-    window.visibleStore = this._visible;
+    window.store = this._store;
   }
 
   getChildContext () {
-    const {
-      datetime,
-      events,
-      infiniteStore,
-      store,
-    } = this.state;
-
     return {
-      datetime,
-      events,
-      infiniteStore,
-      store,
-      visible: this._visible,
+      datetime: this._datetime,
+      events: this._events,
+      store: this._store,
     };
   }
 
   componentWillReceiveProps (nextProps) {
-    this.state.store.update(nextProps);
+    this._store.update(nextProps);
   }
 
   componentWillUnmount () {
-    this._visible.destroy();
+    this._store.destroy();
   }
 
   render () {
@@ -70,9 +48,7 @@ export default class Calendar extends Component {
 Calendar.childContextTypes = {
   datetime: PropTypes.instanceOf(Datetime),
   events: PropTypes.instanceOf(Events),
-  infiniteStore: PropTypes.instanceOf(InfiniteStore),
-  store: PropTypes.instanceOf(GridStore),
-  visible: PropTypes.instanceOf(DateVisible),
+  store: PropTypes.instanceOf(CommonStore),
 };
 
 /* @if NODE_ENV=='development' **

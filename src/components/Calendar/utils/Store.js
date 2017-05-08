@@ -1,6 +1,6 @@
 // @flow
 
-import EventEmitter from '../utils/EventEmitter';
+import EventEmitter from './EventEmitter';
 import StoreStrategy from './StoreStrategy';
 
 export default class Store extends EventEmitter {

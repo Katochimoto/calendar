@@ -12,12 +12,17 @@ export default class StoreStrategy {
 
     /*::`*/
     const props = Object.keys(data).reduce((data, name) => {
+      const gname = `_${name}Getter`;
+
       const prop = data[ name ] = {
-        enumerable: true,
-        get: () => this.current[ name ]
+        enumerable: true
       };
 
-      prop.get.displayName = `_${name}Getter`;
+      prop.get = (gname in this) ?
+        () => this[ gname ]() :
+        () => this.current[ name ];
+
+      prop.get.displayName = gname;
 
       if (name !== name.toUpperCase()) {
         const sname = `_${name}Setter`;

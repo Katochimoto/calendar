@@ -1,4 +1,5 @@
 import { StoreComponent } from '../../utils/Component';
+import { GRID } from '../../constant';
 
 import GridDays from '../GridDays';
 import GridMonth from '../GridMonth';
@@ -25,7 +26,7 @@ export default class CalendarGrid extends StoreComponent {
     const { grid } = this.state;
 
     return do {
-      if (grid === 'month') {
+      if (grid === GRID.MONTH) {
         <GridMonth />;
       } else {
         <GridDays />;

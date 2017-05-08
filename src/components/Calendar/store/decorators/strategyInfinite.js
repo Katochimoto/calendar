@@ -1,14 +1,15 @@
 import { ASCROLL } from '../../constant';
-import StoreStrategy from '../StoreStrategy';
-import defaultState from './defaultState';
 
-export default class Strategy extends StoreStrategy {
-  constructor (data: {[id:string]: any} = defaultState) {
-    super(data);
-    this.LIMIT_PREV = 1;
-    this.LIMIT_NEXT = 2;
-  }
+export function strategyInfinite (component) {
+  Object.assign(component.prototype, protoInfinite);
+}
 
+export function strategyInfiniteConstructor () {
+  this.LIMIT_PREV = 1;
+  this.LIMIT_NEXT = 2;
+}
+
+const protoInfinite = {
   /**
    * Принудительное обновление через установку уникального значения updated в стейт.
    * @public
@@ -17,7 +18,7 @@ export default class Strategy extends StoreStrategy {
   forceUpdated () {
     this.current.updated++;
     return true;
-  }
+  },
 
   /**
    * Обновление позиции скрола.
@@ -68,7 +69,7 @@ export default class Strategy extends StoreStrategy {
       speedScrollX !== this.current.speedScrollX ||
       speedScrollY !== this.current.speedScrollY
     );
-  }
+  },
 
   /**
    * Проверка видимости блока списка.
@@ -78,7 +79,7 @@ export default class Strategy extends StoreStrategy {
    */
   isVisibleOffset (offset: number): boolean {
     return true;
-  }
+  },
 
   /**
    * @abstract
@@ -86,7 +87,7 @@ export default class Strategy extends StoreStrategy {
    */
   getVisibleRange () {
     return [];
-  }
+  },
 
   _limitScroll (value: number, min: number, max: number): number {
     return (
@@ -94,7 +95,7 @@ export default class Strategy extends StoreStrategy {
       value > max ? max :
       Math.round(value)
     );
-  }
+  },
 
   _limitScrollY (value: number): number {
     return this._limitScroll(
@@ -102,7 +103,7 @@ export default class Strategy extends StoreStrategy {
       this.current.scrollOffsetTop,
       this.current.scrollOffsetBottom
     );
-  }
+  },
 
   _limitScrollX (value: number): number {
     return this._limitScroll(
@@ -110,7 +111,7 @@ export default class Strategy extends StoreStrategy {
       this.current.scrollOffsetLeft,
       this.current.scrollOffsetRight
     );
-  }
+  },
 
   _correctLimitOffset (limit, value, size) {
     switch (limit) {
@@ -121,7 +122,7 @@ export default class Strategy extends StoreStrategy {
       default:
         return value;
     }
-  }
+  },
 
   _checkLimitOffset (scroll, offsetPrev, offsetNext): number {
     const scrollOffsetCenter = (offsetPrev + offsetNext) / 2;
@@ -145,7 +146,7 @@ export default class Strategy extends StoreStrategy {
     }
 
     return 0;
-  }
+  },
 
   _getVisibleRange (scroll, size) {
     const precision = 10000;
@@ -162,4 +163,4 @@ export default class Strategy extends StoreStrategy {
       (precision - startRate) / 100
     ];
   }
-}
+};

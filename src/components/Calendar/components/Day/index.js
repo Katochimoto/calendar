@@ -1,4 +1,4 @@
-import { Component } from '../../utils/Component';
+import { StoreComponent } from '../../utils/Component';
 /* @if NODE_ENV=='development' **
 import { PropTypes } from '../../utils/Component';
 /* @endif */
@@ -7,14 +7,7 @@ import classnames from 'classnames';
 import DayEvents from '../DayEvents';
 import styles from './index.less';
 
-export default class Day extends Component {
-  componentDidMount () {
-    this.context.visible.addChangeListener(this.handleVisible, this);
-  }
-
-  componentWillUnmount () {
-    this.context.visible.removeChangeListener(this.handleVisible, this);
-  }
+export default class Day extends StoreComponent {
 
   componentWillReceiveProps (nextProps) {
     this.updateState(nextProps);
@@ -34,16 +27,12 @@ export default class Day extends Component {
 
   transformState (props, context) {
     const isVisible = (
-      context.visible.isVisible(props.date)
+      context.store.isVisibleDate(props.date)
     );
 
     return {
       isVisible
     };
-  }
-
-  handleVisible () {
-    this.updateState();
   }
 
   getEvents () {

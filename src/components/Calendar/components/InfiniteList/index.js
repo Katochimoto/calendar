@@ -1,4 +1,4 @@
-import { Component } from '../../utils/Component';
+import { StoreComponent } from '../../utils/Component';
 /* @if NODE_ENV=='development' **
 import { PropTypes } from '../../utils/Component';
 /* @endif */
@@ -8,11 +8,7 @@ import classnames from 'classnames';
 import InfiniteListItem from '../InfiniteListItem';
 import styles from './index.less';
 
-export default class InfiniteList extends Component {
-  constructor (props, context) {
-    super(props, context);
-    this._scrollDirection = 0;
-  }
+export default class InfiniteList extends StoreComponent {
 
   transformState (props, context) {
     const {
@@ -25,7 +21,7 @@ export default class InfiniteList extends Component {
       speedScrollX,
       speedScrollY,
       updated,
-    } = context.infiniteStore.getState();
+    } = context.store.getState();
 
     return {
       listRange,
@@ -58,50 +54,18 @@ export default class InfiniteList extends Component {
     );
   }
 
-  componentDidMount () {
-    this.context.infiniteStore.addChangeListener(this.handleChange, this);
-  }
-
-  componentWillUnmount () {
-    this.context.infiniteStore.removeChangeListener(this.handleChange, this);
-  }
-
   componentDidUpdate (prevProps, prevState) {
     super.componentDidUpdate(prevProps, prevState);
 
     if (this.state.scrollAnimation === ASCROLL.STOP) {
-      this.context.infiniteStore.update({
+      this.context.store.update({
         scrollAnimation: ASCROLL.OFF
       });
     }
   }
 
-  handleChange () {
-    this.updateState();
-    const nextScrollDirection = this.state.scrollDirection;
-
-    if (
-      this.props.next &&
-      nextScrollDirection > this._scrollDirection
-    ) {
-      this.props.next();
-
-    } else if (
-      this.props.prev &&
-      nextScrollDirection < this._scrollDirection
-    ) {
-      this.props.prev();
-    }
-
-    if (this.props.change) {
-      this.props.change();
-    }
-
-    this._scrollDirection = nextScrollDirection;
-  }
-
   getItems () {
-    const store = this.context.infiniteStore;
+    const store = this.context.store;
     const { listRange, updated, SAXISX } = this.state;
     const items = [];
 

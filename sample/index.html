@@ -148,29 +148,17 @@
 
   <script>
     var state = window.store.getState();
-    var infiniteState = window.infiniteStore.getState();
-    var visibleState = window.visibleStore.getState();
 
     document.getElementById('form').innerHTML = (
       createForm(state) +
-      '<hr/>' +
-      createForm(infiniteState) +
-      '<hr/>' +
-      createForm(visibleState) +
       '<hr/>'
     );
 
     window.store.addChangeListener(upgrade);
-    window.infiniteStore.addChangeListener(upgrade);
-    window.visibleStore.addChangeListener(upgrade);
 
     function upgrade () {
       var state = window.store.getState();
-      var infiniteState = window.infiniteStore.getState();
-      var visibleState = window.visibleStore.getState();
       updateForm(state);
-      updateForm(infiniteState);
-      updateForm(visibleState);
     }
 
     function onSubmit (event) {
@@ -180,16 +168,6 @@
       var newState = getFormData(state);
       console.log('grid', newState);
       window.store.update(newState);
-
-      state = window.infiniteStore.getState();
-      newState = getFormData(state);
-      console.log('infinite', newState);
-      window.infiniteStore.update(newState);
-
-      state = window.visibleStore.getState();
-      newState = getFormData(state);
-      console.log('visible', newState);
-      window.visibleStore.update(newState);
 
       return false;
     }

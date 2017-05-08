@@ -1,13 +1,15 @@
 import { ASCROLL } from '../../constant';
-import Strategy from './Strategy';
 
-export default class StrategyY extends Strategy {
-  constructor (data: {[id:string]: any}) {
-    super(data);
-    this.current.SAXISX = false;
-    this.current.scrollX = 0;
-  }
+export function strategyInfiniteY (component) {
+  Object.assign(component.prototype, protoInfiniteY);
+}
 
+export function strategyInfiniteYConstructor () {
+  this.current.SAXISX = false;
+  this.current.scrollX = 0;
+}
+
+const protoInfiniteY = {
   isVisibleOffset (offset: number): boolean {
     const { scrollY, scrollHeight, listRange, speedScrollY } = this.current;
     const min = this._getScrollYByOffset(offset);
@@ -21,14 +23,14 @@ export default class StrategyY extends Strategy {
       (min < minOffset) ||
       (min === minOffset && speedScrollY >= 0)
     );
-  }
+  },
 
   getVisibleRange () {
     return this._getVisibleRange(
       this.current.scrollY,
       this.current.scrollHeight
     );
-  }
+  },
 
   _getScrollYByOffset (offset: number): number {
     return (
@@ -36,7 +38,7 @@ export default class StrategyY extends Strategy {
       this.current.listRange *
       this.current.scrollHeight
     );
-  }
+  },
 
   _correctScrollY () {
     const limitOffset = this._checkLimitOffset(
@@ -67,7 +69,16 @@ export default class StrategyY extends Strategy {
       this.current.scrollY,
       this.current.scrollHeight
     ));
-  }
+
+    switch (limitOffset) {
+      case this.LIMIT_PREV:
+        this._gridDateOffsetPrev();
+        break;
+      case this.LIMIT_NEXT:
+        this._gridDateOffsetNext();
+        break;
+    }
+  },
 
   _scrollHeightSetter (value) {
     const scrollHeight = this.current.scrollHeight;
@@ -83,8 +94,9 @@ export default class StrategyY extends Strategy {
     );
 
     this._correctScrollY();
+    this._updateVisibleDate();
     this.isChanged = true;
-  }
+  },
 
   _scrollWidthSetter (value) {
     const scrollWidth = this.current.scrollWidth;
@@ -98,7 +110,7 @@ export default class StrategyY extends Strategy {
     );
 
     this.isChanged = true;
-  }
+  },
 
   _scrollXSetter (value) {
     value = this._limitScrollX(value);
@@ -106,16 +118,17 @@ export default class StrategyY extends Strategy {
       this.current.scrollX = value;
       this.isChanged = true;
     }
-  }
+  },
 
   _scrollYSetter (value) {
     value = this._limitScrollY(value);
     if (value !== this.current.scrollY) {
       this.current.scrollY = value;
       this._correctScrollY();
+      this._updateVisibleDate();
       this.isChanged = true;
     }
-  }
+  },
 
   _listRangeSetter (value) {
     value = value | 0;
@@ -124,4 +137,4 @@ export default class StrategyY extends Strategy {
       this.isChanged = true;
     }
   }
-}
+};

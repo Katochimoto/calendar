@@ -10,6 +10,7 @@ import {
   getDay,
   offsetOnDay,
   getMonthDate,
+  equalToMonth,
 } from '../../utils/date';
 
 import {
@@ -46,6 +47,10 @@ export function createGrid () {
         date >= this.current.datePartBegin &&
         date <= this.current.datePartEnd
       );
+    },
+
+    isCurrentMonthDate (date: number): boolean {
+      return equalToMonth(this.current.visibleMonth, date);
     },
 
     _updateVisibleDate ({

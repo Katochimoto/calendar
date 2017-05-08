@@ -76,5 +76,9 @@ export default class CommonStore extends Store {
   isVisibleDate (date: number): boolean {
     return this._strategy.isVisibleDate(date);
   }
+
+  isCurrentMonthDate (date: number): boolean {
+    return this._strategy.isCurrentMonthDate(date);
+  }
   // -------------------------------------------------------------
 }

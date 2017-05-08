@@ -104,7 +104,7 @@ export default {
   datePartBegin: 0,
   datePartEnd: 0,
   visibleDay: 0,
-  visiblemonth: 0,
+  visibleMonth: 0,
   visibleRateBegin: 0,
   visibleRateEnd: 0,
 };

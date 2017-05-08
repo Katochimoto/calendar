@@ -1,7 +1,15 @@
 import classnames from 'classnames';
 import styles from './index.less';
 
-export default function MonthWeekDay ({ date, isCurrentDate, isWeekend }, { datetime }) {
+export default function MonthWeekDay ({
+  date,
+  isCurrentDate,
+  isWeekend,
+}, {
+  datetime,
+  store
+}) {
+
   const odate = datetime.parseDate(date);
   const monthDate = odate.getDate();
   const weekDay = odate.getDay();
@@ -10,6 +18,7 @@ export default function MonthWeekDay ({ date, isCurrentDate, isWeekend }, { date
   const classes = classnames({
     [ styles.MonthWeekDay ]: true,
     [ styles.MonthWeekDay__weekend ]: isWeekend,
+    [ styles.MonthWeekDay__othermonth ]: !store.isCurrentMonthDate(date),
   });
 
   const classesDateTitle = classnames({

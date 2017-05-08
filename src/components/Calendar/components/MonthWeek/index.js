@@ -21,7 +21,8 @@ export default class MonthWeek extends StoreComponent {
       props.date !== nextProps.date ||
       props.hideWeekends !== nextProps.hideWeekends ||
       props.weekends !== nextProps.weekends ||
-      state.isVisible !== nextState.isVisible
+      state.isVisible !== nextState.isVisible ||
+      state.visibleMonth !== nextState.visibleMonth
     );
   }
 
@@ -30,8 +31,13 @@ export default class MonthWeek extends StoreComponent {
       context.store.isVisibleDate(props.date)
     );
 
+    const {
+      visibleMonth
+    } = context.store.getState();
+
     return {
-      isVisible
+      isVisible,
+      visibleMonth,
     };
   }
 

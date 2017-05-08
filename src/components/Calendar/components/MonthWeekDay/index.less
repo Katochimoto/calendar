@@ -9,6 +9,7 @@
   flex-shrink: 0;
   overflow: hidden;
   position: relative;
+  transition: background-color 500ms linear;
 
   &:last-child {
     border-right: none;
@@ -16,6 +17,10 @@
 
   &__weekend {
     background: @day-weekend-background-color;
+  }
+
+  &__othermonth {
+    background: @othermonth-day-background-color !important;
   }
 
   &_DateTitle {

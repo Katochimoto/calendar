@@ -3,13 +3,11 @@
 .MonthWeekDay {
   border-right: 1px solid #ddd;
   border-top: 1px solid #ddd;
-  box-sizing: border-box;
   flex-basis: 0;
   flex-grow: 1;
   flex-shrink: 0;
   overflow: hidden;
   position: relative;
-  transition: background-color 500ms linear;
 
   &:last-child {
     border-right: none;
@@ -19,46 +17,66 @@
     background: @day-weekend-background-color;
   }
 
-  &__othermonth {
-    background: @othermonth-day-background-color !important;
+  &__trbl2 {
+    box-shadow:
+      inset 0px -2px 0px 0px #ddd; // bottom
   }
 
-  &_DateTitle {
-    position: absolute;
-    top: 0;
-    right: 0;
-    display: inline-block;
-    line-height: @month-title-date-size;
-    margin: @month-title-date-margin;
-    font-size: @month-title-date-font-size;
-    cursor: pointer;
-    text-transform: lowercase;
-    text-align: right;
-
-    &__current {
-      margin: @month-title-date-margin - @month-title-current-date-padding;
-    }
+  &__trbl6 {
+    box-shadow:
+      inset -1px 0px 0px 0px #ddd, // right
+      inset 0px -2px 0px 0px #ddd; // bottom
   }
 
-  &_Date {
-    display: inline-block;
-
-    &__current {
-      background: @month-title-current-background;
-      border-radius: 50%;
-      color: @month-title-current-color;
-      height: @month-title-date-size;
-      padding: @month-title-current-date-padding;
-      text-align: center;
-      width: @month-title-date-size;
-    }
+  &__trbl8 {
+    box-shadow:
+      inset 0px 2px 0px 0px #ddd; // top
   }
 
-  &_Month {
-    margin-left: 3px;
+  &__trbl9 {
+    box-shadow:
+      inset 1px 0px 0px 0px #ddd, // left
+      inset 0px 2px 0px 0px #ddd; // top
+  }
+}
 
-    .mobile({
-      display: none;
-    })
+.MonthWeekDay_DateTitle {
+  position: absolute;
+  top: 0;
+  right: 0;
+  display: inline-block;
+  line-height: @month-title-date-size;
+  margin: @month-title-date-margin;
+  font-size: @month-title-date-font-size;
+  cursor: pointer;
+  text-transform: lowercase;
+  text-align: right;
+}
+
+.MonthWeekDay_Date {
+  display: inline-block;
+}
+
+.MonthWeekDay_Month {
+  margin-left: 3px;
+
+  .mobile({
+    display: none;
+  })
+}
+
+.MonthWeekDay__current {
+  .MonthWeekDay_DateTitle {
+    margin: @month-title-date-margin - @month-title-current-date-padding;
+  }
+
+  .MonthWeekDay_Date {
+    background: @month-title-current-background;
+    border-radius: 50%;
+    color: @month-title-current-color;
+    height: @month-title-date-size;
+    padding: @month-title-current-date-padding;
+    text-align: center;
+    width: @month-title-date-size;
   }
 }

@@ -2,6 +2,8 @@
 
 export const HOURMS = 60 * 60 * 1000;
 
+export const DAYMS = HOURMS * 24;
+
 export const WEEKDAYS = 7;
 
 /**
@@ -89,6 +91,11 @@ export function offsetOnWorksDay (
  */
 export function getDay (date: number): number {
   return parseDate(date).getDay();
+}
+
+export function getDate (date: number): number {
+  const _ = date / 100 ^ 0;
+  return date - _ * 100;
 }
 
 /**

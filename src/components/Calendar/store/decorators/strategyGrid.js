@@ -6,11 +6,13 @@ import {
 } from '../../utils/array';
 
 import {
-  HOURMS,
-  getDay,
-  offsetOnDay,
-  getMonthDate,
+  DAYMS,
   equalToMonth,
+  getDay,
+  getMonthDate,
+  HOURMS,
+  offsetOnDay,
+  parseDate,
 } from '../../utils/date';
 
 import {
@@ -60,8 +62,8 @@ export function createGrid () {
 
       const {
         currentDate,
-        hideWeekends,
-        weekends,
+        hideWeekends, // TODO
+        weekends, // TODO
       } = this.current;
 
       const range = this.getVisibleRange();
@@ -90,8 +92,12 @@ export function createGrid () {
       this.current.datePartBegin = offsetOnDay(currentDate, daysPartBegin);
       this.current.datePartEnd = offsetOnDay(currentDate, daysPartEnd);
 
+      const d = (
+        (parseDate(this.current.dateFullEnd) - parseDate(this.current.dateFullBegin)) / DAYMS
+      ) / 2 | 0;
+
       this.current.visibleDay = this.current.dateFullBegin;
-      this.current.visibleMonth = getMonthDate(offsetOnDay(this.current.dateFullBegin, 10));
+      this.current.visibleMonth = getMonthDate(offsetOnDay(this.current.dateFullBegin, d)); // TODO зависит от направления скрола
       this.current.visibleRateBegin = 100 * startRateRest / itemRate | 0;
       this.current.visibleRateEnd = 100 * endRateRest / itemRate | 0;
     },

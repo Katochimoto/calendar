@@ -32,12 +32,14 @@ export default class MonthWeek extends StoreComponent {
     );
 
     const {
-      visibleMonth
+      visibleMonth,
+      speedScrollY
     } = context.store.getState();
 
     return {
       isVisible,
       visibleMonth,
+      speedScrollY,
     };
   }
 
@@ -53,6 +55,7 @@ export default class MonthWeek extends StoreComponent {
           <MonthWeekDays
             date={date}
             hideWeekends={hideWeekends} />,
+
           <MonthWeekEvents />
         ];
       } else {

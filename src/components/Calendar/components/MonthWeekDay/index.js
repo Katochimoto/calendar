@@ -1,4 +1,3 @@
-import cls from '../../utils/cls';
 import styles from './index.less';
 
 export default function MonthWeekDay ({
@@ -14,11 +13,12 @@ export default function MonthWeekDay ({
 
   const isFirstDay = monthDate === 1;
 
-  const classes = cls`
-${styles.MonthWeekDay}
-${isWeekend && styles.MonthWeekDay__weekend || ''}
-${isCurrentDate && styles.MonthWeekDay__current || ''}
-${trbl && styles[`MonthWeekDay__trbl${trbl}`] || ''}`;
+  const classes = [
+    styles.MonthWeekDay,
+    isWeekend     && styles.MonthWeekDay__weekend || '',
+    isCurrentDate && styles.MonthWeekDay__current || '',
+    trbl          && styles[`MonthWeekDay__trbl${trbl}`] || ''
+  ].join(' ');
 
   const monthName = do {
     if (isFirstDay) {

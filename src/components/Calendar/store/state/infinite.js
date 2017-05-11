@@ -97,4 +97,6 @@ export default {
   //stepScrollX: false,     // ? пошаговый скролл по X
   //freeScrollX: false,     // ? свободный скролл по X
   //freeScrollY: false,     // ? свободный скролл по Y
+
+  
 };

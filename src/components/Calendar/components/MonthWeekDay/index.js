@@ -1,26 +1,24 @@
-import classnames from 'classnames';
 import styles from './index.less';
 
-export default function MonthWeekDay ({ date, isCurrentDate, isWeekend }, { datetime }) {
-  const odate = datetime.parseDate(date);
-  const monthDate = odate.getDate();
-  const weekDay = odate.getDay();
+export default function MonthWeekDay ({
+  date,
+  isCurrentDate,
+  isWeekend,
+  monthDate,
+  trbl,
+}, {
+  datetime,
+  store,
+}) {
+
   const isFirstDay = monthDate === 1;
 
-  const classes = classnames({
-    [ styles.MonthWeekDay ]: true,
-    [ styles.MonthWeekDay__weekend ]: isWeekend,
-  });
-
-  const classesDateTitle = classnames({
-    [ styles.MonthWeekDay_DateTitle ]: true,
-    [ styles.MonthWeekDay_DateTitle__current ]: isCurrentDate,
-  });
-
-  const classesDate = classnames({
-    [ styles.MonthWeekDay_Date ]: true,
-    [ styles.MonthWeekDay_Date__current ]: isCurrentDate,
-  });
+  const classes = [
+    styles.MonthWeekDay,
+    isWeekend     && styles.MonthWeekDay__weekend || '',
+    isCurrentDate && styles.MonthWeekDay__current || '',
+    trbl          && styles[`MonthWeekDay__trbl${trbl}`] || ''
+  ].join(' ');
 
   const monthName = do {
     if (isFirstDay) {
@@ -36,8 +34,8 @@ export default function MonthWeekDay ({ date, isCurrentDate, isWeekend }, { date
 
   return (
     <div className={classes}>
-      <span className={classesDateTitle}>
-        <span className={classesDate}>
+      <span className={styles.MonthWeekDay_DateTitle}>
+        <span className={styles.MonthWeekDay_Date}>
           {monthDate}
         </span>
         {monthName}

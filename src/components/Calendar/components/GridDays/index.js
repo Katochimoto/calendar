@@ -10,15 +10,15 @@ import styles from './index.less';
 export default class GridDays extends Component {
   constructor (props, context) {
     super(props, context);
-    context.infiniteStore.switchStrategyX();
+    context.store.switchStrategyGridDay();
   }
 
   handleWheel (deltaX, deltaY) {
-    this.context.infiniteStore.updateScrollByWheel(deltaX, deltaY);
+    this.context.store.updateScrollByWheel(deltaX, deltaY);
   }
 
   handleWheelStop () {
-    this.context.infiniteStore.updateScrollByWheel(0, 0);
+    this.context.store.updateScrollByWheel(0, 0);
   }
 
   render () {

@@ -2,6 +2,8 @@
 
 export const HOURMS = 60 * 60 * 1000;
 
+export const DAYMS = HOURMS * 24;
+
 export const WEEKDAYS = 7;
 
 /**
@@ -91,6 +93,11 @@ export function getDay (date: number): number {
   return parseDate(date).getDay();
 }
 
+export function getDate (date: number): number {
+  const _ = date / 100 ^ 0;
+  return date - _ * 100;
+}
+
 /**
  * Первый день месяца.
  * @param {number} date
@@ -100,4 +107,16 @@ export function getMonthDate (date: number): number {
   const d = parseDate(date);
   d.setDate(1);
   return formatDate(d);
+}
+
+export function equalToMonth (date1: number, date2: number): boolean {
+  const y1 = date1 / 10000 ^ 0;
+  const m1 = ((date1 / 100 ^ 0) - 100 * y1) - 1;
+  const y2 = date2 / 10000 ^ 0;
+  const m2 = ((date2 / 100 ^ 0) - 100 * y2) - 1;
+
+  return (
+    y1 === y2 &&
+    m1 === m2
+  );
 }

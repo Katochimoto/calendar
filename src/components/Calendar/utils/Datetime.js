@@ -1,6 +1,6 @@
 // @flow
 
-import { getDay, parseDate, formatDate, offsetOnDay } from './date';
+import { getDay, parseDate, formatDate, offsetOnDay, getDate } from './date';
 import Strategy from './Datetime/Strategy';
 
 interface DatetimeStrategy {
@@ -37,6 +37,10 @@ export default class Datetime {
     return getDay(date);
   }
 
+  getDate (date: number): number {
+    return getDate(date);
+  }
+
   parseDate (date: number): Date {
     return parseDate(date);
   }
@@ -44,7 +48,7 @@ export default class Datetime {
   formatDate (date: Date): number {
     return formatDate(date);
   }
-  
+
   offsetOnDay (date: number, offset: number): number {
     return offsetOnDay(date, offset);
   }

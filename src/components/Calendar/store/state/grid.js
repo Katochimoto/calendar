@@ -97,5 +97,14 @@ export default {
    * @type {number}
    * @public
    */
-  beginningOfWeek: 1
+  beginningOfWeek: 1,
+
+  dateFullBegin: 0,
+  dateFullEnd: 0,
+  datePartBegin: 0,
+  datePartEnd: 0,
+  visibleDay: 0,
+  visibleMonth: 0,
+  visibleRateBegin: 0,
+  visibleRateEnd: 0,
 };

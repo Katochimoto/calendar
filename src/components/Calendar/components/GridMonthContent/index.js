@@ -11,8 +11,6 @@ export default class GridMonthContent extends StoreComponent {
   constructor (props, context) {
     super(props, context);
     this.getItemElement = this.getItemElement.bind(this);
-    this.handleInfiniteNext = this.handleInfiniteNext.bind(this);
-    this.handleInfinitePrev = this.handleInfinitePrev.bind(this);
   }
 
   transformState (props, context) {
@@ -34,30 +32,8 @@ export default class GridMonthContent extends StoreComponent {
     );
   }
 
-  handleInfiniteNext () {
-    const store = this.context.store;
-
-    store.update({
-      currentDate: store.gridDateOffset(
-        this.state.currentDate,
-        this.state.gridMonthItemSize
-      )
-    });
-  }
-
-  handleInfinitePrev () {
-    const store = this.context.store;
-
-    store.update({
-      currentDate: store.gridDateOffset(
-        this.state.currentDate,
-        -(this.state.gridMonthItemSize)
-      )
-    });
-  }
-
   handleResize () {
-    this.context.infiniteStore.update(this.getRect());
+    this.context.store.update(this.getRect());
   }
 
   getItemElement (offset) {
@@ -66,10 +42,7 @@ export default class GridMonthContent extends StoreComponent {
       gridMonthItemSize,
     } = this.state;
 
-    const date = this.context.store.gridDateOffset(
-      currentDate,
-      offset * gridMonthItemSize
-    );
+    const date = this.context.store.gridDateItemOffset(currentDate, offset);
 
     return (
       <GridMonthItem
@@ -91,9 +64,7 @@ export default class GridMonthContent extends StoreComponent {
         className={styles.GridMonthContent}>
 
         <InfiniteList
-          getItemElement={this.getItemElement}
-          next={this.handleInfiniteNext}
-          prev={this.handleInfinitePrev} />
+          getItemElement={this.getItemElement} />
       </div>
     );
   }

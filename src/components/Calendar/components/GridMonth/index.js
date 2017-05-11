@@ -9,15 +9,15 @@ import styles from './index.less';
 export default class GridMonth extends Component {
   constructor (props, context) {
     super(props, context);
-    context.infiniteStore.switchStrategyY();
+    context.store.switchStrategyGridMonth();
   }
 
   handleWheel (deltaX, deltaY) {
-    this.context.infiniteStore.updateScrollByWheel(deltaX, deltaY);
+    this.context.store.updateScrollByWheel(deltaX, deltaY);
   }
 
   handleWheelStop () {
-    this.context.infiniteStore.updateScrollByWheel(0, 0);
+    this.context.store.updateScrollByWheel(0, 0);
   }
 
   render () {

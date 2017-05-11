@@ -127,7 +127,10 @@ export default {
     }),
 
     RollupPluginBuble({
-      exclude: 'node_modules/**'
+      exclude: 'node_modules/**',
+      transforms: {
+        dangerousTaggedTemplateString: true
+      }
     }),
 
     RollupPluginNodeResolve({

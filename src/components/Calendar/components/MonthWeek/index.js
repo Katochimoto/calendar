@@ -1,4 +1,4 @@
-import { Component } from '../../utils/Component';
+import { StoreComponent } from '../../utils/Component';
 /* @if NODE_ENV=='development' **
 import { PropTypes } from '../../utils/Component';
 /* @endif */
@@ -7,19 +7,7 @@ import MonthWeekDays from '../MonthWeekDays';
 import MonthWeekEvents from '../MonthWeekEvents';
 import styles from './index.less';
 
-export default class MonthWeek extends Component {
-  constructor (props, context) {
-    super(props, context);
-    this.handleVisible = this.handleVisible.bind(this);
-  }
-
-  componentDidMount () {
-    this.context.visible.addChangeListener(this.handleVisible, this);
-  }
-
-  componentWillUnmount () {
-    this.context.visible.removeChangeListener(this.handleVisible, this);
-  }
+export default class MonthWeek extends StoreComponent {
 
   componentWillReceiveProps (nextProps) {
     this.updateState(nextProps);
@@ -33,17 +21,25 @@ export default class MonthWeek extends Component {
       props.date !== nextProps.date ||
       props.hideWeekends !== nextProps.hideWeekends ||
       props.weekends !== nextProps.weekends ||
-      state.isVisible !== nextState.isVisible
+      state.isVisible !== nextState.isVisible ||
+      state.visibleMonth !== nextState.visibleMonth
     );
   }
 
   transformState (props, context) {
     const isVisible = (
-      context.visible.isVisible(props.date)
+      context.store.isVisibleDate(props.date)
     );
 
+    const {
+      visibleMonth,
+      speedScrollY
+    } = context.store.getState();
+
     return {
-      isVisible
+      isVisible,
+      visibleMonth,
+      speedScrollY,
     };
   }
 
@@ -59,6 +55,7 @@ export default class MonthWeek extends Component {
           <MonthWeekDays
             date={date}
             hideWeekends={hideWeekends} />,
+
           <MonthWeekEvents />
         ];
       } else {

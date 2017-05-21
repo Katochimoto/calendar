@@ -34,7 +34,10 @@
 @month-title-current-background: #f00;
 
 .mobile (@rules) {
-  @media screen and (max-width: 480px) {
+  @media
+    screen and (max-width: 480px),
+    screen and (max-width: 600px) and (orientation: landscape) {
+
     @rules();
   }
 }

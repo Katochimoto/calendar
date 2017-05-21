@@ -41,16 +41,21 @@
 }
 
 .MonthWeekDay_DateTitle {
-  position: absolute;
-  top: 0;
-  right: 0;
-  display: inline-block;
-  line-height: @month-title-date-size;
-  margin: @month-title-date-margin;
-  font-size: @month-title-date-font-size;
   cursor: pointer;
-  text-transform: lowercase;
+  display: inline-block;
+  font-size: 1em;
+  line-height: 1.6em;
+  margin: 0 0.3em;
+  position: absolute;
+  right: 0;
   text-align: right;
+  text-transform: lowercase;
+  top: 0;
+
+  .mobile({
+    line-height: 1.4em;
+    margin: 0 0.2em;
+  })
 }
 
 .MonthWeekDay_Date {
@@ -66,17 +71,9 @@
 }
 
 .MonthWeekDay__current {
-  .MonthWeekDay_DateTitle {
-    margin: @month-title-date-margin - @month-title-current-date-padding;
-  }
-
   .MonthWeekDay_Date {
-    background: @month-title-current-background;
-    border-radius: 50%;
-    color: @month-title-current-color;
-    height: @month-title-date-size;
-    padding: @month-title-current-date-padding;
-    text-align: center;
-    width: @month-title-date-size;
+    color: #f00;
+    font-weight: bold;
+    text-decoration: underline;
   }
 }

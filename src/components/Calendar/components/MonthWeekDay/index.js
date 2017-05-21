@@ -14,7 +14,7 @@ export default function MonthWeekDay ({
   const isFirstDay = monthDate === 1;
 
   const classes = [
-    styles.MonthWeekDay,
+    true          && styles.MonthWeekDay,
     isWeekend     && styles.MonthWeekDay__weekend || '',
     isCurrentDate && styles.MonthWeekDay__current || '',
     trbl          && styles[`MonthWeekDay__trbl${trbl}`] || ''

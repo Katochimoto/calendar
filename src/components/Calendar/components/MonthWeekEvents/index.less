@@ -1,9 +1,25 @@
 @import (reference, once) "../../style/constant";
 
 .MonthWeekEvents {
-  position: absolute;
-  top: @month-title-height;
-  left: 0;
-  right: 0;
   bottom: 0;
+  left: 0;
+  overflow: hidden;
+  position: absolute;
+  right: 0;
+  top: @month-title-height;
+}
+
+.MonthWeekEvent {
+  overflow: hidden;
+  position: relative;
+  line-height: 10px;
+  font-size: 10px;
+
+  &_Content {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+  }
 }

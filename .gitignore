@@ -1,5 +1,6 @@
 .idea
 .npm-debug.log
+.vscode
 node_modules
 bower_components
 coverage

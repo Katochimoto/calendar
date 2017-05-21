@@ -67,3 +67,22 @@
     @rules();
   }
 }
+
+.randomColor () {
+  @randomColor: `'0123456789ABCDEF'.split('').sort(function(){return.5-Math.random()}).slice(0,6).join('')`;
+  @colorHex: e(@randomColor);
+  @color: ~"#@{colorHex}";
+}
+
+.repeat (@name; @count; @sep: " ") {
+  @srepeat: `Array(@{count}).fill(@{name}).join(@{sep})`;
+  @repeat: ~"@{srepeat}";
+}
+
+.loop (@name; @cnt; @rules; @index: 1) when (@index =< @cnt) {
+  .loop(@name; @cnt; @rules; (@index + 1));
+
+  &@{name}@{index} {
+    @rules();
+  }
+}

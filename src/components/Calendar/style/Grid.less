@@ -1,61 +1,5 @@
 @import (reference, once) "./constant";
 
-.randomColor () {
-  @randomColor: `'0123456789ABCDEF'.split('').sort(function(){return.5-Math.random()}).slice(0,6).join('')`;
-  @colorHex: e(@randomColor);
-  @color: ~"#@{colorHex}";
-}
-
-.repeat (@name; @count; @sep: " ") {
-  @srepeat: `Array(@{count}).fill(@{name}).join(@{sep})`;
-  @repeat: ~"@{srepeat}";
-}
-
-.grid_column_start (@name; @columns; @index: 1) when (@index =< @columns) {
-  .grid_column_start(@name; @columns; (@index + 1));
-
-  &_@{name}@{index} {
-    //width: ( percentage(@index / @columns) );
-    .randomColor();
-    grid-column-start: @index;
-    background-color: @color;
-  }
-}
-
-.grid_column_end (@name; @columns; @index: 1) when (@index =< @columns) {
-  .grid_column_end(@name; @columns; (@index + 1));
-
-  &_@{name}@{index} {
-    grid-column-end: @index + 1;
-  }
-}
-
-.grid_row_start (@name; @columns; @index: 1) when (@index =< @columns) {
-  .grid_row_start(@name; @columns; (@index + 1));
-
-  &_@{name}@{index} {
-    grid-row-start: @index;
-  }
-}
-
-.grid_columns (@name; @columns; @index: 1) when (@index =< @columns) {
-  .grid_columns(@name; @columns; (@index + 1));
-
-  &_@{name}@{index} {
-    .repeat("auto"; @index);
-    grid-template-columns: @repeat;
-  }
-}
-
-.grid_rows (@name; @columns; @index: 1) when (@index =< @columns) {
-  .grid_rows(@name; @columns; (@index + 1));
-
-  &_@{name}@{index} {
-    .repeat("auto"; @index);
-    grid-template-rows: @repeat;
-  }
-}
-
 .Grid {
   display: grid;
   justify-items: stretch;
@@ -64,9 +8,28 @@
   align-content: stretch;
   grid-row-gap: 1px;
 
-  .grid_columns(columns; 7);
-  .grid_rows(rows; 10);
-  .grid_column_start(cs; 7);
-  .grid_column_end(ce; 7);
-  .grid_row_start(rs, 10);
+  .loop(__columns; 7; {
+    .repeat("auto"; @index);
+    grid-template-columns: @repeat;
+  });
+
+  .loop(__rows; 10; {
+    .repeat("auto"; @index);
+    grid-template-rows: @repeat;
+  });
+
+  .loop(_ColumnStart; 7; {
+    //width: ( percentage(@index / @columns) );
+    .randomColor();
+    grid-column-start: @index;
+    background-color: @color;
+  });
+
+  .loop(_ColumnEnd; 7; {
+    grid-column-end: @index + 1;
+  });
+
+  .loop(_RowStart; 10; {
+    grid-row-start: @index;
+  });
 }

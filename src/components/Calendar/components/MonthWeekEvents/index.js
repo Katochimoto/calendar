@@ -17,7 +17,10 @@ export default function MonthWeekEvents () {
 
   return (
     <div className={classes}>
-      <MonthWeekEvent row={1} scol={1} ecol={2} />
+      <MonthWeekEvent
+        rowStart={1}
+        columnStart={1}
+        columnEnd={2} />
     </div>
   );
 }

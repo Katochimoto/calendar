@@ -4,15 +4,15 @@ import styles from './index.less';
 import gridStyles from '../../style/Grid.less';
 
 export default function MonthWeekEvent ({
-  ecol,
-  row,
-  scol,
+  columnEnd,
+  columnStart,
+  rowStart,
 }) {
   const classes = classnames({
     [ styles.MonthWeekEvent ]: true,
-    [ gridStyles[ `Grid_ColumnStart${scol}` ] ]: true,
-    [ gridStyles[ `Grid_ColumnEnd${ecol}` ] ]: ecol > scol,
-    [ gridStyles[ `Grid_RowStart${row}` ] ]: true,
+    [ gridStyles[ `Grid_ColumnStart${columnStart}` ] ]: true,
+    [ gridStyles[ `Grid_ColumnEnd${columnEnd}` ] ]: columnEnd > columnStart,
+    [ gridStyles[ `Grid_RowStart${rowStart}` ] ]: true,
   });
 
   return (

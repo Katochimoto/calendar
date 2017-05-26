@@ -128,10 +128,7 @@ export default class InfiniteList extends StoreComponent {
 
 /* @if NODE_ENV=='development' **
 InfiniteList.propTypes = {
-  change: PropTypes.function,
-  getItemElement: PropTypes.function,
-  next: PropTypes.function,
-  prev: PropTypes.function,
+  getItemElement: PropTypes.func,
 };
 /* @endif */
 

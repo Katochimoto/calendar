@@ -3,7 +3,10 @@ import context from './decorators/context';
 import stateful from './decorators/stateful';
 import mutable from './decorators/mutable';
 
-export const PropTypes = React.PropTypes;
+/* @if NODE_ENV=='development' **
+import PropTypes from 'prop-types';
+export { PropTypes };
+/* @endif */
 
 @context
 @stateful

@@ -70,7 +70,7 @@ export default class Day extends StoreComponent {
 Day.propTypes = {
   date: PropTypes.number,
   hoursOfDay: PropTypes.string,
-  isWeekend: PropTypes.boolean,
+  isWeekend: PropTypes.bool,
 };
 /* @endif */
 

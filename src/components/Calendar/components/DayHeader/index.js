@@ -40,7 +40,7 @@ export default class DayHeader extends Component {
 /* @if NODE_ENV=='development' **
 DayHeader.propTypes = {
   date: PropTypes.number,
-  isWeekend: PropTypes.boolean,
+  isWeekend: PropTypes.bool,
 };
 /* @endif */
 

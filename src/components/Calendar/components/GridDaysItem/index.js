@@ -76,7 +76,7 @@ export default class GridDaysItem extends StoreComponent {
 /* @if NODE_ENV=='development' **
 GridDaysItem.propTypes = {
   date: PropTypes.number,
-  ItemComponent: PropTypes.function,
+  ItemComponent: PropTypes.func,
   itemSize: PropTypes.number,
 };
 /* @endif */

@@ -74,7 +74,7 @@ export default class MonthWeek extends StoreComponent {
 /* @if NODE_ENV=='development' **
 MonthWeek.propTypes = {
   date: PropTypes.number,
-  hideWeekends: PropTypes.boolean,
+  hideWeekends: PropTypes.bool,
   weekends: PropTypes.string,
 };
 /* @endif */

@@ -39,10 +39,10 @@ export default class InfiniteListItem extends Component {
 
 /* @if NODE_ENV=='development' **
 InfiniteListItem.propTypes = {
-  getItemElement: PropTypes.function,
-  isVisible: PropTypes.boolean,
+  getItemElement: PropTypes.func,
+  isVisible: PropTypes.bool,
   offset: PropTypes.number,
-  saxisx: PropTypes.boolean,
+  saxisx: PropTypes.bool,
   updated: PropTypes.number,
 };
 /* @endif */

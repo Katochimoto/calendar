@@ -56,7 +56,8 @@ export default class MonthWeek extends StoreComponent {
             date={date}
             hideWeekends={hideWeekends} />,
 
-          <MonthWeekEvents />
+          <MonthWeekEvents
+            date={date} />
         ];
       } else {
         null;

@@ -8,28 +8,38 @@
   align-content: stretch;
   grid-row-gap: 1px;
 
-  .loop(__columns; 7; {
-    .repeat("auto"; @index);
-    grid-template-columns: @repeat;
-  });
+  &__columns {
+    .loop(7; {
+      .repeat("auto"; @index);
+      grid-template-columns: @repeat;
+    });
+  }
 
-  .loop(__rows; 10; {
-    .repeat("auto"; @index);
-    grid-template-rows: @repeat;
-  });
+  &__rows {
+    .loop(10; {
+      .repeat("auto"; @index);
+      grid-template-rows: @repeat;
+    });
+  }
 
-  .loop(_ColumnStart; 7; {
-    //width: ( percentage(@index / @columns) );
-    .randomColor();
-    grid-column-start: @index;
-    background-color: @color;
-  });
+  &_ColumnStart {
+    .loop(7; {
+      //width: ( percentage(@index / @columns) );
+      .randomColor();
+      grid-column-start: @index;
+      background-color: @color;
+    });
+  }
 
-  .loop(_ColumnEnd; 7; {
-    grid-column-end: @index + 1;
-  });
+  &_ColumnEnd {
+    .loop(7; {
+      grid-column-end: @index + 1;
+    });
+  }
 
-  .loop(_RowStart; 10; {
-    grid-row-start: @index;
-  });
+  &_RowStart {
+    .loop(10; {
+      grid-row-start: @index;
+    });
+  }
 }

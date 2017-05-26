@@ -1,17 +1,23 @@
 import classnames from 'classnames';
 
+import MonthWeekEvent from '../MonthWeekEvent';
+
 import styles from './index.less';
 import gridStyles from '../../style/Grid.less';
 
 export default function MonthWeekEvents () {
+  const days = 7;
+  const rows = 5;
   const classes = classnames({
     [ styles.MonthWeekEvents ]: true,
-    [ gridStyles.Grid ]: true
+    [ gridStyles.Grid ]: true,
+    [ gridStyles[ `Grid__columns${days}` ] ]: true,
+    [ gridStyles[ `Grid__rows${rows}` ] ]: true,
   });
 
   return (
     <div className={classes}>
-
+      <MonthWeekEvent row={1} scol={1} ecol={2} />
     </div>
   );
 }

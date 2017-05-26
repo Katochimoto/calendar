@@ -9,6 +9,20 @@ export default class CommonStore extends Store {
     super(strategy || (new GridDayStrategy: StoreStrategy));
   }
 
+  switchStrategyGridDay () {
+    const state = { ...this.getState() };
+    state.scrollY = undefined;
+    state.scrollX = undefined;
+    this.setStrategy(new GridDayStrategy(state));
+  }
+
+  switchStrategyGridMonth () {
+    const state = { ...this.getState() };
+    state.scrollY = undefined;
+    state.scrollX = undefined;
+    this.setStrategy(new GridMonthStrategy(state));
+  }
+
   // -------------------------------------------------------------
   gridDateOffset (date: number, offset: number): number {
     return this._strategy.gridDateOffset(date, offset);
@@ -47,20 +61,6 @@ export default class CommonStore extends Store {
 
   getVisibleRange () {
     return this._strategy.getVisibleRange();
-  }
-
-  switchStrategyGridDay () {
-    const state = { ...this.getState() };
-    state.scrollY = undefined;
-    state.scrollX = undefined;
-    this.setStrategy(new GridDayStrategy(state));
-  }
-
-  switchStrategyGridMonth () {
-    const state = { ...this.getState() };
-    state.scrollY = undefined;
-    state.scrollX = undefined;
-    this.setStrategy(new GridMonthStrategy(state));
   }
   // -------------------------------------------------------------
 

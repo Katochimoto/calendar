@@ -4,10 +4,10 @@ import MonthWeekDay from '../MonthWeekDay';
 import styles from './index.less';
 
 const TRBL = {
-  B: 2,
-  RB: 6,
-  T: 8,
-  TL: 9,
+  B:  0b0010,
+  RB: 0b0110,
+  T:  0b1000,
+  TL: 0b1001,
 };
 
 export default function MonthWeekDays ({

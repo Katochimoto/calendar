@@ -5,7 +5,14 @@ import MonthWeekEvent from '../MonthWeekEvent';
 import styles from './index.less';
 import gridStyles from '../../style/Grid.less';
 
-export default function MonthWeekEvents () {
+export default function MonthWeekEvents ({
+  date,
+  hideWeekends,
+}, {
+  datetime,
+  store,
+}) {
+
   const days = 7;
   const rows = 5;
   const classes = classnames({

@@ -35,7 +35,8 @@ export default {
   globals: {
     'classnames': 'vendor._classnames',
     'preact-compat': 'vendor._preact_compat',
-    'preact': 'vendor._preact'
+    'preact': 'vendor._preact',
+    'prop-types': 'vendor._prop_types'
   },
   plugins: [
     RollupPluginJSON(),

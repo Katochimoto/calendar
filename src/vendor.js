@@ -3,13 +3,15 @@ import _preact_compat from 'preact-compat';
 import _classnames from 'classnames';
 import _raf from 'raf';
 import _setimmediate2 from 'setimmediate2';
+import _prop_types from 'prop-types';
 import 'es6-symbol/implement';
 
 _raf.polyfill();
 _setimmediate2.polifill();
 
 export default {
-  _preact,
+  _classnames,
   _preact_compat,
-  _classnames
+  _preact,
+  _prop_types,
 };

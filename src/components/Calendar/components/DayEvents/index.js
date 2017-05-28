@@ -12,6 +12,17 @@ import styles from './index.less';
 
 export default class DayEvents extends EventsComponent {
 
+  transformState (props, context) {
+    const interval = this.getInterval(props);
+    const events = context.events.getByInterval(interval);
+    const { INTERVALS } = context.store.getState();
+
+    return {
+      events,
+      INTERVALS
+    };
+  }
+
   shouldComponentUpdate (nextProps, nextState) {
     return (
       this.props.date !== nextProps.date ||
@@ -20,53 +31,8 @@ export default class DayEvents extends EventsComponent {
     );
   }
 
-  componentDidMount () {
-    super.componentDidMount();
-    this.upload();
-  }
-
-  componentWillReceiveProps (nextProps) {
-    this.updateState(nextProps);
-
-    if (this.props.date !== nextProps.date) {
-      this.upload(this.getInterval(nextProps));
-    }
-  }
-
-  componentDidUpdate (prevProps) {
-    super.componentDidUpdate();
-
-    //if (this.props.date !== prevProps.date) {
-    //  this.upload();
-    //}
-  }
-
-  componentWillUnmount () {
-    super.componentWillUnmount();
-    this.cancelUpload();
-  }
-
   getInterval (props = this.props) {
     return [ props.date ];
-  }
-
-  transformState (props, context) {
-    const interval = this.getInterval(props);
-    const events = context.events.getByInterval(interval);
-    const { INTERVALS } = context.store.getState();
-    return { events, INTERVALS };
-  }
-
-  upload (interval = this.getInterval()) {
-    this.cancelUpload();
-    this._upload = this.context.events.uploadByInterval(interval);
-  }
-
-  cancelUpload () {
-    if (this._upload) {
-      this._upload.cancel();
-      this._upload = null;
-    }
   }
 
   getItems () {

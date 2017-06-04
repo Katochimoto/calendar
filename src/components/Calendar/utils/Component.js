@@ -51,7 +51,6 @@ export class EventsComponent extends React.Component {
    * @final
    */
   componentDidMount () {
-    super.componentDidMount();
     this.upload();
   }
 
@@ -59,7 +58,6 @@ export class EventsComponent extends React.Component {
    * @final
    */
   componentWillUnmount () {
-    super.componentWillUnmount();
     this.cancelUpload();
   }
 

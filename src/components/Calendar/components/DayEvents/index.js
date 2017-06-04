@@ -26,8 +26,8 @@ export default class DayEvents extends EventsComponent {
   shouldComponentUpdate (nextProps, nextState) {
     return (
       this.props.date !== nextProps.date ||
-      this.props.hoursOfDay !== nextProps.hoursOfDay
-      // this.state.eventsIterator !== nextState.eventsIterator // вернуть после Immutable событий
+      this.props.hoursOfDay !== nextProps.hoursOfDay ||
+      this.state.eventsIterator !== nextState.eventsIterator
     );
   }
 
@@ -53,7 +53,7 @@ export default class DayEvents extends EventsComponent {
     while ((result = events.next()) && !result.done) {
       const event = result.value;
 
-      const { id, timeEnd, timeBegin } = event;
+      const { ID, timeEnd, timeBegin } = event.getData();
 
       for (let j = 0; j < ilen; j++) {
         const interval = INTERVALS[j];
@@ -90,15 +90,15 @@ export default class DayEvents extends EventsComponent {
             columnsTimeMax = timeEnd;
           }
 
-          const column = (id in eventsColumn) ?
-            eventsColumn[ id ] :
+          const column = (ID in eventsColumn) ?
+            eventsColumn[ ID ] :
             getColumn(timeBegin, columns);
 
           columns[ column ] = timeEnd;
-          eventsColumn[ id ] = column;
+          eventsColumn[ ID ] = column;
 
           items.push({
-            key: `${intervalKey}-${id}`,
+            key: `${intervalKey}-${ID}`,
             top: store.timeToRate(Math.max(timeBegin, intervalBegin)),
             bottom: 100 - store.timeToRate(Math.min(timeEnd, intervalEnd - 1)),
             column: column,

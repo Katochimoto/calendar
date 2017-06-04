@@ -12,26 +12,19 @@ export default class Strategy extends EventEmitter {
   getById (id: string): ?Object {}
 
   getByInterval (interval: number[]): Array<Object> {
-    const dateBegin = interval[0]
-    const dateEnd = interval[1] || dateBegin;
-    const checkInInterval = (item) => (
-      item.dateBegin >= dateBegin &&
-      item.dateBegin <= dateEnd
-    );
-
-    let idx = state.findIndex(checkInInterval);
-
-    // FIXME remove later
-    if (idx === -1) {
-      fillStateSamples(dateBegin, dateEnd);
-      idx = state.findIndex(checkInInterval);
+    let idx = -1;
+    for (let i = 0, len = state.length; i < len; i++) {
+      if (state[i].isBeginInInterval(interval)) {
+        idx = i;
+        break;
+      }
     }
 
     return {
       next () {
-        const event = state[idx];
+        const item = state[idx];
 
-        if (!event || !checkInInterval(event)) {
+        if (!item || !(item.isBeginInInterval(interval))) {
           return { done: true };
         }
 
@@ -39,24 +32,42 @@ export default class Strategy extends EventEmitter {
 
         return {
           done: false,
-          value: event
+          value: item
         };
       }
     };
   }
 
   @lazy
-  uploadByInterval (interval: number[]): void {
+  uploadByInterval (intervals: Array<Number[]>): void {
+    // FIXME remove later
     setTimeout(() => {
+      intervals.forEach((interval) => {
+        let idx = -1;
+        for (let i = 0, len = state.length; i < len; i++) {
+          if (state[i].isBeginInInterval(interval)) {
+            idx = i;
+            break;
+          }
+        }
+
+        if (idx === -1) {
+          fillStateSamples(interval);
+        }
+      });
+
       this.emitChange();
     }, 500);
   }
 }
 
-function fillStateSamples (dateBegin, dateEnd) {
+function fillStateSamples (interval) {
+  const dateBegin = interval[0]
+  const dateEnd = interval[1] || dateBegin;
+
   const data = [
     {
-      id: `${dateBegin}T03:30:00--${dateEnd}T07:30:00`,
+      ID: `${dateBegin}T03:30:00--${dateEnd}T07:30:00`,
       dateBegin: dateBegin,
       dateEnd: dateEnd,
       timeBegin: (3 * 60 + 30) * 60 * 1000,
@@ -65,7 +76,7 @@ function fillStateSamples (dateBegin, dateEnd) {
       UPDATED: Math.random() + 1
     },
     {
-      id: `${dateBegin}T06:00:00--${dateEnd}T09:00:00`,
+      ID: `${dateBegin}T06:00:00--${dateEnd}T09:00:00`,
       dateBegin: dateBegin,
       dateEnd: dateEnd,
       timeBegin: (6 * 60) * 60 * 1000,
@@ -74,7 +85,7 @@ function fillStateSamples (dateBegin, dateEnd) {
       UPDATED: Math.random() + 2
     },
     {
-      id: `${dateBegin}T07:30:00--${dateEnd}T10:00:00`,
+      ID: `${dateBegin}T07:30:00--${dateEnd}T10:00:00`,
       dateBegin: dateBegin,
       dateEnd: dateEnd,
       timeBegin: (7 * 60 + 30) * 60 * 1000,
@@ -83,7 +94,7 @@ function fillStateSamples (dateBegin, dateEnd) {
       UPDATED: Math.random() + 3
     },
     {
-      id: `${dateBegin}T11:00:00--${dateEnd}T12:30:00`,
+      ID: `${dateBegin}T11:00:00--${dateEnd}T12:30:00`,
       dateBegin: dateBegin,
       dateEnd: dateEnd,
       timeBegin: (11 * 60) * 60 * 1000,
@@ -94,6 +105,8 @@ function fillStateSamples (dateBegin, dateEnd) {
   ].map(item => Event.create(item));
 
   state = state.concat(data);
+
+  /*
   state.sort((a, b) => {
     if (a.dateBegin > b.dateBegin) {
       return 1;
@@ -109,4 +122,5 @@ function fillStateSamples (dateBegin, dateEnd) {
       }
     }
   });
+  */
 }

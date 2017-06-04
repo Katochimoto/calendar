@@ -2,7 +2,7 @@
 
 import { qlazy } from './decorators/lazy';
 import EventEmitter from './EventEmitter';
-import EventsStrategyDefault from './Events/EventsStrategyDefault';
+import Strategy from './Events/Strategy';
 
 interface EventsStrategy extends EventEmitter {
   getById (id: string): ?Object;
@@ -18,7 +18,7 @@ export default class Events extends EventEmitter {
 
   constructor (strategy: ?EventsStrategy) {
     super();
-    this._strategy = strategy || (new EventsStrategyDefault: EventsStrategy);
+    this._strategy = strategy || (new Strategy: EventsStrategy);
     this._strategy.addChangeListener(this._handleChangeEventsStrategy, this);
   }
 

@@ -14,11 +14,11 @@ export default class DayEvents extends EventsComponent {
 
   transformState (props, context) {
     const interval = this.getInterval(props);
-    const events = context.events.getByInterval(interval);
+    const eventsIterator = context.events.getByInterval(interval);
     const { INTERVALS } = context.store.getState();
 
     return {
-      events,
+      eventsIterator,
       INTERVALS
     };
   }
@@ -27,7 +27,7 @@ export default class DayEvents extends EventsComponent {
     return (
       this.props.date !== nextProps.date ||
       this.props.hoursOfDay !== nextProps.hoursOfDay
-      // this.state.events !== nextState.events // вернуть после Immutable событий
+      // this.state.eventsIterator !== nextState.eventsIterator // вернуть после Immutable событий
     );
   }
 
@@ -37,20 +37,22 @@ export default class DayEvents extends EventsComponent {
 
   getItems () {
     const items = [];
+    const events = this.state.eventsIterator;
+
     const store = this.context.store;
     const date = this.props.date;
     const INTERVALS = this.state.INTERVALS;
-    const events = this.state.events;
     const eventsFolded = {};
     const eventsColumn = {};
     let columns = [];
     let columnsTimeMax = 0;
 
     const ilen = INTERVALS.length;
-    const len = events.length;
 
-    for (let i = 0; i < len; i++) {
-      const event = events[i];
+    let result;
+    while ((result = events.next()) && !result.done) {
+      const event = result.value;
+
       const { id, timeEnd, timeBegin } = event;
 
       for (let j = 0; j < ilen; j++) {

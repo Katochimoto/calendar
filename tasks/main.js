@@ -2,6 +2,7 @@ import RollupPluginNodeResolve from 'rollup-plugin-node-resolve';
 import RollupPluginCommonJS from 'rollup-plugin-commonjs';
 import RollupPluginFilesize from 'rollup-plugin-filesize';
 import RollupPluginReplace from 'rollup-plugin-replace';
+import RollupPluginBuble from 'rollup-plugin-buble';
 
 export function generate ({
   env = 'development'
@@ -21,6 +22,12 @@ export function rollup ({
     plugins: [
       RollupPluginReplace({
         'process.env.NODE_ENV': JSON.stringify(env)
+      }),
+
+      RollupPluginBuble({
+        transforms: {
+          modules: false
+        }
       }),
 
       RollupPluginNodeResolve({

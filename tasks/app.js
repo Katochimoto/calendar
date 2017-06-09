@@ -20,11 +20,11 @@ import CssMqpacker from 'css-mqpacker';
 const NODE_ENV = 'development'; // production
 const IS_DEV = (NODE_ENV === 'development');
 
-let pkg = require('./package.json');
+let pkg = require('../package.json');
 let external = Object.keys(pkg.peerDependencies || {}).concat(Object.keys(pkg.dependencies || {}));
 
 export default {
-  entry: 'src/index.js',
+  entry: 'src/app.js',
   dest: 'dist/app.js',
   exports: 'none',
   format: 'iife',

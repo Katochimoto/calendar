@@ -12,7 +12,7 @@
     "reload": "livereload 'dist'",
     "watch": "npm-run-all --parallel reload dev vendor",
     "start": "electron .",
-    "build": "electron-packager . $npm_package_name --platform=darwin --arch=x64 --version=$npm_package_electronVersion --app-version=$npm_package_version --out=build --ignore=build --prune",
+    "build": "electron-packager . $npm_package_name --platform=darwin --arch=x64 --version=$npm_package_electronVersion --app-version=$npm_package_version --out=build --ignore=build --prune --overwrite",
     "test": "mocha --require babel-register src/**/*.spec.js",
     "test-dev": "mocha -w --require babel-register src/**/*.spec.js",
     "flow": "flow check"

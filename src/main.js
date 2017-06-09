@@ -1,7 +1,7 @@
 const { app, BrowserWindow, ipcMain } = require('electron');
-const url = require('url');
-const qs = require('querystring');
-const request = require('request');
+//const url = require('url');
+//const qs = require('querystring');
+//const request = require('request');
 
 import template from './index.pug';
 

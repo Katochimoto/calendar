@@ -4,36 +4,48 @@ import { lazy } from '../decorators/lazy';
 import EventEmitter from '../EventEmitter';
 import Event from './Event';
 
-let state = [];
-
-window.getStateEvents = () => state;
+const EVENTS_STRATEGY_STATE = Symbol('events-strategy-state');
 
 export default class Strategy extends EventEmitter {
-  getById (id: string): ?Object {}
+  constructor () {
+    super();
+    this[ EVENTS_STRATEGY_STATE ] = [];
+  }
+
+  first (): ?Event {
+
+  }
+
+  last (): ?Event {
+
+  }
 
   getByInterval (interval: number[]): Array<Object> {
-    let idx = -1;
-    for (let i = 0, len = state.length; i < len; i++) {
-      if (state[i].isBeginInInterval(interval)) {
-        idx = i;
+    let item;
+    let current = this.first();
+
+    while (current) {
+      if (current.isBeginInInterval(interval)) {
+        item = current;
         break;
       }
+
+      current = current.next();
     }
+
+    current = undefined;
 
     return {
       next () {
-        const item = state[idx];
+        const data = { done: true };
 
-        if (!item || !(item.isBeginInInterval(interval))) {
-          return { done: true };
+        if (item && item.isBeginInInterval(interval)) {
+          data.done = false;
+          data.value = item;
+          item = item.next();
         }
 
-        idx++;
-
-        return {
-          done: false,
-          value: item
-        };
+        return data;
       }
     };
   }

@@ -5,7 +5,6 @@ import EventEmitter from './EventEmitter';
 import Strategy from './Events/Strategy';
 
 interface EventsStrategy extends EventEmitter {
-  getById (id: string): ?Object;
   getByInterval (interval: number[]): Array<Object>;
   uploadByInterval (interval: number[]): void;
 }

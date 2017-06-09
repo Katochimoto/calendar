@@ -1,7 +1,9 @@
+const { app, BrowserWindow, ipcMain } = require('electron');
 const url = require('url');
 const qs = require('querystring');
 const request = require('request');
-const { app, BrowserWindow, ipcMain } = require('electron');
+
+import template from './index.pug';
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
@@ -9,32 +11,42 @@ let win = null;
 let authWindow = null;
 
 function createWindow() {
-    win = new BrowserWindow({ width: 800, height: 600 });
-    win.loadURL(`file://${__dirname}/dist/index.html`);
-    win.webContents.openDevTools();
-    win.on('closed', () => {
-        // если приложение поддерживает многооконность, то окна хранятся в массиве
-        // и в этом месте окно удаляется из массива
-        win = null;
-    });
+  win = new BrowserWindow({
+    width: 800,
+    height: 600,
+    center: true,
+    resizable: true,
+    frame: true,
+    transparent: false
+  });
+
+  win.loadURL('data:text/html;charset=UTF-8,' + encodeURIComponent(template()));
+
+  win.webContents.openDevTools();
+
+  win.on('closed', () => {
+    // если приложение поддерживает многооконность, то окна хранятся в массиве
+    // и в этом месте окно удаляется из массива
+    win = null;
+  });
 }
 
 app.on('ready', createWindow);
 
 app.on('window-all-closed', () => {
-    // On macOS it is common for applications and their menu bar
-    // to stay active until the user quits explicitly with Cmd + Q
-    if (process.platform !== 'darwin') {
-        app.quit();
-    }
+  // On macOS it is common for applications and their menu bar
+  // to stay active until the user quits explicitly with Cmd + Q
+  if (process.platform !== 'darwin') {
+    app.quit();
+  }
 });
 
 app.on('activate', () => {
-    // On macOS it's common to re-create a window in the app when the
-    // dock icon is clicked and there are no other windows open.
-    if (win === null) {
-        createWindow();
-    }
+  // On macOS it's common to re-create a window in the app when the
+  // dock icon is clicked and there are no other windows open.
+  if (win === null) {
+    createWindow();
+  }
 });
 
 

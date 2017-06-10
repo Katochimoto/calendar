@@ -1,6 +1,11 @@
 import gulp from 'gulp';
 import hash from 'gulp-hash';
 import rollup from 'gulp-better-rollup';
+import gulpif from 'gulp-if';
+import uglify from 'gulp-uglify';
+import size from 'gulp-size';
+import inject from 'gulp-inject';
+import minimist from 'minimist';
 import { exec } from 'child_process';
 
 import {
@@ -18,31 +23,59 @@ import {
   generate as mainGenerate
 } from './tasks/main.js';
 
+import {
+  sources as injectSources,
+  options as injectOptions
+} from './tasks/main.html.js';
+
+const OPTIONS = minimist(process.argv.slice(2), {
+  string: [
+    'env',
+    'dist',
+    'build'
+  ],
+  default: {
+    env: process.env.NODE_ENV || 'development', //'production'
+    dist: 'dist',
+    build: 'build'
+  }
+});
 
 export function app () {
   return gulp.src('src/app.js')
-    .pipe(rollup(appRollup(), appGenerate()))
-    .pipe(gulp.dest('dist'));
+    .pipe(rollup(appRollup(OPTIONS), appGenerate(OPTIONS)))
+    .pipe(gulpif(OPTIONS.env === 'production', uglify()))
+    .pipe(size({ title: 'app' }))
+    .pipe(gulp.dest(OPTIONS.dist));
 }
 
 export function vendor () {
   return gulp.src('src/vendor.js')
-    .pipe(rollup(vendorRollup(), vendorGenerate()))
-    .pipe(gulp.dest('dist'));
+    .pipe(rollup(vendorRollup(OPTIONS), vendorGenerate(OPTIONS)))
+    .pipe(gulpif(OPTIONS.env === 'production', uglify()))
+    .pipe(size({ title: 'vendor' }))
+    .pipe(gulp.dest(OPTIONS.dist));
 }
 
 export function main () {
   return gulp.src('src/main.js')
-    .pipe(rollup(mainRollup(), mainGenerate()))
-    .pipe(gulp.dest('dist'));
+    .pipe(rollup(mainRollup(OPTIONS), mainGenerate(OPTIONS)))
+    .pipe(size({ title: 'main' }))
+    .pipe(gulp.dest(OPTIONS.dist));
 }
 
 export function assets () {
-  return gulp.src('dist/**/*.js')
+  return gulp.src([`${OPTIONS.dist}/**/*.js`, `${OPTIONS.dist}/**/*.css`])
     .pipe(hash())
-    .pipe(gulp.dest('dist/_'))
+    .pipe(gulp.dest(`${OPTIONS.dist}/_`))
     .pipe(hash.manifest('assets.json'))
-    .pipe(gulp.dest('dist'));
+    .pipe(gulp.dest(OPTIONS.dist));
+}
+
+export function mainhtml () {
+  return gulp.src('src/main.html')
+    .pipe(inject(injectSources(OPTIONS), injectOptions(OPTIONS)))
+    .pipe(gulp.dest(OPTIONS.dist));
 }
 
 export function clean () {
@@ -56,8 +89,8 @@ export function pkg () {
     --arch=x64 \
     --electron-version=$npm_package_electronVersion \
     --app-version=$npm_package_version \
-    --out=build \
-    --ignore=build \
+    --out=${OPTIONS.build} \
+    --ignore=${OPTIONS.build} \
     --prune \
     --overwrite`
   );
@@ -66,7 +99,8 @@ export function pkg () {
 const build = gulp.series(
   clean,
   gulp.parallel(app, vendor, main),
-  assets
+  assets,
+  mainhtml
 );
 
 export {

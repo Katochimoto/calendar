@@ -1,4 +1,7 @@
-import { Component, PropTypes } from './utils/Component';
+import { Component } from './utils/Component';
+/* @if NODE_ENV=='development' **
+import { PropTypes } from './utils/Component';
+/* @endif */
 
 import CalendarGrid from './components/CalendarGrid';
 
@@ -45,13 +48,13 @@ export default class Calendar extends Component {
   }
 }
 
+/* @if NODE_ENV=='development' **
 Calendar.childContextTypes = {
   datetime: PropTypes.instanceOf(Datetime),
   events: PropTypes.instanceOf(Events),
   store: PropTypes.instanceOf(CommonStore),
 };
 
-/* @if NODE_ENV=='development' **
 Calendar.propTypes = {};
 /* @endif */
 

@@ -1,7 +1,6 @@
 import RollupPluginBabel from 'rollup-plugin-babel';
 import RollupPluginBuble from 'rollup-plugin-buble';
 import RollupPluginCommonJS from 'rollup-plugin-commonjs';
-import RollupPluginFilesize from 'rollup-plugin-filesize';
 import RollupPluginInject from 'rollup-plugin-inject';
 import RollupPluginJSON from 'rollup-plugin-json';
 import RollupPluginLess2 from 'rollup-plugin-less2';
@@ -19,9 +18,7 @@ import CssMqpacker from 'css-mqpacker';
 const pkg = require('../package.json');
 const external = Object.keys(pkg.peerDependencies || {}).concat(Object.keys(pkg.dependencies || {}));
 
-export function generate ({
-  env = 'development'
-} = {}) {
+export function generate ({ env, dist }) {
   return {
     format: 'iife',
     exports: 'none',
@@ -35,9 +32,7 @@ export function generate ({
   };
 }
 
-export function rollup ({
-  env = 'development'
-} = {}) {
+export function rollup ({ env, dist }) {
   return {
     sourceMap: true,
     context: 'window',
@@ -142,9 +137,7 @@ export function rollup ({
         context: {
           NODE_ENV: env
         }
-      }),
-
-      RollupPluginFilesize()
+      })
     ]
   };
 };

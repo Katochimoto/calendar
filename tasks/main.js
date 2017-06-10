@@ -1,12 +1,9 @@
 import RollupPluginNodeResolve from 'rollup-plugin-node-resolve';
 import RollupPluginCommonJS from 'rollup-plugin-commonjs';
-import RollupPluginFilesize from 'rollup-plugin-filesize';
 import RollupPluginReplace from 'rollup-plugin-replace';
 import RollupPluginBuble from 'rollup-plugin-buble';
 
-export function generate ({
-  env = 'development'
-} = {}) {
+export function generate ({ env, dist }) {
   return {
     format: 'cjs',
     exports: 'none',
@@ -14,9 +11,7 @@ export function generate ({
   };
 }
 
-export function rollup ({
-  env = 'development'
-} = {}) {
+export function rollup ({ env, dist }) {
   return {
     sourceMap: false,
     plugins: [
@@ -38,9 +33,7 @@ export function rollup ({
 
       RollupPluginCommonJS({
         include: 'node_modules/**'
-      }),
-
-      RollupPluginFilesize()
+      })
     ]
   };
 }

@@ -8,17 +8,14 @@ import RollupPluginNodeResolve from 'rollup-plugin-node-resolve';
 import RollupPluginPreprocess from 'rollup-plugin-preprocess';
 import RollupPluginReplace from 'rollup-plugin-replace';
 
-import LessPluginCssModules from 'less-plugin-css-modules';
-
-import autoprefixer from 'autoprefixer';
-import postcss from 'postcss';
-import PostcssCsso from 'postcss-csso';
-import CssMqpacker from 'css-mqpacker';
+import {
+  options as getLessOptions
+} from './app.less.js';
 
 const pkg = require('../package.json');
 const external = Object.keys(pkg.peerDependencies || {}).concat(Object.keys(pkg.dependencies || {}));
 
-export function generate ({ env, dist }) {
+export function generate () {
   return {
     format: 'iife',
     exports: 'none',
@@ -32,7 +29,9 @@ export function generate ({ env, dist }) {
   };
 }
 
-export function rollup ({ env, dist }) {
+export function rollup (options) {
+  const lessOptions = getLessOptions(options);
+
   return {
     sourceMap: true,
     context: 'window',
@@ -41,47 +40,10 @@ export function rollup ({ env, dist }) {
     plugins: [
       RollupPluginJSON(),
 
-      RollupPluginLess2({
-        output: 'dist/app.css',
-        cssModules: true,
-        options: {
-          plugins: [
-            new LessPluginCssModules({
-              mode: 'local',
-              hashPrefix: 'calendar',
-              generateScopedName: '[local]___[hash:base64:5]' // '[hash:base64:8]'
-            })
-          ]
-        },
-        onWriteBefore: function (css, map) {
-          return postcss([
-            autoprefixer({
-              remove: false,
-              browsers: [
-                '> 1%',
-                'Firefox >= 13',
-                'Opera >= 12',
-                'Chrome >= 4',
-              ]
-            }),
-            CssMqpacker(),
-            //PostcssCsso()
-          ]).process(css, {
-            to: 'app.css',
-            map: {
-              inline: false
-            }
-          }).then(function (result) {
-            return {
-              css: result.css,
-              map: JSON.parse(result.map)
-            };
-          });
-        }
-      }),
+      RollupPluginLess2(lessOptions),
 
       RollupPluginReplace({
-        'process.env.NODE_ENV': JSON.stringify(env)
+        'process.env.NODE_ENV': JSON.stringify(options.env)
       }),
 
       RollupPluginBabel({
@@ -135,7 +97,7 @@ export function rollup ({ env, dist }) {
 
       RollupPluginPreprocess({
         context: {
-          NODE_ENV: env
+          NODE_ENV: options.env
         }
       })
     ]

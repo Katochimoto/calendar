@@ -1,0 +1,42 @@
+import LessPluginCssModules from 'less-plugin-css-modules';
+import autoprefixer from 'autoprefixer';
+import postcss from 'postcss';
+import mqpacker from 'css-mqpacker';
+
+export function options (options) {
+  const postcssProcessParams = {
+    to: `${options.moduleName}.css`,
+    map: { inline: false }
+  };
+
+  const cssModulesParams = {
+    mode: 'local',
+    hashPrefix: 'calendar',
+    generateScopedName: '[local]___[hash:base64:5]' // '[hash:base64:8]'
+  };
+
+  return {
+    output: `${options.dist}/${options.moduleName}.css`,
+    cssModules: true,
+    options: {
+      plugins: [
+        new LessPluginCssModules(cssModulesParams)
+      ]
+    },
+    onWriteBefore: function (css, map) {
+      return runPostcss(css, map, postcssProcessParams);
+    }
+  };
+}
+
+function runPostcss (css, map, processParams) {
+  return postcss([
+    autoprefixer({ remove: false }),
+    mqpacker()
+  ]).process(css, processParams).then(function (result) {
+    return {
+      css: result.css,
+      map: JSON.parse(result.map)
+    };
+  });
+}

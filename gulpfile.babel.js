@@ -6,6 +6,7 @@ import uglify from 'gulp-uglify';
 import size from 'gulp-size';
 import inject from 'gulp-inject';
 import minimist from 'minimist';
+import del from 'del';
 import { exec } from 'child_process';
 
 import {
@@ -32,35 +33,46 @@ const OPTIONS = minimist(process.argv.slice(2), {
   string: [
     'env',
     'dist',
-    'build'
+    'build',
+    'src'
   ],
   default: {
     env: process.env.NODE_ENV || 'development', //'production'
     dist: 'dist',
-    build: 'build'
+    build: 'build',
+    src: 'src'
   }
 });
 
 export function app () {
+  const moduleName = 'app';
+  const options = { ...OPTIONS, moduleName };
+
   return gulp.src('src/app.js')
-    .pipe(rollup(appRollup(OPTIONS), appGenerate(OPTIONS)))
+    .pipe(rollup(appRollup(options), appGenerate(options)))
     .pipe(gulpif(OPTIONS.env === 'production', uglify()))
-    .pipe(size({ title: 'app' }))
+    .pipe(size({ title: moduleName }))
     .pipe(gulp.dest(OPTIONS.dist));
 }
 
 export function vendor () {
+  const moduleName = 'vendor';
+  const options = { ...OPTIONS, moduleName };
+
   return gulp.src('src/vendor.js')
-    .pipe(rollup(vendorRollup(OPTIONS), vendorGenerate(OPTIONS)))
+    .pipe(rollup(vendorRollup(options), vendorGenerate(options)))
     .pipe(gulpif(OPTIONS.env === 'production', uglify()))
-    .pipe(size({ title: 'vendor' }))
+    .pipe(size({ title: moduleName }))
     .pipe(gulp.dest(OPTIONS.dist));
 }
 
 export function main () {
+  const moduleName = 'main';
+  const options = { ...OPTIONS, moduleName };
+
   return gulp.src('src/main.js')
-    .pipe(rollup(mainRollup(OPTIONS), mainGenerate(OPTIONS)))
-    .pipe(size({ title: 'main' }))
+    .pipe(rollup(mainRollup(options), mainGenerate(options)))
+    .pipe(size({ title: moduleName }))
     .pipe(gulp.dest(OPTIONS.dist));
 }
 
@@ -73,13 +85,15 @@ export function assets () {
 }
 
 export function mainhtml () {
+  const options = { ...OPTIONS };
+
   return gulp.src('src/main.html')
-    .pipe(inject(injectSources(OPTIONS), injectOptions(OPTIONS)))
+    .pipe(inject(injectSources(options), injectOptions(options)))
     .pipe(gulp.dest(OPTIONS.dist));
 }
 
 export function clean () {
-  return cmd('npm run clean');
+  return del([ 'dist', 'build' ]);
 }
 
 export function pkg () {

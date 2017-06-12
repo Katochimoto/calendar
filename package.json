@@ -33,7 +33,6 @@
     "electron": "1.6.10",
     "electron-packager": "8.7.1",
     "gulp": "github:gulpjs/gulp#4.0",
-    "gulp-better-rollup": "1.1.1",
     "gulp-hash": "4.1.1",
     "gulp-if": "2.0.2",
     "gulp-inject": "4.2.0",
@@ -57,7 +56,10 @@
     "rollup-plugin-preprocess": "0.0.1",
     "rollup-plugin-replace": "1.1.1",
     "rollup-plugin-uglify": "2.0.1",
-    "rollup-watch": "4.0.0"
+    "rollup-stream": "^1.20.0",
+    "rollup-watch": "4.0.0",
+    "vinyl-buffer": "^1.0.0",
+    "vinyl-source-stream": "^1.1.0"
   },
   "dependencies": {
     "classnames": "2.2.5",

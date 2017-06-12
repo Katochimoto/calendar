@@ -10,13 +10,16 @@ import RollupPluginReplace from 'rollup-plugin-replace';
 
 import {
   options as getLessOptions
-} from './app.less.js';
+} from './less.app.js';
 
 const pkg = require('../package.json');
 const external = Object.keys(pkg.peerDependencies || {}).concat(Object.keys(pkg.dependencies || {}));
 
-export function generate () {
+export function rollup (options) {
+  const lessOptions = getLessOptions(options);
+
   return {
+    entry: `${options.src}/${options.moduleName}.js`,
     format: 'iife',
     exports: 'none',
     useStrict: true,
@@ -25,18 +28,11 @@ export function generate () {
       'preact-compat': 'vendor._preact_compat',
       'preact': 'vendor._preact',
       'prop-types': 'vendor._prop_types'
-    }
-  };
-}
+    },
 
-export function rollup (options) {
-  const lessOptions = getLessOptions(options);
-
-  return {
     sourceMap: true,
     context: 'window',
     external: external,
-
     plugins: [
       RollupPluginJSON(),
 

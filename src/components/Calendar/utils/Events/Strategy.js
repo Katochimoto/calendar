@@ -1,6 +1,7 @@
 // @flow
 
 import { lazy } from '../decorators/lazy';
+import { mergeIntervals } from '../date';
 import EventEmitter from '../EventEmitter';
 import Event from './Event';
 
@@ -52,24 +53,23 @@ export default class Strategy extends EventEmitter {
 
   @lazy
   uploadByInterval (intervals: Array<Number[]>): void {
-    // FIXME remove later
-    setTimeout(() => {
-      intervals.forEach((interval) => {
-        let idx = -1;
-        for (let i = 0, len = state.length; i < len; i++) {
-          if (state[i].isBeginInInterval(interval)) {
-            idx = i;
-            break;
-          }
-        }
+    const interval = mergeIntervals(intervals);
 
-        if (idx === -1) {
-          fillStateSamples(interval);
+    /*setTimeout(() => {
+      let idx = -1;
+      for (let i = 0, len = state.length; i < len; i++) {
+        if (state[i].isBeginInInterval(interval)) {
+          idx = i;
+          break;
         }
-      });
+      }
+
+      if (idx === -1) {
+        fillStateSamples(interval);
+      }
 
       this.emitChange();
-    }, 500);
+    }, 500);*/
   }
 }
 

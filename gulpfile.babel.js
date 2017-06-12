@@ -92,6 +92,13 @@ export function mainhtml () {
     .pipe(gulp.dest(OPTIONS.dist));
 }
 
+export function watch() {
+  gulp.watch([
+    'src/**/*.js',
+    'src/**/*.less'
+  ], app);
+}
+
 export function clean () {
   return del([ 'dist', 'build' ]);
 }

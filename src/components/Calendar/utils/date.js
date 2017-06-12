@@ -120,3 +120,35 @@ export function equalToMonth (date1: number, date2: number): boolean {
     m1 === m2
   );
 }
+
+export function mergeIntervals (intervals: Array<Number[]>): number[] {
+  let min = Number.MAX_VALUE;
+  let max = Number.MIN_VALUE;
+
+  for (let i = 0, len = intervals.length; i < len; i++) {
+    let interval = intervals[i];
+
+    if (Array.isArray(interval[0])) {
+      interval = mergeIntervals(interval);
+    }
+
+    if (!interval) {
+      continue;
+    }
+
+    const dateBegin = interval[0]
+    const dateEnd = interval[1] || dateBegin;
+
+    if (dateBegin < min) {
+      min = dateBegin;
+    }
+
+    if (dateEnd > max) {
+      max = dateEnd;
+    }
+  }
+
+  return (min === Number.MAX_VALUE || max === Number.MIN_VALUE) ?
+    null :
+    [ min, max ];
+}

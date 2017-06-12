@@ -11,17 +11,9 @@ import source from 'vinyl-source-stream';
 import buffer from 'vinyl-buffer';
 import { exec } from 'child_process';
 
-import {
-  rollup as vendorRollup
-} from './tasks/rollup.vendor.js';
-
-import {
-  rollup as appRollup
-} from './tasks/rollup.app.js';
-
-import {
-  rollup as mainRollup
-} from './tasks/rollup.main.js';
+import vendorRollup from './tasks/rollup.vendor.js';
+import appRollup from './tasks/rollup.app.js';
+import mainRollup from './tasks/rollup.main.js';
 
 import {
   sources as injectSources,

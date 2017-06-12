@@ -8,7 +8,7 @@ import {
   options as getLessOptions
 } from './less.vendor.js';
 
-export function rollup (options) {
+export default function (options) {
   const lessOptions = getLessOptions(options);
 
   return {

@@ -15,7 +15,7 @@ import {
 const pkg = require('../package.json');
 const external = Object.keys(pkg.peerDependencies || {}).concat(Object.keys(pkg.dependencies || {}));
 
-export function rollup (options) {
+export default function (options) {
   const lessOptions = getLessOptions(options);
 
   return {

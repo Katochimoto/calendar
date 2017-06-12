@@ -3,7 +3,7 @@ import RollupPluginCommonJS from 'rollup-plugin-commonjs';
 import RollupPluginReplace from 'rollup-plugin-replace';
 import RollupPluginBuble from 'rollup-plugin-buble';
 
-export function rollup (options) {
+export default function (options) {
   return {
     entry: `${options.src}/${options.moduleName}.js`,
     format: 'cjs',

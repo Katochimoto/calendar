@@ -52,8 +52,9 @@ export default class DayEvents extends EventsComponent {
     let result;
     while ((result = events.next()) && !result.done) {
       const event = result.value;
-
-      const { ID, timeEnd, timeBegin } = event.getData();
+      const eventId = event.get('id');
+      const timeEnd = event.get('timeEnd');
+      const timeBegin = event.get('timeBegin');
 
       for (let j = 0; j < ilen; j++) {
         const interval = INTERVALS[j];
@@ -90,15 +91,15 @@ export default class DayEvents extends EventsComponent {
             columnsTimeMax = timeEnd;
           }
 
-          const column = (ID in eventsColumn) ?
-            eventsColumn[ ID ] :
+          const column = (eventId in eventsColumn) ?
+            eventsColumn[ eventId ] :
             getColumn(timeBegin, columns);
 
           columns[ column ] = timeEnd;
-          eventsColumn[ ID ] = column;
+          eventsColumn[ eventId ] = column;
 
           items.push({
-            key: `${intervalKey}-${ID}`,
+            key: `${intervalKey}-${eventId}`,
             top: store.timeToRate(Math.max(timeBegin, intervalBegin)),
             bottom: 100 - store.timeToRate(Math.min(timeEnd, intervalEnd - 1)),
             column: column,

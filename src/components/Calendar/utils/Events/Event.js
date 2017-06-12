@@ -1,15 +1,15 @@
+// @flow
+
 import EventEmitter from '../EventEmitter';
 
 export const EVENT_DATA = Symbol('event-data');
 export const EVENT_NEXT = Symbol('event-next');
 export const EVENT_PREV = Symbol('event-prev');
 
+const F_UPDATED = 'updated';
+const F_DATE_BEGIN = 'dateBegin';
+
 export default class Event extends EventEmitter {
-
-  static create (data: {[id:string]: any}): Event {
-    return new Event(data);
-  }
-
   constructor (data: {[id:string]: any}) {
     super();
     this[ EVENT_DATA ] = data;
@@ -24,13 +24,8 @@ export default class Event extends EventEmitter {
     this[ EVENT_PREV ] = null;
   }
 
-  get (name) {
-    return this[ EVENT_DATA ][ name ];
-  }
-
-  // @deprecated
-  getData () {
-    return this[ EVENT_DATA ];
+  get (name: String) {
+    return this[ EVENT_DATA ] && this[ EVENT_DATA ][ name ];
   }
 
   next (): ?Event {
@@ -42,7 +37,7 @@ export default class Event extends EventEmitter {
   }
 
   valueOf () {
-    return this[ EVENT_DATA ] && this[ EVENT_DATA ].UPDATED;
+    return this.get(F_UPDATED);
   }
 
   toString () {
@@ -52,7 +47,7 @@ export default class Event extends EventEmitter {
   isBeginInInterval (interval: number[]) {
     const dateBegin = interval[0]
     const dateEnd = interval[1] || dateBegin;
-    const evtDateBegin = this[ EVENT_DATA ].dateBegin;
+    const evtDateBegin = this.get(F_DATE_BEGIN);
 
     return (
       evtDateBegin >= dateBegin &&

@@ -6,6 +6,8 @@ import _setimmediate2 from 'setimmediate2';
 import _prop_types from 'prop-types';
 import 'es6-symbol/implement';
 
+import './vendor.less';
+
 _raf.polyfill();
 _setimmediate2.polifill();
 

@@ -4,6 +4,8 @@ export function sources ({ env, dist }) {
   return gulp.src([
     `${dist}/vendor.js`,
     `${dist}/app.js`,
+
+    `${dist}/vendor.css`,
     `${dist}/app.css`
   ], {
     read: false

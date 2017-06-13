@@ -21,20 +21,39 @@ export default class Strategy extends EventEmitter {
 
   }
 
-  getByInterval (interval: number[]): Object {
+  firstByInterval (interval: number[], current = this.first()): ?Event {
     let item;
-    let current = this.first();
+    let toFirst = true;
 
     while (current) {
-      if (current.isBeginInInterval(interval)) {
+      const compare = current.compareBeginInInterval(interval);
+
+      if (compare === -1) {
+        current = current.next();
+        toFirst = false;
+      } else if (compare === 1) {
+        current = current.prev();
+        toFirst = true;
+      } else if (toFirst) {
+        const prev = current.prev();
+        if (prev) {
+          current = prev;
+        } else {
+          item = current;
+          break;
+        }
+      } else {
         item = current;
         break;
       }
-
-      current = current.next();
     }
 
     current = undefined;
+    return item;
+  }
+
+  getByInterval (interval: number[]): Object {
+    let item = this.firstByInterval(interval);
 
     return {
       next () {

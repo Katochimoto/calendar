@@ -44,14 +44,23 @@ export default class Event extends EventEmitter {
     return String(this.valueOf() || '');
   }
 
-  isBeginInInterval (interval: number[]) {
+  compareBeginInInterval (interval: number[]): number {
     const dateBegin = interval[0]
     const dateEnd = interval[1] || dateBegin;
     const evtDateBegin = this.get(F_DATE_BEGIN);
 
-    return (
-      evtDateBegin >= dateBegin &&
-      evtDateBegin <= dateEnd
-    );
+    return do {
+      if (evtDateBegin < dateBegin) {
+        -1;
+      } else if (evtDateBegin > dateEnd) {
+        1;
+      } else {
+        0;
+      }
+    };
+  }
+
+  isBeginInInterval (interval: number[]): boolean {
+    return this.compareBeginInInterval(interval) === 0;
   }
 }

@@ -1,17 +1,7 @@
 import { assert } from 'chai';
 import Event, { EVENT_NEXT, EVENT_PREV } from './Event';
-import Strategy from './Strategy';
 
-describe('utils/Events/Strategy', function () {
-  beforeEach(function () {
-    this.strategy = new Strategy();
-  });
-
-  afterEach(function () {
-    this.strategy.destroy();
-    this.strategy = undefined;
-  });
-
+describe('utils/Events/Event', function () {
   describe('firstByInterval', function () {
     beforeEach(function () {
       this.events = [];
@@ -38,35 +28,35 @@ describe('utils/Events/Strategy', function () {
     it('должен найти первое событие в интервале (поиск вперед)', function () {
       const dateBegin = 20170615;
       const dateEnd = 20170620;
-      const event = this.strategy.firstByInterval([dateBegin, dateEnd], this.events[0]);
+      const event = this.events[0].firstByInterval([dateBegin, dateEnd]);
       assert.equal(event.get('dateBegin'), dateBegin);
     });
 
     it('должен найти первое событие в интервале (поиск назад)', function () {
       const dateBegin = 20170615;
       const dateEnd = 20170620;
-      const event = this.strategy.firstByInterval([dateBegin, dateEnd], this.events[this.events.length - 1]);
+      const event = this.events[this.events.length - 1].firstByInterval([dateBegin, dateEnd]);
       assert.equal(event.get('dateBegin'), dateBegin);
     });
 
     it('должен найти первое событие в интервале (начальное событие в интервале)', function () {
       const dateBegin = 20170615;
       const dateEnd = 20170620;
-      const event = this.strategy.firstByInterval([dateBegin, dateEnd], this.events[17]);
+      const event = this.events[17].firstByInterval([dateBegin, dateEnd]);
       assert.equal(event.get('dateBegin'), dateBegin);
     });
 
     it('должен найти первое событие в интервале (интервал начинается раньше)', function () {
       const dateBegin = 20170520;
       const dateEnd = 20170620;
-      const event = this.strategy.firstByInterval([dateBegin, dateEnd], this.events[17]);
+      const event = this.events[17].firstByInterval([dateBegin, dateEnd]);
       assert.equal(event.get('dateBegin'), 20170601);
     });
 
     it('должен найти первое событие в интервале (интервал начинается раньше, поиск назад)', function () {
       const dateBegin = 20170520;
       const dateEnd = 20170620;
-      const event = this.strategy.firstByInterval([dateBegin, dateEnd], this.events[this.events.length - 1]);
+      const event = this.events[this.events.length - 1].firstByInterval([dateBegin, dateEnd]);
       assert.equal(event.get('dateBegin'), 20170601);
     });
   });

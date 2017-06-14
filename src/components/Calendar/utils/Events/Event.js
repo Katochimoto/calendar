@@ -64,12 +64,36 @@ export default class Event extends EventEmitter {
     return this.compareBeginInInterval(interval) === 0;
   }
 
+  first (): ?Event {
+    let item;
+    let current = this;
+
+    do {
+      item = current;
+      current = current.prev();
+    } while (current);
+
+    return item;
+  }
+
+  last (): ?Event {
+    let item;
+    let current = this;
+
+    do {
+      item = current;
+      current = current.next();
+    } while (current);
+
+    return item;
+  }
+
   firstByInterval (interval: number[]): ?Event {
     let item;
     let toFirst = true;
     let current = this;
 
-    while (current) {
+    while (current && !item) {
       const compare = current.compareBeginInInterval(interval);
 
       if (compare === -1) {
@@ -84,15 +108,12 @@ export default class Event extends EventEmitter {
           current = prev;
         } else {
           item = current;
-          break;
         }
       } else {
         item = current;
-        break;
       }
     }
 
-    current = undefined;
     return item;
   }
 }

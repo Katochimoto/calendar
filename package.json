@@ -7,6 +7,7 @@
   "electronVersion": "1.6.10",
   "scripts": {
     "start": "electron .",
+    "dev": "gulp; gulp watch",
     "test": "mocha --require babel-register src/**/*.spec.js",
     "test-dev": "mocha -w --require babel-register src/**/*.spec.js",
     "flow": "flow check"

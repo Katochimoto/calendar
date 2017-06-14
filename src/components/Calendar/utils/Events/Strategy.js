@@ -1,28 +1,36 @@
 // @flow
 
 import { lazy } from '../decorators/lazy';
-import { mergeIntervals } from '../date';
+import { mergeIntervals, offsetOnDay } from '../date';
 import EventEmitter from '../EventEmitter';
-import Event from './Event';
+import Event, { EVENT_NEXT, EVENT_PREV } from './Event';
 
 const EVENTS_STRATEGY_STATE = Symbol('events-strategy-state');
+const EVENTS_STRATEGY_FIRST = Symbol('events-strategy-first');
+const EVENTS_STRATEGY_LAST = Symbol('events-strategy-last');
 
 export default class Strategy extends EventEmitter {
   constructor () {
     super();
     this[ EVENTS_STRATEGY_STATE ] = [];
+    this[ EVENTS_STRATEGY_FIRST ] = null;
+    this[ EVENTS_STRATEGY_LAST ] = null;
   }
 
   first (): ?Event {
-
+    return this[ EVENTS_STRATEGY_STATE ][0];
   }
 
   last (): ?Event {
+    return this[ EVENTS_STRATEGY_STATE ][this[ EVENTS_STRATEGY_STATE ].length - 1];
+  }
 
+  current (): ?Event {
+    return this.first();
   }
 
   getByInterval (interval: number[]): Object {
-    let item = this.first().firstByInterval(interval);
+    let item = this.current() && this.current().firstByInterval(interval);
 
     return {
       next () {
@@ -43,84 +51,61 @@ export default class Strategy extends EventEmitter {
   uploadByInterval (intervals: Array<Number[]>): void {
     const interval = mergeIntervals(intervals);
 
-    /*setTimeout(() => {
-      let idx = -1;
-      for (let i = 0, len = state.length; i < len; i++) {
-        if (state[i].isBeginInInterval(interval)) {
-          idx = i;
-          break;
-        }
-      }
+    setTimeout(() => {
+      let item = this.current() && this.current().firstByInterval(interval);
 
-      if (idx === -1) {
-        fillStateSamples(interval);
-      }
+      if (!item) {
+        const events = generateEvents(interval);
+        this[ EVENTS_STRATEGY_STATE ] = this[ EVENTS_STRATEGY_STATE ].concat(events);
 
-      this.emitChange();
-    }, 500);*/
+        this.emitChange();
+      }
+    }, 500);
   }
 }
 
-function fillStateSamples (interval) {
+function generateEvents (interval) {
   const dateBegin = interval[0]
   const dateEnd = interval[1] || dateBegin;
+  const events = [];
+  let currentDate = dateBegin;
 
-  const data = [
-    {
-      id: `${dateBegin}T03:30:00--${dateEnd}T07:30:00`,
-      dateBegin: dateBegin,
-      dateEnd: dateEnd,
-      timeBegin: (3 * 60 + 30) * 60 * 1000,
-      timeEnd: (7 * 60 + 30) * 60 * 1000,
-      title: `${dateBegin} 1`,
-      updated: Math.random() + 1
-    },
-    {
-      id: `${dateBegin}T06:00:00--${dateEnd}T09:00:00`,
-      dateBegin: dateBegin,
-      dateEnd: dateEnd,
-      timeBegin: (6 * 60) * 60 * 1000,
-      timeEnd: (9 * 60) * 60 * 1000,
-      title: `${dateBegin} 2`,
-      updated: Math.random() + 2
-    },
-    {
-      id: `${dateBegin}T07:30:00--${dateEnd}T10:00:00`,
-      dateBegin: dateBegin,
-      dateEnd: dateEnd,
-      timeBegin: (7 * 60 + 30) * 60 * 1000,
-      timeEnd: (10 * 60) * 60 * 1000,
-      title: `${dateBegin} 3`,
-      updated: Math.random() + 3
-    },
-    {
-      id: `${dateBegin}T11:00:00--${dateEnd}T12:30:00`,
-      dateBegin: dateBegin,
-      dateEnd: dateEnd,
-      timeBegin: (11 * 60) * 60 * 1000,
-      timeEnd: (12 * 60 + 30) * 60 * 1000,
-      title: `${dateBegin} 4`,
-      updated: Math.random() + 4
-    }
-  ].map(item => new Event(item));
+  while (currentDate <= dateEnd) {
+    events.push(
+      generateEvent([currentDate, currentDate]),
+      generateEvent([currentDate, currentDate]),
+      generateEvent([currentDate, currentDate]),
+      generateEvent([currentDate, currentDate]),
+      generateEvent([currentDate, currentDate])
+    );
+    currentDate = offsetOnDay(currentDate, 1);
+  }
 
-  state = state.concat(data);
-
-  /*
-  state.sort((a, b) => {
-    if (a.dateBegin > b.dateBegin) {
-      return 1;
-    } else if (a.dateBegin < b.dateBegin) {
-      return -1;
-    } else {
-      if (a.timeBegin > b.timeBegin) {
-        return 1;
-      } else if (a.timeBegin < b.timeBegin) {
-        return -1;
-      } else {
-        return 0;
-      }
-    }
+  events.forEach(function (item, idx, events) {
+    item[ EVENT_PREV ] = events[idx - 1] || null;
+    item[ EVENT_NEXT ] = events[idx + 1] || null;
   });
-  */
+
+  return events;
+}
+
+function generateEvent (interval) {
+  const dateBegin = interval[0]
+  const dateEnd = interval[1] || dateBegin;
+  const timeBegin = getRandomInt(0, 23 * 60);
+  const timeEnd = getRandomInt(timeBegin + 30, 24 * 60);
+
+  return new Event({
+    id: `${dateBegin}T${timeBegin}--${dateEnd}T${timeEnd}`,
+    dateBegin: dateBegin,
+    dateEnd: dateEnd,
+    timeBegin: timeBegin * 60 * 1000,
+    timeEnd: timeEnd * 60 * 1000,
+    title: `${dateBegin} ${timeBegin}:${timeEnd}`,
+    updated: Math.random() + 1
+  });
+}
+
+function getRandomInt(min, max) {
+  return Math.floor(Math.random() * (max - min)) + min;
 }

@@ -87,7 +87,7 @@ export function mainhtml () {
 }
 
 export function watch() {
-  return gulp.watch([
+  gulp.watch([
     'src/**/*.js',
     'src/**/*.less'
   ], app);

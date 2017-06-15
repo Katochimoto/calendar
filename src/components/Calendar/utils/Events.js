@@ -4,21 +4,28 @@ import { qlazy } from './decorators/lazy';
 import EventEmitter from './EventEmitter';
 import Strategy from './Events/Strategy';
 
-interface EventsStrategy extends EventEmitter {
-  getByInterval (interval: number[]): Array<Object>;
-  uploadByInterval (interval: number[]): void;
-}
-
-/**
- * @param {EventsStrategy} strategy
- */
 export default class Events extends EventEmitter {
-  _strategy: EventsStrategy;
+  _strategy: Strategy;
 
-  constructor (strategy: ?EventsStrategy) {
+  /**
+   * @param {Strategy} strategy
+   */
+  constructor (strategy: ?Strategy) {
     super();
-    this._strategy = strategy || (new Strategy: EventsStrategy);
-    this._strategy.addChangeListener(this._handleChangeEventsStrategy, this);
+    this._setStrategy(strategy);
+  }
+
+  destroy () {
+    super.destroy();
+    if (this._strategy) {
+      this._strategy.destroy();
+      this._strategy = undefined;
+    }
+  }
+
+  setStrategy (strategy: Strategy) {
+    this._setStrategy(strategy);
+    // this.emitChange();
   }
 
   getByInterval (interval: number[]): Array<Object> {
@@ -29,7 +36,16 @@ export default class Events extends EventEmitter {
     return qlazy(() => this._strategy.uploadByInterval(interval));
   }
 
-  _handleChangeEventsStrategy () {
+  _handleChangeStrategy () {
     this.emitChange();
+  }
+
+  _setStrategy (strategy: Strategy) {
+    if (this._strategy) {
+      this._strategy.destroy();
+    }
+
+    this._strategy = strategy || (new Strategy: Strategy);
+    this._strategy.addChangeListener(this._handleChangeStrategy, this);
   }
 }

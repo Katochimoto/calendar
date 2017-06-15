@@ -12,6 +12,7 @@ export default class Store extends EventEmitter {
   }
 
   destroy () {
+    super.destroy();
     if (this._strategy) {
       this._strategy.destroy();
       this._strategy = undefined;

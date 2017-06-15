@@ -17,6 +17,13 @@ export default class Strategy extends EventEmitter {
     this[ EVENTS_STRATEGY_LAST ] = null;
   }
 
+  destroy () {
+    super.destroy();
+    this[ EVENTS_STRATEGY_STATE ] = [];
+    this[ EVENTS_STRATEGY_FIRST ] = null;
+    this[ EVENTS_STRATEGY_LAST ] = null;
+  }
+
   first (): ?Event {
     return this[ EVENTS_STRATEGY_STATE ][0];
   }
@@ -80,6 +87,26 @@ function generateEvents (interval) {
     );
     currentDate = offsetOnDay(currentDate, 1);
   }
+
+  events.sort((a, b) => {
+    const ab = a.get('dateBegin');
+    const bb = b.get('dateBegin');
+    if (ab > bb) {
+      return 1;
+    } else if (ab < bb) {
+      return -1;
+    } else {
+      const atb = a.get('timeBegin');
+      const btb = b.get('timeBegin');
+      if (atb > btb) {
+        return 1;
+      } else if (atb < btb) {
+        return -1;
+      } else {
+        return 0;
+      }
+    }
+  });
 
   events.forEach(function (item, idx, events) {
     item[ EVENT_PREV ] = events[idx - 1] || null;

@@ -5,9 +5,9 @@ import { PropTypes } from './utils/Component';
 
 import CalendarGrid from './components/CalendarGrid';
 
+import CommonStore from './store/CommonStore';
 import Datetime from './utils/Datetime';
 import Events from './utils/Events';
-import CommonStore from './store/CommonStore';
 
 import styles from './index.less';
 
@@ -55,7 +55,11 @@ Calendar.childContextTypes = {
   store: PropTypes.instanceOf(CommonStore),
 };
 
-Calendar.propTypes = {};
+Calendar.propTypes = {
+  apiEvents: PropTypes.shape({
+    uploadByInterval: PropTypes.func.isRequired
+  })
+};
 /* @endif */
 
 Calendar.defaultProps = {};

@@ -1,4 +1,4 @@
-import Calendar from './../Calendar';
+import Calendar from '../Calendar';
 
 import styles from './index.less';
 

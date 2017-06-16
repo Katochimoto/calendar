@@ -8,6 +8,7 @@ import CalendarGrid from './components/CalendarGrid';
 import CommonStore from './store/CommonStore';
 import Datetime from './utils/Datetime';
 import Events from './utils/Events';
+import EventsStrategy from './utils/Events/Strategy';
 
 import styles from './index.less';
 
@@ -15,9 +16,12 @@ export default class Calendar extends Component {
   constructor (props, context) {
     super(props, context);
 
-    this._datetime = new Datetime();
-    this._events = new Events();
     this._store = new CommonStore();
+    this._datetime = new Datetime();
+    this._events = new Events(new EventsStrategy({
+      upload: props.upload,
+      update: props.update
+    }));
 
     // FIXME remove later
     window.store = this._store;
@@ -31,8 +35,15 @@ export default class Calendar extends Component {
     };
   }
 
-  componentWillReceiveProps (nextProps) {
-    this._store.update(nextProps);
+  componentWillReceiveProps ({ upload, update }) {
+    if (
+      upload !== this.props.upload ||
+      update !== this.props.update
+    ) {
+      this._events.setStrategy(new EventsStrategy({ upload, update }));
+    }
+
+    // this._store.update(nextProps);
   }
 
   componentWillUnmount () {
@@ -56,9 +67,8 @@ Calendar.childContextTypes = {
 };
 
 Calendar.propTypes = {
-  apiEvents: PropTypes.shape({
-    uploadByInterval: PropTypes.func.isRequired
-  })
+  upload: PropTypes.func.isRequired,
+  update: PropTypes.func.isRequired
 };
 /* @endif */
 

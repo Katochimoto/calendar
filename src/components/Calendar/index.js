@@ -20,7 +20,7 @@ export default class Calendar extends Component {
     this._datetime = new Datetime();
     this._events = new Events(new EventsStrategy({
       upload: props.upload,
-      update: props.update
+      update: props.update,
     }));
 
     // FIXME remove later
@@ -40,13 +40,18 @@ export default class Calendar extends Component {
       upload !== this.props.upload ||
       update !== this.props.update
     ) {
-      this._events.setStrategy(new EventsStrategy({ upload, update }));
+      this._events.setStrategy(new EventsStrategy({
+        upload,
+        update,
+      }));
     }
 
     // this._store.update(nextProps);
   }
 
   componentWillUnmount () {
+    this._datetime.destroy();
+    this._events.destroy();
     this._store.destroy();
   }
 

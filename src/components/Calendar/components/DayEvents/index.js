@@ -52,7 +52,7 @@ export default class DayEvents extends EventsComponent {
     let result;
     while ((result = events.next()) && !result.done) {
       const event = result.value;
-      const eventId = event.get('id');
+      const eventId = event.getId();
       const timeEnd = event.get('timeEnd');
       const timeBegin = event.get('timeBegin');
 

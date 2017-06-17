@@ -16,6 +16,13 @@ export default class Datetime {
     this._strategy = strategy || (new Strategy: DatetimeStrategy);
   }
 
+  destroy () {
+    if (this._strategy) {
+      this._strategy.destroy();
+      this._strategy = undefined;
+    }
+  }
+
   gridDaysHourTitle (hour: number): string {
     return this._strategy.gridDaysHourTitle(hour);
   }

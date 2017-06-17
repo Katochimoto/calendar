@@ -6,6 +6,7 @@ export const EVENT_DATA = Symbol('event-data');
 export const EVENT_NEXT = Symbol('event-next');
 export const EVENT_PREV = Symbol('event-prev');
 
+const F_ID = 'id';
 const F_UPDATED = 'updated';
 const F_DATE_BEGIN = 'dateBegin';
 
@@ -26,6 +27,10 @@ export default class Event extends EventEmitter {
 
   get (name: String) {
     return this[ EVENT_DATA ] && this[ EVENT_DATA ][ name ];
+  }
+
+  getId () {
+    return this.get(F_ID);
   }
 
   next (): ?Event {

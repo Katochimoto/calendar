@@ -5,48 +5,62 @@ import { mergeIntervals } from '../date';
 import EventEmitter from '../EventEmitter';
 import Event, { EVENT_NEXT, EVENT_PREV } from './Event';
 
-const EVENTS_STRATEGY_STATE = Symbol('events-strategy-state');
-const EVENTS_STRATEGY_FIRST = Symbol('events-strategy-first');
-const EVENTS_STRATEGY_LAST = Symbol('events-strategy-last');
-const EVENTS_STRATEGY_UPLOAD = Symbol('events-strategy-upload');
-const EVENTS_STRATEGY_UPDATE = Symbol('events-strategy-update');
-
 export default class Strategy extends EventEmitter {
   constructor ({
     upload = () => {},
     update = () => {}
   } = {}) {
     super();
-    this[ EVENTS_STRATEGY_STATE ] = [];
-    this[ EVENTS_STRATEGY_FIRST ] = null;
-    this[ EVENTS_STRATEGY_LAST ] = null;
-    this[ EVENTS_STRATEGY_UPLOAD ] = upload;
-    this[ EVENTS_STRATEGY_UPDATE ] = update;
+    this._state = Object.create(null);
+    this._current = null;
+    this._upload = upload;
+    this._update = update;
   }
 
   destroy () {
     super.destroy();
-    this[ EVENTS_STRATEGY_STATE ] = [];
-    this[ EVENTS_STRATEGY_FIRST ] = null;
-    this[ EVENTS_STRATEGY_LAST ] = null;
-    this[ EVENTS_STRATEGY_UPLOAD ] = null;
-    this[ EVENTS_STRATEGY_UPDATE ] = null;
+
+    for (const eventId in this._state) {
+      const event = this._state[ eventId ];
+      if (event) {
+        event.destroy();
+      }
+    }
+
+    this._state = Object.create(null);
+    this._current = null;
+    this._upload = null;
+    this._update = null;
   }
 
-  first (): ?Event {
-    return this[ EVENTS_STRATEGY_STATE ][0];
+  getEventInstance (data) {
+    if (data instanceof Event) {
+      return data;
+    }
+
+    const newEvent = new Event(data);
+    const eventId = newEvent.getId();
+    const prevEvent = this._state[ eventId ];
+
+    if (prevEvent) {
+      if (prevEvent.valueOf() === newEvent.valueOf()) {
+        return prevEvent;
+      } else {
+        this.destroyEventInstance(prevEvent);
+      }
+    }
+
+    this._state[ eventId ] = newEvent;
+    return newEvent;
   }
 
-  last (): ?Event {
-    return this[ EVENTS_STRATEGY_STATE ][this[ EVENTS_STRATEGY_STATE ].length - 1];
-  }
-
-  current (): ?Event {
-    return this.first();
+  destroyEventInstance (event: Event) {
+    this._state[ event.getId() ] = undefined;
+    event.destroy();
   }
 
   getByInterval (interval: number[]): Object {
-    let item = this.current() && this.current().firstByInterval(interval);
+    let item = this._current && this._current.firstByInterval(interval);
 
     return {
       next () {
@@ -63,27 +77,59 @@ export default class Strategy extends EventEmitter {
     };
   }
 
+  clearByInterval (interval: number[]) {
+    const iterator = this.getByInterval(interval);
+
+    let result = iterator.next();
+    let first = result.value && result.value.prev() || null;
+    let last = null;
+
+    while (result && !result.done) {
+      const event = result.value;
+      last = event.next();
+      this.destroyEventInstance(event);
+      result = iterator.next();
+    }
+
+    if (first) {
+      first[ EVENT_NEXT ] = last;
+    }
+
+    if (last) {
+      last[ EVENT_PREV ] = first;
+    }
+
+    return [ first, last ];
+  }
+
   @lazy
   uploadByInterval (intervals: Array<Number[]>): void {
     const interval = mergeIntervals(intervals);
-    this[ EVENTS_STRATEGY_UPLOAD ](interval, (error, data) => {
-      if (error) {
-
-      } else {
-        data = data
-          .map(createEvent)
-          .map(createEventLinks);
-
-        // FIXME
-        this[ EVENTS_STRATEGY_STATE ] = this[ EVENTS_STRATEGY_STATE ].concat(data);
-        this.emitChange();
-      }
-    });
+    this._upload(interval, this._uploadCallback);
   }
-}
 
-function createEvent (item) {
-  return new Event(item);
+  _uploadCallback (error, interval, events) {
+    if (error || !events.length) {
+      return;
+    }
+
+    const [ first, last ] = this.clearByInterval(interval);
+
+    events = events
+      .map(this.getEventInstance, this)
+      .map(createEventLinks);
+
+    if (first) {
+      first[ EVENT_NEXT ] = events[0];
+    }
+
+    if (last) {
+      last[ EVENT_PREV ] = events[events.length - 1];
+    }
+
+    this._current = events[0];
+    this.emitChange();
+  }
 }
 
 function createEventLinks (event, idx, events) {

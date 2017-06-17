@@ -15,11 +15,11 @@ export default App;
 
 function uploadEvents (interval: number[], callback: Function) {
   const events = generateEvents(interval);
-  callback(null, events);
+  callback.call(this, null, interval, events);
 }
 
 function updateEvents (callback: Function) {
-
+  // callback.call(this);
 }
 
 function generateEvents (interval) {

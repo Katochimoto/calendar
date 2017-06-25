@@ -3,12 +3,17 @@
 import { lazy } from '../decorators/lazy';
 import { mergeIntervals } from '../date';
 import EventEmitter from '../EventEmitter';
-import Event, { EVENT_NEXT, EVENT_PREV } from './Event';
+import Event from './Event';
 
 export default class Strategy extends EventEmitter {
+  _current: ?Event;
+  _state: { [string]: ?Event };
+  _update: Function;
+  _upload: Function;
+
   constructor ({
-    upload = () => {},
-    update = () => {}
+    upload = () => { },
+    update = () => { }
   } = {}) {
     super();
     this._state = Object.create(null);
@@ -21,7 +26,7 @@ export default class Strategy extends EventEmitter {
     super.destroy();
 
     for (const eventId in this._state) {
-      const event = this._state[ eventId ];
+      const event: Event = this._state[ eventId ];
       if (event) {
         event.destroy();
       }
@@ -29,18 +34,18 @@ export default class Strategy extends EventEmitter {
 
     this._state = Object.create(null);
     this._current = null;
-    this._upload = null;
-    this._update = null;
+    this._upload = () => { };
+    this._update = () => { };
   }
 
-  getEventInstance (data) {
+  getEventInstance(data: Object | Event): Event {
     if (data instanceof Event) {
       return data;
     }
 
-    const newEvent = new Event(data);
-    const eventId = newEvent.getId();
-    const prevEvent = this._state[ eventId ];
+    const newEvent: Event = new Event(data);
+    const eventId: string = newEvent.getId();
+    const prevEvent: Event = this._state[ eventId ];
 
     if (prevEvent) {
       if (prevEvent.valueOf() === newEvent.valueOf()) {
@@ -64,7 +69,7 @@ export default class Strategy extends EventEmitter {
 
     return {
       next () {
-        const data = { done: true };
+        const data = { done: true, value: undefined };
 
         if (item && item.isBeginInInterval(interval)) {
           data.done = false;
@@ -77,7 +82,12 @@ export default class Strategy extends EventEmitter {
     };
   }
 
-  clearByInterval (interval: number[]) {
+  clearByInterval (interval: number[]): [ ?Event, ?Event ] {
+    // TODO
+    // prevByInterval()
+    // nextByInterval()
+    // this._current = ...
+
     const iterator = this.getByInterval(interval);
 
     let result = iterator.next();
@@ -85,46 +95,44 @@ export default class Strategy extends EventEmitter {
     let last = null;
 
     while (result && !result.done) {
-      const event = result.value;
-      last = event.next();
-      this.destroyEventInstance(event);
+      last = result.value.next();
       result = iterator.next();
     }
 
     if (first) {
-      first[ EVENT_NEXT ] = last;
+      first._next = last;
     }
 
     if (last) {
-      last[ EVENT_PREV ] = first;
+      last._prev = first;
     }
 
     return [ first, last ];
   }
 
   @lazy
-  uploadByInterval (intervals: Array<Number[]>): void {
+  uploadByInterval (intervals: Array<number[]>): void {
     const interval = mergeIntervals(intervals);
     this._upload(interval, this._uploadCallback);
   }
 
-  _uploadCallback (error, interval, events) {
-    if (error || !events.length) {
+  _uploadCallback (error: ?Object, interval: number[], data: Array<Object>) {
+    if (error || !data.length) {
       return;
     }
 
     const [ first, last ] = this.clearByInterval(interval);
 
-    events = events
+    const events: Array<Event> = data
       .map(this.getEventInstance, this)
       .map(createEventLinks);
 
     if (first) {
-      first[ EVENT_NEXT ] = events[0];
+      first._next = events[0];
     }
 
     if (last) {
-      last[ EVENT_PREV ] = events[events.length - 1];
+      last._prev = events[events.length - 1];
     }
 
     this._current = events[0];
@@ -132,8 +140,8 @@ export default class Strategy extends EventEmitter {
   }
 }
 
-function createEventLinks (event, idx, events) {
-  event[ EVENT_PREV ] = events[idx - 1] || null;
-  event[ EVENT_NEXT ] = events[idx + 1] || null;
+function createEventLinks(event: Event, idx: number, events: Array<Event>): Event {
+  event._prev = events[idx - 1] || null;
+  event._next = events[idx + 1] || null;
   return event;
 }

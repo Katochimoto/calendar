@@ -2,50 +2,50 @@
 
 import EventEmitter from '../EventEmitter';
 
-export const EVENT_DATA = Symbol('event-data');
-export const EVENT_NEXT = Symbol('event-next');
-export const EVENT_PREV = Symbol('event-prev');
-
 const F_ID = 'id';
 const F_UPDATED = 'updated';
 const F_DATE_BEGIN = 'dateBegin';
 
 export default class Event extends EventEmitter {
+  _data: ?Object;
+  _next: ?Event;
+  _prev: ?Event;
+
   constructor (data: {[id:string]: any}) {
     super();
-    this[ EVENT_DATA ] = data;
-    this[ EVENT_NEXT ] = null;
-    this[ EVENT_PREV ] = null;
+    this._data = data;
+    this._next = null;
+    this._prev = null;
   }
 
   destroy () {
     super.destroy();
-    this[ EVENT_DATA ] = null;
-    this[ EVENT_NEXT ] = null;
-    this[ EVENT_PREV ] = null;
+    this._data = null;
+    this._next = null;
+    this._prev = null;
   }
 
-  get (name: String) {
-    return this[ EVENT_DATA ] && this[ EVENT_DATA ][ name ];
+  get (name: String): any {
+    return this._data && this._data[ name ];
   }
 
-  getId () {
+  getId (): string {
     return this.get(F_ID);
   }
 
   next (): ?Event {
-    return this[ EVENT_NEXT ];
+    return this._next;
   }
 
   prev (): ?Event {
-    return this[ EVENT_PREV ];
+    return this._prev;
   }
 
-  valueOf () {
+  valueOf (): any {
     return this.get(F_UPDATED);
   }
 
-  toString () {
+  toString (): string {
     return String(this.valueOf() || '');
   }
 
@@ -120,5 +120,13 @@ export default class Event extends EventEmitter {
     }
 
     return item;
+  }
+
+  prevByInterval (interval: number[]): ?Event {
+
+  }
+
+  nextByInterval (interval: number[]): ?Event {
+
   }
 }

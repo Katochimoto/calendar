@@ -121,7 +121,7 @@ export function equalToMonth (date1: number, date2: number): boolean {
   );
 }
 
-export function mergeIntervals (intervals: Array<Number[]>): number[] {
+export function mergeIntervals(intervals: Array<number[]>): ?number[] {
   let min = Number.MAX_VALUE;
   let max = Number.MIN_VALUE;
 

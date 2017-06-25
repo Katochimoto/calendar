@@ -3,23 +3,17 @@
 import { getDay, parseDate, formatDate, offsetOnDay, getDate } from './date';
 import Strategy from './Datetime/Strategy';
 
-interface DatetimeStrategy {
-  gridDaysDayTitle (date: Date): string;
-  gridDaysHourTitle (hour: number): string;
-  monthNameGenShort (date: Date): string;
-}
-
 export default class Datetime {
-  _strategy: DatetimeStrategy;
+  _strategy: Strategy;
 
-  constructor (strategy: ?DatetimeStrategy) {
-    this._strategy = strategy || (new Strategy: DatetimeStrategy);
+  constructor(strategy: ?Strategy) {
+    this._strategy = strategy || (new Strategy: Strategy);
   }
 
   destroy () {
     if (this._strategy) {
       this._strategy.destroy();
-      this._strategy = undefined;
+      this._strategy = null;
     }
   }
 

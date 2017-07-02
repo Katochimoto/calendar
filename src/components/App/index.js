@@ -3,6 +3,10 @@ import { offsetOnDay } from '../Calendar/utils/date';
 
 import styles from './index.less';
 
+// https://github.com/material-components/material-components-web
+// https://material.io/components/web/catalog/toolbar/
+// https://reacttraining.com/react-router/
+
 const App = () => (
   <div className={styles.app}>
     <Calendar

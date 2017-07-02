@@ -5,6 +5,7 @@ import EventEmitter from '../EventEmitter';
 const F_ID = 'id';
 const F_UPDATED = 'updated';
 const F_DATE_BEGIN = 'dateBegin';
+const F_DATE_END = 'dateEnd';
 
 export default class Event extends EventEmitter {
   _data: ?Object;
@@ -25,7 +26,7 @@ export default class Event extends EventEmitter {
     this._prev = null;
   }
 
-  get (name: String): any {
+  get(name: string): any {
     return this._data && this._data[ name ];
   }
 
@@ -39,6 +40,22 @@ export default class Event extends EventEmitter {
 
   prev (): ?Event {
     return this._prev;
+  }
+
+  setPrevNext (prev: ?Event, next: ?Event): Event {
+    this._prev = prev;
+    this._next = next;
+    return this;
+  }
+
+  setNext (next: ?Event): Event {
+    this._next = next;
+    return this;
+  }
+
+  setPrev (prev: ?Event): Event {
+    this._prev = prev;
+    return this;
   }
 
   valueOf (): any {
@@ -78,7 +95,7 @@ export default class Event extends EventEmitter {
       current = current.prev();
     } while (current);
 
-    return item;
+    return item || null;
   }
 
   last (): ?Event {
@@ -90,7 +107,7 @@ export default class Event extends EventEmitter {
       current = current.next();
     } while (current);
 
-    return item;
+    return item || null;
   }
 
   firstByInterval (interval: number[]): ?Event {
@@ -119,14 +136,63 @@ export default class Event extends EventEmitter {
       }
     }
 
-    return item;
+    return item || null;
+  }
+
+  lastByInterval (interval: number[]): ?Event {
+    let item;
+    let toLast = true;
+    let current = this;
+
+    while (current && !item) {
+      const compare = current.compareBeginInInterval(interval);
+
+      if (compare === -1) {
+        current = current.next();
+        toLast = true;
+      } else if (compare === 1) {
+        current = current.prev();
+        toLast = false;
+      } else if (toLast) {
+        const next = current.next();
+        if (next) {
+          current = next;
+        } else {
+          item = current;
+        }
+      } else {
+        item = current;
+      }
+    }
+
+    return item || null;
   }
 
   prevByInterval (interval: number[]): ?Event {
+    let item = this.firstByInterval(interval);
+    item = item && item.prev();
 
+    if (!item) {
+      const last = this.last();
+      if (last && last.compareBeginInInterval(interval) === -1) {
+        item = last;
+      }
+    }
+    
+    return item;
   }
 
   nextByInterval (interval: number[]): ?Event {
+    let item = this.lastByInterval(interval);
+    item = item && item.next();
 
+    if (!item) {
+      const first = this.first();
+      if (first && first.compareBeginInInterval(interval) === 1) {
+        item = first;
+      }
+    }
+    
+    return item;
   }
 }

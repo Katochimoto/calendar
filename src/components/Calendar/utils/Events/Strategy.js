@@ -11,15 +11,12 @@ export default class Strategy extends EventEmitter {
   _update: Function;
   _upload: Function;
 
-  constructor ({
-    upload = () => { },
-    update = () => { }
-  } = {}) {
+  constructor ({ upload, update }: { upload: ?Function, update: ?Function } = {}) {
     super();
     this._state = Object.create(null);
     this._current = null;
-    this._upload = upload;
-    this._update = update;
+    this._upload = upload || (() => { });
+    this._update = update || (() => { });
   }
 
   destroy () {
@@ -83,28 +80,15 @@ export default class Strategy extends EventEmitter {
   }
 
   clearByInterval (interval: number[]): [ ?Event, ?Event ] {
-    // TODO
-    // prevByInterval()
-    // nextByInterval()
-    // this._current = ...
-
-    const iterator = this.getByInterval(interval);
-
-    let result = iterator.next();
-    let first = result.value && result.value.prev() || null;
-    let last = null;
-
-    while (result && !result.done) {
-      last = result.value.next();
-      result = iterator.next();
-    }
+    const first = this._current && this._current.prevByInterval(interval) || null;
+    const last = this._current && this._current.nextByInterval(interval) || null;
 
     if (first) {
-      first._next = last;
+      first.setNext(last);
     }
 
     if (last) {
-      last._prev = first;
+      last.setPrev(first);
     }
 
     return [ first, last ];
@@ -128,11 +112,13 @@ export default class Strategy extends EventEmitter {
       .map(createEventLinks);
 
     if (first) {
-      first._next = events[0];
+      first.setNext(events[0]);
+      events[0].setPrev(first);
     }
 
     if (last) {
-      last._prev = events[events.length - 1];
+      last.setPrev(events[events.length - 1]);
+      events[events.length - 1].setNext(last);
     }
 
     this._current = events[0];
@@ -141,7 +127,8 @@ export default class Strategy extends EventEmitter {
 }
 
 function createEventLinks(event: Event, idx: number, events: Array<Event>): Event {
-  event._prev = events[idx - 1] || null;
-  event._next = events[idx + 1] || null;
-  return event;
+  return event.setPrevNext(
+    events[idx - 1] || null,
+    events[idx + 1] || null
+  );
 }

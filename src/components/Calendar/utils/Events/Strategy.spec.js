@@ -1,6 +1,6 @@
 import { assert } from 'chai';
 import Strategy from './Strategy';
-import Event, { EVENT_NEXT, EVENT_PREV } from './Event';
+import Event from './Event';
 
 describe('utils/Events/Strategy', function () {
   beforeEach(function () {
@@ -16,8 +16,10 @@ describe('utils/Events/Strategy', function () {
     }
 
     this.events.forEach(function (item, idx, events) {
-      item[ EVENT_PREV ] = events[idx - 1] || null;
-      item[ EVENT_NEXT ] = events[idx + 1] || null;
+      item.setPrevNext(
+        events[idx - 1] || null,
+        events[idx + 1] || null
+      );
     });
 
     this.strategy = new Strategy();
@@ -29,65 +31,62 @@ describe('utils/Events/Strategy', function () {
     this.events = undefined;
   });
 
-  describe('clearByInterval', function () {
-    it('должен вернуть предыдущее событие начала интервала', function () {
+  describe.only('clearByInterval', function () {
+    beforeEach(function () {
       this.strategy._state = this.events;
       this.strategy._current = this.events[0];
+    });
 
+    it('должен удалить события из интервала', function () {
       const dateBegin = 20170615;
       const dateEnd = 20170620;
       const [ first, last ] = this.strategy.clearByInterval([ dateBegin, dateEnd ]);
-      assert.equal(first.get('dateBegin'), 20170614);
+      assert.strictEqual(first.next(), last);
+      assert.strictEqual(first.prev().get('dateBegin'), dateBegin - 2);
+      assert.strictEqual(last.prev(), first);
+      assert.strictEqual(last.next().get('dateBegin'), dateEnd + 2);
+    });
+
+    it('должен вернуть предыдущее событие начала интервала', function () {
+      const dateBegin = 20170615;
+      const dateEnd = 20170620;
+      const [ first, last ] = this.strategy.clearByInterval([ dateBegin, dateEnd ]);
+      assert.strictEqual(first.get('dateBegin'), dateBegin - 1);
     });
 
     it('должен вернуть следующее событие конца интервала', function () {
-      this.strategy._state = this.events;
-      this.strategy._current = this.events[0];
-
       const dateBegin = 20170615;
       const dateEnd = 20170620;
       const [ first, last ] = this.strategy.clearByInterval([ dateBegin, dateEnd ]);
-      assert.equal(last.get('dateBegin'), 20170621);
+      assert.strictEqual(last.get('dateBegin'), dateEnd + 1);
     });
 
     it('должен вернуть пустое начало, если интервал начинается раньше', function () {
-      this.strategy._state = this.events;
-      this.strategy._current = this.events[0];
-
       const dateBegin = 20170501;
       const dateEnd = 20170620;
       const [ first, last ] = this.strategy.clearByInterval([ dateBegin, dateEnd ]);
-      assert.equal(first, null);
+      assert.strictEqual(first, null);
     });
 
     it('должен вернуть пустой конец, если интервал заканчивается позже', function () {
-      this.strategy._state = this.events;
-      this.strategy._current = this.events[0];
-
       const dateBegin = 20170620;
       const dateEnd = 20170701;
       const [ first, last ] = this.strategy.clearByInterval([ dateBegin, dateEnd ]);
-      assert.equal(last, null);
+      assert.strictEqual(last, null);
     });
 
     it('должен вернуть последнее событие в данных, если интервал начинается позже', function () {
-      this.strategy._state = this.events;
-      this.strategy._current = this.events[0];
-
       const dateBegin = 20170701;
       const dateEnd = 20170701;
       const [ first, last ] = this.strategy.clearByInterval([ dateBegin, dateEnd ]);
-      assert.equal(first, this.events[this.events.length - 1]);
+      assert.strictEqual(first, this.events[this.events.length - 1]);
     });
 
     it('должен вернуть первое событие в данных, если интервал заканчивается раньше', function () {
-      this.strategy._state = this.events;
-      this.strategy._current = this.events[0];
-
       const dateBegin = 20170501;
       const dateEnd = 20170501;
       const [ first, last ] = this.strategy.clearByInterval([ dateBegin, dateEnd ]);
-      assert.equal(last, this.events[0]);
+      assert.strictEqual(last, this.events[0]);
     });
   });
 });

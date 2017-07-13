@@ -1,21 +1,51 @@
 import Calendar from '../Calendar';
 import { offsetOnDay } from '../Calendar/utils/date';
+import { Route, Link } from 'react-router-dom';
 
 import styles from './index.less';
 
 // https://github.com/material-components/material-components-web
 // https://material.io/components/web/catalog/toolbar/
-// https://reacttraining.com/react-router/
 
 const App = () => (
   <div className={styles.app}>
-    <Calendar
-      upload={uploadEvents}
-      update={updateEvents} />
+    <ul>
+      <li><Link to="/">Main</Link></li>
+      <li><Link to="/about">About</Link></li>
+      <li><Link to="/topics">Topics</Link></li>
+    </ul>
+
+    <hr/>
+
+    <Route exact path="/" component={Main} />
+    <Route path="/about" component={About} />
+    <Route path="/topics" component={Topic} />
   </div>
 );
 
+const Main = () => (
+  <div>
+    <h2>Main</h2>
+  </div>
+)
+
+const About = () => (
+  <div>
+    <h2>About</h2>
+  </div>
+)
+
+const Topic = () => (
+  <div>
+    <h3>123</h3>
+  </div>
+)
+
 export default App;
+
+// <Calendar
+//       upload={uploadEvents}
+//       update={updateEvents} />
 
 function uploadEvents (interval: number[], callback: Function) {
   const events = generateEvents(interval);

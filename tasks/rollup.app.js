@@ -13,7 +13,12 @@ import {
 } from './less.app.js';
 
 const pkg = require('../package.json');
-const external = Object.keys(pkg.peerDependencies || {}).concat(Object.keys(pkg.dependencies || {}));
+const external = [
+  'classnames',
+  'preact-compat',
+  'preact',
+  'prop-types'
+]; // Object.keys(pkg.peerDependencies || {}).concat(Object.keys(pkg.dependencies || {}));
 
 export default function (options) {
   const lessOptions = getLessOptions(options);
@@ -43,7 +48,7 @@ export default function (options) {
       }),
 
       RollupPluginBabel({
-        exclude: 'node_modules/**',
+        // exclude: 'node_modules/**',
         babelrc: false,
         presets: [
           //'stage-0',
@@ -72,7 +77,10 @@ export default function (options) {
       }),
 
       RollupPluginInject({
-        'h': [ 'preact', 'h' ]
+        modules: {
+          'h': [ 'preact', 'h' ],
+          'React.createElement': [ 'preact', 'h' ]
+        }
       }),
 
       RollupPluginBuble({

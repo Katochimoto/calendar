@@ -1,11 +1,11 @@
 // @flow
 
 export default class StoreStrategy {
-  state: {[id:string]: any};
-  current: {[id:string]: any};
+  state: { [string]: any };
+  current: { [string]: any };
   isChanged: boolean;
 
-  constructor (data: {[id:string]: any} = {}) {
+  constructor(data: { [string]: any } = {}) {
     this.current = { ...data };
     this.isChanged = false;
     this.state = Object.create(null);
@@ -49,7 +49,7 @@ export default class StoreStrategy {
     this.state = undefined;
   }
 
-  update (data: {[id:string]: any}): boolean {
+  update (data: { [ string ]: any }): boolean {
     this.isChanged = false;
 
     if (!data) {

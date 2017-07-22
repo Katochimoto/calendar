@@ -3,22 +3,17 @@ import RollupPluginCommonJS from 'rollup-plugin-commonjs';
 import RollupPluginReplace from 'rollup-plugin-replace';
 import RollupPluginBuble from 'rollup-plugin-buble';
 
-export function generate ({ env, dist }) {
+export default function (options) {
   return {
-    format: 'iife',
-    exports: 'default',
-    moduleName: 'vendor',
-    useStrict: true
-  };
-}
+    entry: `${options.src}/${options.moduleName}.js`,
+    format: 'cjs',
+    exports: 'none',
+    useStrict: true,
 
-export function rollup ({ env, dist }) {
-  return {
     sourceMap: false,
-    context: 'window',
     plugins: [
       RollupPluginReplace({
-        'process.env.NODE_ENV': JSON.stringify(env)
+        'process.env.NODE_ENV': JSON.stringify(options.env)
       }),
 
       RollupPluginBuble({

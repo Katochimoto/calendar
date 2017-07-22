@@ -41,6 +41,8 @@ const MONTH_GEN_SHORT = {
 };
 
 export default class Strategy {
+  destroy () {}
+
   gridDaysHourTitle (hour: number): string {
     return String(hour);
   }

@@ -1,5 +1,9 @@
 [ignore]
 src/**/*.spec.js
+node_modules
+dist
+sample
+tasks
 
 [include]
 src/**/*.js

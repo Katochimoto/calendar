@@ -1,28 +1,19 @@
 import gulp from 'gulp';
 import hash from 'gulp-hash';
-import rollup from 'gulp-better-rollup';
+import rollup from 'rollup-stream';
 import gulpif from 'gulp-if';
 import uglify from 'gulp-uglify';
 import size from 'gulp-size';
 import inject from 'gulp-inject';
 import minimist from 'minimist';
 import del from 'del';
+import source from 'vinyl-source-stream';
+import buffer from 'vinyl-buffer';
 import { exec } from 'child_process';
 
-import {
-  rollup as vendorRollup,
-  generate as vendorGenerate
-} from './tasks/vendor.js';
-
-import {
-  rollup as appRollup,
-  generate as appGenerate
-} from './tasks/app.js';
-
-import {
-  rollup as mainRollup,
-  generate as mainGenerate
-} from './tasks/main.js';
+import vendorRollup from './tasks/rollup.vendor.js';
+import appRollup from './tasks/rollup.app.js';
+import mainRollup from './tasks/rollup.main.js';
 
 import {
   sources as injectSources,
@@ -48,8 +39,9 @@ export function app () {
   const moduleName = 'app';
   const options = { ...OPTIONS, moduleName };
 
-  return gulp.src('src/app.js')
-    .pipe(rollup(appRollup(options), appGenerate(options)))
+  return rollup(appRollup(options))
+    .pipe(source('app.js', OPTIONS.src))
+    .pipe(buffer())
     .pipe(gulpif(OPTIONS.env === 'production', uglify()))
     .pipe(size({ title: moduleName }))
     .pipe(gulp.dest(OPTIONS.dist));
@@ -59,8 +51,9 @@ export function vendor () {
   const moduleName = 'vendor';
   const options = { ...OPTIONS, moduleName };
 
-  return gulp.src('src/vendor.js')
-    .pipe(rollup(vendorRollup(options), vendorGenerate(options)))
+  return rollup(vendorRollup(options))
+    .pipe(source('vendor.js', OPTIONS.src))
+    .pipe(buffer())
     .pipe(gulpif(OPTIONS.env === 'production', uglify()))
     .pipe(size({ title: moduleName }))
     .pipe(gulp.dest(OPTIONS.dist));
@@ -70,8 +63,9 @@ export function main () {
   const moduleName = 'main';
   const options = { ...OPTIONS, moduleName };
 
-  return gulp.src('src/main.js')
-    .pipe(rollup(mainRollup(options), mainGenerate(options)))
+  return rollup(mainRollup(options))
+    .pipe(source('main.js', OPTIONS.src))
+    .pipe(buffer())
     .pipe(size({ title: moduleName }))
     .pipe(gulp.dest(OPTIONS.dist));
 }
@@ -90,6 +84,13 @@ export function mainhtml () {
   return gulp.src('src/main.html')
     .pipe(inject(injectSources(options), injectOptions(options)))
     .pipe(gulp.dest(OPTIONS.dist));
+}
+
+export function watch() {
+  gulp.watch([
+    'src/**/*.js',
+    'src/**/*.less'
+  ], app);
 }
 
 export function clean () {

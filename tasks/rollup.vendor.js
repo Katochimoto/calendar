@@ -2,21 +2,29 @@ import RollupPluginNodeResolve from 'rollup-plugin-node-resolve';
 import RollupPluginCommonJS from 'rollup-plugin-commonjs';
 import RollupPluginReplace from 'rollup-plugin-replace';
 import RollupPluginBuble from 'rollup-plugin-buble';
+import RollupPluginLess2 from 'rollup-plugin-less2';
 
-export function generate ({ env, dist }) {
-  return {
-    format: 'cjs',
-    exports: 'none',
-    useStrict: true
-  };
-}
+import {
+  options as getLessOptions
+} from './less.vendor.js';
 
-export function rollup ({ env, dist }) {
+export default function (options) {
+  const lessOptions = getLessOptions(options);
+
   return {
+    entry: `${options.src}/${options.moduleName}.js`,
+    format: 'iife',
+    exports: 'default',
+    moduleName: 'vendor',
+    useStrict: true,
+
     sourceMap: false,
+    context: 'window',
     plugins: [
+      RollupPluginLess2(lessOptions),
+
       RollupPluginReplace({
-        'process.env.NODE_ENV': JSON.stringify(env)
+        'process.env.NODE_ENV': JSON.stringify(options.env)
       }),
 
       RollupPluginBuble({
@@ -32,7 +40,8 @@ export function rollup ({ env, dist }) {
       }),
 
       RollupPluginCommonJS({
-        include: 'node_modules/**'
+        include: 'node_modules/**',
+        exclude: '**/*.less'
       })
     ]
   };

@@ -1,0 +1,22 @@
+@import (reference, once) "../../style/constant";
+
+.Navbar {
+  padding: 0 1rem;
+}
+
+.Nav {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  overflow: auto;
+
+  &_Item {
+    float: left;
+  }
+
+  &_Link {
+    line-height: @header-height;
+    white-space: nowrap;
+    display: block;
+  }
+}

@@ -1,4 +1,8 @@
+import Aside from '../Aside';
+import Navbar from '../Navbar';
+import Body from '../Body';
 import Calendar from '../Calendar';
+
 import { offsetOnDay } from '../Calendar/utils/date';
 import { Route, Link } from 'react-router-dom';
 
@@ -6,46 +10,29 @@ import styles from './index.less';
 
 // https://github.com/material-components/material-components-web
 // https://material.io/components/web/catalog/toolbar/
+// https://prateekbh.github.io/preact-material-components/#/component/toolbar
 
 const App = () => (
-  <div className={styles.app}>
-    <ul>
-      <li><Link to="/">Main</Link></li>
-      <li><Link to="/about">About</Link></li>
-      <li><Link to="/topics">Topics</Link></li>
-    </ul>
-
-    <hr/>
-
-    <Route exact path="/" component={Main} />
-    <Route path="/about" component={About} />
-    <Route path="/topics" component={Topic} />
+  <div className={styles.App}>
+    <Aside />
+    <div className={styles.App_Content}>
+      <div className={styles.App_Header}>
+        <Navbar />
+      </div>
+      <Body>
+        <Route exact path="/" render={renderCalendar} />
+      </Body>
+    </div>
   </div>
 );
 
-const Main = () => (
-  <div>
-    <h2>Main</h2>
-  </div>
-)
-
-const About = () => (
-  <div>
-    <h2>About</h2>
-  </div>
-)
-
-const Topic = () => (
-  <div>
-    <h3>123</h3>
-  </div>
-)
-
 export default App;
 
-// <Calendar
-//       upload={uploadEvents}
-//       update={updateEvents} />
+function renderCalendar (props) {
+  return (
+    <Calendar {...props} upload={uploadEvents} update={updateEvents} />
+  );
+}
 
 function uploadEvents (interval: number[], callback: Function) {
   const events = generateEvents(interval);

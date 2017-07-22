@@ -1,11 +1,29 @@
-.app {
-  margin: 20px;
+@import (reference, once) "../../style/constant";
+
+.App {
   position: absolute;
-  overflow: auto;
   top: 0;
   right: 0;
   bottom: 0;
   left: 0;
-  box-sizing: border-box;
-  border: 1px solid #000;
+  overflow: hidden;
+
+  &_Content {
+    margin-left: @aside-width;
+    box-shadow: none;
+    position: relative;
+    min-height: 100%;
+  }
+
+  &_Header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    min-height: @header-height;
+    margin: inherit;
+    color: fade(#fff, 87%);
+    background-color: @header-bg-color;
+    box-shadow: 0 2px 5px fade(#000, 26%), 0 -1px 0 fade(#000, 2%);
+  }
 }

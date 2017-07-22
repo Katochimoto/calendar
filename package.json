@@ -46,6 +46,7 @@
     "normalize.css": "7.0.0",
     "postcss": "6.0.6",
     "postcss-csso": "2.0.0",
+    "preact-material-components": "^1.0.14",
     "rollup": "0.45.2",
     "rollup-plugin-babel": "2.7.1",
     "rollup-plugin-buble": "0.15.0",

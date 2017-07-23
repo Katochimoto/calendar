@@ -1,6 +1,5 @@
 import Aside from '../Aside';
 import Navbar from '../Navbar';
-import Body from '../Body';
 import Calendar from '../Calendar';
 
 import { offsetOnDay } from '../Calendar/utils/date';
@@ -12,6 +11,16 @@ import styles from './index.less';
 // https://material.io/components/web/catalog/toolbar/
 // https://prateekbh.github.io/preact-material-components/#/component/toolbar
 
+// https://github.com/css-modules/css-modules/blob/master/docs/theming.md
+// https://github.com/css-modules/postcss-icss-values/issues/6
+// https://github.com/Semantic-Org/Semantic-UI-LESS
+// https://semantic-ui.com/introduction/advanced-usage.html#less-only-distribution
+// https://getuikit.com/docs/less
+
+
+// http://flatfull.com/themes/flatkit/html/dashboard.0.html
+// http://www.deeplearningbook.org/
+
 const App = () => (
   <div className={styles.App}>
     <Aside />
@@ -19,9 +28,9 @@ const App = () => (
       <div className={styles.App_Header}>
         <Navbar />
       </div>
-      <Body>
+      <div className={styles.App_Body}>
         <Route exact path="/" render={renderCalendar} />
-      </Body>
+      </div>
     </div>
   </div>
 );

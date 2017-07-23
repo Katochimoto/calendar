@@ -1,4 +1,4 @@
-@import (reference, once) "../../style/constant";
+@import (reference, once) "../../style/variables";
 
 .App {
   position: absolute;
@@ -20,10 +20,18 @@
     top: 0;
     left: 0;
     right: 0;
-    min-height: @header-height;
     margin: inherit;
-    color: fade(#fff, 87%);
+    min-height: @header-height;
+    color: @header-text-color;
     background-color: @header-bg-color;
-    box-shadow: 0 2px 5px fade(#000, 26%), 0 -1px 0 fade(#000, 2%);
+    box-shadow: 2px 2px 2px 0px fade(#000, 15%);
+  }
+
+  &_Body {
+    position: absolute;
+    top: @header-height;
+    left: 0;
+    right: 0;
+    bottom: 0;
   }
 }

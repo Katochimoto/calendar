@@ -2,14 +2,14 @@
 
 .App {
   position: absolute;
-  top: 0;
-  right: 0;
   bottom: 0;
   left: 0;
+  right: 0;
+  top: 0;
   overflow: hidden;
 
   &_Content {
-    margin-left: @aside-width;
+    margin-left: @global-aside-width;
     box-shadow: none;
     position: relative;
     min-height: 100%;
@@ -17,21 +17,21 @@
 
   &_Header {
     position: fixed;
-    top: 0;
     left: 0;
     right: 0;
+    top: 0;
     margin: inherit;
-    min-height: @header-height;
-    color: @header-text-color;
-    background-color: @header-bg-color;
-    box-shadow: 2px 2px 2px 0px fade(#000, 15%);
+    min-height: @global-header-height;
+    background-color: @global-header-bg-color;
+    color: @global-header-text-color;
+    box-shadow: 0 2px 2px rgba(0,0,0,.03), 0 1px 0 rgba(0,0,0,.03);
   }
 
   &_Body {
     position: absolute;
-    top: @header-height;
+    bottom: 0;
     left: 0;
     right: 0;
-    bottom: 0;
+    top: @global-header-height;
   }
 }

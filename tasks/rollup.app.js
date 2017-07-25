@@ -35,7 +35,7 @@ export default function (options) {
       'prop-types': 'vendor._prop_types'
     },
 
-    sourceMap: true,
+    sourceMap: false,
     context: 'window',
     external: external,
     plugins: [

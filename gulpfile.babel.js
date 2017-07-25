@@ -5,6 +5,7 @@ import gulpif from 'gulp-if';
 import uglify from 'gulp-uglify';
 import size from 'gulp-size';
 import inject from 'gulp-inject';
+import sourcemaps from 'gulp-sourcemaps';
 import minimist from 'minimist';
 import del from 'del';
 import source from 'vinyl-source-stream';
@@ -42,7 +43,9 @@ export function app () {
   return rollup(appRollup(options))
     .pipe(source('app.js', OPTIONS.src))
     .pipe(buffer())
+    .pipe(sourcemaps.init())
     .pipe(gulpif(OPTIONS.env === 'production', uglify()))
+    .pipe(sourcemaps.write('.'))
     .pipe(size({ title: moduleName }))
     .pipe(gulp.dest(OPTIONS.dist));
 }
@@ -54,7 +57,9 @@ export function vendor () {
   return rollup(vendorRollup(options))
     .pipe(source('vendor.js', OPTIONS.src))
     .pipe(buffer())
+    .pipe(sourcemaps.init())
     .pipe(gulpif(OPTIONS.env === 'production', uglify()))
+    .pipe(sourcemaps.write('.'))
     .pipe(size({ title: moduleName }))
     .pipe(gulp.dest(OPTIONS.dist));
 }

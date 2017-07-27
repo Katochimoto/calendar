@@ -25,9 +25,11 @@ const App = () => (
   <div className={styles.App}>
     <Aside />
     <div className={styles.App_Content}>
-      <div className={styles.App_Header}>
-        <Navbar />
-      </div>
+      <header className={styles.App_Header}>
+        <section>
+          <Navbar />
+        </section>
+      </header>
       <div className={styles.App_Body}>
         <Route exact path="/" render={renderCalendar} />
       </div>
@@ -36,6 +38,10 @@ const App = () => (
 );
 
 export default App;
+
+// <div className={styles.App_Header}>
+//         <Navbar />
+//       </div>
 
 function renderCalendar (props) {
   return (

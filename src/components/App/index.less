@@ -13,26 +13,20 @@
     box-shadow: none;
     position: relative;
     min-height: 100%;
+    display: flex;
+    flex-direction: column;
   }
 
   &_Header {
-    position: fixed;
-    left: 0;
-    right: 0;
-    top: 0;
-    margin: inherit;
-    min-height: @global-header-height;
+    height: @global-header-height;
     background-color: @global-header-bg-color;
     color: @global-header-text-color;
     box-shadow: 0 2px 2px rgba(0,0,0,.03), 0 1px 0 rgba(0,0,0,.03);
   }
 
   &_Body {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    top: @global-header-height;
-    margin: 1rem;
+    position: relative;
+    margin: 16px;
+    flex-grow: 1;
   }
 }

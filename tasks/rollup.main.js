@@ -2,6 +2,7 @@ import RollupPluginNodeResolve from 'rollup-plugin-node-resolve';
 import RollupPluginCommonJS from 'rollup-plugin-commonjs';
 import RollupPluginReplace from 'rollup-plugin-replace';
 import RollupPluginBuble from 'rollup-plugin-buble';
+import RollupPluginPreprocess from 'rollup-plugin-preprocess';
 
 export default function (options) {
   return {
@@ -30,6 +31,12 @@ export default function (options) {
 
       RollupPluginCommonJS({
         include: 'node_modules/**'
+      }),
+
+      RollupPluginPreprocess({
+        context: {
+          NODE_ENV: options.env
+        }
       })
     ]
   };

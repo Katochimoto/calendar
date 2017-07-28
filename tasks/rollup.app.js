@@ -5,8 +5,8 @@ import RollupPluginInject from 'rollup-plugin-inject';
 import RollupPluginJSON from 'rollup-plugin-json';
 import RollupPluginLess2 from 'rollup-plugin-less2';
 import RollupPluginNodeResolve from 'rollup-plugin-node-resolve';
-import RollupPluginPreprocess from 'rollup-plugin-preprocess';
 import RollupPluginReplace from 'rollup-plugin-replace';
+import RollupPluginPreprocess from 'rollup-plugin-preprocess';
 
 import {
   options as getLessOptions

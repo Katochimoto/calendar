@@ -56,6 +56,8 @@ export default {
    */
   GRID_HOURS: GRID_HOURS,
 
+  HOURS_LIST: HOURS_LIST,
+
   /**
    * Количество миллисекунд в сутках
    * @type {number}

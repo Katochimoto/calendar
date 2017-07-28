@@ -3,9 +3,9 @@ import hash from 'gulp-hash';
 import rollup from 'rollup-stream';
 import gulpif from 'gulp-if';
 import uglify from 'gulp-uglify';
-import size from 'gulp-size';
-import inject from 'gulp-inject';
+import preprocess from 'gulp-preprocess';
 import sourcemaps from 'gulp-sourcemaps';
+import sizereport from 'gulp-sizereport';
 import minimist from 'minimist';
 import del from 'del';
 import source from 'vinyl-source-stream';
@@ -15,11 +15,6 @@ import { exec } from 'child_process';
 import vendorRollup from './tasks/rollup.vendor.js';
 import appRollup from './tasks/rollup.app.js';
 import mainRollup from './tasks/rollup.main.js';
-
-import {
-  sources as injectSources,
-  options as injectOptions
-} from './tasks/main.html.js';
 
 const OPTIONS = minimist(process.argv.slice(2), {
   string: [
@@ -46,7 +41,6 @@ export function app () {
     .pipe(sourcemaps.init())
     .pipe(gulpif(OPTIONS.env === 'production', uglify()))
     .pipe(sourcemaps.write('.'))
-    .pipe(size({ title: moduleName }))
     .pipe(gulp.dest(OPTIONS.dist));
 }
 
@@ -60,7 +54,6 @@ export function vendor () {
     .pipe(sourcemaps.init())
     .pipe(gulpif(OPTIONS.env === 'production', uglify()))
     .pipe(sourcemaps.write('.'))
-    .pipe(size({ title: moduleName }))
     .pipe(gulp.dest(OPTIONS.dist));
 }
 
@@ -71,7 +64,6 @@ export function main () {
   return rollup(mainRollup(options))
     .pipe(source('main.js', OPTIONS.src))
     .pipe(buffer())
-    .pipe(size({ title: moduleName }))
     .pipe(gulp.dest(OPTIONS.dist));
 }
 
@@ -87,7 +79,14 @@ export function mainhtml () {
   const options = { ...OPTIONS };
 
   return gulp.src('src/main.html')
-    .pipe(inject(injectSources(options), injectOptions(options)))
+    .pipe(preprocess({
+      context: {
+        NODE_ENV: OPTIONS.env,
+        static: function (name) {
+          return name;
+        }
+      }
+    }))
     .pipe(gulp.dest(OPTIONS.dist));
 }
 
@@ -99,7 +98,7 @@ export function watch() {
 }
 
 export function clean () {
-  return del([ 'dist', 'build' ]);
+  return del([ OPTIONS.dist, OPTIONS.build ]);
 }
 
 export function pkg () {
@@ -114,6 +113,14 @@ export function pkg () {
     --prune \
     --overwrite`
   );
+}
+
+export  function report () {
+  return gulp.src(`${OPTIONS.dist}/*`)
+    .pipe(sizereport({
+      gzip: true,
+      total: false
+    }));
 }
 
 const build = gulp.series(

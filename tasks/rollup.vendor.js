@@ -3,6 +3,7 @@ import RollupPluginCommonJS from 'rollup-plugin-commonjs';
 import RollupPluginReplace from 'rollup-plugin-replace';
 import RollupPluginBuble from 'rollup-plugin-buble';
 import RollupPluginLess2 from 'rollup-plugin-less2';
+import RollupPluginPreprocess from 'rollup-plugin-preprocess';
 
 import {
   options as getLessOptions
@@ -42,6 +43,12 @@ export default function (options) {
       RollupPluginCommonJS({
         include: 'node_modules/**',
         exclude: '**/*.less'
+      }),
+
+      RollupPluginPreprocess({
+        context: {
+          NODE_ENV: options.env
+        }
       })
     ]
   };

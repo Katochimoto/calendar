@@ -40,15 +40,40 @@ const MONTH_GEN_SHORT = {
   '12': 'Дек.',
 };
 
+const MONTH_GEN_SHORT_LOWER = {
+  '1': 'янв',
+  '2': 'фев',
+  '3': 'мар',
+  '4': 'апр',
+  '5': 'мая',
+  '6': 'июня',
+  '7': 'июля',
+  '8': 'авг',
+  '9': 'сент',
+  '10': 'окт',
+  '11': 'ноя',
+  '12': 'дек',
+};
+
 export default class Strategy {
   destroy () {}
 
   gridDaysHourTitle (hour: number): string {
-    return String(hour);
+    return do {
+      if (hour === 0) {
+        '12am';
+      } else if (hour < 12) {
+        `${hour}am`;
+      } else if (hour == 12) {
+        '12pm';
+      } else {
+        `${hour - 12}pm`;
+      }
+    };
   }
 
   gridDaysDayTitle (date: Date): string {
-    return `${DAYS[ date.getDay() ]}, ${date.getDate()}`;
+    return `${DAYS[ date.getDay() ]}, ${date.getDate()} ${MONTH_GEN_SHORT_LOWER[ date.getMonth() + 1 ]}`;
   }
 
   monthNameGenShort (date: Date): string {

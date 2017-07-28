@@ -15,21 +15,22 @@ export default class DayHours extends StoreComponent {
   }
 
   transformState (props, context) {
-    const { hoursOfDay } = context.store.getState();
-    return { hoursOfDay };
+    const { hoursOfDay, HOURS_LIST } = context.store.getState();
+    return { hoursOfDay, HOURS_LIST };
   }
 
   getItems () {
-    if (!this.state.hoursOfDay) {
+    const HOURS_LIST = this.state.HOURS_LIST;
+
+    if (!HOURS_LIST) {
       return null;
     }
 
     const datetime = this.context.datetime;
-    const hoursOfDay = this.state.hoursOfDay.split(',');
     const items = [];
 
-    for (let i = 0, len = hoursOfDay.length; i < len; i++) {
-      const hour = hoursOfDay[ i ];
+    for (let i = 0, len = HOURS_LIST.length; i < len; i++) {
+      const hour = HOURS_LIST[ i ];
 
       items.push(
         <div key={hour}
@@ -38,7 +39,7 @@ export default class DayHours extends StoreComponent {
       );
     }
 
-    const hour = hoursOfDay[ 0 ];
+    const hour = HOURS_LIST[ 0 ];
 
     items.push(
       <div key={`next-${hour}`}

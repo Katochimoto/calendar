@@ -1,3 +1,5 @@
+import Icon from '../Icon';
+
 import styles from './index.less';
 
 const Aside = () => (
@@ -29,6 +31,7 @@ const Aside = () => (
       <ul className={styles.List}>
         <li>
           <a className={styles.List_Item}>
+            <Icon />
             <span className={styles.List_Item_Text}>Отправить отзыв</span>
           </a>
         </li>

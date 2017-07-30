@@ -9,7 +9,16 @@ const Aside = () => (
     <nav className={styles.Aside_Menu}>
       <ul className={styles.List}>
         <li className={styles.List_Header}>
-          <span>Личные</span>
+          <span>Google</span>
+        </li>
+        <li>
+          <a className={styles.List_Item}>
+            <i></i>
+            <span className={styles.List_Item_Text}>123</span>
+          </a>
+        </li>
+        <li className={styles.List_Header}>
+          <span>iCloud</span>
         </li>
         <li>
           <a className={styles.List_Item}>
@@ -17,7 +26,7 @@ const Aside = () => (
           </a>
         </li>
         <li className={styles.List_Header}>
-          <span>События</span>
+          <span>Другое</span>
         </li>
         <li>
           <a className={styles.List_Item}>
@@ -28,14 +37,11 @@ const Aside = () => (
     </nav>
 
     <nav className={styles.Aside_Bottom}>
-      <ul className={styles.List}>
-        <li>
-          <a className={styles.List_Item}>
-            <Icon />
-            <span className={styles.List_Item_Text}>Отправить отзыв</span>
-          </a>
-        </li>
-      </ul>
+      <div className={`${styles.BottomMenu}`}>
+        <a className={styles.BottomMenu_Item}><Icon type="calendar" /></a>
+        <a className={styles.BottomMenu_Item} title="Отправить отзыв"><Icon type="info" /></a>
+        <a className={styles.BottomMenu_Item}><Icon type="cog" /></a>
+      </div>
     </nav>
   </div>
 );

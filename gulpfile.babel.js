@@ -93,8 +93,9 @@ export function mainhtml () {
 export function watch() {
   gulp.watch([
     'src/**/*.js',
-    'src/**/*.less'
-  ], app);
+    'src/**/*.less',
+    'src/**/*.svg'
+  ], gulp.parallel(app, mainhtml));
 }
 
 export function clean () {

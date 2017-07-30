@@ -1,7 +1,12 @@
 @import (reference, once) "../../style/variables";
 
 .Navbar {
-  height: @global-header-height;
+  @navbar-height: @global-header-height;
+  @navbar-active-color: fade(#fff, 100%);
+  @navbar-active-shadow: inset 0px 3px 0px 0px fade(#fff, 100%);
+  @navbar-hover-bg: fade(#fff, 8%);
+
+  height: @navbar-height;
   margin: 0;
   display: table;
 
@@ -18,12 +23,13 @@
     vertical-align: middle;
 
     &:hover {
-      color: fade(#fff, 100%);
+      color: @navbar-active-color;
+      background: @navbar-hover-bg;
     }
 
     &__active {
-      color: fade(#fff, 100%);
-      box-shadow: inset 0px 3px 0px 0px fade(#fff, 100%);
+      color: @navbar-active-color;
+      box-shadow: @navbar-active-shadow;
     }
   }
 }

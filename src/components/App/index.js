@@ -32,6 +32,7 @@ const App = () => (
       </header>
       <div className={styles.App_Body}>
         <Route exact path="/" render={renderCalendar} />
+        <Route exact path="/settings" render={renderCalendar} />
       </div>
     </div>
   </div>

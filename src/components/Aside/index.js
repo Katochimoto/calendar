@@ -1,3 +1,4 @@
+import { NavLink } from 'react-router-dom';
 import Icon from '../Icon';
 
 import styles from './index.less';
@@ -40,7 +41,14 @@ const Aside = () => (
       <div className={`${styles.BottomMenu}`}>
         <a className={styles.BottomMenu_Item}><Icon type="calendar" /></a>
         <a className={styles.BottomMenu_Item} title="Отправить отзыв"><Icon type="info" /></a>
-        <a className={styles.BottomMenu_Item}><Icon type="cog" /></a>
+        <NavLink
+          className={styles.BottomMenu_Item}
+          activeClassName={styles.BottomMenu_Item__active}
+          to="/settings"
+          title="Настройки">
+
+          <Icon type="cog" />
+        </NavLink>
       </div>
     </nav>
   </div>

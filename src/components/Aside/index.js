@@ -14,7 +14,15 @@ const Aside = () => (
         </li>
         <li>
           <a className={styles.List_Item}>
-            <i></i>
+            <span className={styles.List_Item_Text}>123</span>
+            <span className={styles.List_Item_Controls}>
+              <Icon type="cog" size="xs" />
+              <Icon type="cog" size="xs" />
+            </span>
+          </a>
+        </li>
+        <li>
+          <a className={styles.List_Item}>
             <span className={styles.List_Item_Text}>123</span>
           </a>
         </li>

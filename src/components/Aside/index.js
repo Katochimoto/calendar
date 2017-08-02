@@ -12,35 +12,27 @@ const Aside = () => (
         <li className={styles.List_Header}>
           <span>Google</span>
         </li>
-        <li>
-          <a className={styles.List_Item}>
-            <span className={styles.List_Item_Text}>123</span>
-            <span className={styles.List_Item_Controls}>
-              <Icon type="cog" size="xs" />
-              <Icon type="cog" size="xs" />
-            </span>
-          </a>
+        <li className={styles.List_Item}>
+          <span className={styles.List_Item_Text}>123</span>
+          <span className={styles.List_Item_Controls}>
+            <a className={styles.List_Item_Controls_Item}><Icon type="cog" size="xs" /></a>
+            <a className={styles.List_Item_Controls_Item}><Icon type="cog" size="xs" /></a>
+          </span>
         </li>
-        <li>
-          <a className={styles.List_Item}>
-            <span className={styles.List_Item_Text}>123</span>
-          </a>
+        <li className={styles.List_Item}>
+          <span className={styles.List_Item_Text}>123</span>
         </li>
         <li className={styles.List_Header}>
           <span>iCloud</span>
         </li>
-        <li>
-          <a className={styles.List_Item}>
-            <span className={styles.List_Item_Text}>123</span>
-          </a>
+        <li className={styles.List_Item}>
+          <span className={styles.List_Item_Text}>123</span>
         </li>
         <li className={styles.List_Header}>
           <span>Другое</span>
         </li>
-        <li>
-          <a className={styles.List_Item}>
-            <span className={styles.List_Item_Text}>123</span>
-          </a>
+        <li className={styles.List_Item}>
+          <span className={styles.List_Item_Text}>123</span>
         </li>
       </ul>
     </nav>

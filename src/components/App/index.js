@@ -1,6 +1,7 @@
 import Aside from '../Aside';
 import Navbar from '../Navbar';
 import Calendar from '../Calendar';
+import Settings from '../Settings';
 
 import { offsetOnDay } from '../Calendar/utils/date';
 import { Route, Link } from 'react-router-dom';
@@ -21,6 +22,9 @@ import styles from './index.less';
 // http://flatfull.com/themes/flatkit/html/dashboard.0.html
 // http://www.deeplearningbook.org/
 
+// http://lesscss.org/3.x/tools/#frameworks-using-less-grid-systems
+// http://flexboxgrid.com/
+
 const App = () => (
   <div className={styles.App}>
     <Aside />
@@ -32,7 +36,7 @@ const App = () => (
       </header>
       <div className={styles.App_Body}>
         <Route exact path="/" render={renderCalendar} />
-        <Route exact path="/settings" render={renderCalendar} />
+        <Route path="/settings" component={Settings} />
       </div>
     </div>
   </div>

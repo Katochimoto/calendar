@@ -25,6 +25,10 @@ import styles from './index.less';
 // http://lesscss.org/3.x/tools/#frameworks-using-less-grid-systems
 // http://flexboxgrid.com/
 
+// !!!
+// https://developers.google.com/identity/protocols/OAuth2UserAgent
+
+
 const App = () => (
   <div className={styles.App}>
     <Aside />

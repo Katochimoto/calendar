@@ -27,7 +27,8 @@ import styles from './index.less';
 
 // !!!
 // https://developers.google.com/identity/protocols/OAuth2UserAgent
-
+// http://fontawesome.io/
+// http://flatfull.com/themes/flatkit/html/setting.html
 
 const App = () => (
   <div className={styles.App}>

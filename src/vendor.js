@@ -1,12 +1,14 @@
-import _preact from 'preact';
-import _preact_compat from 'preact-compat';
-import _classnames from 'classnames';
-import _raf from 'raf';
-import _setimmediate2 from 'setimmediate2';
-import _prop_types from 'prop-types';
-import 'es6-symbol/implement';
+import _preact from 'preact'
+import _preact_compat from 'preact-compat'
+import _react_redux from 'react-redux'
+import _redux from 'redux'
+import _classnames from 'classnames'
+import _raf from 'raf'
+import _setimmediate2 from 'setimmediate2'
+import _prop_types from 'prop-types'
+import 'es6-symbol/implement'
 
-import './vendor.less';
+import './vendor.less'
 
 _raf.polyfill();
 _setimmediate2.polifill();
@@ -16,4 +18,6 @@ export default {
   _preact_compat,
   _preact,
   _prop_types,
+  _react_redux,
+  _redux
 };

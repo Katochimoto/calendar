@@ -1,14 +1,11 @@
-import './style/common.less';
+import './style/common.less'
 
-import ReactDOM from 'react-dom';
-import { HashRouter as Router } from 'react-router-dom';
-// import { BrowserRouter as Router } from 'react-router-dom';
-// import { MemoryRouter as Router } from 'react-router-dom';
-import App from './components/App';
+import ReactDOM from 'react-dom'
+import { HashRouter as Router } from 'react-router-dom'
+// import { BrowserRouter as Router } from 'react-router-dom'
+// import { MemoryRouter as Router } from 'react-router-dom'
+import App from './components/App'
 
-// import dav from 'dav';
-
-// https://reacttraining.com/react-router/
 
 ReactDOM.render((
   <Router>
@@ -16,14 +13,18 @@ ReactDOM.render((
   </Router>
 ), document.body.appendChild(document.createElement('div')));
 
-// var client = new dav.Client(xhr);
-// client.createAccount({
-//   server: 'http://dav.example.com',
-//   accountType: 'carddav'
-// })
-// .then(function(account) {
-//   account.addressBooks.forEach(function(addressBook) {
-//     console.log('Found address book name ' + addressBook.displayName);
-//     // etc.
-//   });
-// });
+
+/*
+https://github.com/reactjs/react-redux/blob/master/docs/api.md#api
+https://github.com/reactjs/react-redux/blob/master/docs/api.md#connectmapstatetoprops-mapdispatchtoprops-mergeprops-options
+http://redux.js.org/docs/faq/ReactRedux.html#react-multiple-components
+http://redux.js.org/docs/basics/UsageWithReact.html
+https://rajdee.gitbooks.io/redux-in-russian/
+https://github.com/reacttraining/react-router/tree/master/packages/react-router-redux
+https://reacttraining.com/react-router/web/guides/redux-integration
+https://medium.com/russian/a-cartoon-intro-to-redux-e2108896f7e6
+
+https://developer.mozilla.org/en-US/docs/Web/API/URLSearchParams
+https://developer.mozilla.org/en-US/docs/Web/API/URL
+https://developers.google.com/web/updates/2016/01/urlsearchparams?hl=en
+*/

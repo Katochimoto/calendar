@@ -17,7 +17,9 @@ const external = [
   'classnames',
   'preact-compat',
   'preact',
-  'prop-types'
+  'prop-types',
+  'react-redux',
+  'redux'
 ]; // Object.keys(pkg.peerDependencies || {}).concat(Object.keys(pkg.dependencies || {}));
 
 export default function (options) {
@@ -32,7 +34,9 @@ export default function (options) {
       'classnames': 'vendor._classnames',
       'preact-compat': 'vendor._preact_compat',
       'preact': 'vendor._preact',
-      'prop-types': 'vendor._prop_types'
+      'prop-types': 'vendor._prop_types',
+      'react-redux': 'vendor._react_redux',
+      'redux': 'vendor._redux'
     },
 
     sourceMap: false,

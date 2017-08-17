@@ -16,10 +16,11 @@ const pkg = require('../package.json');
 const external = [
   'classnames',
   'preact-compat',
+  'react-redux',
   'preact',
   'prop-types',
-  'react-redux',
-  'redux'
+  'redux',
+  'react-router-dom'
 ]; // Object.keys(pkg.peerDependencies || {}).concat(Object.keys(pkg.dependencies || {}));
 
 export default function (options) {
@@ -33,10 +34,11 @@ export default function (options) {
     globals: {
       'classnames': 'vendor._classnames',
       'preact-compat': 'vendor._preact_compat',
+      'react-redux': 'vendor._react_redux',
       'preact': 'vendor._preact',
       'prop-types': 'vendor._prop_types',
-      'react-redux': 'vendor._react_redux',
-      'redux': 'vendor._redux'
+      'redux': 'vendor._redux',
+      'react-router-dom': 'vendor._react_router_dom'
     },
 
     sourceMap: false,

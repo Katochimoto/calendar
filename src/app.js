@@ -2,16 +2,27 @@ import './style/common.less'
 
 import ReactDOM from 'react-dom'
 import { HashRouter as Router } from 'react-router-dom'
+import { Provider } from 'react-redux'
 // import { BrowserRouter as Router } from 'react-router-dom'
 // import { MemoryRouter as Router } from 'react-router-dom'
-import App from './components/App'
 
+import App from './components/App'
+import store from './store'
+
+window.__store__ = store
+
+const target = document.body.appendChild(document.createElement('div'));
 
 ReactDOM.render((
-  <Router>
-    <App />
-  </Router>
-), document.body.appendChild(document.createElement('div')));
+  <Provider store={store}>
+    <Router>
+      <App />
+    </Router>
+  </Provider>
+), target);
+
+
+
 
 
 /*

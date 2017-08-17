@@ -1,3 +1,5 @@
+import RollupPluginBabel from 'rollup-plugin-babel';
+import RollupPluginInject from 'rollup-plugin-inject';
 import RollupPluginNodeResolve from 'rollup-plugin-node-resolve';
 import RollupPluginCommonJS from 'rollup-plugin-commonjs';
 import RollupPluginReplace from 'rollup-plugin-replace';
@@ -26,6 +28,31 @@ export default function (options) {
 
       RollupPluginReplace({
         'process.env.NODE_ENV': JSON.stringify(options.env)
+      }),
+
+      RollupPluginBabel({
+        babelrc: false,
+        presets: [],
+        plugins: [
+          [ 'transform-react-jsx', { pragma: 'h' } ],
+          [
+            'module-resolver',
+            {
+              root: [ '.' ],
+              alias: {
+                'react': 'preact-compat',
+                'react-dom': 'preact-compat'
+              }
+            }
+          ]
+        ]
+      }),
+
+      RollupPluginInject({
+        modules: {
+          'h': [ 'preact', 'h' ],
+          'React.createElement': [ 'preact', 'h' ]
+        }
       }),
 
       RollupPluginBuble({

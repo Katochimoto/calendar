@@ -1,5 +1,5 @@
 import { Route, NavLink } from 'react-router-dom';
-import SettingsImport from '../SettingsImport';
+import SettingsAccounts from '../../containers/SettingsAccounts';
 
 import styles from './index.less';
 
@@ -18,9 +18,9 @@ export default function Settings ({ match }) {
           <NavLink
             className={styles.Settings_Menu_Item}
             activeClassName={styles.Settings_Menu_Item__active}
-            to={`${match.url}/import`}
+            to={`${match.url}/accounts`}
             exact>
-            Импорт
+            Аккаунты
           </NavLink>
           <NavLink
             className={styles.Settings_Menu_Item}
@@ -31,11 +31,14 @@ export default function Settings ({ match }) {
           </NavLink>
         </div>
       </div>
+
       <div className={styles.Settings_Body}>
         <Route exact path={`${match.url}`} render={() => (
           <div>1</div>
         )} />
-        <Route exact path={`${match.url}/import`} component={SettingsImport} />
+        <Route exact path={`${match.url}/accounts`} render={() => (
+          <SettingsAccounts />
+        )} />
         <Route exact path={`${match.url}/main2`} render={() => (
           <div>3</div>
         )} />

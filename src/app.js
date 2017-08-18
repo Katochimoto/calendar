@@ -1,4 +1,4 @@
-import './style/common.less'
+import './style/app.less'
 
 import ReactDOM from 'react-dom'
 import { HashRouter as Router } from 'react-router-dom'

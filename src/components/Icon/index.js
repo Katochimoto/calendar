@@ -7,7 +7,7 @@ export default function Icon ({
 } = {}) {
   const classes = classnames({
     [ styles.Icon ]: true,
-    [ styles[ `Icon-${type}` ] ]: true,
+    // [ styles[ `Icon-${type}` ] ]: true,
     [ styles[ `Icon_size_${size}` ] ]: true
   });
 

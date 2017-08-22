@@ -3,7 +3,6 @@ import { NavLink } from 'react-router-dom';
 import styles from './index.less';
 
 export default function Navbar (props, context) {
-  console.log(context);
   return (
     <nav className={styles.Navbar}>
       <NavLink className={styles.Navbar_Tab} to="/day" activeClassName={styles.Navbar_Tab__active}>

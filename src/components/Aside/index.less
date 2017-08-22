@@ -1,4 +1,5 @@
 @import (reference, once) "../../style/variables";
+
 .Aside {
   float: left;
   width: @global-aside-width;
@@ -21,12 +22,12 @@
   &_Bottom {
     flex-shrink: 0;
     border-right: 1px solid fade(#000, 10%);
-    border-top: 1px solid fade(#000, 10%);
   }
 }
 
 .BottomMenu {
   display: flex;
+
   &_Item {
     flex-grow: 1;
     display: flex;
@@ -34,15 +35,13 @@
     align-items: center;
     height: 2.25rem;
     line-height: 2.25rem;
-    color: inherit;
+    color: fade(@global-base-text-color, 50%);
     text-decoration: none;
-    &:hover {
-      color: inherit;
-      text-decoration: none;
-      background-color: fade(#000, 3%);
-    }
+    cursor: pointer;
+
+    &:hover,
     &__active {
-      background-color: fade(#000, 3%);
+      color: @global-base-text-color;
     }
   }
 }

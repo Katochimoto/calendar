@@ -1,0 +1,35 @@
+@import (reference, once) "../../style/variables";
+
+.CalendarControls {
+  display: flex;
+  align-items: center;
+  position: absolute;
+  z-index: 1;
+  visibility: hidden;
+  bottom: 20px;
+  right: 20px;
+
+  &_Group {
+    display: flex;
+    flex-direction: column;
+  }
+
+  &_Item {
+    visibility: visible;
+    background: #fff;
+    height: 3rem;
+    width: 3rem;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 1px solid fade(#000, 10%);
+    color: fade(@global-base-text-color, 50%);
+    cursor: pointer;
+
+    &:hover,
+    &__active {
+      color: @global-base-text-color;
+    }
+  }
+}

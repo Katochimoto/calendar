@@ -1,6 +1,8 @@
 import { Route, NavLink } from 'react-router-dom';
 import SettingsAccounts from '../../containers/SettingsAccounts';
 import SettingsAccountsCreate from '../../containers/SettingsAccountsCreate';
+import SettingsExternals from '../../containers/SettingsExternals';
+import SettingsExternalsImport from '../../containers/SettingsExternalsImport';
 
 import styles from './index.less';
 
@@ -25,6 +27,12 @@ export default function Settings ({ match }) {
           <NavLink
             className={styles.Settings_Menu_Item}
             activeClassName={styles.Settings_Menu_Item__active}
+            to={`${match.url}/externals`}>
+            Внешние календари
+          </NavLink>
+          <NavLink
+            className={styles.Settings_Menu_Item}
+            activeClassName={styles.Settings_Menu_Item__active}
             to={`${match.url}/main2`}
             exact>
             Защита и безопасность
@@ -45,6 +53,13 @@ export default function Settings ({ match }) {
         )} />
         <Route exact path={`${match.url}/accounts/create`} render={() => (
           <SettingsAccountsCreate />
+        )} />
+
+        <Route exact path={`${match.url}/externals`} render={({ match }) => (
+          <SettingsExternals match={match} />
+        )} />
+        <Route exact path={`${match.url}/externals/import`} render={() => (
+          <SettingsExternalsImport />
         )} />
       </div>
     </div>

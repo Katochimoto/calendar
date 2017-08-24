@@ -8,7 +8,7 @@ export default function CalendarControls () {
       <div class={styles.CalendarControls_Item}>prev</div>
       <div class={styles.CalendarControls_Group}>
         <div class={styles.CalendarControls_Item}>home</div>
-        <div class={styles.CalendarControls_Item} title="Настройки сетки">
+        <div class={styles.CalendarControls_Item} title="Настройки вида">
           <Icon type="cog" />
         </div>
       </div>

@@ -1,7 +1,3 @@
-import accounts from './accounts'
-import settings from './settings'
-
-export default {
-  accounts,
-  settings
-}
+export * from './accounts'
+export * from './settings'
+export * from './calendars'

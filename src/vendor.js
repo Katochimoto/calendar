@@ -2,6 +2,7 @@ import _preact from 'preact'
 import _preact_compat from 'preact-compat'
 import * as _react_redux from 'react-redux'
 import * as _redux from 'redux'
+import * as _redux_actions from 'redux-actions'
 import _classnames from 'classnames'
 import _raf from 'raf'
 import _setimmediate2 from 'setimmediate2'
@@ -22,5 +23,6 @@ export default {
   _prop_types,
   _react_redux,
   _redux,
+  _redux_actions,
   _react_router_dom
 };

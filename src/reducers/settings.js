@@ -1,3 +1,3 @@
-export default function settings (state, action) {
+export function settings (state, action) {
   return {};
 }

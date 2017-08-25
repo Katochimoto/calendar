@@ -20,6 +20,7 @@ const external = [
   'preact',
   'prop-types',
   'redux',
+  'redux-actions',
   'react-router-dom'
 ]; // Object.keys(pkg.peerDependencies || {}).concat(Object.keys(pkg.dependencies || {}));
 
@@ -38,6 +39,7 @@ export default function (options) {
       'preact': 'vendor._preact',
       'prop-types': 'vendor._prop_types',
       'redux': 'vendor._redux',
+      'redux-actions': 'vendor._redux_actions',
       'react-router-dom': 'vendor._react_router_dom'
     },
 

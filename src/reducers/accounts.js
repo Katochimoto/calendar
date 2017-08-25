@@ -1,3 +1,3 @@
-export default function accounts (state, action) {
+export function accounts (state, action) {
   return [];
 }

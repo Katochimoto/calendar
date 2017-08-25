@@ -1,18 +1,18 @@
 import { connect } from 'react-redux'
+import store from '../../store'
+import { importICS } from '../../actions'
 import SettingsExternalsImport from '../../components/SettingsExternalsImport'
 
 const mapStateToProps = (state) => {
   return {
-    externals: state.externals
+    calendars: state.calendars
   }
 }
 
 const mapDispatchToProps = () => {
   return {
-    onSubmitImportICS: (event) => {
-      const data = new FormData(event.target);
-      console.log('>>>', data);
-      event.preventDefault();
+    importICS: formData => {
+      store.dispatch(importICS(formData));
     }
   }
 }

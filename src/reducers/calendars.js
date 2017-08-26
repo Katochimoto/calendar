@@ -1,15 +1,11 @@
 import { handleActions } from 'redux-actions'
-import { importICS } from '../actions'
+import { createCalendar } from '../actions'
 
 export const calendars = handleActions({
-  [ importICS ] (state, { payload }) {
-    return [
+  [ createCalendar ] (state, { payload }) {
+    return {
       ...state,
-      {
-        color: payload.color,
-        name: payload.name,
-        url: payload.url,
-      }
-    ];
+      [ payload._id ]: payload
+    };
   }
-}, []);
+}, {})

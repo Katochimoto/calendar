@@ -12,17 +12,17 @@ import {
   options as getLessOptions
 } from './less.app.js';
 
-const pkg = require('../package.json');
 const external = [
   'classnames',
   'preact-compat',
-  'react-redux',
   'preact',
   'prop-types',
-  'redux',
+  'react-redux',
+  'react-router-dom',
   'redux-actions',
-  'react-router-dom'
-]; // Object.keys(pkg.peerDependencies || {}).concat(Object.keys(pkg.dependencies || {}));
+  'redux-saga',
+  'redux',
+];
 
 export default function (options) {
   const lessOptions = getLessOptions(options);
@@ -35,12 +35,13 @@ export default function (options) {
     globals: {
       'classnames': 'vendor._classnames',
       'preact-compat': 'vendor._preact_compat',
-      'react-redux': 'vendor._react_redux',
       'preact': 'vendor._preact',
       'prop-types': 'vendor._prop_types',
-      'redux': 'vendor._redux',
+      'react-redux': 'vendor._react_redux',
+      'react-router-dom': 'vendor._react_router_dom',
       'redux-actions': 'vendor._redux_actions',
-      'react-router-dom': 'vendor._react_router_dom'
+      'redux-saga': 'vendor._redux_saga',
+      'redux': 'vendor._redux',
     },
 
     sourceMap: false,
@@ -65,6 +66,7 @@ export default function (options) {
         ],
         plugins: [
           'external-helpers',
+          'syntax-async-functions',
           'transform-flow-strip-types',
           'transform-decorators-legacy',
           'transform-do-expressions',
@@ -94,7 +96,8 @@ export default function (options) {
       RollupPluginBuble({
         exclude: 'node_modules/**',
         transforms: {
-          dangerousTaggedTemplateString: true
+          dangerousTaggedTemplateString: true,
+          generator: false
         }
       }),
 

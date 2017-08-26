@@ -9,7 +9,7 @@ import { Provider } from 'react-redux'
 import App from './components/App'
 import store from './store'
 
-window.__store__ = store
+window.__store__ = store;
 
 const target = document.body.appendChild(document.createElement('div'));
 

@@ -116,7 +116,7 @@ export function pkg () {
   );
 }
 
-export  function report () {
+export function report () {
   return gulp.src(`${OPTIONS.dist}/*`)
     .pipe(sizereport({
       gzip: true,

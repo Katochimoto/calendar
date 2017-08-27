@@ -11,12 +11,23 @@ const WHEELX = Symbol('wheel-delta-x');
 const WHEELY = Symbol('wheel-delta-y');
 const WTIMER = Symbol('wheel-timer');
 
-const DOCUMENT = context.document;
-const EVENT_NAME = do {
-  if (DOCUMENT) {
-    if ('onwheel' in DOCUMENT.createElement('div')) {
+let passiveSupported = false;
+try {
+  const options = Object.defineProperty({}, 'passive', {
+    get: function() {
+      passiveSupported = true;
+    }
+  });
+
+  context.addEventListener('test', null, options);
+} catch(err) {}
+
+const doc = context.document;
+const wheelEventName = do {
+  if (doc) {
+    if ('onwheel' in doc.createElement('div')) {
       'wheel';
-    } else if (DOCUMENT.onmousewheel !== undefined) {
+    } else if (doc.onmousewheel !== undefined) {
       'mousewheel';
     } else {
       'DOMMouseScroll';
@@ -26,8 +37,15 @@ const EVENT_NAME = do {
   }
 };
 
+const wheelEventOptions = passiveSupported ?
+  { passive: true } :
+  false;
+
 const onWheel = wrapWheelCallback(function _onWheel (event) {
-  event.preventDefault();
+  if (!passiveSupported) {
+    event.preventDefault();
+  }
+
   const timer = this[ WTIMER ];
 
   if (!this[ WHEELSTART ]) {
@@ -83,7 +101,7 @@ export default function wheel (component) {
     this[ ONSTOP ] = onWheelStop.bind(this);
     this[ ONSTOPSUCCESS ] = onWheelStopSuccess.bind(this);
 
-    this._rootNode.addEventListener(EVENT_NAME, this[ ONWHEEL ], false);
+    this._rootNode.addEventListener(wheelEventName, this[ ONWHEEL ], wheelEventOptions);
   };
 
   proto.componentWillUnmount = function () {
@@ -91,7 +109,7 @@ export default function wheel (component) {
 
     this[ WHEELSTART ] = false;
 
-    this._rootNode.removeEventListener(EVENT_NAME, this[ ONWHEEL ], false);
+    this._rootNode.removeEventListener(wheelEventName, this[ ONWHEEL ], wheelEventOptions);
 
     if (this[ WTIMER ]) {
       context.cancelAnimationFrame(this[ WTIMER ]);
@@ -111,7 +129,7 @@ export default function wheel (component) {
 }
 
 function wrapWheelCallback (callback) {
-  if (EVENT_NAME === 'wheel') {
+  if (wheelEventName === 'wheel') {
     return callback;
   }
 
@@ -150,7 +168,7 @@ function wrapWheelCallback (callback) {
       }
     };
 
-    if (EVENT_NAME === 'mousewheel') {
+    if (wheelEventName === 'mousewheel') {
       event.deltaY = - 1/40 * originalEvent.wheelDelta;
 
       if (originalEvent.wheelDeltaX) {

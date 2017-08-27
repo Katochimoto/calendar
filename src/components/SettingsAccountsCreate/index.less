@@ -1,0 +1,44 @@
+@import (reference, once) "../../style/variables";
+@import (reference, once) "../../style/mixins/form";
+
+.SettingsAccountsCreate {
+  margin: 1rem;
+
+  &_Title {
+    .h1();
+  }
+
+  &_Form {
+    .form();
+    width: 50%;
+
+    &_Row {
+      margin-bottom: 16px;
+    }
+
+    &_Label {
+      display: block;
+      margin-bottom: 8px;
+    }
+
+    &_Control {
+      display: block;
+      width: 100%;
+      padding: .5rem .75rem;
+      margin: 0;
+      font-size: 1rem;
+      line-height: 1.25;
+      color: #55595c;
+      background-color: #fff;
+      background-image: none;
+      background-clip: padding-box;
+      border: 1px solid rgba(0,0,0,.15);
+      touch-action: manipulation;
+
+      select& {
+        height: 2.5rem;
+        text-transform: none;
+      }
+    }
+  }
+}

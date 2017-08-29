@@ -78,7 +78,7 @@ export function assets () {
 export function mainhtml () {
   const options = { ...OPTIONS };
 
-  return gulp.src('src/main.html')
+  return gulp.src('src/index.html')
     .pipe(preprocess({
       context: {
         NODE_ENV: OPTIONS.env,

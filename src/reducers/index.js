@@ -1,4 +1,3 @@
 export * from './accounts'
-export * from './calendars'
+export * from './externals'
 export * from './settings'
-export * from './sources'

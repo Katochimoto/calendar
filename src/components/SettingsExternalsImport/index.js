@@ -1,4 +1,5 @@
 import styles from './index.less'
+import stylesForm from '../../style/form.less'
 
 export default function SettingsExternalsImport ({ calendars, importICS }) {
 
@@ -21,35 +22,49 @@ export default function SettingsExternalsImport ({ calendars, importICS }) {
         Календарь должен быть в формате ICS.
       </p>
 
-      <form onsubmit={onSubmit} method="post">
-        <label for="SettingsExternalsImport_name">
-          <span>Календарь:</span>
+      <form className={stylesForm.Form}
+        onSubmit={onSubmit}
+        method="post">
 
-          <input name="color"
-            type="color" />
+        <label className={stylesForm.Form_Row} for="SettingsExternalsImport_name">
+          <span className={stylesForm.Form_Label}>
+            Календарь:
+          </span>
 
-          <input id="SettingsExternalsImport_name"
-            name="name"
-            autofocus
-            required
-            placeholder="название календаря" />
+          <div className={stylesForm.Form_ControlGroup}>
+            <input className={stylesForm.Form_ControlColor}
+              name="color"
+              type="color" />
+
+            <input className={stylesForm.Form_Control}
+              id="SettingsExternalsImport_name"
+              name="name"
+              autofocus
+              required
+              placeholder="название календаря" />
+          </div>
         </label>
 
-        <label>
-          <span>Адрес:</span>
-          <input name="url"
+        <label className={stylesForm.Form_Row}>
+          <span className={stylesForm.Form_Label}>
+            Адрес:
+          </span>
+
+          <input className={stylesForm.Form_Control}
+            name="source"
             type="url"
             required
             placeholder="http://example.com/calendar.ics" />
         </label>
 
-        <div>
-          <button type="submit">
-            Импортировать
-          </button>
+        <div className={stylesForm.Form_Row}>
+          <div className={stylesForm.Form_ControlGroup}>
+            <button className={stylesForm.Form_Button} type="submit">
+              Импортировать
+            </button>
+          </div>
         </div>
       </form>
-
     </div>
   );
 }

@@ -39,6 +39,7 @@ export default function SettingsExternalsImport ({ calendars, importICS }) {
             <input className={stylesForm.Form_Control}
               id="SettingsExternalsImport_name"
               name="name"
+              maxlength="100"
               autofocus
               required
               placeholder="название календаря" />

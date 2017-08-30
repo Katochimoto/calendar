@@ -1,0 +1,59 @@
+.form () {
+  display: flex;
+  flex-direction: column;
+  width: 50%;
+
+  &_Row {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 1rem;
+  }
+
+  &_ControlGroup {
+    display: flex;
+  }
+
+  &_Label {
+    margin-bottom: .5rem;
+  }
+
+  &_Control {
+    flex-grow: 1;
+    padding: .5rem .75rem;
+    margin: 0;
+    font-size: 1rem;
+    line-height: 1.25;
+    background-color: #fff;
+    background-image: none;
+    background-clip: padding-box;
+    border: 1px solid fade(#000, 15%);
+    touch-action: manipulation;
+    box-sizing: border-box;
+    height: 2.3rem;
+
+    select& {
+      height: 2.3rem;
+      text-transform: none;
+    }
+  }
+
+  &_ControlColor {
+    background-color: #fff;
+    background-image: none;
+    background-clip: padding-box;
+    border: 1px solid fade(#000, 15%);
+    touch-action: manipulation;
+    width: 2.3rem;
+    height: 2.3rem;
+    margin: 0;
+    padding: 0;
+    flex-grow: 0;
+    box-sizing: border-box;
+  }
+
+  &_Button {
+    font-size: 1rem;
+    line-height: 1.25;
+    box-sizing: border-box;
+  }
+}

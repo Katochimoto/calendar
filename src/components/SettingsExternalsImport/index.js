@@ -60,8 +60,12 @@ export default function SettingsExternalsImport ({ calendars, importICS }) {
 
         <div className={stylesForm.Form_Row}>
           <div className={stylesForm.Form_ControlGroup}>
-            <button className={stylesForm.Form_Button} type="submit">
+            <button className={stylesForm.Form_ButtonActive} type="submit">
               Импортировать
+            </button>
+
+            <button className={stylesForm.Form_Button}>
+              Отмена
             </button>
           </div>
         </div>

@@ -52,6 +52,7 @@
 
   &_ControlGroup {
     display: flex;
+    position: relative;
   }
 
   &_Label {
@@ -71,6 +72,7 @@
     touch-action: manipulation;
     box-sizing: border-box;
     height: 2.3rem;
+    min-width: 400px;
 
     select& {
       height: 2.3rem;
@@ -79,17 +81,24 @@
   }
 
   &_ControlColor {
-    background-color: #fff;
+    position: absolute;
+    background: transparent;
     background-image: none;
     background-clip: padding-box;
-    border: 1px solid fade(#000, 15%);
+    border: 0;
     touch-action: manipulation;
     width: 2.3rem;
     height: 2.3rem;
     margin: 0;
-    padding: 0;
+    padding: 0.2rem;
     flex-grow: 0;
+    flex-shrink: 0;
     box-sizing: border-box;
+
+    // FIXME
+    & + .Form_Control {
+      padding-left: 2.6rem;
+    }
   }
 
   &_Button {

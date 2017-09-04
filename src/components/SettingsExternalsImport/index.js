@@ -32,7 +32,7 @@ export default function SettingsExternalsImport ({ calendars, importICS }) {
           </span>
 
           <div className={stylesForm.Form_ControlGroup}>
-            <input className={stylesForm.Form_ControlColor}
+            <input className={stylesForm.Form_Control_Color}
               name="color"
               type="color" />
 
@@ -60,7 +60,7 @@ export default function SettingsExternalsImport ({ calendars, importICS }) {
 
         <div className={stylesForm.Form_Row}>
           <div className={stylesForm.Form_ControlGroup}>
-            <button className={stylesForm.Form_ButtonActive} type="submit">
+            <button className={`${stylesForm.Form_Button} ${stylesForm.Form_Button__active}`} type="submit">
               Импортировать
             </button>
 

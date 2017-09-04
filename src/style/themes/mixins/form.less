@@ -1,5 +1,6 @@
 .form (
-  @button-active-color: #fff
+  @button-active-color: #fff,
+  @control-height: 2.3rem
 ) {
 
   .form-button () {
@@ -23,6 +24,12 @@
         box-shadow: inset 0 -10rem 0px rgba(158, 158, 158, 0.2);
       }
     }
+
+    &[disabled] {
+      background-color: fade(#000, 10%);
+      border-color: rgba(120,130,140,.13);
+      color: @global-base-text-color;
+    }
   }
 
   .form-button-active () {
@@ -36,6 +43,7 @@
         color: @button-active-color;
         background-color: #025aa5;
         border-color: #01549b;
+        box-shadow: none;
       }
     }
   }
@@ -71,42 +79,49 @@
     border: 1px solid fade(#000, 15%);
     touch-action: manipulation;
     box-sizing: border-box;
-    height: 2.3rem;
+    height: @control-height;
     min-width: 400px;
+    user-select: none;
+
+    &[disabled] {
+      background-color: fade(#000, 10%);
+    }
 
     select& {
-      height: 2.3rem;
+      height: @control-height;
       text-transform: none;
     }
-  }
 
-  &_ControlColor {
-    position: absolute;
-    background: transparent;
-    background-image: none;
-    background-clip: padding-box;
-    border: 0;
-    touch-action: manipulation;
-    width: 2.3rem;
-    height: 2.3rem;
-    margin: 0;
-    padding: 0.2rem;
-    flex-grow: 0;
-    flex-shrink: 0;
-    box-sizing: border-box;
-
-    // FIXME
-    & + .Form_Control {
+    &_Color + & {
       padding-left: 2.6rem;
+    }
+
+    &_Color {
+      position: absolute;
+      background: transparent;
+      background-image: none;
+      background-clip: padding-box;
+      border: 0;
+      touch-action: manipulation;
+      width: @control-height;
+      height: @control-height;
+      margin: 0;
+      padding: 0.2rem;
+      flex-grow: 0;
+      flex-shrink: 0;
+      box-sizing: border-box;
     }
   }
 
   &_Button {
     .form-button();
-  }
 
-  &_ButtonActive {
-    .form-button();
-    .form-button-active();
+    & + & {
+      margin-left: .5rem;
+    }
+
+    &__active {
+      .form-button-active();
+    }
   }
 }

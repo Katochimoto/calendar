@@ -2,7 +2,7 @@ import { NavLink } from 'react-router-dom';
 
 import styles from './index.less'
 
-export default function SettingsExternals ({ externals, onClickCreate, match }) {
+export default function SettingsExternals ({ externals, match }) {
 
   return (
     <div className={styles.SettingsExternals}>
@@ -16,6 +16,15 @@ export default function SettingsExternals ({ externals, onClickCreate, match }) 
         Импорт календарей
       </NavLink>
 
+      <table>
+        {externals.map(item => (
+          <tr>
+            <td>{item.color}</td>
+            <td>{item.name}</td>
+            <td>{item.source}</td>
+          </tr>
+        ))}
+      </table>
     </div>
   );
 }

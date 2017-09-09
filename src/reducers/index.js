@@ -1,3 +1,3 @@
 export * from './accounts'
-export * from './externals'
+export * from './calendars'
 export * from './settings'

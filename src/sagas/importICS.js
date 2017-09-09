@@ -4,7 +4,7 @@ import {
 } from 'redux-saga/effects'
 
 import {
-  createExternal as createExternalAction,
+  createExternalCalendar as createExternalCalendarAction,
   importICS as importICSAction,
 } from '../actions'
 
@@ -14,7 +14,7 @@ function* importICSAsync ({ payload: {
   source,
 } }) {
 
-  yield put(createExternalAction({
+  yield put(createExternalCalendarAction({
     color,
     name,
     source,

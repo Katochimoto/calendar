@@ -12,17 +12,18 @@ import {
   options as getLessOptions
 } from './less.app.js';
 
-const external = [
-  'classnames',
-  'preact-compat',
-  'preact',
-  'prop-types',
-  'react-redux',
-  'react-router-dom',
-  'redux-actions',
-  'redux-saga',
-  'redux',
-];
+const external = {
+  'classnames': 'vendor._classnames',
+  'preact-compat': 'vendor._preact_compat',
+  'preact': 'vendor._preact',
+  'prop-types': 'vendor._prop_types',
+  'react-redux': 'vendor._react_redux',
+  'react-router-dom': 'vendor._react_router_dom',
+  'redux-actions': 'vendor._redux_actions',
+  'redux-persist': 'vendor._redux_persist',
+  'redux-saga': 'vendor._redux_saga',
+  'redux': 'vendor._redux',
+};
 
 export default function (options) {
   const lessOptions = getLessOptions(options);
@@ -32,21 +33,11 @@ export default function (options) {
     format: 'iife',
     exports: 'none',
     useStrict: true,
-    globals: {
-      'classnames': 'vendor._classnames',
-      'preact-compat': 'vendor._preact_compat',
-      'preact': 'vendor._preact',
-      'prop-types': 'vendor._prop_types',
-      'react-redux': 'vendor._react_redux',
-      'react-router-dom': 'vendor._react_router_dom',
-      'redux-actions': 'vendor._redux_actions',
-      'redux-saga': 'vendor._redux_saga',
-      'redux': 'vendor._redux',
-    },
+    globals: external,
 
     sourceMap: false,
     context: 'window',
-    external: external,
+    external: Object.keys(external),
     plugins: [
       RollupPluginJSON(),
 
@@ -102,7 +93,7 @@ export default function (options) {
       }),
 
       RollupPluginNodeResolve({
-        externals: external
+        externals: Object.keys(external)
       }),
 
       RollupPluginCommonJS({

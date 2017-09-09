@@ -1,2 +1,2 @@
-export * from './createExternal'
+export * from './createExternalCalendar'
 export * from './importICS'

@@ -10,3 +10,9 @@ const store = createStore(app, {}, applyMiddleware(sagaMiddleware))
 sagaMiddleware.run(sagas);
 
 export default store;
+
+// https://github.com/rt2zz/redux-persist
+// https://github.com/agershun/alasql/wiki/Webworker
+// http://lokijs.org/
+// https://github.com/pouchdb-community/worker-pouch
+// https://developer.ibm.com/clouddataservices/2016/02/26/running-pouchdb-in-a-web-worker/

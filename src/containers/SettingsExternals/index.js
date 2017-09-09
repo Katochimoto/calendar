@@ -3,15 +3,13 @@ import SettingsExternals from '../../components/SettingsExternals'
 
 const mapStateToProps = (state) => {
   return {
-    externals: state.externals
+    externals: state.calendars.filter(item => item.external)
   }
 }
 
 const mapDispatchToProps = () => {
   return {
-    onClickCreate: () => {
-      console.log('>>>');
-    }
+
   }
 }
 

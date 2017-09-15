@@ -6,6 +6,7 @@ import uglify from 'gulp-uglify';
 import preprocess from 'gulp-preprocess';
 import sourcemaps from 'gulp-sourcemaps';
 import sizereport from 'gulp-sizereport';
+import gulpConnect from 'gulp-connect';
 import mocha from 'gulp-mocha';
 import minimist from 'minimist';
 import del from 'del';
@@ -135,6 +136,13 @@ export function test () {
         'babel-register'
       ]
     }));
+}
+
+export function connect () {
+  gulpConnect.server({
+    root: 'dist',
+    livereload: false
+  });
 }
 
 const build = gulp.series(

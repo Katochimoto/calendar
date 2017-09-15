@@ -1,5 +1,7 @@
 import { NavLink } from 'react-router-dom';
 
+import Icon from '../Icon';
+
 import styles from './index.less'
 
 export default function SettingsExternals ({ externals, match }) {
@@ -16,15 +18,17 @@ export default function SettingsExternals ({ externals, match }) {
         Импорт календарей
       </NavLink>
 
-      <table>
+      <ul className={styles.ListGroup}>
         {externals.map(item => (
-          <tr>
-            <td>{item.color}</td>
-            <td>{item.name}</td>
-            <td>{item.source}</td>
-          </tr>
+          <li className={styles.ListGroup_Item}>
+            <Icon type="cog" size="xs" color={item.color} />
+
+            {item.color}
+            / {item.name}
+            / {item.source}
+          </li>
         ))}
-      </table>
+      </ul>
     </div>
   );
 }

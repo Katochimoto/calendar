@@ -3,6 +3,7 @@ import styles from './index.less';
 
 export default function Icon ({
   type,
+  color,
   size = 's'
 } = {}) {
   const classes = classnames({
@@ -12,7 +13,7 @@ export default function Icon ({
   });
 
   return (
-    <svg xmlns="http://www.w3.org/2000/svg" className={classes}>
+    <svg xmlns="http://www.w3.org/2000/svg" className={classes} style={{ color: color }}>
       <use href={`#icon-${type}`}></use>
       <rect height="100%" width="100%" style="fill: transparent;"></rect>
     </svg>

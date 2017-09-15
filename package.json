@@ -6,7 +6,8 @@
   "license": "MIT",
   "electronVersion": "1.6.10",
   "scripts": {
-    "start": "electron .",
+    "start": "gulp connect",
+    "start:electron": "electron .",
     "dev": "gulp; gulp watch",
     "test": "gulp test",
     "flow": "flow check"

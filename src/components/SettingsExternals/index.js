@@ -21,7 +21,10 @@ export default function SettingsExternals ({ externals, match }) {
       <ul className={styles.ListGroup}>
         {externals.map(item => (
           <li className={styles.ListGroup_Item}>
-            <Icon type="cog" size="xs" color={item.color} />
+            <Icon type="cog"
+              size="xs"
+              color={item.color}
+              className={styles.ListGroup_Icon} />
 
             {item.color}
             / {item.name}

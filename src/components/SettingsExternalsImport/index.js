@@ -1,7 +1,10 @@
 import styles from './index.less'
 import stylesForm from '../../style/form.less'
 
-export default function SettingsExternalsImport ({ calendars, importICS }) {
+export default function SettingsExternalsImport ({
+  form,
+  importICS
+}) {
 
   function onSubmit (event) {
     event.preventDefault();

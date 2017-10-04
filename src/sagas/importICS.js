@@ -14,11 +14,19 @@ function* importICSAsync ({ payload: {
   source,
 } }) {
 
+  // проверить совпадение source
+
+  // ошибка при совпадении
+  // yield put(setExternalsImportFormError())
+
   yield put(createExternalCalendarAction({
     color,
     name,
     source,
   }))
+
+  // успех
+  // yield put(setExternalsImportFormSuccess())
 }
 
 export default function* importICS () {

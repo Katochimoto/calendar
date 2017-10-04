@@ -3,9 +3,9 @@ import store from '../../store'
 import { importICS } from '../../actions'
 import SettingsExternalsImport from '../../components/SettingsExternalsImport'
 
-const mapStateToProps = (state) => {
+const mapStateToProps = ({ externalsImportForm }) => {
   return {
-    calendars: state.calendars
+    form: externalsImportForm
   }
 }
 

@@ -6,6 +6,8 @@ export default function SettingsExternalsImport ({
   importICS
 }) {
 
+  console.log('>>', arguments);
+
   function onSubmit (event) {
     event.preventDefault();
     const data = new FormData(event.target);

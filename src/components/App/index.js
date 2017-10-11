@@ -1,4 +1,4 @@
-import { Route, Link } from 'react-router-dom';
+import { Route } from 'react-router-dom';
 
 import Aside from '../Aside';
 import Navbar from '../Navbar';

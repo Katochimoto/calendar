@@ -1,20 +1,23 @@
+import { Redirect } from 'react-router-dom'
+
 import styles from './index.less'
 import stylesForm from '../../style/form.less'
 
 export default function SettingsExternalsImport ({
-  form,
-  importICS
+  externalsImportForm,
+  importICS,
+  resetExternalsImportForm,
+  urlExternals,
 }) {
 
-  console.log('>>', arguments);
-
-  function onSubmit (event) {
-    event.preventDefault();
-    const data = new FormData(event.target);
-
-    importICS(data);
-    return false;
+  if (externalsImportForm.success) {
+    resetExternalsImportForm()
+    return (
+      <Redirect to={urlExternals} />
+    )
   }
+
+  console.log('>>', externalsImportForm);
 
   return (
     <div className={styles.SettingsExternalsImport}>
@@ -28,8 +31,13 @@ export default function SettingsExternalsImport ({
       </p>
 
       <form className={stylesForm.Form}
-        onSubmit={onSubmit}
-        method="post">
+        method="post"
+        onSubmit={(event) => {
+          event.preventDefault();
+          const data = new FormData(event.target);
+          importICS(data);
+          return false;
+        }}>
 
         <label className={stylesForm.Form_Row} for="SettingsExternalsImport_name">
           <span className={stylesForm.Form_Label}>
@@ -69,12 +77,17 @@ export default function SettingsExternalsImport ({
               Импортировать
             </button>
 
-            <button className={stylesForm.Form_Button}>
+            <button className={stylesForm.Form_Button}
+              onClick={(event) => {
+                event.preventDefault();
+                resetExternalsImportForm()
+                return false;
+              }}>
               Отмена
             </button>
           </div>
         </div>
       </form>
     </div>
-  );
+  )
 }

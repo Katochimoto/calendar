@@ -1,7 +1,6 @@
 import {
   Route,
-  Redirect,
-  NavLink
+  NavLink,
 } from 'react-router-dom'
 
 import SettingsAccounts from '../../containers/SettingsAccounts'
@@ -70,12 +69,8 @@ export default function Settings ({ match }) {
         <Route exact path={urlExternals} render={({ match }) => (
           <SettingsExternals match={match} />
         )} />
-        <Route exact path={urlExternalsImport} render={({ match }) => (
-          test ? (
-            <SettingsExternalsImport />
-          ) : (
-            <Redirect to={urlExternals} />
-          )
+        <Route exact path={urlExternalsImport} render={() => (
+          <SettingsExternalsImport urlExternals={urlExternals} />
         )} />
       </div>
     </div>

@@ -5,28 +5,36 @@ import {
 
 import {
   createExternalCalendar as createExternalCalendarAction,
+  setExternalsImportFormSuccess as setExternalsImportFormSuccessAction,
+  setExternalsImportFormError as setExternalsImportFormErrorAction,
   importICS as importICSAction,
 } from '../actions'
+
+import store from '../store'
 
 function* importICSAsync ({ payload: {
   color,
   name,
   source,
 } }) {
+  const { calendars } = store.getState();
 
-  // проверить совпадение source
+  if (calendars.some(item => item.source === source)) {
+    yield put(setExternalsImportFormErrorAction({
+      fields: {
+        source: 'duplicate'
+      }
+    }))
 
-  // ошибка при совпадении
-  // yield put(setExternalsImportFormError())
+  } else {
+    yield put(createExternalCalendarAction({
+      color,
+      name,
+      source,
+    }))
 
-  yield put(createExternalCalendarAction({
-    color,
-    name,
-    source,
-  }))
-
-  // успех
-  // yield put(setExternalsImportFormSuccess())
+    yield put(setExternalsImportFormSuccessAction())
+  }
 }
 
 export default function* importICS () {

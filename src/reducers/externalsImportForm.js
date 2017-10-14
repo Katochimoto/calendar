@@ -1,13 +1,14 @@
 import { handleActions } from 'redux-actions'
 import {
+  resetExternalsImportForm,
   setExternalsImportFormError,
-  setExternalsImportFormSuccess
+  setExternalsImportFormSuccess,
 } from '../actions'
 
 export const externalsImportForm = handleActions({
   [ setExternalsImportFormError ] (state, { payload }) {
     return {
-      error: {}
+      error: payload
     }
   },
 
@@ -15,5 +16,9 @@ export const externalsImportForm = handleActions({
     return {
       success: {}
     }
+  },
+
+  [ resetExternalsImportForm ] () {
+    return {}
   }
 }, {})

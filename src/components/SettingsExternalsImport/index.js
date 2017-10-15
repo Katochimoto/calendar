@@ -3,6 +3,7 @@ import { Field, reduxForm } from 'redux-form'
 
 import styles from './index.less'
 import stylesForm from '../../style/form.less'
+import stylesTypography from '../../style/typography.less'
 
 const SettingsExternalsImport = ({
   externalsImportForm,
@@ -20,13 +21,14 @@ const SettingsExternalsImport = ({
 
   return (
     <div className={styles.SettingsExternalsImport}>
-      <h1 className={styles.SettingsExternalsImport_Title}>
+      <h1 className={stylesTypography.Header}>
         Импорт календарей
       </h1>
 
       <p>
         Для импортирования календаря по URL нужно ввести его адрес.
-        Календарь должен быть в формате ICS.
+        Календарь должен быть в формате
+        <a href="https://en.wikipedia.org/wiki/ICalendar" target="_blank" rel="nofollow">ICS</a>.
       </p>
 
       <form className={stylesForm.Form}

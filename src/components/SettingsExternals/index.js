@@ -3,12 +3,13 @@ import { NavLink } from 'react-router-dom';
 import Icon from '../Icon';
 
 import styles from './index.less'
+import stylesTypography from '../../style/typography.less'
 
 export default function SettingsExternals ({ externals, match }) {
 
   return (
     <div className={styles.SettingsExternals}>
-      <h1 className={styles.SettingsExternals_Title}>
+      <h1 className={stylesTypography.Header}>
         Внешние календари
       </h1>
 

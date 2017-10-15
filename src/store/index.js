@@ -7,6 +7,7 @@ import {
 
 import {
   autoRehydrate,
+  persistStore,
 } from 'redux-persist'
 
 import createSagaMiddleware from 'redux-saga'
@@ -35,6 +36,16 @@ const store = createStore(app, undefined, compose(
 sagaMiddleware.run(sagas)
 
 export default store
+
+export function persist (store, callback = () => {}) {
+  persistStore(store, {
+    whitelist: [
+      'calendars'
+    ],
+    debounce: 100,
+    keyPrefix: 'clnd.'
+  }, callback)
+}
 
 // https://github.com/rt2zz/redux-persist
 // https://github.com/agershun/alasql/wiki/Webworker

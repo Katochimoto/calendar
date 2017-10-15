@@ -34,7 +34,11 @@ const SettingsExternalsImport = ({
         onSubmit={(event) => {
           event.preventDefault();
           const data = new FormData(event.target);
-          importICS(data);
+          importICS({
+            color: data.get('color'),
+            name: data.get('name'),
+            source: data.get('source'),
+          });
           return false;
         }}>
 

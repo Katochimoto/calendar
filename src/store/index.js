@@ -7,16 +7,24 @@ import {
 
 import {
   autoRehydrate,
-  persistStore,
 } from 'redux-persist'
 
 import createSagaMiddleware from 'redux-saga'
+
+import {
+  reducer as formReducer
+} from 'redux-form'
 
 import * as reducers from '../reducers'
 import sagas from '../sagas'
 
 const sagaMiddleware = createSagaMiddleware()
-const app = combineReducers(reducers)
+
+const app = combineReducers({
+  ...reducers,
+  form: formReducer
+})
+
 const store = createStore(app, undefined, compose(
   applyMiddleware(sagaMiddleware),
   autoRehydrate({
@@ -25,14 +33,6 @@ const store = createStore(app, undefined, compose(
 ))
 
 sagaMiddleware.run(sagas)
-
-persistStore(store, {
-  whitelist: [
-    'calendars'
-  ],
-  debounce: 100,
-  keyPrefix: 'clnd.'
-})
 
 export default store
 

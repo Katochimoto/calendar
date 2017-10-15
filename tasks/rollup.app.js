@@ -20,6 +20,7 @@ const external = {
   'react-redux': 'vendor._react_redux',
   'react-router-dom': 'vendor._react_router_dom',
   'redux-actions': 'vendor._redux_actions',
+  'redux-form': 'vendor._redux_form',
   'redux-persist': 'vendor._redux_persist',
   'redux-saga': 'vendor._redux_saga',
   'redux': 'vendor._redux',

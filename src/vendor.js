@@ -5,6 +5,7 @@ import * as _redux from 'redux'
 import * as _redux_actions from 'redux-actions'
 import * as _redux_saga from 'redux-saga'
 import * as _redux_persist from 'redux-persist'
+import * as _redux_form from 'redux-form'
 import _classnames from 'classnames'
 import _raf from 'raf'
 import _setimmediate2 from 'setimmediate2'
@@ -24,9 +25,10 @@ export default {
   _preact,
   _prop_types,
   _react_redux,
-  _redux,
-  _redux_actions,
-  _redux_saga,
-  _redux_persist,
   _react_router_dom,
+  _redux_actions,
+  _redux_form,
+  _redux_persist,
+  _redux_saga,
+  _redux,
 }

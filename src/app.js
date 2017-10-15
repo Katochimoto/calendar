@@ -1,24 +1,12 @@
 import './style/app.less'
 
 import ReactDOM from 'react-dom'
-import { HashRouter as Router } from 'react-router-dom'
-import { Provider } from 'react-redux'
-// import { BrowserRouter as Router } from 'react-router-dom'
-// import { MemoryRouter as Router } from 'react-router-dom'
-
-import App from './components/App'
-import store from './store'
-
-window.__store__ = store;
+import AppProvider from './components/AppProvider'
 
 const target = document.body.appendChild(document.createElement('div'));
 
 ReactDOM.render((
-  <Provider store={store}>
-    <Router>
-      <App />
-    </Router>
-  </Provider>
+  <AppProvider />
 ), target);
 
 

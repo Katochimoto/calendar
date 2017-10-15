@@ -1,14 +1,15 @@
 import { Redirect } from 'react-router-dom'
+import { Field, reduxForm } from 'redux-form'
 
 import styles from './index.less'
 import stylesForm from '../../style/form.less'
 
-export default function SettingsExternalsImport ({
+const SettingsExternalsImport = ({
   externalsImportForm,
   importICS,
   resetExternalsImportForm,
   urlExternals,
-}) {
+}) => {
 
   if (externalsImportForm.success) {
     resetExternalsImportForm()
@@ -16,8 +17,6 @@ export default function SettingsExternalsImport ({
       <Redirect to={urlExternals} />
     )
   }
-
-  console.log('>>', externalsImportForm);
 
   return (
     <div className={styles.SettingsExternalsImport}>
@@ -45,11 +44,13 @@ export default function SettingsExternalsImport ({
           </span>
 
           <div className={stylesForm.Form_ControlGroup}>
-            <input className={stylesForm.Form_Control_Color}
+            <Field className={stylesForm.Form_Control_Color}
+              component="input"
               name="color"
               type="color" />
 
-            <input className={stylesForm.Form_Control}
+            <Field className={stylesForm.Form_Control}
+              component="input"
               id="SettingsExternalsImport_name"
               name="name"
               maxlength="100"
@@ -64,7 +65,8 @@ export default function SettingsExternalsImport ({
             Адрес:
           </span>
 
-          <input className={stylesForm.Form_Control}
+          <Field className={stylesForm.Form_Control}
+            component="input"
             name="source"
             type="url"
             required
@@ -91,3 +93,7 @@ export default function SettingsExternalsImport ({
     </div>
   )
 }
+
+export default reduxForm({
+  form: 'SettingsExternalsImport'
+})(SettingsExternalsImport)

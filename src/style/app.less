@@ -22,6 +22,17 @@
     tap-highlight-color: transparent;
   }
 
+  .gap {
+    .for-each(@size in @global-sizes) {
+      .for-each(@side in @global-sides) {
+        @key: at(@size, 1);
+        &-@{side}-@{key} {
+          margin-@{side}: at(@size, 2);
+        }
+      }
+    }
+  }
+
   // a {
   //   color: inherit;
   //   text-decoration: none;

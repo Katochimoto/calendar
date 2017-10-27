@@ -27,8 +27,7 @@ const SettingsExternalsImport = ({
 
       <p>
         Для импортирования календаря по URL нужно ввести его адрес.
-        Календарь должен быть в формате
-        <a href="https://en.wikipedia.org/wiki/ICalendar" target="_blank" rel="nofollow">ICS</a>.
+        Календарь должен быть в формате <a href="https://en.wikipedia.org/wiki/ICalendar" target="_blank" rel="nofollow">ICS</a>.
       </p>
 
       <form className={stylesForm.Form}

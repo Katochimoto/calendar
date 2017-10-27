@@ -14,10 +14,13 @@
 @global-list-hover-bg: fade(@global-base-color, 10%); // #F0F1FF;
 @global-list-active-bg: fade(@global-base-color, 20%); // #E2E4FF;
 
+@global-sizes: xs 0.25rem, s 0.5rem, m 1rem, l 1.5rem, xl 2rem;
+@global-sides: top, left, bottom, right;
+
 .h1() {
   font-size: 1.6rem;
   font-weight: normal;
-  margin: 1rem 0;
+  margin: at(@global-sizes, m) 0;
 }
 
 @import (reference, once) "./mixins/form";

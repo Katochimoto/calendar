@@ -16,7 +16,7 @@ export default function Settings ({ match }) {
   const urlAccounts = `${match.url}/accounts`
   const urlAccountsCreate = `${match.url}/accounts/create`
   const urlExternals = `${match.url}/externals`
-  const urlExternalsImport = `${match.url}/externals/import`
+  const urlExternalsImport = `${match.url}/externals/import/:id?`
 
   return (
     <div className={styles.Settings}>
@@ -69,7 +69,7 @@ export default function Settings ({ match }) {
         <Route exact path={urlExternals} render={({ match }) => (
           <SettingsExternals match={match} />
         )} />
-        <Route exact path={urlExternalsImport} render={() => (
+        <Route path={urlExternalsImport} render={() => (
           <SettingsExternalsImport urlExternals={urlExternals} />
         )} />
       </div>

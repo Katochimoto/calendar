@@ -1,4 +1,5 @@
 import LessPluginCssModules from 'less-plugin-css-modules';
+import LessPluginLists from 'less-plugin-lists';
 import autoprefixer from 'autoprefixer';
 import postcss from 'postcss';
 import mqpacker from 'css-mqpacker';
@@ -19,8 +20,12 @@ export function options (options) {
     output: `${options.dist}/${options.moduleName}.css`,
     cssModules: true,
     options: {
+      globalVars: {
+        'base-path': JSON.stringify(options.src)
+      },
       plugins: [
-        new LessPluginCssModules(cssModulesParams)
+        new LessPluginCssModules(cssModulesParams),
+        new LessPluginLists()
       ]
     },
     onWriteBefore: function (css, map) {

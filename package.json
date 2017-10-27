@@ -50,6 +50,7 @@
     "gulp-uglify": "3.0.0",
     "jest": "21.2.1",
     "less-plugin-css-modules": "0.0.3",
+    "less-plugin-lists": "1.1.1",
     "minimist": "1.2.0",
     "mocha": "4.0.1",
     "postcss": "6.0.13",

@@ -5,7 +5,7 @@ export const createExternalCalendar = createAction(
   'CREATE_EXTERNAL',
   data => ({
     ...data,
-    _id: uuid(),
+    id: uuid(),
     active: true,
     status: 0,
     updated: 0,

@@ -4067,6 +4067,10 @@ less-plugin-css-modules@0.0.3:
     postcss-modules-scope "^1.0.2"
     yargs "^6.6.0"
 
+less-plugin-lists@^1.1.1:
+  version "1.1.1"
+  resolved "https://registry.yarnpkg.com/less-plugin-lists/-/less-plugin-lists-1.1.1.tgz#6e6245bcda75b424dbfe7b49d7b2a409b9ff1c17"
+
 less@^2.7.1:
   version "2.7.2"
   resolved "https://registry.yarnpkg.com/less/-/less-2.7.2.tgz#368d6cc73e1fb03981183280918743c5dcf9b3df"

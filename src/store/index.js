@@ -6,7 +6,8 @@ import {
 } from 'redux'
 
 import {
-  autoRehydrate,
+  storage,
+  persistReducer,
   persistStore,
 } from 'redux-persist'
 
@@ -21,30 +22,34 @@ import sagas from '../sagas'
 
 const sagaMiddleware = createSagaMiddleware()
 
-const app = combineReducers({
+const app = persistReducer({
+  storage,
+  key: 'root',
+  keyPrefix: 'clnd.',
+  throttle: 200,
+  debug: true,
+  version: 1,
+  whitelist: [
+    'calendars'
+  ],
+}, combineReducers({
   ...reducers,
   form: formReducer
-})
+}))
 
-const store = createStore(app, undefined, compose(
-  applyMiddleware(sagaMiddleware),
-  autoRehydrate({
-    log: true
-  })
-))
+export default function configureStore () {
+  const store = createStore(app, undefined, compose(
+    applyMiddleware(sagaMiddleware)
+  ))
 
-sagaMiddleware.run(sagas)
+  sagaMiddleware.run(sagas)
 
-export default store
+  const persistor = persistStore(store)
 
-export function persist (store, callback = () => {}) {
-  persistStore(store, {
-    whitelist: [
-      'calendars'
-    ],
-    debounce: 100,
-    keyPrefix: 'clnd.'
-  }, callback)
+  return {
+    store,
+    persistor,
+  }
 }
 
 // https://github.com/rt2zz/redux-persist

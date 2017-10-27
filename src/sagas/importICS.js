@@ -1,5 +1,6 @@
 import {
   put,
+  select,
   takeEvery,
 } from 'redux-saga/effects'
 
@@ -10,14 +11,14 @@ import {
   importICS as importICSAction,
 } from '../actions'
 
-import store from '../store'
+const getCalendars = state => state.calendars
 
 function* importICSAsync ({ payload: {
   color,
   name,
   source,
 } }) {
-  const { calendars } = store.getState();
+  const calendars = yield select(getCalendars)
 
   if (calendars.some(item => item.source === source)) {
     yield put(setExternalsImportFormErrorAction({

@@ -1,5 +1,5 @@
+import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
-import store from '../../store'
 import {
   importICS,
   resetExternalsImportForm,
@@ -7,22 +7,16 @@ import {
 
 import SettingsExternalsImport from '../../components/SettingsExternalsImport'
 
-const mapStateToProps = ({ externalsImportForm }) => {
-  return {
-    externalsImportForm
-  }
-}
+const mapStateToProps = ({ externalsImportForm }) => ({
+  externalsImportForm
+})
 
-const mapDispatchToProps = () => {
-  return {
-    importICS: formData => {
-      store.dispatch(importICS(formData))
-    },
-    resetExternalsImportForm: () => {
-      store.dispatch(resetExternalsImportForm())
-    }
-  }
-}
+const mapDispatchToProps = (dispatch) => (
+  bindActionCreators({
+    importICS,
+    resetExternalsImportForm,
+  }, dispatch)
+)
 
 export default connect(
   mapStateToProps,

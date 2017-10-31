@@ -3,9 +3,9 @@ import { createExternalCalendar } from '../actions'
 
 export const calendars = handleActions({
   [ createExternalCalendar ] (state, { payload }) {
-    return [
+    return {
       ...state,
-      payload
-    ];
+      [ payload.id ]: payload
+    }
   }
-}, [])
+}, {})

@@ -1,6 +1,27 @@
 .form (
-  @button-active-color: #fff,
-  @control-height: 2.3rem
+  @control-height: 2.3rem,
+
+
+  @control-active-color: #fff,
+  @control-active-border-color: #0275d8,
+  @control-active-background-color: #0275d8,
+
+  @control-active-hover-border-color: darken(@control-active-border-color, 5%),
+  @control-active-hover-background-color: darken(@control-active-background-color, 5%),
+
+
+  @control-border-color: #c1c1c1,
+  @control-background-color: #fff,
+
+  @control-hover-border-color: darken(@control-border-color, 5%),
+  @control-hover-background-color: darken(@control-background-color, 5%),
+
+  @control-disabled-color: lighten(@global-base-text-color, 50%),
+  @control-disabled-border-color: lighten(@control-border-color, 10%),
+  @control-disabled-background-color: darken(@control-background-color, 2%),
+
+
+  @control-font-size: 1rem
 ) {
 
   @import (reference, once) "./form-button";
@@ -13,7 +34,7 @@
   &_Row {
     display: flex;
     flex-direction: column;
-    margin-bottom: 1rem;
+    margin-bottom: at(@global-sizes, m);
   }
 
   &_ControlGroup {
@@ -22,19 +43,19 @@
   }
 
   &_Label {
-    margin-bottom: .5rem;
+    margin-bottom: at(@global-sizes, s);
   }
 
   &_Control {
     flex-grow: 1;
     padding: .5rem .75rem;
     margin: 0;
-    font-size: 1rem;
+    font-size: @control-font-size;
     line-height: 1.25;
-    background-color: #fff;
+    background-color: @control-background-color;
     background-image: none;
     background-clip: padding-box;
-    border: 1px solid fade(#000, 15%);
+    border: 1px solid @control-border-color;
     touch-action: manipulation;
     box-sizing: border-box;
     height: @control-height;
@@ -43,7 +64,7 @@
     outline-width: 2px;
 
     &[disabled] {
-      background-color: fade(#000, 10%);
+      background-color: @control-disabled-background-color;
     }
 
     select& {
@@ -78,7 +99,7 @@
     .form-button();
 
     & + & {
-      margin-left: .5rem;
+      margin-left: at(@global-sizes, s);
     }
 
     &__active {

@@ -3,7 +3,7 @@ import SettingsExternals from '../../components/SettingsExternals'
 
 const mapStateToProps = (state) => {
   return {
-    externals: state.calendars.filter(item => Boolean(item.source))
+    externals: Object.values(state.calendars).filter(item => Boolean(item.source))
   }
 }
 

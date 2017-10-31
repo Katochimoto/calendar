@@ -24,6 +24,7 @@ const external = {
   'redux-persist': 'vendor._redux_persist',
   'redux-saga': 'vendor._redux_saga',
   'redux': 'vendor._redux',
+  'reselect': 'vendor._reselect',
 };
 
 export default function (options) {

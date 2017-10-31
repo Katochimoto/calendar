@@ -20,7 +20,7 @@ function* importICSAsync ({ payload: {
 } }) {
   const calendars = yield select(getCalendars)
 
-  if (calendars.some(item => item.source === source)) {
+  if (Object.values(calendars).some(item => item.source === source)) {
     yield put(setExternalsImportFormErrorAction({
       fields: {
         source: 'duplicate'

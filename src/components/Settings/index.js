@@ -69,7 +69,7 @@ export default function Settings ({ match }) {
         <Route exact path={urlExternals} render={({ match }) => (
           <SettingsExternals match={match} />
         )} />
-        <Route path={urlExternalsImport} render={() => (
+        <Route exact path={urlExternalsImport} render={() => (
           <SettingsExternalsImport urlExternals={urlExternals} />
         )} />
       </div>

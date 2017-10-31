@@ -10,6 +10,7 @@ import _raf from 'raf'
 import _setimmediate2 from 'setimmediate2'
 import _prop_types from 'prop-types'
 import * as _react_router_dom from 'react-router-dom'
+import * as _reselect from 'reselect'
 
 import _redux_persist from 'redux-persist'
 import storage from 'redux-persist/es/storage'
@@ -37,4 +38,5 @@ export default {
   },
   _redux_saga,
   _redux,
+  _reselect,
 }

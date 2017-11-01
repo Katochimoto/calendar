@@ -7,7 +7,7 @@ import {
 
 import SettingsExternalsImport from '../../components/SettingsExternalsImport'
 
-const mapStateToProps = ({ externalsImportForm }) => ({
+const mapStateToProps = ({ externalsImportForm }, { calendarId }) => ({
   externalsImportForm
 })
 
@@ -20,5 +20,9 @@ const mapDispatchToProps = (dispatch) => (
 
 export default connect(
   mapStateToProps,
-  mapDispatchToProps
+  mapDispatchToProps,
+  null,
+  {
+    pure: true
+  }
 )(SettingsExternalsImport)

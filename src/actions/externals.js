@@ -8,7 +8,7 @@ export const createExternalCalendar = createAction(
     id: uuid(),
     active: true,
     status: 0, // удален, изменен, новый
-    updated: 0,
+    updated: 0, // время последнего обновления
   })
 )
 

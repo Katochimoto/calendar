@@ -6,6 +6,11 @@ import {
 } from 'redux'
 
 import {
+  routerMiddleware,
+  routerReducer,
+} from 'react-router-redux'
+
+import {
   storage,
   persistReducer,
   persistStore,
@@ -14,41 +19,52 @@ import {
 import createSagaMiddleware from 'redux-saga'
 
 import {
-  reducer as formReducer
+  reducer as reduxFormReducer,
 } from 'redux-form'
+
+import {
+  createHashHistory as createHistory,
+} from 'history'
 
 import * as reducers from '../reducers'
 import sagas from '../sagas'
 
-const sagaMiddleware = createSagaMiddleware()
-
-const app = persistReducer({
-  storage,
-  key: 'root',
-  keyPrefix: 'clnd.',
-  throttle: 200,
-  debug: true,
-  version: 1,
-  whitelist: [
-    'calendars'
-  ],
-}, combineReducers({
-  ...reducers,
-  form: formReducer
-}))
-
 export default function configureStore () {
+  const history = createHistory()
+  const _routerMiddleware = routerMiddleware(history)
+  const _sagaMiddleware = createSagaMiddleware()
+
+  const app = persistReducer({
+    storage,
+    key: 'root',
+    keyPrefix: 'clnd.',
+    throttle: 200,
+    debug: true,
+    version: 1,
+    whitelist: [
+      'calendars'
+    ],
+  }, combineReducers({
+    ...reducers,
+    form: reduxFormReducer,
+    router: routerReducer,
+  }))
+
   const store = createStore(app, undefined, compose(
-    applyMiddleware(sagaMiddleware)
+    applyMiddleware(
+      _sagaMiddleware,
+      _routerMiddleware,
+    )
   ))
 
-  sagaMiddleware.run(sagas)
+  _sagaMiddleware.run(sagas)
 
   const persistor = persistStore(store)
 
   return {
-    store,
+    history,
     persistor,
+    store,
   }
 }
 

@@ -14,13 +14,14 @@ import {
 
 const external = {
   'classnames': 'vendor._classnames',
+  'history': 'vendor._history',
   'preact-compat': 'vendor._preact_compat',
   'preact': 'vendor._preact',
   'prop-types': 'vendor._prop_types',
   'react-redux': 'vendor._react_redux',
-  'react-router': 'vendor._react_router',
   'react-router-dom': 'vendor._react_router_dom',
   'react-router-redux': 'vendor._react_router_redux',
+  'react-router': 'vendor._react_router',
   'redux-actions': 'vendor._redux_actions',
   'redux-form': 'vendor._redux_form',
   'redux-persist': 'vendor._redux_persist',

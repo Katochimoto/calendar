@@ -1,12 +1,15 @@
 import React from 'react';
 import { Provider } from 'react-redux'
-import { HashRouter as Router } from 'react-router-dom'
-// import { BrowserRouter as Router } from 'react-router-dom'
-// import { MemoryRouter as Router } from 'react-router-dom'
+import { ConnectedRouter } from 'react-router-redux'
+
 import App from '../App'
 import configureStore from '../../store'
 
-const { store, persistor } = configureStore()
+const {
+  history,
+  persistor,
+  store,
+} = configureStore()
 
 window.__store__ = store;
 
@@ -51,9 +54,9 @@ export default class AppProvider extends React.Component {
 
     return (
       <Provider store={store}>
-        <Router>
+        <ConnectedRouter history={history}>
           <App />
-        </Router>
+        </ConnectedRouter>
       </Provider>
     )
   }

@@ -13,6 +13,7 @@ import * as _react_router from 'react-router'
 import * as _react_router_dom from 'react-router-dom'
 import * as _react_router_redux from 'react-router-redux'
 import * as _reselect from 'reselect'
+import * as _history from 'history'
 
 import _redux_persist from 'redux-persist'
 import storage from 'redux-persist/es/storage'
@@ -43,4 +44,5 @@ export default {
   _redux_saga,
   _redux,
   _reselect,
+  _history,
 }

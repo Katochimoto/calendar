@@ -9,7 +9,9 @@ import _classnames from 'classnames'
 import _raf from 'raf'
 import _setimmediate2 from 'setimmediate2'
 import _prop_types from 'prop-types'
+import * as _react_router from 'react-router'
 import * as _react_router_dom from 'react-router-dom'
+import * as _react_router_redux from 'react-router-redux'
 import * as _reselect from 'reselect'
 
 import _redux_persist from 'redux-persist'
@@ -28,7 +30,9 @@ export default {
   _preact,
   _prop_types,
   _react_redux,
+  _react_router,
   _react_router_dom,
+  _react_router_redux,
   _redux_actions,
   _redux_form,
   _redux_persist: {

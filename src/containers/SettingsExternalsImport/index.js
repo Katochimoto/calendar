@@ -4,11 +4,15 @@ import {
   importICS,
   resetExternalsImportForm,
 } from '../../actions'
+import {
+  calendarSelector
+} from '../../selectors'
 
 import SettingsExternalsImport from '../../components/SettingsExternalsImport'
 
-const mapStateToProps = ({ externalsImportForm }, { calendarId }) => ({
-  externalsImportForm
+const mapStateToProps = (state, { calendarId }) => ({
+  externalsImportForm: state.externalsImportForm,
+  formData: calendarId ? calendarSelector(state, calendarId) : {}
 })
 
 const mapDispatchToProps = (dispatch) => (

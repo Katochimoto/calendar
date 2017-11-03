@@ -5,9 +5,11 @@ import {
 export const calendarsSelector = state => state.calendars
 
 export const calendarSelector = createSelector(
-  calendarsSelector,
+  [
+    calendarsSelector,
+    (state, calendarId) => calendarId
+  ],
   function (calendars, calendarId) {
-    console.log('>>', arguments);
     return calendars[ calendarId ];
   }
 )

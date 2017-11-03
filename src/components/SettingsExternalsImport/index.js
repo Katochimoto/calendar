@@ -7,6 +7,8 @@ import stylesTypography from '../../style/typography.less'
 
 const SettingsExternalsImport = ({
   externalsImportForm,
+  formData,
+
   importICS,
   resetExternalsImportForm,
   urlExternals,
